@@ -116,8 +116,8 @@ public final class TextDecoratorUi implements TextDecoratorUiOperator {
         mTouchEventWindow.dismiss();
     }
 
-    private static final RectF getIndicatorBoundsInScreenCoordinates(final Matrix matrix,
-            final RectF composingTextBounds, final boolean showAtLeftSide) {
+    private static RectF getIndicatorBoundsInScreenCoordinates(final Matrix matrix,
+                                                               final RectF composingTextBounds, final boolean showAtLeftSide) {
         final float indicatorSize = composingTextBounds.height();
         final RectF indicatorBounds;
         if (showAtLeftSide) {

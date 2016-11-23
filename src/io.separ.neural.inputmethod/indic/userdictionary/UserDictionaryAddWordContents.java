@@ -183,7 +183,7 @@ public class UserDictionaryAddWordContents {
 
         // In this class we use the empty string to represent 'all locales' and mLocale cannot
         // be null. However the addWord method takes null to mean 'all locales'.
-        UserDictionaryCompatUtils.addWord(context, newWord.toString(),
+        UserDictionaryCompatUtils.addWord(context, newWord,
                 FREQUENCY_FOR_USER_DICTIONARY_ADDS, newShortcut, TextUtils.isEmpty(mLocale) ?
                         null : LocaleUtils.constructLocaleFromString(mLocale));
 
@@ -209,8 +209,7 @@ public class UserDictionaryAddWordContents {
                       new String[] { word, mLocale }, null /* sort order */);
         }
         try {
-            if (null == cursor) return false;
-            return cursor.getCount() > 0;
+            return null != cursor && cursor.getCount() > 0;
         } finally {
             if (null != cursor) cursor.close();
         }

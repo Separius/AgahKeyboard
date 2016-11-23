@@ -59,7 +59,7 @@ final public class BinaryDictionaryGetter {
     public static final String ID_CATEGORY_SEPARATOR = ":";
 
     // The key considered to read the version attribute in a dictionary file.
-    private static String VERSION_KEY = "version";
+    private static final String VERSION_KEY = "version";
 
     // Prevents this from being instantiated
     private BinaryDictionaryGetter() {}
@@ -113,20 +113,16 @@ final public class BinaryDictionaryGetter {
                             Context.MODE_MULTI_PROCESS);
         }
         public boolean isWordListActive(final String dictId) {
-            if (null == mDictPreferences) {
-                // If we don't have preferences it basically means we can't find the dictionary
-                // pack - either it's not installed, or it's disabled, or there is some strange
-                // bug. Either way, a word list with no settings should be on by default: default
-                // dictionaries in LatinIME are on if there is no settings at all, and if for some
-                // reason some dictionaries have been installed BUT the dictionary pack can't be
-                // found anymore it's safer to actually supply installed dictionaries.
-                return true;
-            } else {
-                // The default is true here for the same reasons as above. We got the dictionary
-                // pack but if we don't have any settings for it it means the user has never been
-                // to the settings yet. So by default, the main dictionaries should be on.
-                return mDictPreferences.getBoolean(dictId, true);
-            }
+            // If we don't have preferences it basically means we can't find the dictionary
+// pack - either it's not installed, or it's disabled, or there is some strange
+// bug. Either way, a word list with no settings should be on by default: default
+// dictionaries in LatinIME are on if there is no settings at all, and if for some
+// reason some dictionaries have been installed BUT the dictionary pack can't be
+// found anymore it's safer to actually supply installed dictionaries.
+            return null == mDictPreferences || mDictPreferences.getBoolean(dictId, true);
+// The default is true here for the same reasons as above. We got the dictionary
+// pack but if we don't have any settings for it it means the user has never been
+// to the settings yet. So by default, the main dictionaries should be on.
         }
     }
 

@@ -20,5 +20,5 @@ package io.separ.neural.inputmethod.dictionarypack;
  * A simple interface to report problems.
  */
 public interface ProblemReporter {
-    public void report(Exception e);
+    void report(Exception e);
 }

@@ -279,9 +279,6 @@ public class DistracterFilterCheckingExactMatchesAndSuggestions implements Distr
             Log.d(TAG, "normalizedScore: " + normalizedScore);
             Log.d(TAG, "distracterThreshold: " + distracterThreshold);
         }
-        if (normalizedScore > distracterThreshold) {
-            return true;
-        }
-        return false;
+        return normalizedScore > distracterThreshold;
     }
 }

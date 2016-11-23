@@ -83,8 +83,7 @@ public final class KeyboardTheme implements Comparable<KeyboardTheme> {
 
     @Override
     public boolean equals(final Object o) {
-        if (o == this) return true;
-        return (o instanceof KeyboardTheme) && ((KeyboardTheme)o).mThemeId == mThemeId;
+        return o == this || (o instanceof KeyboardTheme) && ((KeyboardTheme) o).mThemeId == mThemeId;
     }
 
     @Override

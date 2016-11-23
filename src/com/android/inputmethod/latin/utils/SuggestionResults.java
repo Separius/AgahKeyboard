@@ -66,8 +66,7 @@ public final class SuggestionResults extends TreeSet<SuggestedWordInfo> {
 
     @Override
     public boolean addAll(final Collection<? extends SuggestedWordInfo> e) {
-        if (null == e) return false;
-        return super.addAll(e);
+        return null != e && super.addAll(e);
     }
 
     private static final class SuggestedWordInfoComparator

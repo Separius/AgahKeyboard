@@ -38,14 +38,9 @@ public class DistracterFilterCheckingIsInDictionary implements DistracterFilter 
     @Override
     public boolean isDistracterToWordsInDictionaries(PrevWordsInfo prevWordsInfo,
             String testedWord, Locale locale) {
-        if (mDictionary.isInDictionary(testedWord)) {
-            // This filter treats entries that are already in the dictionary as non-distracters
-            // because they have passed the filtering in the past.
-            return false;
-        } else {
-            return mDistracterFilter.isDistracterToWordsInDictionaries(
-                    prevWordsInfo, testedWord, locale);
-        }
+        // This filter treats entries that are already in the dictionary as non-distracters
+// because they have passed the filtering in the past.
+        return !mDictionary.isInDictionary(testedWord) && mDistracterFilter.isDistracterToWordsInDictionaries(prevWordsInfo, testedWord, locale);
     }
 
     @Override

@@ -54,7 +54,7 @@ public final class CursorAnchorInfoCompatWrapper {
     private static final CompatUtils.ToObjectMethodWrapper<Matrix> sGetMatrixMethod;
     private static final CompatUtils.ToIntMethodWrapper sGetInsertionMarkerFlagsMethod;
 
-    private static int INVALID_TEXT_INDEX = -1;
+    private static final int INVALID_TEXT_INDEX = -1;
     static {
         sCursorAnchorInfoClass = CompatUtils.getClassWrapper(
                 "android.view.inputmethod.CursorAnchorInfo");
@@ -88,7 +88,7 @@ public final class CursorAnchorInfoCompatWrapper {
         return sCursorAnchorInfoClass.exists() && mInstance != null;
     }
 
-    private Object mInstance;
+    private final Object mInstance;
 
     private CursorAnchorInfoCompatWrapper(final Object instance) {
         mInstance = instance;
@@ -103,7 +103,7 @@ public final class CursorAnchorInfoCompatWrapper {
     }
 
     private static final class FakeHolder {
-        static CursorAnchorInfoCompatWrapper sInstance = new CursorAnchorInfoCompatWrapper(null);
+        static final CursorAnchorInfoCompatWrapper sInstance = new CursorAnchorInfoCompatWrapper(null);
     }
 
     @UsedForTesting

@@ -35,15 +35,12 @@ public final class InputConnectionCompatUtils {
     /**
      * Local copies of some constants in InputConnection until the SDK becomes publicly available.
      */
-    private static int CURSOR_UPDATE_IMMEDIATE = 1 << 0;
-    private static int CURSOR_UPDATE_MONITOR = 1 << 1;
+    private static final int CURSOR_UPDATE_IMMEDIATE = 1;
+    private static final int CURSOR_UPDATE_MONITOR = 1 << 1;
 
     private static boolean requestCursorUpdatesImpl(final InputConnection inputConnection,
             final int cursorUpdateMode) {
-        if (!isRequestCursorUpdatesAvailable()) {
-             return false;
-        }
-        return sRequestCursorUpdatesMethod.invoke(inputConnection, cursorUpdateMode);
+        return isRequestCursorUpdatesAvailable() && sRequestCursorUpdatesMethod.invoke(inputConnection, cursorUpdateMode);
     }
 
     /**

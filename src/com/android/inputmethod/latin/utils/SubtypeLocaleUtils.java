@@ -77,7 +77,7 @@ public final class SubtypeLocaleUtils {
     // Note that this initialization method can be called multiple times.
     public static void init(final Context context) {
         synchronized (sInitializeLock) {
-            if (sInitialized == false) {
+            if (!sInitialized) {
                 initLocked(context);
                 sInitialized = true;
             }
@@ -108,8 +108,7 @@ public final class SubtypeLocaleUtils {
 
         final String[] exceptionalLocales = res.getStringArray(
                 R.array.subtype_locale_exception_keys);
-        for (int i = 0; i < exceptionalLocales.length; i++) {
-            final String localeString = exceptionalLocales[i];
+        for (final String localeString : exceptionalLocales) {
             final String resourceName = SUBTYPE_NAME_RESOURCE_PREFIX + localeString;
             final int resId = res.getIdentifier(resourceName, null, RESOURCE_PACKAGE_NAME);
             sExceptionalLocaleToNameIdsMap.put(localeString, resId);
@@ -137,7 +136,7 @@ public final class SubtypeLocaleUtils {
         return sExceptionalLocaleToNameIdsMap.containsKey(localeString);
     }
 
-    private static final String getNoLanguageLayoutKey(final String keyboardLayoutName) {
+    private static String getNoLanguageLayoutKey(final String keyboardLayoutName) {
         return NO_LANGUAGE + "_" + keyboardLayoutName;
     }
 

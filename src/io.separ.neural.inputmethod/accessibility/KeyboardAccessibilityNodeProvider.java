@@ -266,10 +266,7 @@ final class KeyboardAccessibilityNodeProvider<KV extends KeyboardView>
     public boolean performAction(final int virtualViewId, final int action,
             final Bundle arguments) {
         final Key key = getKeyOf(virtualViewId);
-        if (key == null) {
-            return false;
-        }
-        return performActionForKey(key, action);
+        return key != null && performActionForKey(key, action);
     }
 
     /**

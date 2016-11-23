@@ -37,7 +37,7 @@ public class RecapitalizeStatus {
         CAPS_MODE_ALL_UPPER
     };
 
-    private static final int getStringMode(final String string, final int[] sortedSeparators) {
+    private static int getStringMode(final String string, final int[] sortedSeparators) {
         if (StringUtils.isIdenticalAfterUpcase(string)) {
             return CAPS_MODE_ALL_UPPER;
         } else if (StringUtils.isIdenticalAfterDowncase(string)) {

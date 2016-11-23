@@ -29,8 +29,8 @@ import com.android.inputmethod.latin.utils.ImportantNoticeUtils;
  */
 public final class ImportantNoticeDialog extends AlertDialog implements OnClickListener {
     public interface ImportantNoticeDialogListener {
-        public void onUserAcknowledgmentOfImportantNoticeDialog(final int nextVersion);
-        public void onClickSettingsOfImportantNoticeDialog(final int nextVersion);
+        void onUserAcknowledgmentOfImportantNoticeDialog(final int nextVersion);
+        void onClickSettingsOfImportantNoticeDialog(final int nextVersion);
     }
 
     private final ImportantNoticeDialogListener mListener;

@@ -48,33 +48,33 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
     private static final boolean DEBUG_EVENT = false;
     private static final boolean DEBUG_MOVE_EVENT = false;
     private static final boolean DEBUG_LISTENER = false;
-    private static boolean DEBUG_MODE = DebugFlags.DEBUG_ENABLED || DEBUG_EVENT;
+    private static final boolean DEBUG_MODE = DebugFlags.DEBUG_ENABLED || DEBUG_EVENT;
 
     public interface DrawingProxy {
-        public void invalidateKey(Key key);
-        public void showKeyPreview(Key key);
-        public void dismissKeyPreview(Key key);
-        public void showSlidingKeyInputPreview(PointerTracker tracker);
-        public void dismissSlidingKeyInputPreview();
-        public void showGestureTrail(PointerTracker tracker, boolean showsFloatingPreviewText);
+        void invalidateKey(Key key);
+        void showKeyPreview(Key key);
+        void dismissKeyPreview(Key key);
+        void showSlidingKeyInputPreview(PointerTracker tracker);
+        void dismissSlidingKeyInputPreview();
+        void showGestureTrail(PointerTracker tracker, boolean showsFloatingPreviewText);
     }
 
     public interface TimerProxy {
-        public void startTypingStateTimer(Key typedKey);
-        public boolean isTypingState();
-        public void startKeyRepeatTimerOf(PointerTracker tracker, int repeatCount, int delay);
-        public void startLongPressTimerOf(PointerTracker tracker, int delay);
-        public void cancelLongPressTimerOf(PointerTracker tracker);
-        public void cancelLongPressShiftKeyTimers();
-        public void cancelKeyTimersOf(PointerTracker tracker);
-        public void startDoubleTapShiftKeyTimer();
-        public void cancelDoubleTapShiftKeyTimer();
-        public boolean isInDoubleTapShiftKeyTimeout();
-        public void startUpdateBatchInputTimer(PointerTracker tracker);
-        public void cancelUpdateBatchInputTimer(PointerTracker tracker);
-        public void cancelAllUpdateBatchInputTimers();
+        void startTypingStateTimer(Key typedKey);
+        boolean isTypingState();
+        void startKeyRepeatTimerOf(PointerTracker tracker, int repeatCount, int delay);
+        void startLongPressTimerOf(PointerTracker tracker, int delay);
+        void cancelLongPressTimerOf(PointerTracker tracker);
+        void cancelLongPressShiftKeyTimers();
+        void cancelKeyTimersOf(PointerTracker tracker);
+        void startDoubleTapShiftKeyTimer();
+        void cancelDoubleTapShiftKeyTimer();
+        boolean isInDoubleTapShiftKeyTimeout();
+        void startUpdateBatchInputTimer(PointerTracker tracker);
+        void cancelUpdateBatchInputTimer(PointerTracker tracker);
+        void cancelAllUpdateBatchInputTimers();
 
-        public static class Adapter implements TimerProxy {
+        class Adapter implements TimerProxy {
             @Override
             public void startTypingStateTimer(Key typedKey) {}
             @Override
@@ -131,7 +131,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         }
     }
 
-    private static GestureEnabler sGestureEnabler = new GestureEnabler();
+    private static final GestureEnabler sGestureEnabler = new GestureEnabler();
 
     // Parameters for pointer handling.
     private static PointerTrackerParams sParams;
@@ -164,7 +164,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
 
     // The position and time at which first down event occurred.
     private long mDownTime;
-    private int[] mDownCoordinates = CoordinateUtils.newInstance();
+    private final int[] mDownCoordinates = CoordinateUtils.newInstance();
     private long mUpTime;
 
     // The current key where this pointer is.
@@ -462,8 +462,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
     }
 
     private static boolean needsToSuppressKeyPreviewPopup(final long eventTime) {
-        if (!sGestureEnabler.shouldHandleGesture()) return false;
-        return sTypingTimeRecorder.needsToSuppressKeyPreviewPopup(eventTime);
+        return sGestureEnabler.shouldHandleGesture() && sTypingTimeRecorder.needsToSuppressKeyPreviewPopup(eventTime);
     }
 
     private void setPressedKeyGraphics(final Key key, final long eventTime) {

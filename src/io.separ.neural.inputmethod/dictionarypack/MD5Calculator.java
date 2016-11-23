@@ -38,8 +38,8 @@ public final class MD5Calculator {
         }
         final byte[] digest = digester.digest();
         final StringBuilder s = new StringBuilder();
-        for (int i = 0; i < digest.length; ++i) {
-            s.append(String.format("%1$02x", digest[i]));
+        for (byte aDigest : digest) {
+            s.append(String.format("%1$02x", aDigest));
         }
         return s.toString();
     }

@@ -184,7 +184,7 @@ abstract public class ExpandableBinaryDictionary extends Dictionary {
             public void run() {
                 if (preCheckTask != null) {
                     try {
-                        if (!preCheckTask.call().booleanValue()) {
+                        if (!preCheckTask.call()) {
                             return;
                         }
                     } catch (final Exception e) {
@@ -407,7 +407,7 @@ abstract public class ExpandableBinaryDictionary extends Dictionary {
     }
 
     public interface AddMultipleDictionaryEntriesCallback {
-        public void onFinished();
+        void onFinished();
     }
 
     /**
@@ -478,10 +478,7 @@ abstract public class ExpandableBinaryDictionary extends Dictionary {
             lockAcquired = mLock.readLock().tryLock(
                     TIMEOUT_FOR_READ_OPS_IN_MILLISECONDS, TimeUnit.MILLISECONDS);
             if (lockAcquired) {
-                if (mBinaryDictionary == null) {
-                    return false;
-                }
-                return isInDictionaryLocked(word);
+                return mBinaryDictionary != null && isInDictionaryLocked(word);
             }
         } catch (final InterruptedException e) {
             Log.e(TAG, "Interrupted tryLock() in isInDictionary().", e);
@@ -494,8 +491,7 @@ abstract public class ExpandableBinaryDictionary extends Dictionary {
     }
 
     protected boolean isInDictionaryLocked(final String word) {
-        if (mBinaryDictionary == null) return false;
-        return mBinaryDictionary.isInDictionary(word);
+        return mBinaryDictionary != null && mBinaryDictionary.isInDictionary(word);
     }
 
     @Override
@@ -523,8 +519,7 @@ abstract public class ExpandableBinaryDictionary extends Dictionary {
 
 
     protected boolean isValidNgramLocked(final PrevWordsInfo prevWordsInfo, final String word) {
-        if (mBinaryDictionary == null) return false;
-        return mBinaryDictionary.isValidNgram(prevWordsInfo, word);
+        return mBinaryDictionary != null && mBinaryDictionary.isValidNgram(prevWordsInfo, word);
     }
 
     /**
@@ -596,7 +591,7 @@ abstract public class ExpandableBinaryDictionary extends Dictionary {
     /**
      * Reloads the dictionary. Access is controlled on a per dictionary file basis.
      */
-    private final void asyncReloadDictionary() {
+    private void asyncReloadDictionary() {
         if (mIsReloading.compareAndSet(false, true)) {
             asyncExecuteTaskWithWriteLock(new Runnable() {
                 @Override

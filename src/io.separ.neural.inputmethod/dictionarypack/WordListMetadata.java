@@ -108,20 +108,19 @@ public class WordListMetadata {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(WordListMetadata.class.getSimpleName());
-        sb.append(" : ").append(mId);
-        sb.append("\nType : ").append(mType);
-        sb.append("\nDescription : ").append(mDescription);
-        sb.append("\nLastUpdate : ").append(mLastUpdate);
-        sb.append("\nFileSize : ").append(mFileSize);
-        sb.append("\nRawChecksum : ").append(mRawChecksum);
-        sb.append("\nChecksum : ").append(mChecksum);
-        sb.append("\nLocalFilename : ").append(mLocalFilename);
-        sb.append("\nRemoteFilename : ").append(mRemoteFilename);
-        sb.append("\nVersion : ").append(mVersion);
-        sb.append("\nFormatVersion : ").append(mFormatVersion);
-        sb.append("\nFlags : ").append(mFlags);
-        sb.append("\nLocale : ").append(mLocale);
-        return sb.toString();
+        String sb = WordListMetadata.class.getSimpleName() + " : " + mId +
+                "\nType : " + mType +
+                "\nDescription : " + mDescription +
+                "\nLastUpdate : " + mLastUpdate +
+                "\nFileSize : " + mFileSize +
+                "\nRawChecksum : " + mRawChecksum +
+                "\nChecksum : " + mChecksum +
+                "\nLocalFilename : " + mLocalFilename +
+                "\nRemoteFilename : " + mRemoteFilename +
+                "\nVersion : " + mVersion +
+                "\nFormatVersion : " + mFormatVersion +
+                "\nFlags : " + mFlags +
+                "\nLocale : " + mLocale;
+        return sb;
     }
 }

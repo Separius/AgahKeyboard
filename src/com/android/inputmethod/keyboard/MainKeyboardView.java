@@ -117,7 +117,7 @@ public final class MainKeyboardView extends KeyboardView implements PointerTrack
     private Key mSpaceKey;
     // Stuff to draw language name on spacebar.
     private final int mLanguageOnSpacebarFinalAlpha;
-    private ObjectAnimator mLanguageOnSpacebarFadeoutAnimator;
+    private final ObjectAnimator mLanguageOnSpacebarFadeoutAnimator;
     private int mLanguageOnSpacebarFormatType;
     private boolean mHasMultipleEnabledIMEsOrSubtypes;
     private int mLanguageOnSpacebarAnimAlpha = Constants.Color.ALPHA_OPAQUE;
@@ -159,7 +159,7 @@ public final class MainKeyboardView extends KeyboardView implements PointerTrack
 
     // Gesture floating preview text
     // TODO: Make this parameter customizable by user via settings.
-    private int mGestureFloatingPreviewTextLingerTimeout;
+    private final int mGestureFloatingPreviewTextLingerTimeout;
 
     private final KeyDetector mKeyDetector;
     private final NonDistinctMultitouchHelper mNonDistinctMultitouchHelper;
@@ -664,10 +664,7 @@ public final class MainKeyboardView extends KeyboardView implements PointerTrack
     }
 
     public boolean isInDraggingFinger() {
-        if (isShowingMoreKeysPanel()) {
-            return true;
-        }
-        return PointerTracker.isAnyInDraggingFinger();
+        return isShowingMoreKeysPanel() || PointerTracker.isAnyInDraggingFinger();
     }
 
     @Override

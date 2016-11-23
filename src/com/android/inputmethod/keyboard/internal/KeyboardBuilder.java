@@ -601,9 +601,9 @@ public class KeyboardBuilder<KP extends KeyboardParams> {
             if (event == XmlPullParser.START_TAG) {
                 final String tag = parser.getName();
                 if (TAG_CASE.equals(tag)) {
-                    selected |= parseCase(parser, row, selected ? true : skip);
+                    selected |= parseCase(parser, row, selected || skip);
                 } else if (TAG_DEFAULT.equals(tag)) {
-                    selected |= parseDefault(parser, row, selected ? true : skip);
+                    selected |= parseDefault(parser, row, selected || skip);
                 } else {
                     throw new XmlParseUtils.IllegalStartTag(parser, tag, TAG_SWITCH);
                 }
@@ -623,10 +623,10 @@ public class KeyboardBuilder<KP extends KeyboardParams> {
         final boolean selected = parseCaseCondition(parser);
         if (row == null) {
             // Processing Rows.
-            parseKeyboardContent(parser, selected ? skip : true);
+            parseKeyboardContent(parser, !selected || skip);
         } else {
             // Processing Keys.
-            parseRowContent(parser, row, selected ? skip : true);
+            parseRowContent(parser, row, !selected || skip);
         }
         return selected;
     }
@@ -755,10 +755,7 @@ public class KeyboardBuilder<KP extends KeyboardParams> {
         if (ResourceUtils.isIntegerValue(v)) {
             return intValue == a.getInt(index, 0);
         }
-        if (ResourceUtils.isStringValue(v)) {
-            return StringUtils.containsInArray(strValue, a.getString(index).split("\\|"));
-        }
-        return false;
+        return ResourceUtils.isStringValue(v) && StringUtils.containsInArray(strValue, a.getString(index).split("\\|"));
     }
 
     private static boolean isIconDefined(final TypedArray a, final int index,

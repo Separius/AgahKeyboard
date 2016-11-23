@@ -33,8 +33,7 @@ public final class EditorInfoCompatUtils {
     }
 
     public static boolean hasFlagForceAscii(final int imeOptions) {
-        if (OBJ_IME_FLAG_FORCE_ASCII == null) return false;
-        return (imeOptions & OBJ_IME_FLAG_FORCE_ASCII) != 0;
+        return OBJ_IME_FLAG_FORCE_ASCII != null && (imeOptions & OBJ_IME_FLAG_FORCE_ASCII) != 0;
     }
 
     public static String imeActionName(final int imeOptions) {

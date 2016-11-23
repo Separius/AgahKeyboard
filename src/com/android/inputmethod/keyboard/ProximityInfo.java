@@ -362,9 +362,7 @@ y |---+---+---+---+-v-+-|-+---+---+---+---+---|          | thresholdBase and get
             final int indexStart = i * keyCount;
             final int indexEnd = indexStart + neighborCountPerCell[i];
             final ArrayList<Key> neighbors = new ArrayList<>(indexEnd - indexStart);
-            for (int index = indexStart; index < indexEnd; index++) {
-                neighbors.add(neighborsFlatBuffer[index]);
-            }
+            neighbors.addAll(Arrays.asList(neighborsFlatBuffer).subList(indexStart, indexEnd));
             mGridNeighbors[i] = Collections.unmodifiableList(neighbors);
         }
     }

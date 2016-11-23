@@ -31,9 +31,9 @@ import io.separ.neural.inputmethod.indic.Constants;
 // TODO: Separate this class into KeyTimerHandler and BatchInputTimerHandler or so.
 public final class TimerHandler extends LeakGuardHandlerWrapper<Callbacks> implements TimerProxy {
     public interface Callbacks {
-        public void startWhileTypingFadeinAnimation();
-        public void startWhileTypingFadeoutAnimation();
-        public void onLongPress(PointerTracker tracker);
+        void startWhileTypingFadeinAnimation();
+        void startWhileTypingFadeoutAnimation();
+        void onLongPress(PointerTracker tracker);
     }
 
     private static final int MSG_TYPING_STATE_EXPIRED = 0;

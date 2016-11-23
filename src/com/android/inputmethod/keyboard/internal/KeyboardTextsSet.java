@@ -38,7 +38,7 @@ public final class KeyboardTextsSet {
 
     private String[] mTextsTable;
     // Resource name to text map.
-    private HashMap<String, String> mResourceNameToTextsMap = new HashMap<>();
+    private final HashMap<String, String> mResourceNameToTextsMap = new HashMap<>();
 
     public void setLocale(final Locale locale, final Context context) {
         mTextsTable = KeyboardTextsTable.getTextsTable(locale);

@@ -88,7 +88,7 @@ public class PrevWordsInfo {
     // For simplicity of implementation, elements may also be EMPTY_WORD_INFO transiently after the
     // WordComposer was reset and before starting a new composing word, but we should never be
     // calling getSuggetions* in this situation.
-    public WordInfo[] mPrevWordsInfo = new WordInfo[Constants.MAX_PREV_WORD_COUNT_FOR_N_GRAM];
+    public final WordInfo[] mPrevWordsInfo = new WordInfo[Constants.MAX_PREV_WORD_COUNT_FOR_N_GRAM];
 
     // Construct from the previous word information.
     public PrevWordsInfo(final WordInfo prevWordInfo) {
@@ -107,9 +107,7 @@ public class PrevWordsInfo {
     public PrevWordsInfo getNextPrevWordsInfo(final WordInfo wordInfo) {
         final WordInfo[] prevWordsInfo = new WordInfo[Constants.MAX_PREV_WORD_COUNT_FOR_N_GRAM];
         prevWordsInfo[0] = wordInfo;
-        for (int i = 1; i < prevWordsInfo.length; i++) {
-            prevWordsInfo[i] = mPrevWordsInfo[i - 1];
-        }
+        System.arraycopy(mPrevWordsInfo, 0, prevWordsInfo, 1, prevWordsInfo.length - 1);
         return new PrevWordsInfo(prevWordsInfo);
     }
 
@@ -146,7 +144,7 @@ public class PrevWordsInfo {
 
     @Override
     public String toString() {
-        final StringBuffer builder = new StringBuffer();
+        final StringBuilder builder = new StringBuilder();
         for (int i = 0; i < mPrevWordsInfo.length; i++) {
             final WordInfo wordInfo = mPrevWordsInfo[i];
             builder.append("PrevWord[");

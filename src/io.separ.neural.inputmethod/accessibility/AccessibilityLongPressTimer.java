@@ -27,7 +27,7 @@ import io.separ.neural.inputmethod.indic.R;
 // Handling long press timer to show a more keys keyboard.
 final class AccessibilityLongPressTimer extends Handler {
     public interface LongPressTimerCallback {
-        public void performLongClickOn(Key key);
+        void performLongClickOn(Key key);
     }
 
     private static final int MSG_LONG_PRESS = 1;
@@ -52,7 +52,6 @@ final class AccessibilityLongPressTimer extends Handler {
             return;
         default:
             super.handleMessage(msg);
-            return;
         }
     }
 

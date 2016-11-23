@@ -124,22 +124,7 @@ public final class KeyboardId {
     }
 
     private boolean equals(final KeyboardId other) {
-        if (other == this)
-            return true;
-        return other.mElementId == mElementId
-                && other.mMode == mMode
-                && other.mWidth == mWidth
-                && other.mHeight == mHeight
-                && other.passwordInput() == passwordInput()
-                && other.mClobberSettingsKey == mClobberSettingsKey
-                && other.mHasShortcutKey == mHasShortcutKey
-                && other.mLanguageSwitchKeyEnabled == mLanguageSwitchKeyEnabled
-                && other.isMultiLine() == isMultiLine()
-                && other.imeAction() == imeAction()
-                && TextUtils.equals(other.mCustomActionLabel, mCustomActionLabel)
-                && other.navigateNext() == navigateNext()
-                && other.navigatePrevious() == navigatePrevious()
-                && other.mSubtype.equals(mSubtype);
+        return other == this || other.mElementId == mElementId && other.mMode == mMode && other.mWidth == mWidth && other.mHeight == mHeight && other.passwordInput() == passwordInput() && other.mClobberSettingsKey == mClobberSettingsKey && other.mHasShortcutKey == mHasShortcutKey && other.mLanguageSwitchKeyEnabled == mLanguageSwitchKeyEnabled && other.isMultiLine() == isMultiLine() && other.imeAction() == imeAction() && TextUtils.equals(other.mCustomActionLabel, mCustomActionLabel) && other.navigateNext() == navigateNext() && other.navigatePrevious() == navigatePrevious() && other.mSubtype.equals(mSubtype);
     }
 
     private static boolean isAlphabetKeyboard(final int elementId) {
@@ -203,11 +188,7 @@ public final class KeyboardId {
     }
 
     public static boolean equivalentEditorInfoForKeyboard(final EditorInfo a, final EditorInfo b) {
-        if (a == null && b == null) return true;
-        if (a == null || b == null) return false;
-        return a.inputType == b.inputType
-                && a.imeOptions == b.imeOptions
-                && TextUtils.equals(a.privateImeOptions, b.privateImeOptions);
+        return a == null && b == null || !(a == null || b == null) && a.inputType == b.inputType && a.imeOptions == b.imeOptions && TextUtils.equals(a.privateImeOptions, b.privateImeOptions);
     }
 
     public static String elementIdToName(final int elementId) {

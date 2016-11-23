@@ -251,10 +251,8 @@ final class DynamicGridKeyboard extends Keyboard {
         @Override
         public boolean equals(final Object o) {
             if (!(o instanceof Key)) return false;
-            final Key key = (Key)o;
-            if (getCode() != key.getCode()) return false;
-            if (!TextUtils.equals(getLabel(), key.getLabel())) return false;
-            return TextUtils.equals(getOutputText(), key.getOutputText());
+            final Key key = (Key) o;
+            return getCode() == key.getCode() && TextUtils.equals(getLabel(), key.getLabel()) && TextUtils.equals(getOutputText(), key.getOutputText());
         }
 
         @Override

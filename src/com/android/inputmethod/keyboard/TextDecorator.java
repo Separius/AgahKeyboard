@@ -51,7 +51,7 @@ public class TextDecorator {
 
     private String mLastComposingText = null;
     private boolean mHasRtlCharsInLastComposingText = false;
-    private RectF mComposingTextBoundsForLastComposingText = new RectF();
+    private final RectF mComposingTextBoundsForLastComposingText = new RectF();
 
     private boolean mIsFullScreenMode = false;
     private String mWaitingWord = null;
@@ -115,7 +115,6 @@ public class TextDecorator {
         mWaitingCursorEnd = selectionEnd;
         mMode = MODE_WAITING_CURSOR_INDEX;
         layoutLater();
-        return;
     }
 
     /**

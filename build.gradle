@@ -1,0 +1,70 @@
+project.ext.set("archivesBaseName", "IndicKeyboard");
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.2'
+    }
+}
+apply plugin: 'com.android.application'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.google.code.findbugs:jsr305:3.0.0'
+    compile fileTree(include: '*.jar', dir: 'libs')
+}
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion '25.0.0'
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 21
+    }
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['../java-overridable/src', 'src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+        aaptOptions {
+            noCompress ".dict"
+        }
+
+        instrumentTest.setRoot('tests')
+    }
+    signingConfigs {
+        release {
+            storeFile file('/home/sepehr/Desktop/Keyboard/apps/mine/key.keystore')
+            storePassword '123456'
+            keyAlias 'alias'
+            keyPassword '123456'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+            signingConfig signingConfigs.release
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+    }
+    productFlavors {
+    }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_7
+    }
+}

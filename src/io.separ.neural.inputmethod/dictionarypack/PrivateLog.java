@@ -46,7 +46,7 @@ public class PrivateLog {
     private static final SimpleDateFormat sDateFormat =
             new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
 
-    private static PrivateLog sInstance = new PrivateLog();
+    private static final PrivateLog sInstance = new PrivateLog();
     private static DebugHelper sDebugHelper = null;
 
     private PrivateLog() {

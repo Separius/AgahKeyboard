@@ -139,11 +139,8 @@ public final class SettingsValues {
         final String autoCorrectionThresholdRawValue = prefs.getString(
                 Settings.PREF_AUTO_CORRECTION_THRESHOLD,
                 res.getString(R.string.auto_correction_threshold_mode_index_modest));
-        mIncludesOtherImesInLanguageSwitchList = Settings.ENABLE_SHOW_LANGUAGE_SWITCH_KEY_SETTINGS
-                ? prefs.getBoolean(Settings.PREF_INCLUDE_OTHER_IMES_IN_LANGUAGE_SWITCH_LIST, false)
-                : true /* forcibly */;
-        mShowsLanguageSwitchKey = Settings.ENABLE_SHOW_LANGUAGE_SWITCH_KEY_SETTINGS
-                ? Settings.readShowsLanguageSwitchKey(prefs) : true /* forcibly */;
+        mIncludesOtherImesInLanguageSwitchList = !Settings.ENABLE_SHOW_LANGUAGE_SWITCH_KEY_SETTINGS || prefs.getBoolean(Settings.PREF_INCLUDE_OTHER_IMES_IN_LANGUAGE_SWITCH_LIST, false) /* forcibly */;
+        mShowsLanguageSwitchKey = !Settings.ENABLE_SHOW_LANGUAGE_SWITCH_KEY_SETTINGS || Settings.readShowsLanguageSwitchKey(prefs) /* forcibly */;
         mUseContactsDict = prefs.getBoolean(Settings.PREF_KEY_USE_CONTACTS_DICT, true);
         mUsePersonalizedDicts = prefs.getBoolean(Settings.PREF_KEY_USE_PERSONALIZED_DICTS, true);
         mUseDoubleSpacePeriod = prefs.getBoolean(Settings.PREF_KEY_USE_DOUBLE_SPACE_PERIOD, true)
@@ -273,13 +270,13 @@ public final class SettingsValues {
     public boolean isBeforeJellyBean() {
         final AppWorkaroundsUtils appWorkaroundUtils
                 = mAppWorkarounds.get(null, TIMEOUT_TO_GET_TARGET_PACKAGE);
-        return null == appWorkaroundUtils ? false : appWorkaroundUtils.isBeforeJellyBean();
+        return null != appWorkaroundUtils && appWorkaroundUtils.isBeforeJellyBean();
     }
 
     public boolean isBrokenByRecorrection() {
         final AppWorkaroundsUtils appWorkaroundUtils
                 = mAppWorkarounds.get(null, TIMEOUT_TO_GET_TARGET_PACKAGE);
-        return null == appWorkaroundUtils ? false : appWorkaroundUtils.isBrokenByRecorrection();
+        return null != appWorkaroundUtils && appWorkaroundUtils.isBrokenByRecorrection();
     }
 
     private static final String SUGGESTIONS_VISIBILITY_HIDE_VALUE_OBSOLETE = "2";
@@ -354,86 +351,86 @@ public final class SettingsValues {
     public String dump() {
         final StringBuilder sb = new StringBuilder("Current settings :");
         sb.append("\n   mSpacingAndPunctuations = ");
-        sb.append("" + mSpacingAndPunctuations.dump());
+        sb.append("").append(mSpacingAndPunctuations.dump());
         sb.append("\n   mDelayInMillisecondsToUpdateOldSuggestions = ");
-        sb.append("" + mDelayInMillisecondsToUpdateOldSuggestions);
+        sb.append("").append(mDelayInMillisecondsToUpdateOldSuggestions);
         sb.append("\n   mAutoCap = ");
-        sb.append("" + mAutoCap);
+        sb.append("").append(mAutoCap);
         sb.append("\n   mVibrateOn = ");
-        sb.append("" + mVibrateOn);
+        sb.append("").append(mVibrateOn);
         sb.append("\n   mSoundOn = ");
-        sb.append("" + mSoundOn);
+        sb.append("").append(mSoundOn);
         sb.append("\n   mKeyPreviewPopupOn = ");
-        sb.append("" + mKeyPreviewPopupOn);
+        sb.append("").append(mKeyPreviewPopupOn);
         sb.append("\n   mShowsVoiceInputKey = ");
-        sb.append("" + mShowsVoiceInputKey);
+        sb.append("").append(mShowsVoiceInputKey);
         sb.append("\n   mIncludesOtherImesInLanguageSwitchList = ");
-        sb.append("" + mIncludesOtherImesInLanguageSwitchList);
+        sb.append("").append(mIncludesOtherImesInLanguageSwitchList);
         sb.append("\n   mShowsLanguageSwitchKey = ");
-        sb.append("" + mShowsLanguageSwitchKey);
+        sb.append("").append(mShowsLanguageSwitchKey);
         sb.append("\n   mUseContactsDict = ");
-        sb.append("" + mUseContactsDict);
+        sb.append("").append(mUseContactsDict);
         sb.append("\n   mUsePersonalizedDicts = ");
-        sb.append("" + mUsePersonalizedDicts);
+        sb.append("").append(mUsePersonalizedDicts);
         sb.append("\n   mUseDoubleSpacePeriod = ");
-        sb.append("" + mUseDoubleSpacePeriod);
+        sb.append("").append(mUseDoubleSpacePeriod);
         sb.append("\n   mBlockPotentiallyOffensive = ");
-        sb.append("" + mBlockPotentiallyOffensive);
+        sb.append("").append(mBlockPotentiallyOffensive);
         sb.append("\n   mBigramPredictionEnabled = ");
-        sb.append("" + mBigramPredictionEnabled);
+        sb.append("").append(mBigramPredictionEnabled);
         sb.append("\n   mGestureInputEnabled = ");
-        sb.append("" + mGestureInputEnabled);
+        sb.append("").append(mGestureInputEnabled);
         sb.append("\n   mGestureTrailEnabled = ");
-        sb.append("" + mGestureTrailEnabled);
+        sb.append("").append(mGestureTrailEnabled);
         sb.append("\n   mGestureFloatingPreviewTextEnabled = ");
-        sb.append("" + mGestureFloatingPreviewTextEnabled);
+        sb.append("").append(mGestureFloatingPreviewTextEnabled);
         sb.append("\n   mSlidingKeyInputPreviewEnabled = ");
-        sb.append("" + mSlidingKeyInputPreviewEnabled);
+        sb.append("").append(mSlidingKeyInputPreviewEnabled);
         sb.append("\n   mPhraseGestureEnabled = ");
-        sb.append("" + mPhraseGestureEnabled);
+        sb.append("").append(mPhraseGestureEnabled);
         sb.append("\n   mKeyLongpressTimeout = ");
-        sb.append("" + mKeyLongpressTimeout);
+        sb.append("").append(mKeyLongpressTimeout);
         sb.append("\n   mLocale = ");
-        sb.append("" + mLocale);
+        sb.append("").append(mLocale);
         sb.append("\n   mInputAttributes = ");
-        sb.append("" + mInputAttributes);
+        sb.append("").append(mInputAttributes);
         sb.append("\n   mKeypressVibrationDuration = ");
-        sb.append("" + mKeypressVibrationDuration);
+        sb.append("").append(mKeypressVibrationDuration);
         sb.append("\n   mKeypressSoundVolume = ");
-        sb.append("" + mKeypressSoundVolume);
+        sb.append("").append(mKeypressSoundVolume);
         sb.append("\n   mKeyPreviewPopupDismissDelay = ");
-        sb.append("" + mKeyPreviewPopupDismissDelay);
+        sb.append("").append(mKeyPreviewPopupDismissDelay);
         sb.append("\n   mAutoCorrectEnabled = ");
-        sb.append("" + mAutoCorrectEnabled);
+        sb.append("").append(mAutoCorrectEnabled);
         sb.append("\n   mAutoCorrectionThreshold = ");
-        sb.append("" + mAutoCorrectionThreshold);
+        sb.append("").append(mAutoCorrectionThreshold);
         sb.append("\n   mAutoCorrectionEnabledPerUserSettings = ");
-        sb.append("" + mAutoCorrectionEnabledPerUserSettings);
+        sb.append("").append(mAutoCorrectionEnabledPerUserSettings);
         sb.append("\n   mSuggestionsEnabledPerUserSettings = ");
-        sb.append("" + mSuggestionsEnabledPerUserSettings);
+        sb.append("").append(mSuggestionsEnabledPerUserSettings);
         sb.append("\n   mDisplayOrientation = ");
-        sb.append("" + mDisplayOrientation);
+        sb.append("").append(mDisplayOrientation);
         sb.append("\n   mAppWorkarounds = ");
         final AppWorkaroundsUtils awu = mAppWorkarounds.get(null, 0);
-        sb.append("" + (null == awu ? "null" : awu.toString()));
+        sb.append("").append(null == awu ? "null" : awu.toString());
         sb.append("\n   mAdditionalFeaturesSettingValues = ");
-        sb.append("" + Arrays.toString(mAdditionalFeaturesSettingValues));
+        sb.append("").append(Arrays.toString(mAdditionalFeaturesSettingValues));
         sb.append("\n   mTextHighlightColorForAddToDictionaryIndicator = ");
-        sb.append("" + mTextHighlightColorForAddToDictionaryIndicator);
+        sb.append("").append(mTextHighlightColorForAddToDictionaryIndicator);
         sb.append("\n   mIsInternal = ");
-        sb.append("" + mIsInternal);
+        sb.append("").append(mIsInternal);
         sb.append("\n   mKeyPreviewShowUpDuration = ");
-        sb.append("" + mKeyPreviewShowUpDuration);
+        sb.append("").append(mKeyPreviewShowUpDuration);
         sb.append("\n   mKeyPreviewDismissDuration = ");
-        sb.append("" + mKeyPreviewDismissDuration);
+        sb.append("").append(mKeyPreviewDismissDuration);
         sb.append("\n   mKeyPreviewShowUpStartScaleX = ");
-        sb.append("" + mKeyPreviewShowUpStartXScale);
+        sb.append("").append(mKeyPreviewShowUpStartXScale);
         sb.append("\n   mKeyPreviewShowUpStartScaleY = ");
-        sb.append("" + mKeyPreviewShowUpStartYScale);
+        sb.append("").append(mKeyPreviewShowUpStartYScale);
         sb.append("\n   mKeyPreviewDismissEndScaleX = ");
-        sb.append("" + mKeyPreviewDismissEndXScale);
+        sb.append("").append(mKeyPreviewDismissEndXScale);
         sb.append("\n   mKeyPreviewDismissEndScaleY = ");
-        sb.append("" + mKeyPreviewDismissEndYScale);
+        sb.append("").append(mKeyPreviewDismissEndYScale);
         return sb.toString();
     }
 }

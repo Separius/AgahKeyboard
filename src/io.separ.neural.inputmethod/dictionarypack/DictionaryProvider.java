@@ -153,8 +153,7 @@ public final class DictionaryProvider extends ContentProvider {
 
         @Override
         public boolean isNull(final int column) {
-            if (mPos >= mWordLists.length) return true;
-            return column != 0;
+            return mPos >= mWordLists.length || column != 0;
         }
     }
 
@@ -317,9 +316,8 @@ public final class DictionaryProvider extends ContentProvider {
                 // This is how we "delete" the files. It allows Android Keyboard to fake deleting
                 // a default dictionary - which is actually in its assets and can't be really
                 // deleted.
-                final AssetFileDescriptor afd = getContext().getResources().openRawResourceFd(
+                return getContext().getResources().openRawResourceFd(
                         R.raw.empty);
-                return afd;
             } else {
                 final String localFilename =
                         wordList.getAsString(MetadataDbHelper.LOCAL_FILENAME_COLUMN);

@@ -223,7 +223,7 @@ public final class FormatSpec {
     // These flags are used only in the dynamic dictionary.
     static final int MASK_MOVE_AND_DELETE_FLAG = 0xC0;
     static final int FIXED_BIT_OF_DYNAMIC_UPDATE_MOVE = 0x40;
-    static final int FLAG_IS_MOVED = 0x00 | FIXED_BIT_OF_DYNAMIC_UPDATE_MOVE;
+    static final int FLAG_IS_MOVED = FIXED_BIT_OF_DYNAMIC_UPDATE_MOVE;
     static final int FLAG_IS_NOT_MOVED = 0x80 | FIXED_BIT_OF_DYNAMIC_UPDATE_MOVE;
     static final int FLAG_IS_DELETED = 0x80;
 

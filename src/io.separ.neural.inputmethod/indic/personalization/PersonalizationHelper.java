@@ -58,7 +58,7 @@ public class PersonalizationHelper {
         }
     }
 
-    private static int sCurrentTimestampForTesting = 0;
+    private static final int sCurrentTimestampForTesting = 0;
     public static void currentTimeChangedForTesting(final int currentTimestamp) {
         if (TimeUnit.MILLISECONDS.toSeconds(
                 DictionaryDecayBroadcastReciever.DICTIONARY_DECAY_INTERVAL)

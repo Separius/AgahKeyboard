@@ -70,9 +70,7 @@ public final class CorrectionSettingsFragment extends SubScreenFragment {
         final int number = pm.queryIntentActivities(intent, 0).size();
         if (0 >= number) {
         */
-        if (true) {
-            removePreference(Settings.PREF_CONFIGURE_DICTIONARIES_KEY);
-        }
+        removePreference(Settings.PREF_CONFIGURE_DICTIONARIES_KEY);
 
         final Preference editPersonalDictionary =
                 findPreference(Settings.PREF_EDIT_PERSONAL_DICTIONARY);

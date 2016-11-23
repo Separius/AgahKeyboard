@@ -171,10 +171,7 @@ public class ContactsBinaryDictionary extends ExpandableBinaryDictionary {
 
     private boolean useFirstLastBigramsForLocale(final Locale locale) {
         // TODO: Add firstname/lastname bigram rules for other languages.
-        if (locale != null && locale.getLanguage().equals(Locale.ENGLISH.getLanguage())) {
-            return true;
-        }
-        return false;
+        return locale != null && locale.getLanguage().equals(Locale.ENGLISH.getLanguage());
     }
 
     private void addWordsLocked(final Cursor cursor) {
@@ -322,9 +319,6 @@ public class ContactsBinaryDictionary extends ExpandableBinaryDictionary {
     }
 
     private static boolean isValidName(final String name) {
-        if (name != null && -1 == name.indexOf(Constants.CODE_COMMERCIAL_AT)) {
-            return true;
-        }
-        return false;
+        return name != null && -1 == name.indexOf(Constants.CODE_COMMERCIAL_AT);
     }
 }

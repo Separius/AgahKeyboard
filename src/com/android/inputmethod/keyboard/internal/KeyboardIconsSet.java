@@ -86,7 +86,7 @@ public final class KeyboardIconsSet {
         NAME_EMOJI_NORMAL_KEY,            R.styleable.Keyboard_iconEmojiNormalKey,
     };
 
-    private static int NUM_ICONS = NAMES_AND_ATTR_IDS.length / 2;
+    private static final int NUM_ICONS = NAMES_AND_ATTR_IDS.length / 2;
     private static final String[] ICON_NAMES = new String[NUM_ICONS];
     private final Drawable[] mIcons = new Drawable[NUM_ICONS];
     private final int[] mIconResourceIds = new int[NUM_ICONS];

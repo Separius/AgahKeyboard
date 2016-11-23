@@ -228,8 +228,6 @@ public final class BinaryDictionaryFileDumper {
         final int COMPRESSED_ONLY = 3;
         final int CRYPTED_ONLY = 4;
         final int NONE = 5;
-        final int MODE_MIN = COMPRESSED_CRYPTED_COMPRESSED;
-        final int MODE_MAX = NONE;
 
         final String clientId = context.getString(R.string.dictionary_pack_client_id);
         final Uri.Builder wordListUriBuilder;
@@ -250,7 +248,7 @@ public final class BinaryDictionaryFileDumper {
             return;
         }
 
-        for (int mode = MODE_MIN; mode <= MODE_MAX; ++mode) {
+        for (int mode = COMPRESSED_CRYPTED_COMPRESSED; mode <= NONE; ++mode) {
             final InputStream originalSourceStream;
             InputStream inputStream = null;
             InputStream uncompressedStream = null;

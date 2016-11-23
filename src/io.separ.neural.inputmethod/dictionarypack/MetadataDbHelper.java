@@ -733,14 +733,13 @@ public class MetadataDbHelper extends SQLiteOpenHelper {
     public static Cursor queryInstalledOrDeletingOrAvailableDictionaryMetadata(
             final Context context, final String clientId) {
         // If clientId is null, we get the defaut DB (see #getInstance() for more about this)
-        final Cursor results = getDb(context, clientId).query(METADATA_TABLE_NAME,
+        return getDb(context, clientId).query(METADATA_TABLE_NAME,
                 METADATA_TABLE_COLUMNS,
                 STATUS_COLUMN + " = ? OR " + STATUS_COLUMN + " = ? OR " + STATUS_COLUMN + " = ?",
                 new String[] { Integer.toString(STATUS_INSTALLED),
                         Integer.toString(STATUS_DELETING),
                         Integer.toString(STATUS_AVAILABLE) },
                 null, null, LOCALE_COLUMN);
-        return results;
     }
 
     /**
@@ -755,9 +754,8 @@ public class MetadataDbHelper extends SQLiteOpenHelper {
      */
     public static Cursor queryCurrentMetadata(final Context context, final String clientId) {
         // If clientId is null, we get the defaut DB (see #getInstance() for more about this)
-        final Cursor results = getDb(context, clientId).query(METADATA_TABLE_NAME,
+        return getDb(context, clientId).query(METADATA_TABLE_NAME,
                 METADATA_TABLE_COLUMNS, null, null, null, null, LOCALE_COLUMN);
-        return results;
     }
 
     /**
@@ -777,7 +775,7 @@ public class MetadataDbHelper extends SQLiteOpenHelper {
      */
     public static Cursor queryDictionaries(final Context context, final String clientId) {
         // If clientId is null, we get the defaut DB (see #getInstance() for more about this)
-        final Cursor results = getDb(context, clientId).query(METADATA_TABLE_NAME,
+        return getDb(context, clientId).query(METADATA_TABLE_NAME,
                 DICTIONARIES_LIST_PUBLIC_COLUMNS,
                 // Filter out empty locales so as not to return auxiliary data, like a
                 // data line for downloading metadata:
@@ -786,7 +784,6 @@ public class MetadataDbHelper extends SQLiteOpenHelper {
                 /*                MetadataDbHelper.TYPE_COLUMN + " = ?",
                 new String[] { Integer.toString(MetadataDbHelper.TYPE_BULK) }, */
                 null, null, LOCALE_COLUMN);
-        return results;
     }
 
     /**
@@ -803,11 +800,8 @@ public class MetadataDbHelper extends SQLiteOpenHelper {
         db.execSQL(METADATA_TABLE_CREATE);
         // Remove this client's entry in the clients table
         final SQLiteDatabase defaultDb = getDb(context, "");
-        if (0 == defaultDb.delete(CLIENT_TABLE_NAME,
-                CLIENT_CLIENT_ID_COLUMN + " = ?", new String[] { clientId })) {
-            return false;
-        }
-        return true;
+        return 0 != defaultDb.delete(CLIENT_TABLE_NAME,
+                CLIENT_CLIENT_ID_COLUMN + " = ?", new String[]{clientId});
     }
 
     /**

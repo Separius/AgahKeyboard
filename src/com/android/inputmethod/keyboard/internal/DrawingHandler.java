@@ -27,9 +27,9 @@ import io.separ.neural.inputmethod.indic.SuggestedWords;
 // TODO: Separate this class into KeyPreviewHandler and BatchInputPreviewHandler or so.
 public class DrawingHandler extends LeakGuardHandlerWrapper<Callbacks> {
     public interface Callbacks {
-        public void dismissKeyPreviewWithoutDelay(Key key);
-        public void dismissAllKeyPreviews();
-        public void showGestureFloatingPreviewText(SuggestedWords suggestedWords);
+        void dismissKeyPreviewWithoutDelay(Key key);
+        void dismissAllKeyPreviews();
+        void showGestureFloatingPreviewText(SuggestedWords suggestedWords);
     }
 
     private static final int MSG_DISMISS_KEY_PREVIEW = 0;

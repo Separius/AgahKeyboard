@@ -286,7 +286,7 @@ public class UserDictionarySettings extends ListFragment {
 
         private AlphabetIndexer mIndexer;
 
-        private ViewBinder mViewBinder = new ViewBinder() {
+        private final ViewBinder mViewBinder = new ViewBinder() {
 
             @Override
             public boolean setViewValue(View v, Cursor c, int columnIndex) {

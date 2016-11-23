@@ -953,13 +953,10 @@ public final class InputLogic {
             // Double quotes behave like they are usually preceded by space iff we are
             // not inside a double quote or after a digit.
             needsPrecedingSpace = !isInsideDoubleQuoteOrAfterDigit;
-        } else if (settingsValues.mSpacingAndPunctuations.isClusteringSymbol(codePoint)
-                && settingsValues.mSpacingAndPunctuations.isClusteringSymbol(
-                        mConnection.getCodePointBeforeCursor())) {
-            needsPrecedingSpace = false;
-        } else {
-            needsPrecedingSpace = settingsValues.isUsuallyPrecededBySpace(codePoint);
-        }
+        } else
+            needsPrecedingSpace = !(settingsValues.mSpacingAndPunctuations.isClusteringSymbol(codePoint)
+                    && settingsValues.mSpacingAndPunctuations.isClusteringSymbol(
+                    mConnection.getCodePointBeforeCursor())) && settingsValues.isUsuallyPrecededBySpace(codePoint);
 
         if (needsPrecedingSpace) {
             promotePhantomSpace(settingsValues);
@@ -2284,14 +2281,7 @@ public final class InputLogic {
         if (TextUtils.isEmpty(lastComposedWord.mTypedWord)) {
             return false;
         }
-        if (TextUtils.equals(lastComposedWord.mTypedWord, lastComposedWord.mCommittedWord)) {
-            return false;
-        }
-        if (!mDictionaryFacilitator.isUserDictionaryEnabled()) {
-            return false;
-        }
-        return !mDictionaryFacilitator.isValidWord(lastComposedWord.mTypedWord,
-                true /* ignoreCase */);
+        return !TextUtils.equals(lastComposedWord.mTypedWord, lastComposedWord.mCommittedWord) && mDictionaryFacilitator.isUserDictionaryEnabled() && !mDictionaryFacilitator.isValidWord(lastComposedWord.mTypedWord, true /* ignoreCase */);
     }
 
     public void setIndic(boolean flag) {

@@ -198,7 +198,7 @@ public class SuggestedWords {
                 SuggestedWordInfo.KIND_TYPED, Dictionary.DICTIONARY_USER_TYPED,
                 SuggestedWordInfo.NOT_AN_INDEX /* indexOfTouchPointOfSecondWord */,
                 SuggestedWordInfo.NOT_A_CONFIDENCE /* autoCommitFirstWordConfidence */));
-        alreadySeen.add(typedWord.toString());
+        alreadySeen.add(typedWord);
         final int previousSize = previousSuggestions.size();
         for (int index = 1; index < previousSize; index++) {
             final SuggestedWordInfo prevWordInfo = previousSuggestions.getInfo(index);
@@ -351,12 +351,8 @@ public class SuggestedWords {
                 return false;
             }
             final boolean didRemoveTypedWord;
-            if (!TextUtils.isEmpty(typedWord)) {
-                didRemoveTypedWord = removeSuggestedWordInfoFrom(typedWord, candidates,
-                        -1 /* startIndexExclusive */);
-            } else {
-                didRemoveTypedWord = false;
-            }
+            /* startIndexExclusive */
+            didRemoveTypedWord = !TextUtils.isEmpty(typedWord) && removeSuggestedWordInfoFrom(typedWord, candidates, -1 /* startIndexExclusive */);
             for (int i = 0; i < candidates.size(); ++i) {
                 removeSuggestedWordInfoFrom(candidates.get(i).mWord, candidates,
                         i /* startIndexExclusive */);

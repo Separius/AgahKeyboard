@@ -93,7 +93,7 @@ public final class RichInputConnection {
      * This variable is a temporary object used in
      * {@link #commitTextWithBackgroundColor(CharSequence, int, int)} to avoid object creation.
      */
-    private SpannableStringBuilder mTempObjectForCommitText = new SpannableStringBuilder();
+    private final SpannableStringBuilder mTempObjectForCommitText = new SpannableStringBuilder();
     /**
      * This variable is used to track whether the last committed text had the background color or
      * not.
@@ -733,11 +733,8 @@ public final class RichInputConnection {
             return false;
         }
         final int codePointAfterCursor = Character.codePointAt(after, 0);
-        if (spacingAndPunctuations.isWordSeparator(codePointAfterCursor)
-                || spacingAndPunctuations.isWordConnector(codePointAfterCursor)) {
-            return false;
-        }
-        return true;
+        return !(spacingAndPunctuations.isWordSeparator(codePointAfterCursor)
+                || spacingAndPunctuations.isWordConnector(codePointAfterCursor));
     }
 
     public void removeTrailingSpace() {
@@ -950,12 +947,7 @@ public final class RichInputConnection {
             final boolean requestImmediateCallback) {
         mIC = mParent.getCurrentInputConnection();
         final boolean scheduled;
-        if (null != mIC) {
-            scheduled = InputConnectionCompatUtils.requestCursorUpdates(mIC, enableMonitor,
-                    requestImmediateCallback);
-        } else {
-            scheduled = false;
-        }
+        scheduled = null != mIC && InputConnectionCompatUtils.requestCursorUpdates(mIC, enableMonitor, requestImmediateCallback);
         mCursorAnchorInfoMonitorEnabled = (scheduled && enableMonitor);
         return scheduled;
     }

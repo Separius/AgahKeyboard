@@ -37,13 +37,12 @@ public class DictionaryListInterfaceState {
         public int mStatus = MetadataDbHelper.STATUS_UNKNOWN;
     }
 
-    private HashMap<String, State> mWordlistToState = new HashMap<>();
-    private ArrayList<View> mViewCache = new ArrayList<>();
+    private final HashMap<String, State> mWordlistToState = new HashMap<>();
+    private final ArrayList<View> mViewCache = new ArrayList<>();
 
     public boolean isOpen(final String wordlistId) {
         final State state = mWordlistToState.get(wordlistId);
-        if (null == state) return false;
-        return state.mOpen;
+        return null != state && state.mOpen;
     }
 
     public int getStatus(final String wordlistId) {

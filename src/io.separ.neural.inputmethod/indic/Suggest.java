@@ -66,7 +66,7 @@ public final class Suggest {
     }
 
     public interface OnGetSuggestedWordsCallback {
-        public void onGetSuggestedWords(final SuggestedWords suggestedWords);
+        void onGetSuggestedWords(final SuggestedWords suggestedWords);
     }
 
     public void getSuggestedWords(final WordComposer wordComposer,
@@ -154,24 +154,19 @@ public final class Suggest {
         // same time, it feels wrong that the SuggestedWord object includes information about
         // the current settings. It may also be useful to know, when the setting is off, whether
         // the word *would* have been auto-corrected.
-        if (!isCorrectionEnabled || !allowsToBeAutoCorrected || resultsArePredictions
+        // If we don't have a main dictionary, we never want to auto-correct. The reason for
+// this is, the user may have a contact whose name happens to match a valid word in
+// their language, and it will unexpectedly auto-correct. For example, if the user
+// types in English with no dictionary and has a "Will" in their contact list, "will"
+// would always auto-correct to "Will" which is unwanted. Hence, no main dict => no
+// auto-correct.
+// Also, shortcuts should never auto-correct unless they are whitelist entries.
+// TODO: we may want to have shortcut-only entries auto-correct in the future.
+        hasAutoCorrection = !(!isCorrectionEnabled || !allowsToBeAutoCorrected || resultsArePredictions
                 || suggestionResults.isEmpty() || wordComposer.hasDigits()
                 || wordComposer.isMostlyCaps() || wordComposer.isResumed()
                 || !mDictionaryFacilitator.hasInitializedMainDictionary()
-                || suggestionResults.first().isKindOf(SuggestedWordInfo.KIND_SHORTCUT)) {
-            // If we don't have a main dictionary, we never want to auto-correct. The reason for
-            // this is, the user may have a contact whose name happens to match a valid word in
-            // their language, and it will unexpectedly auto-correct. For example, if the user
-            // types in English with no dictionary and has a "Will" in their contact list, "will"
-            // would always auto-correct to "Will" which is unwanted. Hence, no main dict => no
-            // auto-correct.
-            // Also, shortcuts should never auto-correct unless they are whitelist entries.
-            // TODO: we may want to have shortcut-only entries auto-correct in the future.
-            hasAutoCorrection = false;
-        } else {
-            hasAutoCorrection = AutoCorrectionUtils.suggestionExceedsAutoCorrectionThreshold(
-                    suggestionResults.first(), consideredWord, mAutoCorrectionThreshold);
-        }
+                || suggestionResults.first().isKindOf(SuggestedWordInfo.KIND_SHORTCUT)) && AutoCorrectionUtils.suggestionExceedsAutoCorrectionThreshold(suggestionResults.first(), consideredWord, mAutoCorrectionThreshold);
 
         if (!TextUtils.isEmpty(typedWord)) {
             suggestionsContainer.add(0, new SuggestedWordInfo(typedWord,

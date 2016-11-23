@@ -204,9 +204,8 @@ public final class CursorAnchorInfoUtils {
 
         // Treat selectionStart as the insertion point.
         if (0 <= selectionStart) {
-            final int offset = selectionStart;
-            final int line = layout.getLineForOffset(offset);
-            final float insertionMarkerX = layout.getPrimaryHorizontal(offset)
+            final int line = layout.getLineForOffset(selectionStart);
+            final float insertionMarkerX = layout.getPrimaryHorizontal(selectionStart)
                     + viewportToContentHorizontalOffset;
             final float insertionMarkerTop = layout.getLineTop(line)
                     + viewportToContentVerticalOffset;
@@ -225,7 +224,7 @@ public final class CursorAnchorInfoUtils {
             if (!isTopVisible || !isBottomVisible) {
                 insertionMarkerFlags |= CursorAnchorInfo.FLAG_HAS_INVISIBLE_REGION;
             }
-            if (layout.isRtlCharAt(offset)) {
+            if (layout.isRtlCharAt(selectionStart)) {
                 insertionMarkerFlags |= CursorAnchorInfo.FLAG_IS_RTL;
             }
             builder.setInsertionMarkerLocation(insertionMarkerX, insertionMarkerTop,

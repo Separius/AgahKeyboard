@@ -24,6 +24,7 @@ import com.android.inputmethod.latin.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Locale;
 
 import io.separ.neural.inputmethod.indic.Constants;
@@ -235,9 +236,7 @@ public final class MoreKeySpec {
                         + " additionalMoreKeys=" + Arrays.toString(additionalMoreKeys));
             }
             out = CollectionUtils.arrayAsList(additionalMoreKeys, additionalIndex, additionalCount);
-            for (int i = 0; i < moreKeysCount; i++) {
-                out.add(moreKeys[i]);
-            }
+            Collections.addAll(out, moreKeys);
         } else if (additionalIndex < additionalCount) {
             // The number of '%' markers are less than additional more keys.
             // Append remained additional more keys to the tail of more keys.

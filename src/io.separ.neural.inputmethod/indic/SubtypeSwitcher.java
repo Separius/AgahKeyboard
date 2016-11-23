@@ -47,7 +47,7 @@ import io.separ.neural.inputmethod.indic.define.DebugFlags;
 //import android.net.NetworkInfo;
 
 public final class SubtypeSwitcher {
-    private static boolean DBG = DebugFlags.DEBUG_ENABLED;
+    private static final boolean DBG = DebugFlags.DEBUG_ENABLED;
     private static final String TAG = SubtypeSwitcher.class.getSimpleName();
 
     private static final SubtypeSwitcher sInstance = new SubtypeSwitcher();
@@ -215,14 +215,7 @@ public final class SubtypeSwitcher {
 
     public boolean isShortcutImeEnabled() {
         updateShortcutIME();
-        if (mShortcutInputMethodInfo == null) {
-            return false;
-        }
-        if (mShortcutSubtype == null) {
-            return true;
-        }
-        return mRichImm.checkIfSubtypeBelongsToImeAndEnabled(
-                mShortcutInputMethodInfo, mShortcutSubtype);
+        return mShortcutInputMethodInfo != null && (mShortcutSubtype == null || mRichImm.checkIfSubtypeBelongsToImeAndEnabled(mShortcutInputMethodInfo, mShortcutSubtype));
     }
 
     public boolean isShortcutImeReady() {

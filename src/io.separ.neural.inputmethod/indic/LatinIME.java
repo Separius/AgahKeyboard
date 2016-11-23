@@ -606,11 +606,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 mSubtypeSwitcher.isSystemLocaleSameAsLocaleOfAllEnabledSubtypesOfEnabledImes());
         mContextualDictionaryUpdater.onLoadSettings(currentSettingsValues.mUsePersonalizedDicts);
         final boolean shouldKeepUserHistoryDictionaries;
-        if (currentSettingsValues.mUsePersonalizedDicts) {
-            shouldKeepUserHistoryDictionaries = true;
-        } else {
-            shouldKeepUserHistoryDictionaries = false;
-        }
+        shouldKeepUserHistoryDictionaries = currentSettingsValues.mUsePersonalizedDicts;
         if (!shouldKeepUserHistoryDictionaries) {
             // Remove user history dictionaries.
             PersonalizationHelper.removeAllUserHistoryDictionaries(this);
@@ -792,7 +788,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     @Override
     public void setCandidatesView(final View view) {
         // To ensure that CandidatesView will never be set.
-        return;
     }
 
     @Override
@@ -1189,10 +1184,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     @Override
     public boolean onEvaluateInputViewShown() {
-        if (mIsExecutingStartShowingInputView) {
-            return true;
-        }
-        return super.onEvaluateInputViewShown();
+        return mIsExecutingStartShowingInputView || super.onEvaluateInputViewShown();
     }
 
     @Override
@@ -1713,10 +1705,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             return super.onKeyUp(keyCode, keyEvent);
         }
         final long keyIdentifier = keyEvent.getDeviceId() << 32 + keyEvent.getKeyCode();
-        if (mInputLogic.mCurrentlyPressedHardwareKeys.remove(keyIdentifier)) {
-            return true;
-        }
-        return super.onKeyUp(keyCode, keyEvent);
+        return mInputLogic.mCurrentlyPressedHardwareKeys.remove(keyIdentifier) || super.onKeyUp(keyCode, keyEvent);
     }
 
     // onKeyDown and onKeyUp are the main events we are interested in. There are two more events
@@ -1855,10 +1844,9 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     public void debugDumpStateAndCrashWithException(final String context) {
         final SettingsValues settingsValues = mSettings.getCurrent();
-        final StringBuilder s = new StringBuilder(settingsValues.toString());
-        s.append("\nAttributes : ").append(settingsValues.mInputAttributes)
-                .append("\nContext : ").append(context);
-        throw new RuntimeException(s.toString());
+        String s = settingsValues.toString() + "\nAttributes : " + settingsValues.mInputAttributes +
+                "\nContext : " + context;
+        throw new RuntimeException(s);
     }
 
     @Override

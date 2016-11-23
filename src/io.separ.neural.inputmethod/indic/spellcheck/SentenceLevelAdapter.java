@@ -141,7 +141,7 @@ public class SentenceLevelAdapter {
         final int cookie = originalTextInfo.getCookie();
         final int start = -1;
         final int end = originalText.length();
-        final ArrayList<SentenceWordItem> wordItems = new ArrayList<SentenceWordItem>();
+        final ArrayList<SentenceWordItem> wordItems = new ArrayList<>();
         int wordStart = wordIterator.getBeginningOfNextWord(originalText, start);
         int wordEnd = wordIterator.getEndOfWord(originalText, wordStart);
         while (wordStart <= end && wordEnd != -1 && wordStart != -1) {
@@ -179,8 +179,7 @@ public class SentenceLevelAdapter {
         for (int i = 0; i < querySize; ++i) {
             final SentenceWordItem item = originalTextInfoParams.mItems.get(i);
             SuggestionsInfo result = null;
-            for (int j = 0; j < results.length; ++j) {
-                final SuggestionsInfo cur = results[j];
+            for (final SuggestionsInfo cur : results) {
                 if (cur != null && cur.getSequence() == item.mTextInfo.getSequence()) {
                     result = cur;
                     result.setCookieAndSequence(originalCookie, originalSequence);

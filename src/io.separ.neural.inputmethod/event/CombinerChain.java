@@ -20,6 +20,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import javax.annotation.Nonnull;
@@ -40,9 +41,9 @@ import io.separ.neural.inputmethod.indic.Constants;
  */
 public class CombinerChain {
     // The already combined text, as described above
-    private StringBuilder mCombinedText;
+    private final StringBuilder mCombinedText;
     // The feedback on the composing state, as described above
-    private SpannableStringBuilder mStateFeedback;
+    private final SpannableStringBuilder mStateFeedback;
     private final ArrayList<Combiner> mCombiners;
 
     private static final HashMap<String, Class<? extends Combiner>> IMPLEMENTED_COMBINERS =
@@ -67,9 +68,7 @@ public class CombinerChain {
         mCombiners = new ArrayList<>();
         // The dead key combiner is always active, and always first
         mCombiners.add(new DeadKeyCombiner());
-        for (final Combiner combiner : combinerList) {
-            mCombiners.add(combiner);
-        }
+        Collections.addAll(mCombiners, combinerList);
         mCombinedText = new StringBuilder(initialText);
         mStateFeedback = new SpannableStringBuilder();
     }

@@ -170,7 +170,7 @@ public class DictionaryFacilitator {
     }
 
     public interface DictionaryInitializationListener {
-        public void onUpdateMainDictionaryAvailability(boolean isMainDictionaryAvailable);
+        void onUpdateMainDictionaryAvailability(boolean isMainDictionaryAvailable);
     }
 
     public DictionaryFacilitator() {
@@ -415,7 +415,7 @@ public class DictionaryFacilitator {
         PrevWordsInfo prevWordsInfoForCurrentWord = prevWordsInfo;
         for (int i = 0; i < words.length; i++) {
             final String currentWord = words[i];
-            final boolean wasCurrentWordAutoCapitalized = (i == 0) ? wasAutoCapitalized : false;
+            final boolean wasCurrentWordAutoCapitalized = (i == 0) && wasAutoCapitalized;
             addWordToUserHistory(dictionaries, prevWordsInfoForCurrentWord, currentWord,
                     wasCurrentWordAutoCapitalized, timeStampInSeconds, blockPotentiallyOffensive);
             prevWordsInfoForCurrentWord =

@@ -103,7 +103,6 @@ public final class MainKeyboardAccessibilityDelegate
         // Announce the keyboard type only when the type is changed.
         if (keyboard.mId.mElementId != lastKeyboard.mId.mElementId) {
             announceKeyboardType(keyboard, lastKeyboard);
-            return;
         }
     }
 

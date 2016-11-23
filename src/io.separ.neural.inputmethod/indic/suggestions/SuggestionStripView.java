@@ -59,10 +59,10 @@ import io.separ.neural.inputmethod.indic.suggestions.MoreSuggestionsView.MoreSug
 public final class SuggestionStripView extends RelativeLayout implements OnClickListener,
         OnLongClickListener {
     public interface Listener {
-        public void addWordToUserDictionary(String word);
-        public void showImportantNoticeContents();
-        public void pickSuggestionManually(SuggestedWordInfo word);
-        public void onCodeInput(int primaryCode, int x, int y, boolean isKeyRepeat);
+        void addWordToUserDictionary(String word);
+        void showImportantNoticeContents();
+        void pickSuggestionManually(SuggestedWordInfo word);
+        void onCodeInput(int primaryCode, int x, int y, boolean isKeyRepeat);
     }
 
     static final boolean DBG = DebugFlags.DEBUG_ENABLED;
@@ -385,10 +385,7 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
         @Override
         public boolean onScroll(MotionEvent down, MotionEvent me, float deltaX, float deltaY) {
             final float dy = me.getY() - down.getY();
-            if (deltaY > 0 && dy < 0) {
-                return showMoreSuggestions();
-            }
-            return false;
+            return deltaY > 0 && dy < 0 && showMoreSuggestions();
         }
     };
 

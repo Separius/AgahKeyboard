@@ -51,7 +51,7 @@ public final class DicTraverseSession {
                 mNativeDicTraverseSession, dictionary, previousWord, previousWordLength);
     }
 
-    private final long createNativeDicTraverseSession(String locale, long dictSize) {
+    private long createNativeDicTraverseSession(String locale, long dictSize) {
         return setDicTraverseSessionNative(locale, dictSize);
     }
 

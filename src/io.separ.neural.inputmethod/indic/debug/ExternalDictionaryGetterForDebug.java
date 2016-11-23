@@ -99,12 +99,12 @@ public class ExternalDictionaryGetterForDebug {
      */
     public static void askInstallFile(final Context context, final String dirPath,
             final String fileName, final Runnable completeRunnable) {
-        final File file = new File(dirPath, fileName.toString());
+        final File file = new File(dirPath, fileName);
         final DictionaryHeader header = DictionaryInfoUtils.getDictionaryFileHeaderOrNull(file);
         final StringBuilder message = new StringBuilder();
         final String locale = header.getLocaleString();
         for (String key : header.mDictionaryOptions.mAttributes.keySet()) {
-            message.append(key + " = " + header.mDictionaryOptions.mAttributes.get(key));
+            message.append(key).append(" = ").append(header.mDictionaryOptions.mAttributes.get(key));
             message.append("\n");
         }
         final String languageName = LocaleUtils.constructLocaleFromString(locale)
@@ -177,7 +177,6 @@ public class ExternalDictionaryGetterForDebug {
                             dialog.dismiss();
                         }
                     }).create().show();
-            return;
         } finally {
             try {
                 if (null != outputStream) outputStream.close();

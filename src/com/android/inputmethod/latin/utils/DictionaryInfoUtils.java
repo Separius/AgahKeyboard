@@ -97,8 +97,8 @@ public class DictionaryInfoUtils {
     private static boolean isFileNameCharacter(int codePoint) {
         if (codePoint >= 0x30 && codePoint <= 0x39) return true; // Digit
         if (codePoint >= 0x41 && codePoint <= 0x5A) return true; // Uppercase
-        if (codePoint >= 0x61 && codePoint <= 0x7A) return true; // Lowercase
-        return codePoint == '_'; // Underscore
+        // Lowercase
+        return codePoint >= 0x61 && codePoint <= 0x7A || codePoint == '_';
     }
 
     /**
@@ -224,8 +224,7 @@ public class DictionaryInfoUtils {
         final String[] idArray = id.split(BinaryDictionaryGetter.ID_CATEGORY_SEPARATOR);
         // An id is supposed to be in format category:locale, so splitting on the separator
         // should yield a 2-elements array
-        if (2 != idArray.length) return false;
-        return BinaryDictionaryGetter.MAIN_DICTIONARY_CATEGORY.equals(idArray[0]);
+        return 2 == idArray.length && BinaryDictionaryGetter.MAIN_DICTIONARY_CATEGORY.equals(idArray[0]);
     }
 
     /**
@@ -280,7 +279,7 @@ public class DictionaryInfoUtils {
         // different countries. This actually needs to return the id that we would
         // like to use for word lists included in resources, and the following is okay.
         return BinaryDictionaryGetter.MAIN_DICTIONARY_CATEGORY +
-                BinaryDictionaryGetter.ID_CATEGORY_SEPARATOR + locale.getLanguage().toString();
+                BinaryDictionaryGetter.ID_CATEGORY_SEPARATOR + locale.getLanguage();
     }
 
     public static DictionaryHeader getDictionaryFileHeaderOrNull(final File file) {
@@ -290,9 +289,7 @@ public class DictionaryInfoUtils {
     private static DictionaryHeader getDictionaryFileHeaderOrNull(final File file,
             final long offset, final long length) {
         try {
-            final DictionaryHeader header =
-                    BinaryDictionaryUtils.getHeaderWithOffsetAndLength(file, offset, length);
-            return header;
+            return BinaryDictionaryUtils.getHeaderWithOffsetAndLength(file, offset, length);
         } catch (UnsupportedFormatException e) {
             return null;
         } catch (IOException e) {

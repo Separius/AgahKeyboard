@@ -128,7 +128,6 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
             mKeyboardTextsSet.setLocale(mSubtypeSwitcher.getCurrentSubtypeLocale(), mThemeContext);
         } catch (KeyboardLayoutSetException e) {
             Log.w(TAG, "loading keyboard failed: " + e.mKeyboardId, e.getCause());
-            return;
         }
     }
 
@@ -319,10 +318,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     }
 
     public boolean isShowingMoreKeysPanel() {
-        if (isShowingEmojiPalettes()) {
-            return false;
-        }
-        return mKeyboardView.isShowingMoreKeysPanel();
+        return !isShowingEmojiPalettes() && mKeyboardView.isShowingMoreKeysPanel();
     }
 
     public View getVisibleKeyboardView() {

@@ -22,9 +22,9 @@ import io.separ.neural.inputmethod.indic.SuggestedWords;
  * An object that gives basic control of a suggestion strip and some info on it.
  */
 public interface SuggestionStripViewAccessor {
-    public void showAddToDictionaryHint(final String word);
-    public boolean isShowingAddToDictionaryHint();
-    public void dismissAddToDictionaryHint();
-    public void setNeutralSuggestionStrip();
-    public void showSuggestionStrip(final SuggestedWords suggestedWords);
+    void showAddToDictionaryHint(final String word);
+    boolean isShowingAddToDictionaryHint();
+    void dismissAddToDictionaryHint();
+    void setNeutralSuggestionStrip();
+    void showSuggestionStrip(final SuggestedWords suggestedWords);
 }

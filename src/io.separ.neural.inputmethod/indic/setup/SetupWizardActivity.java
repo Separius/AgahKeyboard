@@ -507,7 +507,6 @@ public final class SetupWizardActivity extends Activity implements View.OnClickL
         public void onClick(final View v) {
             if (v == mActionLabel && mAction != null) {
                 mAction.run();
-                return;
             }
         }
     }

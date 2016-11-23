@@ -76,8 +76,7 @@ public final class AndroidSpellCheckerSession extends AndroidWordLevelSpellCheck
                 continue;
             }
             final int splitNum = splitTexts.length;
-            for (int j = 0; j < splitNum; ++j) {
-                final CharSequence splitText = splitTexts[j];
+            for (final CharSequence splitText : splitTexts) {
                 if (TextUtils.isEmpty(splitText)) {
                     continue;
                 }

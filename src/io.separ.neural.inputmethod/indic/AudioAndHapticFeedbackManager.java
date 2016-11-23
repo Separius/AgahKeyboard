@@ -75,10 +75,7 @@ public final class AudioAndHapticFeedbackManager {
     }
 
     private boolean reevaluateIfSoundIsOn() {
-        if (mSettingsValues == null || !mSettingsValues.mSoundOn || mAudioManager == null) {
-            return false;
-        }
-        return mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL;
+        return !(mSettingsValues == null || !mSettingsValues.mSoundOn || mAudioManager == null) && mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL;
     }
 
     public void performAudioFeedback(final int code) {

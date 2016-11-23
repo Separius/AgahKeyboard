@@ -117,10 +117,7 @@ public final class RichInputMethodManager {
         }
         // Was not able to call {@link InputMethodManager#switchToNextInputMethodIBinder,boolean)}
         // because the current device is running ICS or previous and lacks the API.
-        if (switchToNextInputSubtypeInThisIme(token, onlyCurrentIme)) {
-            return true;
-        }
-        return switchToNextInputMethodAndSubtype(token);
+        return switchToNextInputSubtypeInThisIme(token, onlyCurrentIme) || switchToNextInputMethodAndSubtype(token);
     }
 
     private boolean switchToNextInputSubtypeInThisIme(final IBinder token,
@@ -344,7 +341,6 @@ public final class RichInputMethodManager {
             // subtypes should be counted as well.
             if (nonAuxCount > 0 || (shouldIncludeAuxiliarySubtypes && auxCount > 1)) {
                 ++filteredImisCount;
-                continue;
             }
         }
 

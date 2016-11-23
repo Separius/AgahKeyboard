@@ -65,7 +65,7 @@ public final class DictionarySettingsFragment extends PreferenceFragment
     private ConnectivityManager mConnectivityManager;
     private MenuItem mUpdateNowMenu;
     private boolean mChangedSettings;
-    private DictionaryListInterfaceState mDictionaryListInterfaceState =
+    private final DictionaryListInterfaceState mDictionaryListInterfaceState =
             new DictionaryListInterfaceState();
     // never null
     private TreeMap<String, WordListPreference> mCurrentPreferenceMap = new TreeMap<>();
@@ -205,7 +205,7 @@ public final class DictionarySettingsFragment extends PreferenceFragment
 
     private void refreshNetworkState() {
         NetworkInfo info = mConnectivityManager.getActiveNetworkInfo();
-        boolean isConnected = null == info ? false : info.isConnected();
+        boolean isConnected = null != info && info.isConnected();
         if (null != mUpdateNowMenu) mUpdateNowMenu.setEnabled(isConnected);
     }
 

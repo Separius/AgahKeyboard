@@ -369,7 +369,7 @@ public abstract class AndroidWordLevelSpellCheckerSession extends Session {
         final int bestScore = suggestionResults.first().mScore;
         final String bestSuggestion = suggestions.get(0);
         final float normalizedScore = BinaryDictionaryUtils.calcNormalizedScore(
-                originalText, bestSuggestion.toString(), bestScore);
+                originalText, bestSuggestion, bestScore);
         final boolean hasRecommendedSuggestions = (normalizedScore > recommendedThreshold);
         if (DBG) {
             Log.i(TAG, "Best suggestion : " + bestSuggestion + ", score " + bestScore);

@@ -361,7 +361,7 @@ final class EmojiCategory {
         return null;
     }
 
-    private static final Long getCategoryKeyboardMapKey(final int categoryId, final int id) {
+    private static Long getCategoryKeyboardMapKey(final int categoryId, final int id) {
         return (((long) categoryId) << Constants.MAX_INT_BIT_COUNT) | id;
     }
 
@@ -408,7 +408,7 @@ final class EmojiCategory {
         return sum;
     }
 
-    private static Comparator<Key> EMOJI_KEY_COMPARATOR = new Comparator<Key>() {
+    private static final Comparator<Key> EMOJI_KEY_COMPARATOR = new Comparator<Key>() {
         @Override
         public int compare(final Key lhs, final Key rhs) {
             final Rect lHitBox = lhs.getHitBox();

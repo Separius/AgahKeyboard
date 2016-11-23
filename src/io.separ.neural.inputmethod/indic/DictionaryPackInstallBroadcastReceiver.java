@@ -96,7 +96,6 @@ public final class DictionaryPackInstallBroadcastReceiver extends BroadcastRecei
             }
             // If we come here none of the authorities matched the one we searched for.
             // We can exit safely.
-            return;
         } else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)
                 && !intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)) {
             if (null == mService) {

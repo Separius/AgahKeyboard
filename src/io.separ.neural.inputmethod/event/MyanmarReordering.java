@@ -83,7 +83,7 @@ public class MyanmarReordering implements Combiner {
     // U+105F MYANMAR CONSONANT SIGN MON MEDIAL MA
     // U+1060 MYANMAR CONSONANT SIGN MON MEDIAL LA
     // U+1082 MYANMAR CONSONANT SIGN SHAN MEDIAL WA
-    private static int[] MEDIAL_LIST = { 0x103B, 0x103C, 0x103D, 0x103E,
+    private static final int[] MEDIAL_LIST = { 0x103B, 0x103C, 0x103D, 0x103E,
             0x105E, 0x105F, 0x1060, 0x1082};
     private static boolean isMedial(final int codePoint) {
         return Arrays.binarySearch(MEDIAL_LIST, codePoint) >= 0;

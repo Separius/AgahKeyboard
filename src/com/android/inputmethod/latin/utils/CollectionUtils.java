@@ -17,6 +17,7 @@
 package com.android.inputmethod.latin.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public final class CollectionUtils {
     private CollectionUtils() {
@@ -32,9 +33,7 @@ public final class CollectionUtils {
         }
 
         final ArrayList<E> list = new ArrayList<>(end - start);
-        for (int i = start; i < end; i++) {
-            list.add(array[i]);
-        }
+        list.addAll(Arrays.asList(array).subList(start, end));
         return list;
     }
 }

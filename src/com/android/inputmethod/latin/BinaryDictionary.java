@@ -217,8 +217,8 @@ public final class BinaryDictionary extends Dictionary {
             long newFormatVersion);
 
     // TODO: Move native dict into session
-    private final void loadDictionary(final String path, final long startOffset,
-            final long length, final boolean isUpdatable) {
+    private void loadDictionary(final String path, final long startOffset,
+                                final long length, final boolean isUpdatable) {
         mHasUpdated = false;
         mNativeDict = openNative(path, startOffset, length, isUpdatable);
     }
@@ -405,8 +405,8 @@ public final class BinaryDictionary extends Dictionary {
     }
 
     public static class GetNextWordPropertyResult {
-        public WordProperty mWordProperty;
-        public int mNextToken;
+        public final WordProperty mWordProperty;
+        public final int mNextToken;
 
         public GetNextWordPropertyResult(final WordProperty wordProperty, final int nextToken) {
             mWordProperty = wordProperty;
@@ -537,10 +537,7 @@ public final class BinaryDictionary extends Dictionary {
 
     // Run GC and flush to dict file if the dictionary has been updated.
     public boolean flushWithGCIfHasUpdated() {
-        if (mHasUpdated) {
-            return flushWithGC();
-        }
-        return true;
+        return !mHasUpdated || flushWithGC();
     }
 
     // Run GC and flush to dict file.
@@ -560,8 +557,7 @@ public final class BinaryDictionary extends Dictionary {
      * @return whether GC is needed to run or not.
      */
     public boolean needsToRunGC(final boolean mindsBlockByGC) {
-        if (!isValidDictionary()) return false;
-        return needsToRunGCNative(mNativeDict, mindsBlockByGC);
+        return isValidDictionary() && needsToRunGCNative(mNativeDict, mindsBlockByGC);
     }
 
     public boolean migrateTo(final int newFormatVersion) {

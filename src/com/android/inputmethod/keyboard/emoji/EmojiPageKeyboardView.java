@@ -43,8 +43,8 @@ final class EmojiPageKeyboardView extends KeyboardView implements
     private static final long KEY_RELEASE_DELAY_TIME = 30;  // msec
 
     public interface OnKeyEventListener {
-        public void onPressKey(Key key);
-        public void onReleaseKey(Key key);
+        void onPressKey(Key key);
+        void onReleaseKey(Key key);
     }
 
     private static final OnKeyEventListener EMPTY_LISTENER = new OnKeyEventListener() {

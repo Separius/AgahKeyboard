@@ -162,11 +162,11 @@ public final class CustomInputStyleSettingsFragment extends PreferenceFragment {
     }
 
     private interface SubtypeDialogProxy {
-        public void onRemovePressed(SubtypePreference subtypePref);
-        public void onSavePressed(SubtypePreference subtypePref);
-        public void onAddPressed(SubtypePreference subtypePref);
-        public SubtypeLocaleAdapter getSubtypeLocaleAdapter();
-        public KeyboardLayoutSetAdapter getKeyboardLayoutSetAdapter();
+        void onRemovePressed(SubtypePreference subtypePref);
+        void onSavePressed(SubtypePreference subtypePref);
+        void onAddPressed(SubtypePreference subtypePref);
+        SubtypeLocaleAdapter getSubtypeLocaleAdapter();
+        KeyboardLayoutSetAdapter getKeyboardLayoutSetAdapter();
     }
 
     static final class SubtypePreference extends DialogPreference

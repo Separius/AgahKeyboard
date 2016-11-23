@@ -101,15 +101,15 @@ public final class UpdateHandler {
      * This is chiefly used by the dictionary manager UI.
      */
     public interface UpdateEventListener {
-        public void downloadedMetadata(boolean succeeded);
-        public void wordListDownloadFinished(String wordListId, boolean succeeded);
-        public void updateCycleCompleted();
+        void downloadedMetadata(boolean succeeded);
+        void wordListDownloadFinished(String wordListId, boolean succeeded);
+        void updateCycleCompleted();
     }
 
     /**
      * The list of currently registered listeners.
      */
-    private static List<UpdateEventListener> sUpdateEventListeners
+    private static final List<UpdateEventListener> sUpdateEventListeners
             = Collections.synchronizedList(new LinkedList<UpdateEventListener>());
 
     /**
@@ -166,9 +166,8 @@ public final class UpdateHandler {
      */
     public static int getDownloadOverMeteredSetting(final Context context) {
         final SharedPreferences prefs = CommonPreferences.getCommonPreferences(context);
-        final int setting = prefs.getInt(DOWNLOAD_OVER_METERED_SETTING_PREFS_KEY,
+        return prefs.getInt(DOWNLOAD_OVER_METERED_SETTING_PREFS_KEY,
                 DOWNLOAD_OVER_METERED_SETTING_UNKNOWN);
-        return setting;
     }
 
     /**
@@ -769,7 +768,6 @@ public final class UpdateHandler {
                             + " version " + metadataInfo.mFormatVersion + " and the maximum version"
                             + " we can handle is " + MAXIMUM_SUPPORTED_FORMAT_VERSION);
                 }
-                continue;
             } else if (null == currentInfo) {
                 // This is the case where a new list that we did not know of popped on the server.
                 // Make it available.

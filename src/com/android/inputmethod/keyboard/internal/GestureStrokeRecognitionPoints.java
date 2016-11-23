@@ -226,7 +226,7 @@ public final class GestureStrokeRecognitionPoints {
         mLastMajorEventY = y;
     }
 
-    private final boolean hasDetectedFastMove() {
+    private boolean hasDetectedFastMove() {
         return mDetectFastMoveTime > 0;
     }
 

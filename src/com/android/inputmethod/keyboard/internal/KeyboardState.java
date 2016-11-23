@@ -42,30 +42,30 @@ public final class KeyboardState {
     private static final boolean DEBUG_ACTION = false;
 
     public interface SwitchActions {
-        public void setAlphabetKeyboard();
-        public void setAlphabetManualShiftedKeyboard();
-        public void setAlphabetAutomaticShiftedKeyboard();
-        public void setAlphabetShiftLockedKeyboard();
-        public void setAlphabetShiftLockShiftedKeyboard();
-        public void setEmojiKeyboard();
-        public void setSymbolsKeyboard();
-        public void setSymbolsShiftedKeyboard();
+        void setAlphabetKeyboard();
+        void setAlphabetManualShiftedKeyboard();
+        void setAlphabetAutomaticShiftedKeyboard();
+        void setAlphabetShiftLockedKeyboard();
+        void setAlphabetShiftLockShiftedKeyboard();
+        void setEmojiKeyboard();
+        void setSymbolsKeyboard();
+        void setSymbolsShiftedKeyboard();
 
         /**
          * Request to call back {@link KeyboardState#onUpdateShiftState(int, int)}.
          */
-        public void requestUpdatingShiftState(final int currentAutoCapsState,
-                final int currentRecapitalizeState);
+        void requestUpdatingShiftState(final int currentAutoCapsState,
+                                       final int currentRecapitalizeState);
 
-        public void startDoubleTapShiftKeyTimer();
-        public boolean isInDoubleTapShiftKeyTimeout();
-        public void cancelDoubleTapShiftKeyTimer();
+        void startDoubleTapShiftKeyTimer();
+        boolean isInDoubleTapShiftKeyTimeout();
+        void cancelDoubleTapShiftKeyTimer();
     }
 
     private final SwitchActions mSwitchActions;
 
-    private ShiftKeyState mShiftKeyState = new ShiftKeyState("Shift");
-    private ModifierKeyState mSymbolKeyState = new ModifierKeyState("Symbol");
+    private final ShiftKeyState mShiftKeyState = new ShiftKeyState("Shift");
+    private final ModifierKeyState mSymbolKeyState = new ModifierKeyState("Symbol");
 
     // TODO: Merge {@link #mSwitchState}, {@link #mIsAlphabetMode}, {@link #mAlphabetShiftState},
     // {@link #mIsSymbolShifted}, {@link #mPrevMainKeyboardWasShiftLocked}, and
@@ -82,7 +82,7 @@ public final class KeyboardState {
     // symbols, and emoji mode.
     private boolean mIsAlphabetMode;
     private boolean mIsEmojiMode;
-    private AlphabetShiftState mAlphabetShiftState = new AlphabetShiftState();
+    private final AlphabetShiftState mAlphabetShiftState = new AlphabetShiftState();
     private boolean mIsSymbolShifted;
     private boolean mPrevMainKeyboardWasShiftLocked;
     private boolean mPrevSymbolsKeyboardWasShifted;

@@ -153,10 +153,10 @@ public class MatrixUtils {
         Log.d(TAG, "Dump matrix: " + title);
         Log.d(TAG, "/*---------------------");
         final StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < row; ++i) {
+        for (float[] anA : a) {
             sb.setLength(0);
             for (int j = 0; j < column; ++j) {
-                sb.append(String.format("%4f", a[i][j])).append(' ');
+                sb.append(String.format("%4f", anA[j])).append(' ');
             }
             Log.d(TAG, sb.toString());
         }

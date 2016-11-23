@@ -33,14 +33,14 @@ public interface DistracterFilter {
      * @param locale the locale of word.
      * @return true if testedWord is a distracter, otherwise false.
      */
-    public boolean isDistracterToWordsInDictionaries(final PrevWordsInfo prevWordsInfo,
-            final String testedWord, final Locale locale);
+    boolean isDistracterToWordsInDictionaries(final PrevWordsInfo prevWordsInfo,
+                                              final String testedWord, final Locale locale);
 
-    public void updateEnabledSubtypes(final List<InputMethodSubtype> enabledSubtypes);
+    void updateEnabledSubtypes(final List<InputMethodSubtype> enabledSubtypes);
 
-    public void close();
+    void close();
 
-    public static final DistracterFilter EMPTY_DISTRACTER_FILTER = new DistracterFilter() {
+    DistracterFilter EMPTY_DISTRACTER_FILTER = new DistracterFilter() {
         @Override
         public boolean isDistracterToWordsInDictionaries(PrevWordsInfo prevWordsInfo,
                 String testedWord, Locale locale) {

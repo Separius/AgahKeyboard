@@ -46,7 +46,7 @@ public class CombinedFormatUtils {
                 continue;
             }
             final String value = attributeMap.get(key);
-            builder.append("," + key + "=" + value);
+            builder.append(",").append(key).append("=").append(value);
         }
         builder.append("\n");
         return builder.toString();
@@ -54,7 +54,7 @@ public class CombinedFormatUtils {
 
     public static String formatWordProperty(final WordProperty wordProperty) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(" " + WORD_TAG + "=" + wordProperty.mWord);
+        builder.append(" " + WORD_TAG + "=").append(wordProperty.mWord);
         builder.append(",");
         builder.append(formatProbabilityInfo(wordProperty.mProbabilityInfo));
         if (wordProperty.mIsBeginningOfSentence) {
@@ -69,7 +69,7 @@ public class CombinedFormatUtils {
         builder.append("\n");
         if (wordProperty.mShortcutTargets != null) {
             for (final WeightedString shortcutTarget : wordProperty.mShortcutTargets) {
-                builder.append("  " + SHORTCUT_TAG + "=" + shortcutTarget.mWord);
+                builder.append("  " + SHORTCUT_TAG + "=").append(shortcutTarget.mWord);
                 builder.append(",");
                 builder.append(formatProbabilityInfo(shortcutTarget.mProbabilityInfo));
                 builder.append("\n");
@@ -77,7 +77,7 @@ public class CombinedFormatUtils {
         }
         if (wordProperty.mBigrams != null) {
             for (final WeightedString bigram : wordProperty.mBigrams) {
-                builder.append("  " + BIGRAM_TAG + "=" + bigram.mWord);
+                builder.append("  " + BIGRAM_TAG + "=").append(bigram.mWord);
                 builder.append(",");
                 builder.append(formatProbabilityInfo(bigram.mProbabilityInfo));
                 builder.append("\n");
@@ -88,7 +88,7 @@ public class CombinedFormatUtils {
 
     public static String formatProbabilityInfo(final ProbabilityInfo probabilityInfo) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(PROBABILITY_TAG + "=" + probabilityInfo.mProbability);
+        builder.append(PROBABILITY_TAG + "=").append(probabilityInfo.mProbability);
         if (probabilityInfo.hasHistoricalInfo()) {
             builder.append(",");
             builder.append(HISTORICAL_INFO_TAG + "=");

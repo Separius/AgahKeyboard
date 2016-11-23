@@ -273,10 +273,8 @@ final class SuggestionStripLayoutHelper {
             // If neither of those, the order in the suggestion strip is left of the center first
             // then right of the center, to both edges of the suggestion strip.
             // For example, center-1, center+1, center-2, center+2, and so on.
-            final int n = indexInSuggestedWords;
-            final int offsetFromCenter = (n % 2) == 0 ? -(n / 2) : (n / 2);
-            final int positionInSuggestionStrip = centerPositionInStrip + offsetFromCenter;
-            return positionInSuggestionStrip;
+            final int offsetFromCenter = (indexInSuggestedWords % 2) == 0 ? -(indexInSuggestedWords / 2) : (indexInSuggestedWords / 2);
+            return centerPositionInStrip + offsetFromCenter;
         }
         final int indexToDisplayMostImportantSuggestion;
         final int indexToDisplaySecondMostImportantSuggestion;
@@ -300,8 +298,7 @@ final class SuggestionStripLayoutHelper {
         // For example, Center+1, center-2, center+2, center-3, and so on.
         final int n = indexInSuggestedWords + 1;
         final int offsetFromCenter = (n % 2) == 0 ? -(n / 2) : (n / 2);
-        final int positionInSuggestionStrip = centerPositionInStrip + offsetFromCenter;
-        return positionInSuggestionStrip;
+        return centerPositionInStrip + offsetFromCenter;
     }
 
     private int getSuggestionTextColor(final SuggestedWords suggestedWords,

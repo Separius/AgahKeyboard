@@ -80,10 +80,7 @@ public final class StringUtils {
 
     public static boolean containsInCommaSplittableText(final String text,
             final String extraValues) {
-        if (TextUtils.isEmpty(extraValues)) {
-            return false;
-        }
-        return containsInArray(text, extraValues.split(SEPARATOR_FOR_COMMA_SPLITTABLE_TEXT));
+        return !TextUtils.isEmpty(extraValues) && containsInArray(text, extraValues.split(SEPARATOR_FOR_COMMA_SPLITTABLE_TEXT));
     }
 
     public static String removeFromCommaSplittableTextIfExists(final String text,

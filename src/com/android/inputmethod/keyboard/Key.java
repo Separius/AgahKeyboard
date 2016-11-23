@@ -271,9 +271,8 @@ public class Key implements Comparable<Key> {
         String[] moreKeys = style.getStringArray(keyAttr, R.styleable.Keyboard_Key_moreKeys);
 
         // Get maximum column order number and set a relevant mode value.
-        int moreKeysColumnAndFlags = MORE_KEYS_MODE_MAX_COLUMN_WITH_AUTO_ORDER
-                | style.getInt(keyAttr, R.styleable.Keyboard_Key_maxMoreKeysColumn,
-                        params.mMaxMoreKeysKeyboardColumn);
+        int moreKeysColumnAndFlags = style.getInt(keyAttr, R.styleable.Keyboard_Key_maxMoreKeysColumn,
+                params.mMaxMoreKeysKeyboardColumn);
         int value;
         if ((value = MoreKeySpec.getIntValue(moreKeys, MORE_KEYS_AUTO_COLUMN_ORDER, -1)) > 0) {
             // Override with fixed column order number and set a relevant mode value.
@@ -446,20 +445,7 @@ public class Key implements Comparable<Key> {
     }
 
     private boolean equalsInternal(final Key o) {
-        if (this == o) return true;
-        return o.mX == mX
-                && o.mY == mY
-                && o.mWidth == mWidth
-                && o.mHeight == mHeight
-                && o.mCode == mCode
-                && TextUtils.equals(o.mLabel, mLabel)
-                && TextUtils.equals(o.mHintLabel, mHintLabel)
-                && o.mIconId == mIconId
-                && o.mBackgroundType == mBackgroundType
-                && Arrays.equals(o.mMoreKeys, mMoreKeys)
-                && TextUtils.equals(o.getOutputText(), getOutputText())
-                && o.mActionFlags == mActionFlags
-                && o.mLabelFlags == mLabelFlags;
+        return this == o || o.mX == mX && o.mY == mY && o.mWidth == mWidth && o.mHeight == mHeight && o.mCode == mCode && TextUtils.equals(o.mLabel, mLabel) && TextUtils.equals(o.mHintLabel, mHintLabel) && o.mIconId == mIconId && o.mBackgroundType == mBackgroundType && Arrays.equals(o.mMoreKeys, mMoreKeys) && TextUtils.equals(o.getOutputText(), getOutputText()) && o.mActionFlags == mActionFlags && o.mLabelFlags == mLabelFlags;
     }
 
     @Override
@@ -710,7 +696,7 @@ public class Key implements Comparable<Key> {
         return (mLabelFlags & LABEL_FLAGS_FROM_CUSTOM_ACTION_LABEL) != 0;
     }
 
-    private final boolean isShiftedLetterActivated() {
+    private boolean isShiftedLetterActivated() {
         return (mLabelFlags & LABEL_FLAGS_SHIFTED_LETTER_ACTIVATED) != 0
                 && !TextUtils.isEmpty(mHintLabel);
     }
