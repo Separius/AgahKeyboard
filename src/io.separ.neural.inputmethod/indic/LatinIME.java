@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
 import android.media.AudioManager;
 import android.os.Build;
@@ -831,7 +832,11 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         final KeyboardSwitcher switcher = mKeyboardSwitcher;
         switcher.updateKeyboardTheme();
         final MainKeyboardView mainKeyboardView = switcher.getMainKeyboardView();
-        mainKeyboardView.setBackgroundColor(ColorUtils.getColor(getApplicationContext(), getCurrentInputBinding().getUid()));
+        try {
+            mainKeyboardView.setBackgroundColor(ColorUtils.getColor(getApplicationContext(), getCurrentInputBinding().getUid()));
+        }catch (Exception e){
+            mainKeyboardView.setBackgroundColor(Color.WHITE);
+        }
 
         // If we are starting input in a different text field from before, we'll have to reload
         // settings, so currentSettingsValues can't be final.
@@ -1479,7 +1484,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 currentSettingsValues.mInputAttributes.mShouldShowSuggestions
                 && currentSettingsValues.isSuggestionsEnabledPerUserSettings();
         final boolean shouldShowSuggestionsStripUnlessPassword = shouldShowImportantNotice
-                || currentSettingsValues.mShowsVoiceInputKey
+                /*|| currentSettingsValues.mShowsVoiceInputKey*/
                 || shouldShowSuggestionCandidates
                 || currentSettingsValues.isApplicationSpecifiedCompletionsOn();
         final boolean shouldShowSuggestionsStrip = shouldShowSuggestionsStripUnlessPassword
