@@ -72,6 +72,7 @@ import com.android.inputmethod.latin.utils.StatsUtils;
 import com.android.inputmethod.latin.utils.SubtypeLocaleUtils;
 import com.android.inputmethod.latin.utils.ViewLayoutUtils;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -81,7 +82,6 @@ import java.util.concurrent.TimeUnit;
 
 import io.separ.neural.inputmethod.Utils.ColorUtils;
 import io.separ.neural.inputmethod.Utils.FontUtils;
-import io.separ.neural.inputmethod.Utils.SpeechUtils;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 import io.separ.neural.inputmethod.annotations.UsedForTesting;
 import io.separ.neural.inputmethod.compat.CursorAnchorInfoCompatWrapper;
@@ -1367,10 +1367,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             /*SpeechUtils.startListening();
             Log.e("SEPAR", "onCodeInput: "+SpeechUtils.data);*/
             mSubtypeSwitcher.switchToShortcutIME(this); /*SEPAR*/
+
         }
-        if (Constants.CODE_SETTINGS == codePoint) {
-            //mKeyboardSwitcher.onToggleSettingsKeyboard();
-            displaySettingsDialog();
+        if (Constants.CODE_INLINESETTINGS == codePoint) {
+            mKeyboardSwitcher.onToggleSettingsKeyboard();
         }
         final Event event = createSoftwareKeypressEvent(codeToSend, keyX, keyY, isKeyRepeat);
         final InputTransaction completeInputTransaction =
@@ -1396,6 +1396,33 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             codePoint = keyCodeOrCodePoint;
         }
         return Event.createSoftwareKeypressEvent(codePoint, keyCode, keyX, keyY, isKeyRepeat);
+    }
+
+    public void SendRichContentSample(int id){
+        final File imagesDir = new File(getFilesDir(), "images");
+        imagesDir.mkdirs();
+        int resId;
+        String type;
+        String name;
+        if(id == 0) {
+            resId = R.raw.setup_welcome_image;
+            type = RichInputConnection.MIME_TYPE_PNG;
+            name = "image.png";
+        } else if(id == 1) {
+            resId = R.raw.animated_gif;
+            type = RichInputConnection.MIME_TYPE_GIF;
+            name = "image.gif";
+        } else {
+            resId = R.raw.animated_webp;
+            type = RichInputConnection.MIME_TYPE_WEBP;
+            name = "image.webp";
+        }
+        File mPngFile = RichInputConnection.getFileForResource(this, resId, imagesDir, name);
+        Intent resInt = mInputLogic.mConnection.doCommitContent("Test", type, mPngFile);
+        if(resInt != null) {
+            resInt.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(resInt);
+        }
     }
 
     // Called from PointerTracker through the KeyboardActionListener interface

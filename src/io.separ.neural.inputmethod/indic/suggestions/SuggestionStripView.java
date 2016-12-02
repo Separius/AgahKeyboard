@@ -493,7 +493,7 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
             return;
         }
         if (view == mSettingsKey) {
-            mListener.onCodeInput(Constants.CODE_SETTINGS,
+            mListener.onCodeInput(Constants.CODE_INLINESETTINGS,
                     Constants.SUGGESTION_STRIP_COORDINATE, Constants.SUGGESTION_STRIP_COORDINATE,
                     false /* isKeyRepeat */);
             return;

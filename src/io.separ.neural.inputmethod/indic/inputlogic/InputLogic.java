@@ -731,6 +731,8 @@ public final class InputLogic {
                 // line, so that does affect the contents of the editor.
                 inputTransaction.setDidAffectContents();
                 break;
+            case Constants.CODE_INLINESETTINGS:
+                break;
             default:
                 throw new RuntimeException("Unknown key code : " + event.mKeyCode);
         }

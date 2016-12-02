@@ -28,6 +28,8 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.android.inputmethod.keyboard.KeyboardLayoutSet.KeyboardLayoutSetException;
 import com.android.inputmethod.keyboard.emoji.EmojiPalettesView;
@@ -44,7 +46,7 @@ import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.indic.RichInputMethodManager;
 import io.separ.neural.inputmethod.indic.SubtypeSwitcher;
 import io.separ.neural.inputmethod.indic.WordComposer;
-import io.separ.neural.inputmethod.indic.inlinesettings.InlineSettingsView;
+import io.separ.neural.inputmethod.indic.inlinesettings.InlineSettingsAdaptor;
 import io.separ.neural.inputmethod.indic.settings.Settings;
 import io.separ.neural.inputmethod.indic.settings.SettingsValues;
 
@@ -58,7 +60,8 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     private View mMainKeyboardFrame;
     private MainKeyboardView mKeyboardView;
     private EmojiPalettesView mEmojiPalettesView;
-    private InlineSettingsView mSettingsViewPager;
+    private LinearLayout mSettingsViewPager;
+    private Button mBackFromSettingsKey;
     private LatinIME mLatinIME;
     private boolean mIsHardwareAcceleratedDrawingEnabled;
 
@@ -274,9 +277,15 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     }
 
     public void onToggleSettingsKeyboard() {
-        mSettingsViewPager.setVisibility(View.VISIBLE);
-        mMainKeyboardFrame.setVisibility(View.GONE);
-        mEmojiPalettesView.setVisibility(View.GONE);
+        if(mSettingsViewPager.getVisibility() == View.VISIBLE){
+            mSettingsViewPager.setVisibility(View.GONE);
+            mMainKeyboardFrame.setVisibility(View.VISIBLE);
+            mEmojiPalettesView.setVisibility(View.GONE);
+        }else {
+            mSettingsViewPager.setVisibility(View.VISIBLE);
+            mMainKeyboardFrame.setVisibility(View.GONE);
+            mEmojiPalettesView.setVisibility(View.GONE);
+        }
     }
 
     public void onToggleEmojiKeyboard() {
@@ -375,7 +384,17 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mMainKeyboardFrame = mCurrentInputView.findViewById(R.id.main_keyboard_frame);
         mEmojiPalettesView = (EmojiPalettesView)mCurrentInputView.findViewById(
                 R.id.emoji_palettes_view);
-        mSettingsViewPager = (InlineSettingsView) mCurrentInputView.findViewById(R.id.settings_pager_view);
+        mSettingsViewPager = (LinearLayout) mCurrentInputView.findViewById(R.id.settings_pager_view);
+        ((ViewPager)mCurrentInputView.findViewById(R.id.settings_pager_tabs)).setAdapter(
+                new InlineSettingsAdaptor(mLatinIME));
+        mBackFromSettingsKey = (Button) mCurrentInputView.findViewById(R.id.backFromSettingsKey);
+        mBackFromSettingsKey.setEnabled(true);
+        mBackFromSettingsKey.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onToggleSettingsKeyboard();
+            }
+        });
 
         mKeyboardView = (MainKeyboardView) mCurrentInputView.findViewById(R.id.keyboard_view);
         mKeyboardView.setHardwareAcceleratedDrawingEnabled(isHardwareAcceleratedDrawingEnabled);
