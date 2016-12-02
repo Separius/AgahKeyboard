@@ -81,6 +81,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.separ.neural.inputmethod.Utils.ColorUtils;
 import io.separ.neural.inputmethod.Utils.FontUtils;
+import io.separ.neural.inputmethod.Utils.SpeechUtils;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 import io.separ.neural.inputmethod.annotations.UsedForTesting;
 import io.separ.neural.inputmethod.compat.CursorAnchorInfoCompatWrapper;
@@ -576,6 +577,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
         StatsUtils.onCreate(mSettings.getCurrent());
         FontUtils.initialize(this);
+        //SpeechUtils.initialize(this);
     }
 
     // Has to be package-visible for unit tests
@@ -1362,8 +1364,13 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             codeToSend = codePoint;
         }
         if (Constants.CODE_SHORTCUT == codePoint) {
-            mSubtypeSwitcher.switchToShortcutIME(this);
-            // Still call the *#onCodeInput methods for readability.
+            /*SpeechUtils.startListening();
+            Log.e("SEPAR", "onCodeInput: "+SpeechUtils.data);*/
+            mSubtypeSwitcher.switchToShortcutIME(this); /*SEPAR*/
+        }
+        if (Constants.CODE_SETTINGS == codePoint) {
+            //mKeyboardSwitcher.onToggleSettingsKeyboard();
+            displaySettingsDialog();
         }
         final Event event = createSoftwareKeypressEvent(codeToSend, keyX, keyY, isKeyRepeat);
         final InputTransaction completeInputTransaction =

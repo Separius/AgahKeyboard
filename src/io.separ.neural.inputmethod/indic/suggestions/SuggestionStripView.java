@@ -17,10 +17,12 @@
 package io.separ.neural.inputmethod.indic.suggestions;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.speech.RecognizerIntent;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -46,6 +48,7 @@ import com.android.inputmethod.latin.utils.ImportantNoticeUtils;
 
 import java.util.ArrayList;
 
+import io.separ.neural.inputmethod.Utils.SpeechUtils;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 import io.separ.neural.inputmethod.indic.AudioAndHapticFeedbackManager;
 import io.separ.neural.inputmethod.indic.Constants;
@@ -71,6 +74,7 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
 
     private final ViewGroup mSuggestionsStrip;
     private final ImageButton mVoiceKey;
+    private final ImageButton mSettingsKey;
     private final ViewGroup mAddToDictionaryStrip;
     private final View mImportantNoticeStrip;
     MainKeyboardView mMainKeyboardView;
@@ -156,6 +160,7 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
 
         mSuggestionsStrip = (ViewGroup)findViewById(R.id.suggestions_strip);
         mVoiceKey = (ImageButton)findViewById(R.id.suggestions_strip_voice_key);
+        mSettingsKey = (ImageButton)findViewById(R.id.suggestions_strip_settings_key);
         mAddToDictionaryStrip = (ViewGroup)findViewById(R.id.add_to_dictionary_strip);
         mImportantNoticeStrip = findViewById(R.id.important_notice_strip);
         mStripVisibilityGroup = new StripVisibilityGroup(this, mSuggestionsStrip,
@@ -191,9 +196,12 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
         final TypedArray keyboardAttr = context.obtainStyledAttributes(attrs,
                 R.styleable.Keyboard, defStyle, R.style.SuggestionStripView);
         final Drawable iconVoice = keyboardAttr.getDrawable(R.styleable.Keyboard_iconShortcutKey);
+        final Drawable iconSettings = keyboardAttr.getDrawable(R.styleable.Keyboard_iconSettingsKey);
         keyboardAttr.recycle();
         mVoiceKey.setImageDrawable(iconVoice);
         mVoiceKey.setOnClickListener(this);
+        mSettingsKey.setImageDrawable(iconSettings);
+        mSettingsKey.setOnClickListener(this);
     }
 
     /**
@@ -210,6 +218,7 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
         setVisibility(visibility);
         final SettingsValues currentSettingsValues = Settings.getInstance().getCurrent();
         mVoiceKey.setVisibility(shouldBeVisible ? (currentSettingsValues.mShowsVoiceInputKey ? VISIBLE : INVISIBLE) : INVISIBLE);
+        mSettingsKey.setVisibility(shouldBeVisible ? VISIBLE : INVISIBLE);
     }
 
     public void setSuggestions(final SuggestedWords suggestedWords, final boolean isRtlLanguage) {
@@ -479,6 +488,12 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
         }
         if (view == mVoiceKey) {
             mListener.onCodeInput(Constants.CODE_SHORTCUT,
+                    Constants.SUGGESTION_STRIP_COORDINATE, Constants.SUGGESTION_STRIP_COORDINATE,
+                    false /* isKeyRepeat */);
+            return;
+        }
+        if (view == mSettingsKey) {
+            mListener.onCodeInput(Constants.CODE_SETTINGS,
                     Constants.SUGGESTION_STRIP_COORDINATE, Constants.SUGGESTION_STRIP_COORDINATE,
                     false /* isKeyRepeat */);
             return;
