@@ -119,7 +119,7 @@ public class DictionaryInfoUtils {
             if (DictionaryInfoUtils.isFileNameCharacter(codePoint)) {
                 sb.appendCodePoint(codePoint);
             } else {
-                sb.append(String.format((Locale)null, "%%%1$0" + MAX_HEX_DIGITS_FOR_CODEPOINT + "x",
+                sb.append(String.format((Locale)null, "%%%1$0" + MAX_HEX_DIGITS_FOR_CODEPOINT + 'x',
                         codePoint));
             }
         }

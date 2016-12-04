@@ -148,7 +148,6 @@ public final class Suggest {
         final boolean allowsToBeAutoCorrected = (null != whitelistedWord)
                 || (consideredWord.length() > 1 && !didRemoveTypedWord);
 
-        final boolean hasAutoCorrection;
         // TODO: using isCorrectionEnabled here is not very good. It's probably useless, because
         // any attempt to do auto-correction is already shielded with a test for this flag; at the
         // same time, it feels wrong that the SuggestedWord object includes information about
@@ -162,7 +161,7 @@ public final class Suggest {
 // auto-correct.
 // Also, shortcuts should never auto-correct unless they are whitelist entries.
 // TODO: we may want to have shortcut-only entries auto-correct in the future.
-        hasAutoCorrection = !(!isCorrectionEnabled || !allowsToBeAutoCorrected || resultsArePredictions
+        final boolean hasAutoCorrection = !(!isCorrectionEnabled || !allowsToBeAutoCorrected || resultsArePredictions
                 || suggestionResults.isEmpty() || wordComposer.hasDigits()
                 || wordComposer.isMostlyCaps() || wordComposer.isResumed()
                 || !mDictionaryFacilitator.hasInitializedMainDictionary()

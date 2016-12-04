@@ -32,8 +32,8 @@
             android:layout_marginStart="16dip"
             android:ellipsize="end"
             android:gravity="center_vertical|start"
-            android:singleLine="true"
-            android:text="@string/user_dict_settings_add_dialog_title" />
+            android:text="@string/user_dict_settings_add_dialog_title"
+            android:maxLines="1" />
 
         <View
             android:layout_width="match_parent"

@@ -85,7 +85,7 @@ public class TextDecorator {
     public void setUiOperator(final TextDecoratorUiOperator uiOperator) {
         mUiOperator.disposeUi();
         mUiOperator = uiOperator;
-        mUiOperator.setOnClickListener(getOnClickHandler());
+        mUiOperator.setOnClickListener(mDefaultOnClickHandler);
     }
 
     private final Runnable mDefaultOnClickHandler = new Runnable() {

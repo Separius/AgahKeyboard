@@ -30,6 +30,7 @@ import android.preference.DialogPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceGroup;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.util.Pair;
@@ -91,7 +92,7 @@ public final class CustomInputStyleSettingsFragment extends PreferenceFragment {
         }
 
         @Override
-        public int compareTo(final SubtypeLocaleItem o) {
+        public int compareTo(@NonNull final SubtypeLocaleItem o) {
             return first.compareTo(o.first);
         }
     }
@@ -219,7 +220,7 @@ public final class CustomInputStyleSettingsFragment extends PreferenceFragment {
                         SubtypeLocaleUtils.getSubtypeDisplayNameInSystemLocale(subtype);
                 setTitle(displayName);
                 setDialogTitle(displayName);
-                setKey(KEY_PREFIX + subtype.getLocale() + "_"
+                setKey(KEY_PREFIX + subtype.getLocale() + '_'
                         + SubtypeLocaleUtils.getKeyboardLayoutSetName(subtype));
             }
         }
@@ -376,7 +377,7 @@ public final class CustomInputStyleSettingsFragment extends PreferenceFragment {
                 super(source);
                 mSubtypeLocaleSelectedPos = source.readInt();
                 mKeyboardLayoutSetSelectedPos = source.readInt();
-                mSubtype = (InputMethodSubtype)source.readParcelable(null);
+                mSubtype = source.readParcelable(null);
             }
 
             public static final Parcelable.Creator<SavedState> CREATOR =

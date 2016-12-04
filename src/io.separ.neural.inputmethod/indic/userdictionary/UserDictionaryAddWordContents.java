@@ -199,7 +199,7 @@ public class UserDictionaryAddWordContents {
         final Cursor cursor;
         // mLocale == "" indicates this is an entry for all languages. Here, mLocale can't
         // be null at all (it's ensured by the updateLocale method).
-        if ("".equals(mLocale)) {
+        if (mLocale != null && mLocale.isEmpty()) {
             cursor = context.getContentResolver().query(UserDictionary.Words.CONTENT_URI,
                       HAS_WORD_PROJECTION, HAS_WORD_SELECTION_ALL_LOCALES,
                       new String[] { word }, null /* sort order */);
@@ -223,7 +223,7 @@ public class UserDictionaryAddWordContents {
             mLocaleString = localeString;
             if (null == localeString) {
                 mDescription = context.getString(R.string.user_dict_settings_more_languages);
-            } else if ("".equals(localeString)) {
+            } else if (localeString != null && localeString.isEmpty()) {
                 mDescription = context.getString(R.string.user_dict_settings_all_languages);
             } else {
                 mDescription = LocaleUtils.constructLocaleFromString(localeString).getDisplayName();
@@ -269,7 +269,7 @@ public class UserDictionaryAddWordContents {
             // TODO: sort in unicode order
             addLocaleDisplayNameToList(activity, localesList, l);
         }
-        if (!"".equals(mLocale)) {
+        if (mLocale != null && !mLocale.isEmpty()) {
             // If mLocale is "", then we already inserted the "all languages" item, so don't do it
             addLocaleDisplayNameToList(activity, localesList, ""); // meaning: all languages
         }

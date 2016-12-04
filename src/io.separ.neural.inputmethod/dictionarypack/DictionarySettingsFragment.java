@@ -218,7 +218,7 @@ public final class DictionarySettingsFragment extends PreferenceFragment
         final Collection<? extends Preference> prefList =
                 createInstalledDictSettingsCollection(mClientId);
 
-        final String updateNowSummary = getString(R.string.last_update) + " "
+        final String updateNowSummary = getString(R.string.last_update) + ' '
                 + DateUtils.formatDateTime(activity, lastUpdateDate,
                         DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME);
 
@@ -239,14 +239,14 @@ public final class DictionarySettingsFragment extends PreferenceFragment
             });
     }
 
-    private Preference createErrorMessage(final Activity activity, final int messageResource) {
+    private static Preference createErrorMessage(final Activity activity, final int messageResource) {
         final Preference message = new Preference(activity);
         message.setTitle(messageResource);
         message.setEnabled(false);
         return message;
     }
 
-    private void removeAnyDictSettings(final PreferenceGroup prefGroup) {
+    private static void removeAnyDictSettings(final PreferenceGroup prefGroup) {
         for (int i = prefGroup.getPreferenceCount() - 1; i >= 0; --i) {
             prefGroup.removePreference(prefGroup.getPreference(i));
         }
@@ -313,7 +313,7 @@ public final class DictionarySettingsFragment extends PreferenceFragment
                     final int filesize = cursor.getInt(filesizeIndex);
                     // The key is sorted in lexicographic order, according to the match level, then
                     // the description.
-                    final String key = matchLevelString + "." + description + "." + wordlistId;
+                    final String key = matchLevelString + '.' + description + '.' + wordlistId;
                     final WordListPreference existingPref = prefMap.get(key);
                     if (null == existingPref || existingPref.hasPriorityOver(status)) {
                         final WordListPreference oldPreference = mCurrentPreferenceMap.get(key);

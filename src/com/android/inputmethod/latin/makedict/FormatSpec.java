@@ -18,6 +18,7 @@ package com.android.inputmethod.latin.makedict;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import io.separ.neural.inputmethod.annotations.UsedForTesting;
 import io.separ.neural.inputmethod.indic.Constants;
@@ -347,22 +348,22 @@ public final class FormatSpec {
                 indent.append("H:");
             } else {
                 for (int i = 0; i < indentCount; ++i) {
-                    indent.append(" ");
+                    indent.append(' ');
                 }
             }
             final StringBuilder s = new StringBuilder();
-            for (final String optionKey : mAttributes.keySet()) {
+            for (final Map.Entry<String, String> stringStringEntry : mAttributes.entrySet()) {
                 s.append(indent);
-                s.append(optionKey);
+                s.append(stringStringEntry.getKey());
                 s.append(" = ");
-                if ("date".equals(optionKey) && !plumbing) {
+                if ("date".equals(stringStringEntry.getKey()) && !plumbing) {
                     // Date needs a number of milliseconds, but the dictionary contains seconds
                     s.append(new Date(
-                            1000 * Long.parseLong(mAttributes.get(optionKey))).toString());
+                            1000 * Long.parseLong(stringStringEntry.getValue())).toString());
                 } else {
-                    s.append(mAttributes.get(optionKey));
+                    s.append(stringStringEntry.getValue());
                 }
-                s.append("\n");
+                s.append('\n');
             }
             return s.toString();
         }

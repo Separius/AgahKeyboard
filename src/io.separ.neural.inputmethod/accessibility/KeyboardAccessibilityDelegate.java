@@ -201,7 +201,7 @@ public class KeyboardAccessibilityDelegate<KV extends KeyboardView>
         if (key != null) {
             onHoverEnterTo(key);
         }
-        setLastHoverKey(key);
+        mLastHoverKey = key;
     }
 
     /**
@@ -210,7 +210,7 @@ public class KeyboardAccessibilityDelegate<KV extends KeyboardView>
      * @param event A hover move event.
      */
     protected void onHoverMove(final MotionEvent event) {
-        final Key lastKey = getLastHoverKey();
+        final Key lastKey = mLastHoverKey;
         final Key key = getHoverKeyOf(event);
         if (key != lastKey) {
             if (lastKey != null) {
@@ -223,7 +223,7 @@ public class KeyboardAccessibilityDelegate<KV extends KeyboardView>
         if (key != null) {
             onHoverMoveWithin(key);
         }
-        setLastHoverKey(key);
+        mLastHoverKey = key;
     }
 
     /**
@@ -232,7 +232,7 @@ public class KeyboardAccessibilityDelegate<KV extends KeyboardView>
      * @param event A hover exit event.
      */
     protected void onHoverExit(final MotionEvent event) {
-        final Key lastKey = getLastHoverKey();
+        final Key lastKey = mLastHoverKey;
         if (DEBUG_HOVER) {
             Log.d(TAG, "onHoverExit: key=" + getHoverKeyOf(event) + " last=" + lastKey);
         }
@@ -246,7 +246,7 @@ public class KeyboardAccessibilityDelegate<KV extends KeyboardView>
             performClickOn(key);
             onHoverExitFrom(key);
         }
-        setLastHoverKey(null);
+        mLastHoverKey = null;
     }
 
     /**

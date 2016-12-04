@@ -37,7 +37,7 @@ public class CombinedFormatUtils {
 
     public static String formatAttributeMap(final HashMap<String, String> attributeMap) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(DICTIONARY_TAG + "=");
+        builder.append(DICTIONARY_TAG + '=');
         if (attributeMap.containsKey(DictionaryHeader.DICTIONARY_ID_KEY)) {
             builder.append(attributeMap.get(DictionaryHeader.DICTIONARY_ID_KEY));
         }
@@ -46,41 +46,41 @@ public class CombinedFormatUtils {
                 continue;
             }
             final String value = attributeMap.get(key);
-            builder.append(",").append(key).append("=").append(value);
+            builder.append(',').append(key).append('=').append(value);
         }
-        builder.append("\n");
+        builder.append('\n');
         return builder.toString();
     }
 
     public static String formatWordProperty(final WordProperty wordProperty) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(" " + WORD_TAG + "=").append(wordProperty.mWord);
-        builder.append(",");
+        builder.append(' ' + WORD_TAG + '=').append(wordProperty.mWord);
+        builder.append(',');
         builder.append(formatProbabilityInfo(wordProperty.mProbabilityInfo));
         if (wordProperty.mIsBeginningOfSentence) {
-            builder.append("," + BEGINNING_OF_SENTENCE_TAG + "=true");
+            builder.append(',' + BEGINNING_OF_SENTENCE_TAG + "=true");
         }
         if (wordProperty.mIsNotAWord) {
-            builder.append("," + NOT_A_WORD_TAG + "=true");
+            builder.append(',' + NOT_A_WORD_TAG + "=true");
         }
         if (wordProperty.mIsBlacklistEntry) {
-            builder.append("," + BLACKLISTED_TAG + "=true");
+            builder.append(',' + BLACKLISTED_TAG + "=true");
         }
-        builder.append("\n");
+        builder.append('\n');
         if (wordProperty.mShortcutTargets != null) {
             for (final WeightedString shortcutTarget : wordProperty.mShortcutTargets) {
-                builder.append("  " + SHORTCUT_TAG + "=").append(shortcutTarget.mWord);
-                builder.append(",");
+                builder.append("  " + SHORTCUT_TAG + '=').append(shortcutTarget.mWord);
+                builder.append(',');
                 builder.append(formatProbabilityInfo(shortcutTarget.mProbabilityInfo));
-                builder.append("\n");
+                builder.append('\n');
             }
         }
         if (wordProperty.mBigrams != null) {
             for (final WeightedString bigram : wordProperty.mBigrams) {
-                builder.append("  " + BIGRAM_TAG + "=").append(bigram.mWord);
-                builder.append(",");
+                builder.append("  " + BIGRAM_TAG + '=').append(bigram.mWord);
+                builder.append(',');
                 builder.append(formatProbabilityInfo(bigram.mProbabilityInfo));
-                builder.append("\n");
+                builder.append('\n');
             }
         }
         return builder.toString();
@@ -88,10 +88,10 @@ public class CombinedFormatUtils {
 
     public static String formatProbabilityInfo(final ProbabilityInfo probabilityInfo) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(PROBABILITY_TAG + "=").append(probabilityInfo.mProbability);
+        builder.append(PROBABILITY_TAG + '=').append(probabilityInfo.mProbability);
         if (probabilityInfo.hasHistoricalInfo()) {
-            builder.append(",");
-            builder.append(HISTORICAL_INFO_TAG + "=");
+            builder.append(',');
+            builder.append(HISTORICAL_INFO_TAG + '=');
             builder.append(probabilityInfo.mTimestamp);
             builder.append(HISTORICAL_INFO_SEPARATOR);
             builder.append(probabilityInfo.mLevel);

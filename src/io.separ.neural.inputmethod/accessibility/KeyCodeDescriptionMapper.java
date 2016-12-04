@@ -223,7 +223,6 @@ final class KeyCodeDescriptionMapper {
             final Key key) {
         final KeyboardId keyboardId = keyboard.mId;
         final int actionId = keyboardId.imeAction();
-        final int resId;
 
         // Always use the label, if available.
         if (!TextUtils.isEmpty(key.getLabel())) {
@@ -231,6 +230,7 @@ final class KeyCodeDescriptionMapper {
         }
 
         // Otherwise, use the action ID.
+        final int resId;
         switch (actionId) {
         case EditorInfo.IME_ACTION_SEARCH:
             resId = R.string.spoken_description_search;

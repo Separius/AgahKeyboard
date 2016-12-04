@@ -201,7 +201,7 @@ public class DictionaryFacilitator {
             final Method factoryMethod = dictClass.getMethod(DICT_FACTORY_METHOD_NAME,
                     DICT_FACTORY_METHOD_ARG_TYPES);
             final Object dict = factoryMethod.invoke(null /* obj */,
-                    new Object[] { context, locale, dictFile, dictNamePrefix });
+                    context, locale, dictFile, dictNamePrefix);
             return (ExpandableBinaryDictionary) dict;
         } catch (final NoSuchMethodException | SecurityException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException e) {

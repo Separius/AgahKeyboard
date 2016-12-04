@@ -18,8 +18,7 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
     <string name="label_go_key" msgid="4033615332628671065">"Go"</string>
     <string name="label_next_key" msgid="5586407279258592635">"Next"</string>
     <string name="label_previous_key" msgid="1421141755779895275">"Prev"</string>

@@ -105,7 +105,7 @@ public class ExternalDictionaryGetterForDebug {
         final String locale = header.getLocaleString();
         for (String key : header.mDictionaryOptions.mAttributes.keySet()) {
             message.append(key).append(" = ").append(header.mDictionaryOptions.mAttributes.get(key));
-            message.append("\n");
+            message.append('\n');
         }
         final String languageName = LocaleUtils.constructLocaleFromString(locale)
                 .getDisplayName(Locale.getDefault());

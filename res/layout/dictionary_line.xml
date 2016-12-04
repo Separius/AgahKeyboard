@@ -47,10 +47,10 @@
         android:layout_marginStart="5dip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:ellipsize="marquee"
-        android:fadingEdge="horizontal" />
+        android:fadingEdge="horizontal"
+        android:maxLines="1" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -88,24 +88,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|center_vertical"
-        android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/install_dict" />
+        android:text="@string/install_dict"
+        android:maxLines="1" />
     <Button
         android:id="@+id/dict_cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|center_vertical"
-        android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/cancel_download_dict" />
+        android:text="@string/cancel_download_dict"
+        android:maxLines="1" />
     <Button
         android:id="@+id/dict_delete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|center_vertical"
-        android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/delete_dict" />
+        android:text="@string/delete_dict"
+        android:maxLines="1" />
   </io.separ.neural.inputmethod.dictionarypack.ButtonSwitcher>
 </LinearLayout>

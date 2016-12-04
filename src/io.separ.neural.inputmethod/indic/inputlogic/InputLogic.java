@@ -1573,7 +1573,7 @@ public final class InputLogic {
             if (!TextUtils.equals(committedWord, wordBeforeCursor)) {
                 throw new RuntimeException("revertCommit check failed: we thought we were "
                         + "reverting \"" + committedWord
-                        + "\", but before the cursor we found \"" + wordBeforeCursor + "\"");
+                        + "\", but before the cursor we found \"" + wordBeforeCursor + '"');
             }
         }
         mConnection.deleteSurroundingText(deleteLength, 0);
@@ -1859,8 +1859,8 @@ public final class InputLogic {
      * @param previousSuggestedWords The previously suggested words.
      * @return Obsolete suggestions with the newly typed word.
      */
-    private SuggestedWords retrieveOlderSuggestions(final String typedWord,
-            final SuggestedWords previousSuggestedWords) {
+    private static SuggestedWords retrieveOlderSuggestions(final String typedWord,
+                                                           final SuggestedWords previousSuggestedWords) {
         final SuggestedWords oldSuggestedWords =
                 previousSuggestedWords.isPunctuationSuggestions() ? SuggestedWords.EMPTY
                         : previousSuggestedWords;
@@ -2280,10 +2280,7 @@ public final class InputLogic {
         if (!settingsValues.mShouldShowUiToAcceptTypedWord) {
             return false;
         }
-        if (TextUtils.isEmpty(lastComposedWord.mTypedWord)) {
-            return false;
-        }
-        return !TextUtils.equals(lastComposedWord.mTypedWord, lastComposedWord.mCommittedWord) && mDictionaryFacilitator.isUserDictionaryEnabled() && !mDictionaryFacilitator.isValidWord(lastComposedWord.mTypedWord, true /* ignoreCase */);
+        return !TextUtils.isEmpty(lastComposedWord.mTypedWord) && !TextUtils.equals(lastComposedWord.mTypedWord, lastComposedWord.mCommittedWord) && mDictionaryFacilitator.isUserDictionaryEnabled() && !mDictionaryFacilitator.isValidWord(lastComposedWord.mTypedWord, true /* ignoreCase */);
     }
 
     public void setIndic(boolean flag) {

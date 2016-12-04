@@ -58,11 +58,11 @@ public final class JsonUtils {
             }
             reader.endArray();
             return list;
-        } catch (final IOException e) {
+        } catch (final IOException ignored) {
         } finally {
             close(reader);
         }
-        return Collections.<Object>emptyList();
+        return Collections.emptyList();
     }
 
     public static String listToJsonStr(final List<Object> list) {
@@ -84,7 +84,7 @@ public final class JsonUtils {
             }
             writer.endArray();
             return sw.toString();
-        } catch (final IOException e) {
+        } catch (final IOException ignored) {
         } finally {
             close(writer);
         }

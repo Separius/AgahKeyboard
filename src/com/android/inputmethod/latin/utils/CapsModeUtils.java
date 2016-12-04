@@ -146,8 +146,8 @@ public final class CapsModeUtils {
         // if the first char that's not a space or tab is a start of line (as in \n, start of text,
         // or some other similar characters).
         int j = i;
-        char prevChar = Constants.CODE_SPACE;
         if (hasSpaceBefore) --j;
+        char prevChar = Constants.CODE_SPACE;
         while (j > 0) {
             prevChar = cs.charAt(j - 1);
             if (!Character.isSpaceChar(prevChar) && prevChar != Constants.CODE_TAB) break;

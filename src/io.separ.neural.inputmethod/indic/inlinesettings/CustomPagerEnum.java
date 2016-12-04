@@ -11,8 +11,8 @@ public enum CustomPagerEnum {
     BLUE("Gif", R.layout.view_red),
     ORANGE("Webp", R.layout.view_red);
 
-    private String mTitleResId;
-    private int mLayoutResId;
+    private final String mTitleResId;
+    private final int mLayoutResId;
 
     CustomPagerEnum(String titleResId, int layoutResId) {
         mTitleResId = titleResId;

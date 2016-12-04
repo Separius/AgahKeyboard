@@ -70,7 +70,7 @@ public final class AndroidSpellCheckerService extends SpellCheckerService
 
     private final HashSet<Locale> mCachedLocales = new HashSet<>();
 
-    private final int MAX_NUM_OF_THREADS_READ_DICTIONARY = 2;
+    private static final int MAX_NUM_OF_THREADS_READ_DICTIONARY = 2;
     private final Semaphore mSemaphore = new Semaphore(MAX_NUM_OF_THREADS_READ_DICTIONARY,
             true /* fair */);
     // TODO: Make each spell checker session has its own session id.
@@ -214,8 +214,8 @@ public final class AndroidSpellCheckerService extends SpellCheckerService
 
     public SuggestionResults getSuggestionResults(final Locale locale, final WordComposer composer,
             final PrevWordsInfo prevWordsInfo, final ProximityInfo proximityInfo) {
-        Integer sessionId = null;
         mSemaphore.acquireUninterruptibly();
+        Integer sessionId = null;
         try {
             sessionId = mSessionIdPool.poll();
             DictionaryFacilitator dictionaryFacilitatorForLocale =

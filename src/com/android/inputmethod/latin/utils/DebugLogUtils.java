@@ -57,7 +57,7 @@ public final class DebugLogUtils {
             final StackTraceElement[] frames = e.getStackTrace();
             // Start at 1 because the first frame is here and we don't care about it
             for (int j = 1; j < frames.length && j < limit + 1; ++j) {
-                sb.append(frames[j].toString()).append("\n");
+                sb.append(frames[j].toString()).append('\n');
             }
         }
         return sb.toString();
@@ -72,7 +72,7 @@ public final class DebugLogUtils {
         final StringBuilder sb = new StringBuilder();
         final StackTraceElement[] frames = t.getStackTrace();
         for (StackTraceElement frame : frames) {
-            sb.append(frame.toString()).append("\n");
+            sb.append(frame.toString()).append('\n');
         }
         return sb.toString();
     }
@@ -90,7 +90,7 @@ public final class DebugLogUtils {
         final StringBuilder sb = new StringBuilder();
         for (final Object o : args) {
             sb.append(s(o));
-            sb.append(" ");
+            sb.append(' ');
         }
         Log.e(TAG, sb.toString());
     }
@@ -107,7 +107,7 @@ public final class DebugLogUtils {
         final StringBuilder sb = new StringBuilder("\u001B[31m");
         for (final Object o : args) {
             sb.append(s(o));
-            sb.append(" ");
+            sb.append(' ');
         }
         sb.append("\u001B[0m");
         Log.e(TAG, sb.toString());

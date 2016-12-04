@@ -154,7 +154,7 @@ public final class WordListPreference extends Preference {
         { ButtonSwitcher.STATUS_INSTALL, ACTION_ENABLE_DICT }
     };
 
-    private int getButtonSwitcherStatus(final int status) {
+    private static int getButtonSwitcherStatus(final int status) {
         if (status >= sStatusActionList.length) {
             Log.e(TAG, "Unknown status " + status);
             return ButtonSwitcher.STATUS_NO_BUTTON;
@@ -256,10 +256,10 @@ public final class WordListPreference extends Preference {
             // Just in case something changed in the framework, test for the concrete class
             if (!(parent instanceof ListView)) return;
             final ListView listView = (ListView)parent;
-            final int indexToOpen;
             // Close all first, we'll open back any item that needs to be open.
             final boolean wasOpen = mInterfaceState.isOpen(mWordlistId);
             mInterfaceState.closeAll();
+            final int indexToOpen;
             if (wasOpen) {
                 // This button being shown. Take note that we don't want to open any button in the
                 // loop below.

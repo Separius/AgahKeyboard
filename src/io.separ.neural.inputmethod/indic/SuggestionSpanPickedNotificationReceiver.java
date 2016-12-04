@@ -37,7 +37,7 @@ public final class SuggestionSpanPickedNotificationReceiver extends BroadcastRec
                         SuggestionSpan.SUGGESTION_SPAN_PICKED_BEFORE);
                 final String after = intent.getStringExtra(
                         SuggestionSpan.SUGGESTION_SPAN_PICKED_AFTER);
-                Log.d(TAG, "Received notification picked: " + before + "," + after);
+                Log.d(TAG, "Received notification picked: " + before + ',' + after);
             }
         }
     }

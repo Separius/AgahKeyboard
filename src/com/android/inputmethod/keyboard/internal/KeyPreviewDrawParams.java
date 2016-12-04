@@ -103,7 +103,7 @@ public final class KeyPreviewDrawParams {
                 - previewTextView.getPaddingBottom();
         // The distance between the top edge of the parent key and the bottom of the visible part
         // of the key preview background.
-        setVisibleOffset(mPreviewOffset - previewTextView.getPaddingBottom());
+        mVisibleOffset = mPreviewOffset - previewTextView.getPaddingBottom();
     }
 
     public int getVisibleWidth() {

@@ -68,9 +68,9 @@ public final class SubtypeSwitcher {
     private static final int SUBTYPE_ID_OF_DUMMY_NO_LANGUAGE_SUBTYPE = 0xdde0bfd3;
     private static final String EXTRA_VALUE_OF_DUMMY_NO_LANGUAGE_SUBTYPE =
             "KeyboardLayoutSet=" + SubtypeLocaleUtils.QWERTY
-            + "," + Constants.Subtype.ExtraValue.ASCII_CAPABLE
-            + "," + Constants.Subtype.ExtraValue.ENABLED_WHEN_DEFAULT_IS_NOT_ASCII_CAPABLE
-            + "," + Constants.Subtype.ExtraValue.EMOJI_CAPABLE;
+            + ',' + Constants.Subtype.ExtraValue.ASCII_CAPABLE
+            + ',' + Constants.Subtype.ExtraValue.ENABLED_WHEN_DEFAULT_IS_NOT_ASCII_CAPABLE
+            + ',' + Constants.Subtype.ExtraValue.EMOJI_CAPABLE;
     private static final InputMethodSubtype DUMMY_NO_LANGUAGE_SUBTYPE =
             InputMethodSubtypeCompatUtils.newInputMethodSubtype(
                     R.string.subtype_no_language_qwerty, R.drawable.ic_ime_switcher_dark,
@@ -83,7 +83,7 @@ public final class SubtypeSwitcher {
     private static final int SUBTYPE_ID_OF_DUMMY_EMOJI_SUBTYPE = 0xd78b2ed0;
     private static final String EXTRA_VALUE_OF_DUMMY_EMOJI_SUBTYPE =
             "KeyboardLayoutSet=" + SubtypeLocaleUtils.EMOJI
-            + "," + Constants.Subtype.ExtraValue.EMOJI_CAPABLE;
+            + ',' + Constants.Subtype.ExtraValue.EMOJI_CAPABLE;
     private static final InputMethodSubtype DUMMY_EMOJI_SUBTYPE =
             InputMethodSubtypeCompatUtils.newInputMethodSubtype(
                     R.string.subtype_emoji, R.drawable.ic_ime_switcher_dark,
@@ -275,7 +275,7 @@ public final class SubtypeSwitcher {
 
     private static InputMethodSubtype sForcedSubtypeForTesting = null;
     @UsedForTesting
-    void forceSubtype(final InputMethodSubtype subtype) {
+    static void forceSubtype(final InputMethodSubtype subtype) {
         sForcedSubtypeForTesting = subtype;
     }
 

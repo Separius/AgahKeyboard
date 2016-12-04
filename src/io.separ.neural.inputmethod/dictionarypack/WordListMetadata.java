@@ -108,7 +108,7 @@ public class WordListMetadata {
 
     @Override
     public String toString() {
-        String sb = WordListMetadata.class.getSimpleName() + " : " + mId +
+        return WordListMetadata.class.getSimpleName() + " : " + mId +
                 "\nType : " + mType +
                 "\nDescription : " + mDescription +
                 "\nLastUpdate : " + mLastUpdate +
@@ -121,6 +121,5 @@ public class WordListMetadata {
                 "\nFormatVersion : " + mFormatVersion +
                 "\nFlags : " + mFlags +
                 "\nLocale : " + mLocale;
-        return sb;
     }
 }

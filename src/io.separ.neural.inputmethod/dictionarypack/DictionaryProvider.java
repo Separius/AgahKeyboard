@@ -27,6 +27,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -193,7 +194,7 @@ public final class DictionaryProvider extends ContentProvider {
      * @return the MIME type, or null if the URL is not recognized.
      */
     @Override
-    public String getType(final Uri uri) {
+    public String getType(@NonNull final Uri uri) {
         PrivateLog.log("Asked for type of : " + uri);
         final int match = matchUri(uri);
         switch (match) {
@@ -222,8 +223,8 @@ public final class DictionaryProvider extends ContentProvider {
      * @return a cursor matching the uri, or null if the URI was not recognized.
      */
     @Override
-    public Cursor query(final Uri uri, final String[] projection, final String selection,
-            final String[] selectionArgs, final String sortOrder) {
+    public Cursor query(@NonNull final Uri uri, final String[] projection, final String selection,
+                        final String[] selectionArgs, final String sortOrder) {
         DebugLogUtils.l("Uri =", uri);
         PrivateLog.log("Query : " + uri);
         final String clientId = getClientId(uri);
@@ -294,7 +295,7 @@ public final class DictionaryProvider extends ContentProvider {
      * @return the descriptor, or null if the file is not found or if mode is not equals to "r".
      */
     @Override
-    public AssetFileDescriptor openAssetFile(final Uri uri, final String mode) {
+    public AssetFileDescriptor openAssetFile(@NonNull final Uri uri, @NonNull final String mode) {
         if (null == mode || !"r".equals(mode)) return null;
 
         final int match = matchUri(uri);
@@ -353,7 +354,7 @@ public final class DictionaryProvider extends ContentProvider {
                 MetadataDbHelper.queryInstalledOrDeletingOrAvailableDictionaryMetadata(context,
                         clientId);
         if (null == results) {
-            return Collections.<WordListInfo>emptyList();
+            return Collections.emptyList();
         }
         try {
             final HashMap<String, WordListInfo> dicts = new HashMap<>();
@@ -440,7 +441,7 @@ public final class DictionaryProvider extends ContentProvider {
      * @see android.content.ContentProvider#delete(Uri, String, String[])
      */
     @Override
-    public int delete(final Uri uri, final String selection, final String[] selectionArgs)
+    public int delete(@NonNull final Uri uri, final String selection, final String[] selectionArgs)
             throws UnsupportedOperationException {
         final int match = matchUri(uri);
         if (DICTIONARY_V1_DICT_INFO == match || DICTIONARY_V2_DATAFILE == match) {
@@ -494,7 +495,7 @@ public final class DictionaryProvider extends ContentProvider {
      * @return the URI for the newly inserted item. May be null if arguments don't allow for insert
      */
     @Override
-    public Uri insert(final Uri uri, final ContentValues values)
+    public Uri insert(@NonNull final Uri uri, final ContentValues values)
             throws UnsupportedOperationException {
         if (null == uri || null == values) return null; // Should never happen but let's be safe
         PrivateLog.log("Insert, uri = " + uri.toString());
@@ -539,8 +540,8 @@ public final class DictionaryProvider extends ContentProvider {
      * @see android.content.ContentProvider#insert(Uri, ContentValues)
      */
     @Override
-    public int update(final Uri uri, final ContentValues values, final String selection,
-            final String[] selectionArgs) throws UnsupportedOperationException {
+    public int update(@NonNull final Uri uri, final ContentValues values, final String selection,
+                      final String[] selectionArgs) throws UnsupportedOperationException {
         PrivateLog.log("Attempt to update : " + uri);
         throw new UnsupportedOperationException("Updating dictionary words is not supported");
     }

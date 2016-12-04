@@ -146,10 +146,10 @@ public final class ResizableIntArray {
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < mLength; i++) {
             if (i != 0) {
-                sb.append(",");
+                sb.append(',');
             }
             sb.append(mArray[i]);
         }
-        return "[" + sb + "]";
+        return "[" + sb + ']';
     }
 }

@@ -141,7 +141,7 @@ public class ProximityInfo {
                     if (code == Constants.NOT_A_CODE) {
                         break;
                     }
-                    if (sb.length() > 0) sb.append(" ");
+                    if (sb.length() > 0) sb.append(' ');
                     sb.append(Constants.printableCode(code));
                 }
                 Log.d(TAG, "proxmityChars["+i+"]: " + sb);
@@ -155,9 +155,6 @@ public class ProximityInfo {
         final int[] keyWidths = new int[keyCount];
         final int[] keyHeights = new int[keyCount];
         final int[] keyCharCodes = new int[keyCount];
-        final float[] sweetSpotCenterXs;
-        final float[] sweetSpotCenterYs;
-        final float[] sweetSpotRadii;
 
         for (int infoIndex = 0, keyIndex = 0; keyIndex < sortedKeys.size(); keyIndex++) {
             final Key key = sortedKeys.get(keyIndex);
@@ -173,6 +170,9 @@ public class ProximityInfo {
             infoIndex++;
         }
 
+        final float[] sweetSpotCenterXs;
+        final float[] sweetSpotCenterYs;
+        final float[] sweetSpotRadii;
         if (touchPositionCorrection != null && touchPositionCorrection.isValid()) {
             if (DEBUG) {
                 Log.d(TAG, "touchPositionCorrection: ON");
@@ -199,7 +199,7 @@ public class ProximityInfo {
                     final int hitBoxHeight = hitBox.height();
                     final float hitBoxDiagonal = (float)Math.hypot(hitBoxWidth, hitBoxHeight);
                     sweetSpotCenterXs[infoIndex] +=
-                            touchPositionCorrection.getX(row) * hitBoxWidth;
+                            TouchPositionCorrection.getX(row) * hitBoxWidth;
                     sweetSpotCenterYs[infoIndex] +=
                             touchPositionCorrection.getY(row) * hitBoxHeight;
                     sweetSpotRadii[infoIndex] =

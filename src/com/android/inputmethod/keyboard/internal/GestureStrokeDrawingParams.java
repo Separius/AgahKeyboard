@@ -45,9 +45,7 @@ public final class GestureStrokeDrawingParams {
                 DEFAULT_MIN_SAMPLING_DISTANCE);
         final int interpolationAngularDegree = mainKeyboardViewAttr.getInteger(R.styleable
                 .MainKeyboardView_gestureTrailMaxInterpolationAngularThreshold, 0);
-        mMaxInterpolationAngularThreshold = (interpolationAngularDegree <= 0)
-                ? Math.toRadians(DEFAULT_MAX_INTERPOLATION_ANGULAR_THRESHOLD)
-                : Math.toRadians(interpolationAngularDegree);
+        mMaxInterpolationAngularThreshold = Math.toRadians(interpolationAngularDegree <= 0 ? DEFAULT_MAX_INTERPOLATION_ANGULAR_THRESHOLD : interpolationAngularDegree);
         mMaxInterpolationDistanceThreshold = mainKeyboardViewAttr.getDimension(R.styleable
                 .MainKeyboardView_gestureTrailMaxInterpolationDistanceThreshold,
                 DEFAULT_MAX_INTERPOLATION_DISTANCE_THRESHOLD);

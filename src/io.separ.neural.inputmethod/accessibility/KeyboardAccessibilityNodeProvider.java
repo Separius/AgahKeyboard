@@ -88,7 +88,7 @@ final class KeyboardAccessibilityNodeProvider<KV extends KeyboardView>
 
         // Since this class is constructed lazily, we might not get a subsequent
         // call to setKeyboard() and therefore need to call it now.
-        setKeyboard(keyboardView.getKeyboard());
+        mKeyboard = keyboardView.getKeyboard();
     }
 
     /**

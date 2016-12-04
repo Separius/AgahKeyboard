@@ -142,7 +142,7 @@ public class UserBinaryDictionary extends ExpandableBinaryDictionary {
             // 1 | "en_"          | ["en", "US", "POSIX"]
             // 2 | "en_US_"       | ["en", "en_US", "POSIX"]
             localeElements[i] = localeSoFar + localeElements[i];
-            localeSoFar = localeElements[i] + "_";
+            localeSoFar = localeElements[i] + '_';
             // i | request
             // 0 | "(locale is NULL)"
             // 1 | "(locale is NULL) or (locale=?)"
@@ -232,7 +232,7 @@ public class UserBinaryDictionary extends ExpandableBinaryDictionary {
                 HISTORICAL_DEFAULT_USER_DICTIONARY_FREQUENCY, null, locale);
     }
 
-    private int scaleFrequencyFromDefaultToLatinIme(final int defaultFrequency) {
+    private static int scaleFrequencyFromDefaultToLatinIme(final int defaultFrequency) {
         // The default frequency for the user dictionary is 250 for historical reasons.
         // Latin IME considers a good value for the default user dictionary frequency
         // is about 160 considering the scale we use. So we are scaling down the values.

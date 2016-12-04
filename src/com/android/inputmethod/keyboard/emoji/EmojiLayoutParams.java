@@ -36,7 +36,6 @@ final class EmojiLayoutParams {
     public final int mKeyVerticalGap;
     private final int mKeyHorizontalGap;
     private final int mBottomPadding;
-    private final int mTopPadding;
 
     public EmojiLayoutParams(final Resources res) {
         final int defaultKeyboardHeight = ResourceUtils.getDefaultKeyboardHeight(res);
@@ -45,7 +44,7 @@ final class EmojiLayoutParams {
                 defaultKeyboardHeight, defaultKeyboardHeight);
         mBottomPadding = (int) res.getFraction(R.fraction.config_keyboard_bottom_padding_holo,
                 defaultKeyboardHeight, defaultKeyboardHeight);
-        mTopPadding = (int) res.getFraction(R.fraction.config_keyboard_top_padding_holo,
+        int mTopPadding = (int) res.getFraction(R.fraction.config_keyboard_top_padding_holo,
                 defaultKeyboardHeight, defaultKeyboardHeight);
         mKeyHorizontalGap = (int) (res.getFraction(R.fraction.config_key_horizontal_gap_holo,
                 defaultKeyboardWidth, defaultKeyboardWidth));

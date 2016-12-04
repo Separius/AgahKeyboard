@@ -46,7 +46,6 @@ public final class GestureStrokeRecognitionPoints {
 
     private final GestureStrokeRecognitionParams mRecognitionParams;
 
-    private int mKeyWidth; // pixel
     private int mMinYCoordinate; // pixel
     private int mMaxYCoordinate; // pixel
     // Static threshold for starting gesture detection
@@ -79,7 +78,7 @@ public final class GestureStrokeRecognitionPoints {
 
     // TODO: Make this package private
     public void setKeyboardGeometry(final int keyWidth, final int keyboardHeight) {
-        mKeyWidth = keyWidth;
+        int mKeyWidth = keyWidth;
         mMinYCoordinate = -(int)(keyboardHeight * EXTRA_GESTURE_TRAIL_AREA_ABOVE_KEYBOARD_RATIO);
         mMaxYCoordinate = keyboardHeight;
         // TODO: Find an appropriate base metric for these length. Maybe diagonal length of the key?
@@ -240,6 +239,7 @@ public final class GestureStrokeRecognitionPoints {
         if (msecs > 0) {
             final int pixels = getDistance(lastX, lastY, x, y);
             final int pixelsPerSec = pixels * MSEC_PER_SEC;
+            int mKeyWidth;
             if (DEBUG_SPEED) {
                 final float speed = (float)pixelsPerSec / msecs / mKeyWidth;
                 Log.d(TAG, String.format("[%d] detectFastMove: speed=%5.2f", mPointerId, speed));

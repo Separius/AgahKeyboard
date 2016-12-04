@@ -22,6 +22,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.android.inputmethod.keyboard.PointerTracker;
@@ -124,7 +125,7 @@ public class GestureFloatingTextDrawingPreview extends AbstractDrawingPreview {
     }
 
     @Override
-    public void setPreviewPosition(final PointerTracker tracker) {
+    public void setPreviewPosition(@NonNull final PointerTracker tracker) {
         if (!isPreviewEnabled()) {
             return;
         }
@@ -137,7 +138,7 @@ public class GestureFloatingTextDrawingPreview extends AbstractDrawingPreview {
      * @param canvas The canvas where preview text is drawn.
      */
     @Override
-    public void drawPreview(final Canvas canvas) {
+    public void drawPreview(@NonNull final Canvas canvas) {
         if (!isPreviewEnabled() || mSuggestedWords.isEmpty()
                 || TextUtils.isEmpty(mSuggestedWords.getWord(0))) {
             return;

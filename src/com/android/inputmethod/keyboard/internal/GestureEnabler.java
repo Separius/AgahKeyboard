@@ -19,14 +19,13 @@ package com.android.inputmethod.keyboard.internal;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 
 public final class GestureEnabler {
-    /** True if we should handle gesture events. */
-    private boolean mShouldHandleGesture;
     private boolean mMainDictionaryAvailable;
     private boolean mGestureHandlingEnabledByInputField;
     private boolean mGestureHandlingEnabledByUser;
 
     private void updateGestureHandlingMode() {
-        mShouldHandleGesture = mMainDictionaryAvailable
+        /* True if we should handle gesture events. */
+        boolean mShouldHandleGesture = mMainDictionaryAvailable
                 && mGestureHandlingEnabledByInputField
                 && mGestureHandlingEnabledByUser
                 && !AccessibilityUtils.getInstance().isTouchExplorationEnabled();
@@ -48,7 +47,7 @@ public final class GestureEnabler {
         updateGestureHandlingMode();
     }
 
-    public boolean shouldHandleGesture() {
+    public static boolean shouldHandleGesture() {
         return true; //**SEPAR**
         //return mShouldHandleGesture;
     }

@@ -153,7 +153,7 @@ public final class KeyboardState {
         }
         state.mIsValid = true;
         if (DEBUG_EVENT) {
-            Log.d(TAG, "onSaveKeyboardState: saved=" + state + " " + this);
+            Log.d(TAG, "onSaveKeyboardState: saved=" + state + ' ' + this);
         }
     }
 
@@ -161,7 +161,7 @@ public final class KeyboardState {
             final int currentRecapitalizeState) {
         final SavedKeyboardState state = mSavedKeyboardState;
         if (DEBUG_EVENT) {
-            Log.d(TAG, "onRestoreKeyboardState: saved=" + state + " " + this);
+            Log.d(TAG, "onRestoreKeyboardState: saved=" + state + ' ' + this);
         }
         if (!state.mIsValid || state.mIsAlphabetMode) {
             setAlphabetKeyboard(currentAutoCapsState, currentRecapitalizeState);
@@ -199,7 +199,7 @@ public final class KeyboardState {
 
     private void setShifted(final int shiftMode) {
         if (DEBUG_ACTION) {
-            Log.d(TAG, "setShifted: shiftMode=" + shiftModeToString(shiftMode) + " " + this);
+            Log.d(TAG, "setShifted: shiftMode=" + shiftModeToString(shiftMode) + ' ' + this);
         }
         if (!mIsAlphabetMode) return;
         final int prevShiftMode;
@@ -238,7 +238,7 @@ public final class KeyboardState {
 
     private void setShiftLocked(final boolean shiftLocked) {
         if (DEBUG_ACTION) {
-            Log.d(TAG, "setShiftLocked: shiftLocked=" + shiftLocked + " " + this);
+            Log.d(TAG, "setShiftLocked: shiftLocked=" + shiftLocked + ' ' + this);
         }
         if (!mIsAlphabetMode) return;
         if (shiftLocked && (!mAlphabetShiftState.isShiftLocked()
@@ -358,7 +358,7 @@ public final class KeyboardState {
             final int currentAutoCapsState, final int currentRecapitalizeState) {
         if (DEBUG_EVENT) {
             Log.d(TAG, "onPressKey: code=" + Constants.printableCode(code) + " single="
-                    + isSinglePointer + " autoCaps=" + currentAutoCapsState + " " + this);
+                    + isSinglePointer + " autoCaps=" + currentAutoCapsState + ' ' + this);
         }
         if (code != Constants.CODE_SHIFT) {
             // Because the double tap shift key timer is to detect two consecutive shift key press,
@@ -397,7 +397,7 @@ public final class KeyboardState {
             final int currentAutoCapsState, final int currentRecapitalizeState) {
         if (DEBUG_EVENT) {
             Log.d(TAG, "onReleaseKey: code=" + Constants.printableCode(code)
-                    + " sliding=" + withSliding + " " + this);
+                    + " sliding=" + withSliding + ' ' + this);
         }
         if (code == Constants.CODE_SHIFT) {
             onReleaseShift(withSliding, currentAutoCapsState, currentRecapitalizeState);
@@ -433,7 +433,7 @@ public final class KeyboardState {
     public void onUpdateShiftState(final int autoCaps, final int recapitalizeMode) {
         if (DEBUG_EVENT) {
             Log.d(TAG, "onUpdateShiftState: autoCaps=" + autoCaps + ", recapitalizeMode="
-                    + recapitalizeMode + " " + this);
+                    + recapitalizeMode + ' ' + this);
         }
         mRecapitalizeMode = recapitalizeMode;
         updateAlphabetShiftState(autoCaps, recapitalizeMode);
@@ -627,7 +627,7 @@ public final class KeyboardState {
             final int currentRecapitalizeState) {
         if (DEBUG_EVENT) {
             Log.d(TAG, "onCodeInput: code=" + Constants.printableCode(code)
-                    + " autoCaps=" + currentAutoCapsState + " " + this);
+                    + " autoCaps=" + currentAutoCapsState + ' ' + this);
         }
 
         switch (mSwitchState) {
@@ -707,6 +707,6 @@ public final class KeyboardState {
                 : (mIsSymbolShifted ? "SYMBOLS_SHIFTED" : "SYMBOLS"))
                 + " shift=" + mShiftKeyState
                 + " symbol=" + mSymbolKeyState
-                + " switch=" + switchStateToString(mSwitchState) + "]";
+                + " switch=" + switchStateToString(mSwitchState) + ']';
     }
 }

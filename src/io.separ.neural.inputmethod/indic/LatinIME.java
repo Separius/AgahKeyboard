@@ -608,8 +608,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 currentSettingsValues.mUsePersonalizedDicts,
                 mSubtypeSwitcher.isSystemLocaleSameAsLocaleOfAllEnabledSubtypesOfEnabledImes());
         mContextualDictionaryUpdater.onLoadSettings(currentSettingsValues.mUsePersonalizedDicts);
-        final boolean shouldKeepUserHistoryDictionaries;
-        shouldKeepUserHistoryDictionaries = currentSettingsValues.mUsePersonalizedDicts;
+        final boolean shouldKeepUserHistoryDictionaries = currentSettingsValues.mUsePersonalizedDicts;
         if (!shouldKeepUserHistoryDictionaries) {
             // Remove user history dictionaries.
             PersonalizationHelper.removeAllUserHistoryDictionaries(this);
@@ -622,7 +621,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     public void onUpdateMainDictionaryAvailability(final boolean isMainDictionaryAvailable) {
         final MainKeyboardView mainKeyboardView = mKeyboardSwitcher.getMainKeyboardView();
         if (mainKeyboardView != null) {
-            mainKeyboardView.setMainDictionaryAvailability(isMainDictionaryAvailable);
+            MainKeyboardView.setMainDictionaryAvailability(isMainDictionaryAvailable);
         }
         if (mHandler.hasPendingWaitForDictionaryLoad()) {
             mHandler.cancelWaitForDictionaryLoad();
@@ -721,7 +720,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             }
         }
         // TODO: Remove this test.
-        if (!conf.locale.equals(mPersonalizationDictionaryUpdater.getLocale())) {
+        if (!conf.locale.equals(PersonalizationDictionaryUpdater.getLocale())) {
             refreshPersonalizationDictionarySession(settingsValues);
         }
         super.onConfigurationChanged(conf);
@@ -863,11 +862,11 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                     + ((editorInfo.inputType & InputType.TYPE_TEXT_FLAG_CAP_WORDS) != 0));
         }
         Log.i(TAG, "Starting input. Cursor position = "
-                + editorInfo.initialSelStart + "," + editorInfo.initialSelEnd);
+                + editorInfo.initialSelStart + ',' + editorInfo.initialSelEnd);
         // TODO: Consolidate these checks with {@link InputAttributes}.
         if (InputAttributes.inPrivateImeOptions(null, NO_MICROPHONE_COMPAT, editorInfo)) {
             Log.w(TAG, "Deprecated private IME option specified: " + editorInfo.privateImeOptions);
-            Log.w(TAG, "Use " + getPackageName() + "." + NO_MICROPHONE + " instead");
+            Log.w(TAG, "Use " + getPackageName() + '.' + NO_MICROPHONE + " instead");
         }
         if (InputAttributes.inPrivateImeOptions(getPackageName(), FORCE_ASCII, editorInfo)) {
             Log.w(TAG, "Deprecated private IME option specified: " + editorInfo.privateImeOptions);
@@ -981,7 +980,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
         mHandler.cancelUpdateSuggestionStrip();
 
-        mainKeyboardView.setMainDictionaryAvailability(
+        MainKeyboardView.setMainDictionaryAvailability(
                 mDictionaryFacilitator.hasInitializedMainDictionary());
         mainKeyboardView.setKeyPreviewPopupEnabled(currentSettingsValues.mKeyPreviewPopupOn,
                 currentSettingsValues.mKeyPreviewPopupDismissDelay);
@@ -1164,13 +1163,13 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         mSuggestionStripView.setMoreSuggestionsHeight(visibleTopY);
         // Need to set touchable region only if a keyboard view is being shown.
         if (visibleKeyboardView.isShown()) {
-            final int touchLeft = 0;
             final int touchTop = mKeyboardSwitcher.isShowingMoreKeysPanel() ? 0 : visibleTopY;
             final int touchRight = visibleKeyboardView.getWidth();
             final int touchBottom = inputHeight
                     // Extend touchable region below the keyboard.
                     + EXTENDED_TOUCHABLE_REGION_HEIGHT;
             outInsets.touchableInsets = InputMethodService.Insets.TOUCHABLE_INSETS_REGION;
+            final int touchLeft = 0;
             outInsets.touchableRegion.set(touchLeft, touchTop, touchRight, touchBottom);
         }
         outInsets.contentTopInsets = visibleTopY;

@@ -53,7 +53,6 @@ public class SmoothingUtils {
         final int N = xs.length;
         // TODO: Never isntantiate the matrix
         final float[][] m0 = new float[COEFF_COUNT][COEFF_COUNT];
-        final float[][] m0Inv = new float[COEFF_COUNT][COEFF_COUNT];
         final float[][] m1 = new float[COEFF_COUNT][N];
         final float[][] m2 = new float[N][1];
 
@@ -68,6 +67,7 @@ public class SmoothingUtils {
             }
         }
         // m0Inv
+        final float[][] m0Inv = new float[COEFF_COUNT][COEFF_COUNT];
         MatrixUtils.inverse(m0, m0Inv);
         if (DEBUG) {
             MatrixUtils.dump("m0-1", m0Inv);

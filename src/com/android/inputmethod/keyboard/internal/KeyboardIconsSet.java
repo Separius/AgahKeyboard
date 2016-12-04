@@ -128,7 +128,7 @@ public final class KeyboardIconsSet {
     }
 
     public static String getIconName(final int iconId) {
-        return isValidIconId(iconId) ? ICON_NAMES[iconId] : "unknown<" + iconId + ">";
+        return isValidIconId(iconId) ? ICON_NAMES[iconId] : "unknown<" + iconId + '>';
     }
 
     public static int getIconId(final String name) {

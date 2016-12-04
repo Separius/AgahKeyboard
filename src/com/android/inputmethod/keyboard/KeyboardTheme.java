@@ -18,6 +18,7 @@ package com.android.inputmethod.keyboard;
 
 import android.content.SharedPreferences;
 import android.os.Build.VERSION_CODES;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -75,7 +76,7 @@ public final class KeyboardTheme implements Comparable<KeyboardTheme> {
     }
 
     @Override
-    public int compareTo(final KeyboardTheme rhs) {
+    public int compareTo(@NonNull final KeyboardTheme rhs) {
         if (mMinApiVersion > rhs.mMinApiVersion) return -1;
         if (mMinApiVersion < rhs.mMinApiVersion) return 1;
         return 0;

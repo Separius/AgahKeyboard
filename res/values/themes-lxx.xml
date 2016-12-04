@@ -18,7 +18,7 @@
 */
 -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources>
     <style
         name="InputView.LXX"
         parent="InputView"
@@ -40,6 +40,6 @@
         <item name="keyLabelFlags">alignHintLabelToBottom</item>
         <item name="spacebarIconWidthRatio">0.9</item>
         <!-- No popup hint letter -->
-        <item name="keyPopupHintLetter"></item>
+        <item name="keyPopupHintLetter" />
     </style>
 </resources>

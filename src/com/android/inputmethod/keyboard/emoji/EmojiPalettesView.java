@@ -84,7 +84,6 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
     private ImageButton mDeleteKey;
     private TextView mAlphabetKeyLeft;
     private TextView mAlphabetKeyRight;
-    private View mSpacebar;
     // TODO: Remove this workaround.
     private View mSpacebarIcon;
     private TabHost mTabHost;
@@ -227,7 +226,7 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
         mAlphabetKeyRight.setTag(Constants.CODE_ALPHA_FROM_EMOJI);
         mAlphabetKeyRight.setOnTouchListener(this);
         mAlphabetKeyRight.setOnClickListener(this);
-        mSpacebar = findViewById(R.id.emoji_keyboard_space);
+        View mSpacebar = findViewById(R.id.emoji_keyboard_space);
         mSpacebar.setBackgroundResource(mSpacebarBackgroundId);
         mSpacebar.setTag(Constants.CODE_SPACE);
         mSpacebar.setOnTouchListener(this);

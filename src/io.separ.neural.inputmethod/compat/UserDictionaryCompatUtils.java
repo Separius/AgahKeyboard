@@ -51,7 +51,7 @@ public final class UserDictionaryCompatUtils {
         }
     }
 
-    public static final boolean hasNewerAddWord() {
+    public static boolean hasNewerAddWord() {
         return null != METHOD_addWord;
     }
 }

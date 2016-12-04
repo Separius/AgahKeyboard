@@ -543,7 +543,7 @@ public final class MainKeyboardView extends KeyboardView implements PointerTrack
 
     // Note that this method is called from a non-UI thread.
     @SuppressWarnings("static-method")
-    public void setMainDictionaryAvailability(final boolean mainDictionaryAvailable) {
+    public static void setMainDictionaryAvailability(final boolean mainDictionaryAvailable) {
         PointerTracker.setMainDictionaryAvailability(mainDictionaryAvailable);
     }
 

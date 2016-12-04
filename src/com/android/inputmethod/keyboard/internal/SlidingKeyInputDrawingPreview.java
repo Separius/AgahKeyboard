@@ -20,6 +20,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.support.annotation.NonNull;
 
 import com.android.inputmethod.keyboard.PointerTracker;
 import com.android.inputmethod.latin.utils.CoordinateUtils;
@@ -80,7 +81,7 @@ public final class SlidingKeyInputDrawingPreview extends AbstractDrawingPreview 
      * @param canvas The canvas where the preview is drawn.
      */
     @Override
-    public void drawPreview(final Canvas canvas) {
+    public void drawPreview(@NonNull final Canvas canvas) {
         if (!isPreviewEnabled() || !mShowsSlidingKeyInputPreview) {
             return;
         }
@@ -98,7 +99,7 @@ public final class SlidingKeyInputDrawingPreview extends AbstractDrawingPreview 
      * @param tracker The new location of the preview is based on the points in PointerTracker.
      */
     @Override
-    public void setPreviewPosition(final PointerTracker tracker) {
+    public void setPreviewPosition(@NonNull final PointerTracker tracker) {
         tracker.getDownCoordinates(mPreviewFrom);
         tracker.getLastCoordinates(mPreviewTo);
         mShowsSlidingKeyInputPreview = true;

@@ -206,9 +206,7 @@ public final class KeyboardLayoutSet {
                 || id.mElementId == KeyboardId.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED)
                 && !mParams.mIsSpellChecker) {
             // We only forcibly cache the primary, "ALPHABET", layouts.
-            for (int i = sForcibleKeyboardCache.length - 1; i >= 1; --i) {
-                sForcibleKeyboardCache[i] = sForcibleKeyboardCache[i - 1];
-            }
+            System.arraycopy(sForcibleKeyboardCache, 0, sForcibleKeyboardCache, 1, sForcibleKeyboardCache.length - 1);
             sForcibleKeyboardCache[0] = keyboard;
             if (DEBUG_CACHE) {
                 Log.d(TAG, "forcing caching of keyboard with id=" + id);

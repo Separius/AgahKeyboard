@@ -63,7 +63,7 @@ final class EmojiCategory {
     private static final int ID_EIGHT_FLAGS = 15;
     private static final int ID_EIGHT_SMILEY_PEOPLE_BORING = 16;
 
-    public final class CategoryProperties {
+    public static final class CategoryProperties {
         public final int mCategoryId;
         public final int mPageCount;
         public CategoryProperties(final int categoryId, final int pageCount) {
@@ -173,8 +173,8 @@ final class EmojiCategory {
                     sCategoryTabIconAttr[i], 0);
         }
 
-        int defaultCategoryId = EmojiCategory.ID_SYMBOLS;
         addShownCategoryId(EmojiCategory.ID_RECENTS);
+        int defaultCategoryId = EmojiCategory.ID_SYMBOLS;
         if (BuildCompatUtils.EFFECTIVE_SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (canShowUnicodeEightEmoji()) {
                 defaultCategoryId = EmojiCategory.ID_EIGHT_SMILEY_PEOPLE;
@@ -239,7 +239,7 @@ final class EmojiCategory {
     }
 
     public static String getCategoryName(final int categoryId, final int categoryPageId) {
-        return sCategoryName[categoryId] + "-" + categoryPageId;
+        return sCategoryName[categoryId] + '-' + categoryPageId;
     }
 
     public int getCategoryId(final String name) {
@@ -413,19 +413,16 @@ final class EmojiCategory {
         public int compare(final Key lhs, final Key rhs) {
             final Rect lHitBox = lhs.getHitBox();
             final Rect rHitBox = rhs.getHitBox();
-            if (lHitBox.top < rHitBox.top) {
+            if (lHitBox.top < rHitBox.top)
                 return -1;
-            } else if (lHitBox.top > rHitBox.top) {
+            if (lHitBox.top > rHitBox.top)
                 return 1;
-            }
-            if (lHitBox.left < rHitBox.left) {
+            if (lHitBox.left < rHitBox.left)
                 return -1;
-            } else if (lHitBox.left > rHitBox.left) {
+            if (lHitBox.left > rHitBox.left)
                 return 1;
-            }
-            if (lhs.getCode() == rhs.getCode()) {
+            if (lhs.getCode() == rhs.getCode())
                 return 0;
-            }
             return lhs.getCode() < rhs.getCode() ? -1 : 1;
         }
     };

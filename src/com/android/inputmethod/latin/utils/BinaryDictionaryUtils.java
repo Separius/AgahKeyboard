@@ -68,9 +68,9 @@ public final class BinaryDictionaryUtils {
     }
 
     public static boolean renameDict(final File dictFile, final File newDictFile) {
-        if (dictFile.isFile()) {
+        if (dictFile.isFile())
             return dictFile.renameTo(newDictFile);
-        } else if (dictFile.isDirectory()) {
+        if (dictFile.isDirectory()) {
             final String dictName = dictFile.getName();
             final String newDictName = newDictFile.getName();
             if (newDictFile.exists()) {

@@ -25,6 +25,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
 import com.android.inputmethod.keyboard.PointerTracker;
@@ -56,8 +57,8 @@ public final class GestureTrailsDrawingPreview extends AbstractDrawingPreview im
     }
 
     @Override
-    public void setKeyboardViewGeometry(final int[] originCoords, final int width,
-            final int height) {
+    public void setKeyboardViewGeometry(@NonNull final int[] originCoords, final int width,
+                                        final int height) {
         super.setKeyboardViewGeometry(originCoords, width, height);
         mOffscreenOffsetY = (int)(height
                 * GestureStrokeRecognitionPoints.EXTRA_GESTURE_TRAIL_AREA_ABOVE_KEYBOARD_RATIO);
@@ -127,7 +128,7 @@ public final class GestureTrailsDrawingPreview extends AbstractDrawingPreview im
      * @param canvas The canvas where the preview is drawn.
      */
     @Override
-    public void drawPreview(final Canvas canvas) {
+    public void drawPreview(@NonNull final Canvas canvas) {
         if (!isPreviewEnabled()) {
             return;
         }
@@ -154,7 +155,7 @@ public final class GestureTrailsDrawingPreview extends AbstractDrawingPreview im
      * @param tracker The new location of the preview is based on the points in PointerTracker.
      */
     @Override
-    public void setPreviewPosition(final PointerTracker tracker) {
+    public void setPreviewPosition(@NonNull final PointerTracker tracker) {
         if (!isPreviewEnabled()) {
             return;
         }

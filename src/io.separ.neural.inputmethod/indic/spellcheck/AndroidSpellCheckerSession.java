@@ -91,7 +91,7 @@ public final class AndroidSpellCheckerSession extends AndroidWordLevelSpellCheck
                 newSi.setCookieAndSequence(si.getCookie(), si.getSequence());
                 if (DBG) {
                     Log.d(TAG, "Override and remove old span over: " + splitText + ", "
-                            + offset + "," + newLength);
+                            + offset + ',' + newLength);
                 }
                 additionalOffsets.add(offset);
                 additionalLengths.add(newLength);

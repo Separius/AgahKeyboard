@@ -33,7 +33,7 @@ public class PersonalizationDictionaryUpdater {
         mDictionaryFacilitator = dictionaryFacilitator;
     }
 
-    public Locale getLocale() {
+    public static Locale getLocale() {
         return null;
     }
 

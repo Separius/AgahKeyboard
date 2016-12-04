@@ -63,11 +63,11 @@ public final class CursorAnchorInfoCompatWrapper {
         sGetSelectionEndMethod = sCursorAnchorInfoClass.getPrimitiveMethod(
                 "getSelectionEnd", INVALID_TEXT_INDEX);
         sGetCharacterBoundsMethod = sCursorAnchorInfoClass.getMethod(
-                "getCharacterBounds", (RectF)null, int.class);
+                "getCharacterBounds", null, int.class);
         sGetCharacterBoundsFlagsMethod = sCursorAnchorInfoClass.getPrimitiveMethod(
                 "getCharacterBoundsFlags", 0, int.class);
         sGetComposingTextMethod = sCursorAnchorInfoClass.getMethod(
-                "getComposingText", (CharSequence)null);
+                "getComposingText", null);
         sGetComposingTextStartMethod = sCursorAnchorInfoClass.getPrimitiveMethod(
                 "getComposingTextStart", INVALID_TEXT_INDEX);
         sGetInsertionMarkerBaselineMethod = sCursorAnchorInfoClass.getPrimitiveMethod(
@@ -78,7 +78,7 @@ public final class CursorAnchorInfoCompatWrapper {
                 "getInsertionMarkerHorizontal", 0.0f);
         sGetInsertionMarkerTopMethod = sCursorAnchorInfoClass.getPrimitiveMethod(
                 "getInsertionMarkerTop", 0.0f);
-        sGetMatrixMethod = sCursorAnchorInfoClass.getMethod("getMatrix", (Matrix)null);
+        sGetMatrixMethod = sCursorAnchorInfoClass.getMethod("getMatrix", null);
         sGetInsertionMarkerFlagsMethod = sCursorAnchorInfoClass.getPrimitiveMethod(
                 "getInsertionMarkerFlags", 0);
     }

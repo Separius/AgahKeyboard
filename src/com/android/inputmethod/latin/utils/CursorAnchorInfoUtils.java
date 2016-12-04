@@ -16,10 +16,12 @@
 
 package com.android.inputmethod.latin.utils;
 
+import android.annotation.TargetApi;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.inputmethodservice.ExtractEditText;
 import android.inputmethodservice.InputMethodService;
+import android.os.Build;
 import android.text.Layout;
 import android.text.Spannable;
 import android.view.View;
@@ -82,6 +84,7 @@ public final class CursorAnchorInfoUtils {
      * @return the {@link CursorAnchorInfo} object based on the current layout. {@code null} if it
      * is not feasible.
      */
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static CursorAnchorInfo getCursorAnchorInfo(final TextView textView) {
         Layout layout = textView.getLayout();
         if (layout == null) {

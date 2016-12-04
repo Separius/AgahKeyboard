@@ -125,7 +125,7 @@ public class MetadataDbHelper extends SQLiteOpenHelper {
             + FORMATVERSION_COLUMN + " INTEGER, "
             + FLAGS_COLUMN + " INTEGER, "
             + RAW_CHECKSUM_COLUMN + " TEXT,"
-            + "PRIMARY KEY (" + WORDLISTID_COLUMN + "," + VERSION_COLUMN + "));";
+            + "PRIMARY KEY (" + WORDLISTID_COLUMN + ',' + VERSION_COLUMN + "));";
     private static final String METADATA_CREATE_CLIENT_TABLE =
             "CREATE TABLE IF NOT EXISTS " + CLIENT_TABLE_NAME + " ("
             + CLIENT_CLIENT_ID_COLUMN + " TEXT, "
@@ -171,7 +171,7 @@ public class MetadataDbHelper extends SQLiteOpenHelper {
     }
     private MetadataDbHelper(final Context context, final String clientId) {
         super(context,
-                METADATA_DATABASE_NAME_STEM + (TextUtils.isEmpty(clientId) ? "" : "." + clientId),
+                METADATA_DATABASE_NAME_STEM + (TextUtils.isEmpty(clientId) ? "" : '.' + clientId),
                 null, CURRENT_METADATA_DATABASE_VERSION);
         mContext = context;
         mClientId = clientId;
@@ -220,7 +220,7 @@ public class MetadataDbHelper extends SQLiteOpenHelper {
         createClientTable(db);
     }
 
-    private void addRawChecksumColumnUnlessPresent(final SQLiteDatabase db, final String clientId) {
+    private static void addRawChecksumColumnUnlessPresent(final SQLiteDatabase db, final String clientId) {
         try {
             db.execSQL("SELECT " + RAW_CHECKSUM_COLUMN + " FROM "
                     + METADATA_TABLE_NAME + " LIMIT 0;");
@@ -354,7 +354,7 @@ public class MetadataDbHelper extends SQLiteOpenHelper {
      * @param uri the metadata URI we just downloaded
      */
     public static void saveLastUpdateTimeOfUri(final Context context, final String uri) {
-        PrivateLog.log("Save last update time of URI : " + uri + " " + System.currentTimeMillis());
+        PrivateLog.log("Save last update time of URI : " + uri + ' ' + System.currentTimeMillis());
         final ContentValues values = new ContentValues();
         values.put(CLIENT_LAST_UPDATE_DATE_COLUMN, System.currentTimeMillis());
         final SQLiteDatabase defaultDb = getDb(context, null);

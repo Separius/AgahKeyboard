@@ -72,7 +72,7 @@ public final class DicTraverseSession {
                 mNativeDicTraverseSession, dictionary, previousWord, previousWordLength);
     }
 
-    private long createNativeDicTraverseSession(String locale, long dictSize) {
+    private static long createNativeDicTraverseSession(String locale, long dictSize) {
         return setDicTraverseSessionNative(locale, dictSize);
     }
 

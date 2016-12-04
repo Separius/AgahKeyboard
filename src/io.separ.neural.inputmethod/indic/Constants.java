@@ -291,7 +291,7 @@ public final class Constants {
             sb.append(printableCode(code));
             addDelimiter = true;
         }
-        return "[" + sb + "]";
+        return "[" + sb + ']';
     }
 
     public static final int MAX_INT_BIT_COUNT = 32;

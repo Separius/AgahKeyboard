@@ -92,7 +92,7 @@ public final class RichInputMethodManager {
         setAdditionalInputMethodSubtypes(additionalSubtypes);
     }
 
-    public InputMethodSubtype[] getAdditionalSubtypes(final Context context) {
+    public static InputMethodSubtype[] getAdditionalSubtypes(final Context context) {
         SubtypeLocaleUtils.init(context);
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final String prefAdditionalSubtypes = Settings.readPrefAdditionalSubtypes(

@@ -154,8 +154,8 @@ public final class RichInputConnection {
                 || !(reference.equals(internal.toString()))) {
             final String context = "Expected selection start = " + mExpectedSelStart
                     + "\nActual selection start = " + et.selectionStart
-                    + "\nExpected text = " + internal.length() + " " + internal
-                    + "\nActual text = " + reference.length() + " " + reference;
+                    + "\nExpected text = " + internal.length() + ' ' + internal
+                    + "\nActual text = " + reference.length() + ' ' + reference;
             ((LatinIME)mParent).debugDumpStateAndCrashWithException(context);
         } else {
             Log.e(TAG, DebugLogUtils.getStackTrace(2));
@@ -492,7 +492,7 @@ public final class RichInputConnection {
             // mistakenly catch them to do some stuff.
             switch (keyEvent.getKeyCode()) {
             case KeyEvent.KEYCODE_ENTER:
-                mCommittedTextBeforeComposingText.append("\n");
+                mCommittedTextBeforeComposingText.append('\n');
                 mExpectedSelStart += 1;
                 mExpectedSelEnd = mExpectedSelStart;
                 break;
@@ -780,7 +780,7 @@ public final class RichInputConnection {
             // cursor, but the application may be changing the text while we are typing, so
             // anything goes. We should not crash.
             Log.d(TAG, "Tried to revert double-space combo but we didn't find "
-                    + "\"" + Constants.STRING_PERIOD_AND_SPACE + "\" just before the cursor.");
+                    + '"' + Constants.STRING_PERIOD_AND_SPACE + "\" just before the cursor.");
             return false;
         }
         // Double-space results in ". ". A backspace to cancel this should result in a single
@@ -966,8 +966,7 @@ public final class RichInputConnection {
     public boolean requestCursorUpdates(final boolean enableMonitor,
             final boolean requestImmediateCallback) {
         mIC = mParent.getCurrentInputConnection();
-        final boolean scheduled;
-        scheduled = null != mIC && InputConnectionCompatUtils.requestCursorUpdates(mIC, enableMonitor, requestImmediateCallback);
+        final boolean scheduled = null != mIC && InputConnectionCompatUtils.requestCursorUpdates(mIC, enableMonitor, requestImmediateCallback);
         mCursorAnchorInfoMonitorEnabled = (scheduled && enableMonitor);
         return scheduled;
     }
@@ -1065,14 +1064,14 @@ public final class RichInputConnection {
             @NonNull Context context, @RawRes int res, @NonNull File outputDir,
             @NonNull String filename) {
         final File outputFile = new File(outputDir, filename);
-        final byte[] buffer = new byte[4096];
-        InputStream resourceReader = null;
         try {
+            InputStream resourceReader = null;
             try {
                 resourceReader = context.getResources().openRawResource(res);
                 OutputStream dataWriter = null;
                 try {
                     dataWriter = new FileOutputStream(outputFile);
+                    final byte[] buffer = new byte[4096];
                     while (true) {
                         final int numRead = resourceReader.read(buffer);
                         if (numRead <= 0) {

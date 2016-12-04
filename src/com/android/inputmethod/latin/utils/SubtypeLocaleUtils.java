@@ -137,7 +137,7 @@ public final class SubtypeLocaleUtils {
     }
 
     private static String getNoLanguageLayoutKey(final String keyboardLayoutName) {
-        return NO_LANGUAGE + "_" + keyboardLayoutName;
+        return NO_LANGUAGE + '_' + keyboardLayoutName;
     }
 
     public static int getSubtypeNameId(final String localeString, final String keyboardLayoutName) {
@@ -254,7 +254,7 @@ public final class SubtypeLocaleUtils {
                             + " nameResId=" + subtype.getNameResId()
                             + " locale=" + subtype.getLocale()
                             + " extra=" + subtype.getExtraValue()
-                            + "\n" + DebugLogUtils.getStackTrace());
+                            + '\n' + DebugLogUtils.getStackTrace());
                     return "";
                 }
             }
@@ -288,7 +288,7 @@ public final class SubtypeLocaleUtils {
             // This subtype doesn't have a keyboardLayoutSet extra value, so lookup its keyboard
             // layout set in sLocaleAndExtraValueToKeyboardLayoutSetMap to keep it compatible with
             // pre-JellyBean.
-            final String key = subtype.getLocale() + ":" + subtype.getExtraValue();
+            final String key = subtype.getLocale() + ':' + subtype.getExtraValue();
             keyboardLayoutSet = sLocaleAndExtraValueToKeyboardLayoutSetMap.get(key);
         }
         // TODO: Remove this null check when InputMethodManager.getCurrentInputMethodSubtype is

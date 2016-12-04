@@ -55,7 +55,7 @@ public class AccountUtils {
     public static List<String> getDeviceAccountsWithDomain(
             final Context context, final String domain) {
         final ArrayList<String> retval = new ArrayList<>();
-        final String atDomain = "@" + domain.toLowerCase(Locale.ROOT);
+        final String atDomain = '@' + domain.toLowerCase(Locale.ROOT);
         for (final Account account : getAccounts(context)) {
             if (account.name.toLowerCase(Locale.ROOT).endsWith(atDomain)) {
                 retval.add(account.name);

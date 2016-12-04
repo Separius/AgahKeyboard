@@ -141,7 +141,7 @@ public class UserDictionaryList extends PreferenceFragment {
         if (null == locale) {
             newPref.setTitle(Locale.getDefault().getDisplayName());
         } else {
-            if ("".equals(locale))
+            if (locale != null && locale.isEmpty())
                 newPref.setTitle(getString(R.string.user_dict_settings_all_languages));
             else
                 newPref.setTitle(LocaleUtils.constructLocaleFromString(locale).getDisplayName());

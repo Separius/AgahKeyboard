@@ -169,7 +169,7 @@ public class ContactsBinaryDictionary extends ExpandableBinaryDictionary {
         }
     }
 
-    private boolean useFirstLastBigramsForLocale(final Locale locale) {
+    private static boolean useFirstLastBigramsForLocale(final Locale locale) {
         // TODO: Add firstname/lastname bigram rules for other languages.
         return locale != null && locale.getLanguage().equals(Locale.ENGLISH.getLanguage());
     }

@@ -16,6 +16,8 @@
 
 package com.android.inputmethod.latin.utils;
 
+import android.support.annotation.NonNull;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -38,7 +40,7 @@ public class ExecutorUtils {
         }
 
         @Override
-        public Thread newThread(final Runnable r) {
+        public Thread newThread(@NonNull final Runnable r) {
             return new Thread(r, "Executor - " + mId);
         }
     }

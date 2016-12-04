@@ -1,5 +1,5 @@
 package io.separ.neural.inputmethod.indic.inlinesettings;
-import android.content.Context;
+
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +9,7 @@ import android.widget.Button;
 import io.separ.neural.inputmethod.indic.LatinIME;
 
 public final class InlineSettingsAdaptor extends PagerAdapter{
-    private LatinIME mContext;
+    private final LatinIME mContext;
 
     public InlineSettingsAdaptor(LatinIME context) {
         mContext = context;

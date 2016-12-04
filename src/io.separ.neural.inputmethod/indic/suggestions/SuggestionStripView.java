@@ -17,16 +17,13 @@
 package io.separ.neural.inputmethod.indic.suggestions;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.speech.RecognizerIntent;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -48,7 +45,6 @@ import com.android.inputmethod.latin.utils.ImportantNoticeUtils;
 
 import java.util.ArrayList;
 
-import io.separ.neural.inputmethod.Utils.SpeechUtils;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 import io.separ.neural.inputmethod.indic.AudioAndHapticFeedbackManager;
 import io.separ.neural.inputmethod.indic.Constants;
@@ -85,7 +81,6 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
 
     private final ArrayList<TextView> mWordViews = new ArrayList<>();
     private final ArrayList<TextView> mDebugInfoViews = new ArrayList<>();
-    private final ArrayList<View> mDividerViews = new ArrayList<>();
 
     Listener mListener;
     private SuggestedWords mSuggestedWords = SuggestedWords.EMPTY;
@@ -166,6 +161,7 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
         mStripVisibilityGroup = new StripVisibilityGroup(this, mSuggestionsStrip,
                 mAddToDictionaryStrip, mImportantNoticeStrip);
 
+        ArrayList<View> mDividerViews = new ArrayList<>();
         for (int pos = 0; pos < SuggestedWords.MAX_SUGGESTIONS; pos++) {
             final TextView word = new TextView(context, null, R.attr.suggestionWordStyle);
             word.setOnClickListener(this);
@@ -190,6 +186,13 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
         final Resources res = context.getResources();
         mMoreSuggestionsModalTolerance = res.getDimensionPixelOffset(
                 R.dimen.config_more_suggestions_modal_tolerance);
+        GestureDetector.OnGestureListener mMoreSuggestionsSlidingListener = new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onScroll(MotionEvent down, MotionEvent me, float deltaX, float deltaY) {
+                final float dy = me.getY() - down.getY();
+                return deltaY > 0 && dy < 0 && showMoreSuggestions();
+            }
+        };
         mMoreSuggestionsSlidingDetector = new GestureDetector(
                 context, mMoreSuggestionsSlidingListener);
 
@@ -390,14 +393,6 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
     private boolean mNeedsToTransformTouchEventToHoverEvent;
     private boolean mIsDispatchingHoverEventToMoreSuggestions;
     private final GestureDetector mMoreSuggestionsSlidingDetector;
-    private final GestureDetector.OnGestureListener mMoreSuggestionsSlidingListener =
-            new GestureDetector.SimpleOnGestureListener() {
-        @Override
-        public boolean onScroll(MotionEvent down, MotionEvent me, float deltaX, float deltaY) {
-            final float dy = me.getY() - down.getY();
-            return deltaY > 0 && dy < 0 && showMoreSuggestions();
-        }
-    };
 
     @Override
     public boolean onInterceptTouchEvent(final MotionEvent me) {

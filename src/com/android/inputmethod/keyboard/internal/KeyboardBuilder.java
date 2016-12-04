@@ -787,7 +787,7 @@ public class KeyboardBuilder<KP extends KeyboardParams> {
         final TypedArray keyAttrs = mResources.obtainAttributes(attr, R.styleable.Keyboard_Key);
         try {
             if (!keyStyleAttr.hasValue(R.styleable.Keyboard_KeyStyle_styleName)) {
-                throw new XmlParseUtils.ParseException("<" + TAG_KEY_STYLE
+                throw new XmlParseUtils.ParseException('<' + TAG_KEY_STYLE
                         + "/> needs styleName attribute", parser);
             }
             if (DEBUG) {

@@ -307,8 +307,7 @@ public final class StringUtils {
         for (int i = 0; i < len; i = text.offsetByCodePoints(i, 1)) {
             final int codePoint = text.codePointAt(i);
             if (Character.isLetter(codePoint)) {
-                if ((needsCapsNext && !Character.isUpperCase(codePoint))
-                        || (!needsCapsNext && !Character.isLowerCase(codePoint))) {
+                if (needsCapsNext ? !Character.isUpperCase(codePoint) : !Character.isLowerCase(codePoint)) {
                     return false;
                 }
             }
@@ -599,7 +598,7 @@ public final class StringUtils {
             return stringArray;
         }
 
-        protected String joinStringArray(final String[] stringArray, final String delimiter) {
+        protected static String joinStringArray(final String[] stringArray, final String delimiter) {
             if (stringArray == null) {
                 return "null";
             }

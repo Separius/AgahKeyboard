@@ -172,16 +172,16 @@ public class UserDictionarySettings extends ListFragment {
         // TODO: it should be easy to make this more readable by making the special values
         // human-readable, like "all_locales" and "current_locales" strings, provided they
         // can be guaranteed not to match locales that may exist.
-        if ("".equals(locale)) {
+        if (locale != null && locale.isEmpty()) {
             // Case-insensitive sort
             return getActivity().managedQuery(UserDictionary.Words.CONTENT_URI, QUERY_PROJECTION,
                     QUERY_SELECTION_ALL_LOCALES, null,
-                    "UPPER(" + UserDictionary.Words.WORD + ")");
+                    "UPPER(" + UserDictionary.Words.WORD + ')');
         } else {
             final String queryLocale = null != locale ? locale : Locale.getDefault().toString();
             return getActivity().managedQuery(UserDictionary.Words.CONTENT_URI, QUERY_PROJECTION,
                     QUERY_SELECTION, new String[] { queryLocale },
-                    "UPPER(" + UserDictionary.Words.WORD + ")");
+                    "UPPER(" + UserDictionary.Words.WORD + ')');
         }
     }
 

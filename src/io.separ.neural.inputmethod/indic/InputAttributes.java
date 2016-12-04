@@ -286,7 +286,7 @@ public final class InputAttributes {
     public static boolean inPrivateImeOptions(final String packageName, final String key,
             final EditorInfo editorInfo) {
         if (editorInfo == null) return false;
-        final String findingKey = (packageName != null) ? packageName + "." + key : key;
+        final String findingKey = (packageName != null) ? packageName + '.' + key : key;
         return StringUtils.containsInCommaSplittableText(findingKey, editorInfo.privateImeOptions);
     }
 }

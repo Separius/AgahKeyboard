@@ -22,7 +22,7 @@
     These symbols (spoken_symbol_*) are also unsupported by TTS.
     TODO: Remove these string resources when TTS/TalkBack support these letters.
 -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
     <!-- Spoken description for Unicode code point U+00AA: "ª" FEMININE ORDINAL INDICATOR -->
     <string name="spoken_accented_letter_00AA">Feminine ordinal indicator</string>
     <!-- Spoken description for Unicode code point U+00B5: "µ" MICRO SIGN -->

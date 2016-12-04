@@ -70,7 +70,7 @@ public final class CodesArrayParser {
         if (strs.length <= 1) {
             return codesArraySpec;
         }
-        return TextUtils.isEmpty(strs[1]) ? strs[0] : strs[1];
+        return strs[TextUtils.isEmpty(strs[1]) ? 0 : 1];
     }
 
     public static int getMinSupportSdkVersion(final String codesArraySpec) {

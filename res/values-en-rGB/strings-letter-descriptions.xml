@@ -24,8 +24,7 @@
     TODO: Remove these string resources when TTS/TalkBack support these letters.
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
     <string name="spoken_accented_letter_00AA" msgid="4374325261868451570">"Feminine ordinal indicator"</string>
     <string name="spoken_accented_letter_00B5" msgid="9031387673828823891">"Micro sign"</string>
     <string name="spoken_accented_letter_00BA" msgid="5045198452071207437">"Masculine ordinal indicator"</string>

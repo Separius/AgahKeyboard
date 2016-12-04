@@ -16,6 +16,8 @@
 
 package com.android.inputmethod.latin.makedict;
 
+import android.support.annotation.NonNull;
+
 import com.android.inputmethod.latin.BinaryDictionary;
 import com.android.inputmethod.latin.utils.CombinedFormatUtils;
 import com.android.inputmethod.latin.utils.StringUtils;
@@ -125,7 +127,7 @@ public final class WordProperty implements Comparable<WordProperty> {
      * frequency, they are sorted in lexicographic order.
      */
     @Override
-    public int compareTo(final WordProperty w) {
+    public int compareTo(@NonNull final WordProperty w) {
         if (getProbability() < w.getProbability()) return 1;
         if (getProbability() > w.getProbability()) return -1;
         return mWord.compareTo(w.mWord);

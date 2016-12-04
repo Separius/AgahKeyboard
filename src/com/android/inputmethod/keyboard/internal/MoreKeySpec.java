@@ -78,8 +78,7 @@ public final class MoreKeySpec {
 
     @Override
     public int hashCode() {
-        int hashCode = 1;
-        hashCode = 31 + mCode;
+        int hashCode = 31 + mCode;
         hashCode = hashCode * 31 + mIconId;
         hashCode = hashCode * 31 + (mLabel == null ? 0 : mLabel.hashCode());
         hashCode = hashCode * 31 + (mOutputText == null ? 0 : mOutputText.hashCode());
@@ -108,7 +107,7 @@ public final class MoreKeySpec {
         if (StringUtils.codePointCount(label) == 1 && label.codePointAt(0) == mCode) {
             return output;
         } else {
-            return label + "|" + output;
+            return label + '|' + output;
         }
     }
 

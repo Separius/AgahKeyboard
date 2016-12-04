@@ -47,7 +47,7 @@ public final class PointerTrackerQueue {
     public void add(final Element pointer) {
         synchronized (mExpandableArrayOfActivePointers) {
             if (DEBUG) {
-                Log.d(TAG, "add: " + pointer + " " + this);
+                Log.d(TAG, "add: " + pointer + ' ' + this);
             }
             final ArrayList<Element> expandableArray = mExpandableArrayOfActivePointers;
             final int arraySize = mArraySize;
@@ -63,7 +63,7 @@ public final class PointerTrackerQueue {
     public void remove(final Element pointer) {
         synchronized (mExpandableArrayOfActivePointers) {
             if (DEBUG) {
-                Log.d(TAG, "remove: " + pointer + " " + this);
+                Log.d(TAG, "remove: " + pointer + ' ' + this);
             }
             final ArrayList<Element> expandableArray = mExpandableArrayOfActivePointers;
             final int arraySize = mArraySize;
@@ -95,7 +95,7 @@ public final class PointerTrackerQueue {
     public void releaseAllPointersOlderThan(final Element pointer, final long eventTime) {
         synchronized (mExpandableArrayOfActivePointers) {
             if (DEBUG) {
-                Log.d(TAG, "releaseAllPoniterOlderThan: " + pointer + " " + this);
+                Log.d(TAG, "releaseAllPoniterOlderThan: " + pointer + ' ' + this);
             }
             final ArrayList<Element> expandableArray = mExpandableArrayOfActivePointers;
             final int arraySize = mArraySize;
@@ -116,8 +116,7 @@ public final class PointerTrackerQueue {
                 newIndex++;
             }
             // Shift rest of the expandableArray.
-            int count = 0;
-            for (; index < arraySize; index++) {
+            for (int count = 0; index < arraySize; index++) {
                 final Element element = expandableArray.get(index);
                 if (element == pointer) {
                     count++;
@@ -146,7 +145,7 @@ public final class PointerTrackerQueue {
                 if (pointer == null) {
                     Log.d(TAG, "releaseAllPoniters: " + this);
                 } else {
-                    Log.d(TAG, "releaseAllPoniterExcept: " + pointer + " " + this);
+                    Log.d(TAG, "releaseAllPoniterExcept: " + pointer + ' ' + this);
                 }
             }
             final ArrayList<Element> expandableArray = mExpandableArrayOfActivePointers;
@@ -228,11 +227,11 @@ public final class PointerTrackerQueue {
             for (int index = 0; index < arraySize; index++) {
                 final Element element = expandableArray.get(index);
                 if (sb.length() > 0) {
-                    sb.append(" ");
+                    sb.append(' ');
                 }
                 sb.append(element.toString());
             }
-            return "[" + sb.toString() + "]";
+            return '[' + sb.toString() + ']';
         }
     }
 }

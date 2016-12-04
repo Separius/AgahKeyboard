@@ -45,12 +45,11 @@ public class AppWorkaroundsUtils {
         if (null == mPackageInfo || null == mPackageInfo.applicationInfo) {
             return "";
         }
-        String s = "Target application : " +
+        return "Target application : " +
                 mPackageInfo.applicationInfo.name +
                 "\nPackage : " +
                 mPackageInfo.applicationInfo.packageName +
                 "\nTarget app sdk version : " +
                 mPackageInfo.applicationInfo.targetSdkVersion;
-        return s;
     }
 }

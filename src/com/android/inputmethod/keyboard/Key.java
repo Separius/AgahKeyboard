@@ -20,6 +20,7 @@ import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.android.inputmethod.keyboard.internal.KeyDrawParams;
@@ -449,7 +450,7 @@ public class Key implements Comparable<Key> {
     }
 
     @Override
-    public int compareTo(Key o) {
+    public int compareTo(@NonNull Key o) {
         if (equalsInternal(o)) return 0;
         if (mHashCode > o.mHashCode) return 1;
         return -1;
@@ -467,11 +468,11 @@ public class Key implements Comparable<Key> {
 
     @Override
     public String toString() {
-        return toShortString() + " " + getX() + "," + getY() + " " + getWidth() + "x" + getHeight();
+        return toShortString() + ' ' + getX() + ',' + getY() + ' ' + mWidth + 'x' + mHeight;
     }
 
     public String toShortString() {
-        final int code = getCode();
+        final int code = mCode;
         if (code == Constants.CODE_OUTPUT_TEXT) {
             return getOutputText();
         }
@@ -479,12 +480,12 @@ public class Key implements Comparable<Key> {
     }
 
     public String toLongString() {
-        final int iconId = getIconId();
+        final int iconId = mIconId;
         final String topVisual = (iconId == KeyboardIconsSet.ICON_UNDEFINED)
-                ? KeyboardIconsSet.PREFIX_ICON + KeyboardIconsSet.getIconName(iconId) : getLabel();
-        final String hintLabel = getHintLabel();
-        final String visual = (hintLabel == null) ? topVisual : topVisual + "^" + hintLabel;
-        return toString() + " " + visual + "/" + backgroundName(mBackgroundType);
+                ? KeyboardIconsSet.PREFIX_ICON + KeyboardIconsSet.getIconName(iconId) : mLabel;
+        final String hintLabel = mHintLabel;
+        final String visual = (hintLabel == null) ? topVisual : topVisual + '^' + hintLabel;
+        return toString() + ' ' + visual + '/' + backgroundName(mBackgroundType);
     }
 
     private static String backgroundName(final int backgroundType) {
@@ -570,7 +571,7 @@ public class Key implements Comparable<Key> {
         return mKeyVisualAttributes;
     }
 
-    public final Typeface selectTypeface(final KeyDrawParams params) {
+    public static Typeface selectTypeface(final KeyDrawParams params) {
         /*SEPAR*/
         return FontUtils.getTypeface();
         /*switch (mLabelFlags & LABEL_FLAGS_FONT_MASK) {
@@ -749,7 +750,7 @@ public class Key implements Comparable<Key> {
     public Drawable getIcon(final KeyboardIconsSet iconSet, final int alpha) {
         final OptionalAttributes attrs = mOptionalAttributes;
         final int disabledIconId = (attrs != null) ? attrs.mDisabledIconId : ICON_UNDEFINED;
-        final int iconId = mEnabled ? getIconId() : disabledIconId;
+        final int iconId = mEnabled ? mIconId : disabledIconId;
         final Drawable icon = iconSet.getIconDrawable(iconId);
         if (icon != null) {
             icon.setAlpha(alpha);
@@ -758,7 +759,7 @@ public class Key implements Comparable<Key> {
     }
 
     public Drawable getPreviewIcon(final KeyboardIconsSet iconSet) {
-        return iconSet.getIconDrawable(getIconId());
+        return iconSet.getIconDrawable(mIconId);
     }
 
     public int getWidth() {

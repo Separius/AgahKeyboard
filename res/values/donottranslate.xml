@@ -17,7 +17,7 @@
 ** limitations under the License.
 */
 -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
     <!-- For backward compatibility.
          See {@link SettingsValues#needsToShowVoiceInputKey(SharedPreferences,Resources)} -->
     <string name="voice_mode_main">0</string>

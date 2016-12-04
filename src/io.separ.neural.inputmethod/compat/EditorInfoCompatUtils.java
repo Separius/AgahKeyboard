@@ -56,7 +56,7 @@ public final class EditorInfoCompatUtils {
         case EditorInfo.IME_ACTION_PREVIOUS:
             return "actionPrevious";
         default:
-            return "actionUnknown(" + actionId + ")";
+            return "actionUnknown(" + actionId + ')';
         }
     }
 

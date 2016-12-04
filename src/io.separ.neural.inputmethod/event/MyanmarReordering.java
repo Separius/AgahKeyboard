@@ -181,7 +181,8 @@ public class MyanmarReordering implements Combiner {
             } else { // lastCodePoint is a consonant/medial. But if it's something else it's fine
                 return clearAndGetResultingEvent(newEvent);
             }
-        } else if (isMedial(codePoint)) {
+        }
+        if (isMedial(codePoint)) {
             final Event lastEvent = getLastEvent();
             if (null == lastEvent) {
                 mCurrentEvents.add(newEvent);

@@ -52,9 +52,8 @@ public class DictionaryListInterfaceState {
     }
 
     public void setOpen(final String wordlistId, final int status) {
-        final State newState;
         final State state = mWordlistToState.get(wordlistId);
-        newState = null == state ? new State() : state;
+        final State newState = null == state ? new State() : state;
         newState.mOpen = true;
         newState.mStatus = status;
         mWordlistToState.put(wordlistId, newState);

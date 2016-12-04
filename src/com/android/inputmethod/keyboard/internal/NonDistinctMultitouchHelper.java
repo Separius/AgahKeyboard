@@ -98,7 +98,7 @@ public final class NonDistinctMultitouchHelper {
         }
 
         Log.w(TAG, "Unknown touch panel behavior: pointer count is "
-                + pointerCount + " (previously " + oldPointerCount + ")");
+                + pointerCount + " (previously " + oldPointerCount + ')');
     }
 
     private static void injectMotionEvent(final int action, final float x, final float y,

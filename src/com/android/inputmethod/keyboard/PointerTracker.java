@@ -271,7 +271,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         final int trackersSize = sTrackers.size();
         for (int i = 0; i < trackersSize; ++i) {
             final PointerTracker tracker = sTrackers.get(i);
-            tracker.setReleasedKeyGraphics(tracker.getKey());
+            tracker.setReleasedKeyGraphics(tracker.mCurrentKey);
         }
     }
 
@@ -462,7 +462,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
     }
 
     private static boolean needsToSuppressKeyPreviewPopup(final long eventTime) {
-        return sGestureEnabler.shouldHandleGesture() && sTypingTimeRecorder.needsToSuppressKeyPreviewPopup(eventTime);
+        return GestureEnabler.shouldHandleGesture() && sTypingTimeRecorder.needsToSuppressKeyPreviewPopup(eventTime);
     }
 
     private void setPressedKeyGraphics(final Key key, final long eventTime) {
@@ -703,7 +703,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         }
         sPointerTrackerQueue.add(this);
         onDownEventInternal(x, y, eventTime);
-        if (!sGestureEnabler.shouldHandleGesture()) {
+        if (!GestureEnabler.shouldHandleGesture()) {
             return;
         }
         // A gesture should start only from a non-modifier key. Note that the gesture detection is
@@ -714,7 +714,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
             mBatchInputArbiter.addDownEventPoint(x, y, eventTime,
                     sTypingTimeRecorder.getLastLetterTypingTime(), getActivePointerTrackerCount());
             mGestureStrokeDrawingPoints.onDownEvent(
-                    x, y, mBatchInputArbiter.getElapsedTimeSinceFirstDown(eventTime));
+                    x, y, BatchInputArbiter.getElapsedTimeSinceFirstDown(eventTime));
         }
     }
 
@@ -781,7 +781,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
             return;
         }
         mGestureStrokeDrawingPoints.onMoveEvent(
-                x, y, mBatchInputArbiter.getElapsedTimeSinceFirstDown(eventTime));
+                x, y, BatchInputArbiter.getElapsedTimeSinceFirstDown(eventTime));
         // If the MoreKeysPanel is showing then do not attempt to enter gesture mode. However,
         // the gestured touch points are still being recorded in case the panel is dismissed.
         if (isShowingMoreKeysPanel()) {
@@ -807,7 +807,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
             return;
         }
 
-        if (sGestureEnabler.shouldHandleGesture() && me != null) {
+        if (GestureEnabler.shouldHandleGesture() && me != null) {
             // Add historical points to gesture path.
             final int pointerIndex = me.findPointerIndex(mPointerId);
             final int historicalSize = me.getHistorySize();
@@ -955,7 +955,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         final Key oldKey = mCurrentKey;
         final Key newKey = onMoveKey(x, y);
 
-        if (sGestureEnabler.shouldHandleGesture()) {
+        if (GestureEnabler.shouldHandleGesture()) {
             // Register move event on gesture tracker.
             onGestureMoveEvent(x, y, eventTime, true /* isMajorEvent */, newKey);
             if (sInGesture) {
@@ -1202,7 +1202,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
     }
 
     public void onKeyRepeat(final int code, final int repeatCount) {
-        final Key key = getKey();
+        final Key key = mCurrentKey;
         if (key == null || key.getCode() != code) {
             mCurrentRepeatingKeyCode = Constants.NOT_A_CODE;
             return;

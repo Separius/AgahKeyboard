@@ -63,7 +63,7 @@ public final class ResourceUtils {
             sBuildKeyValues.put(key, value);
             keyValuePairs.add(key + '=' + value);
         }
-        sBuildKeyValuesDebugString = "[" + TextUtils.join(" ", keyValuePairs) + "]";
+        sBuildKeyValuesDebugString = '[' + TextUtils.join(" ", keyValuePairs) + ']';
     }
 
     public static String getDeviceOverrideValue(final Resources res, final int overrideResId,
@@ -252,14 +252,12 @@ public final class ResourceUtils {
     public static float getDimensionOrFraction(final TypedArray a, final int index, final int base,
             final float defValue) {
         final TypedValue value = a.peekValue(index);
-        if (value == null) {
+        if (value == null)
             return defValue;
-        }
-        if (isFractionValue(value)) {
+        if (isFractionValue(value))
             return a.getFraction(index, base, base, defValue);
-        } else if (isDimensionValue(value)) {
+        if (isDimensionValue(value))
             return a.getDimension(index, defValue);
-        }
         return defValue;
     }
 

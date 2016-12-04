@@ -17,11 +17,11 @@
 ** limitations under the License.
 */
 -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
     <string name="dictionary_pack_client_id" translatable="false">io.separ.neural.inputmethod.indic</string>
-    <string name="dictionary_pack_metadata_uri" translatable="false"></string>
+    <string name="dictionary_pack_metadata_uri" translatable="false" />
     <string name="dictionary_pack_settings_activity" translatable="false">io.separ.neural.inputmethod.dictionarypack.DictionarySettingsActivity</string>
     <string name="authority" translatable="false">io.separ.neural.inputmethod.dictionarypack.aosp</string>
-    <string name="default_metadata_uri" translatable="false"></string>
+    <string name="default_metadata_uri" translatable="false" />
     <string name="local_metadata_filename" translatable="false">metadata.json</string>
 </resources>

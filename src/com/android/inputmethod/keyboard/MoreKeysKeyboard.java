@@ -80,7 +80,7 @@ public final class MoreKeysKeyboard extends Keyboard {
             mIsMoreKeysFixedOrder = isMoreKeysFixedOrder;
             if (parentKeyboardWidth / keyWidth < Math.min(numKeys, numColumn)) {
                 throw new IllegalArgumentException("Keyboard is too small to hold more keys: "
-                        + parentKeyboardWidth + " " + keyWidth + " " + numKeys + " " + numColumn);
+                        + parentKeyboardWidth + ' ' + keyWidth + ' ' + numKeys + ' ' + numColumn);
             }
             mDefaultKeyWidth = keyWidth;
             mDefaultRowHeight = rowHeight;

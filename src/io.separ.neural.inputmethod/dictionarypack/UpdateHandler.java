@@ -240,9 +240,7 @@ public final class UpdateHandler {
             }
             metadataRequest.setAllowedOverRoaming(res.getBoolean(R.bool.allow_over_roaming));
         }
-        final boolean notificationVisible = updateNow
-                ? res.getBoolean(R.bool.display_notification_for_user_requested_update)
-                : res.getBoolean(R.bool.display_notification_for_auto_update);
+        final boolean notificationVisible = res.getBoolean(updateNow ? R.bool.display_notification_for_user_requested_update : R.bool.display_notification_for_auto_update);
 
         metadataRequest.setTitle(res.getString(R.string.download_description));
         metadataRequest.setNotificationVisibility(notificationVisible
@@ -659,7 +657,7 @@ public final class UpdateHandler {
             context.deleteFile(destinationFile);
             throw new BadFormatException("MD5 checksum check failed : \"" + md5sum + "\" <> \""
                     + downloadRecord.mAttributes.getAsString(MetadataDbHelper.CHECKSUM_COLUMN)
-                    + "\"");
+                    + '"');
         }
     }
 

@@ -115,7 +115,7 @@ public final class SpacingAndPunctuations {
     }
 
     public String dump() {
-        String sb = "mSortedSymbolsPrecededBySpace = " +
+        return "mSortedSymbolsPrecededBySpace = " +
                 "" + Arrays.toString(mSortedSymbolsPrecededBySpace) +
                 "\n   mSortedSymbolsFollowedBySpace = " +
                 "" + Arrays.toString(mSortedSymbolsFollowedBySpace) +
@@ -135,6 +135,5 @@ public final class SpacingAndPunctuations {
                 "" + mUsesAmericanTypography +
                 "\n   mUsesGermanRules = " +
                 "" + mUsesGermanRules;
-        return sb;
     }
 }

@@ -21,7 +21,7 @@
     These Emoji symbols are unsupported by TTS.
     TODO: Remove this file when TTS/TalkBack support these Emoji symbols.
 -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
      <string name="spoken_emoji_00A9">Copyright sign</string>
      <string name="spoken_emoji_00AE">Registered sign</string>
      <string name="spoken_emoji_203C">Double exclamation mark</string>
@@ -459,7 +459,7 @@
      <string name="spoken_emoji_1F3F8">Badminton racquet and shuttlecock</string>
      <string name="spoken_emoji_1F3F9">Bow and arrow</string>
      <string name="spoken_emoji_1F3FA">Amphora</string>
-     <string name="spoken_emoji_1F3FB">Emoji modifier Fitzpatrick type–1-2</string>
+     <string name="spoken_emoji_1F3FB">Emoji modifier Fitzpatrick type–1–2</string>
      <string name="spoken_emoji_1F3FC">Emoji modifier Fitzpatrick type-3</string>
      <string name="spoken_emoji_1F3FD">Emoji modifier Fitzpatrick type-4</string>
      <string name="spoken_emoji_1F3FE">Emoji modifier Fitzpatrick type-5</string>
@@ -540,7 +540,7 @@
      <string name="spoken_emoji_1F449">White right pointing backhand index</string>
      <string name="spoken_emoji_1F44A">Fisted hand sign</string>
      <string name="spoken_emoji_1F44B">Waving hand sign</string>
-     <string name="spoken_emoji_1F44C">Ok hand sign</string>
+     <string name="spoken_emoji_1F44C">OK hand sign</string>
      <string name="spoken_emoji_1F44D">Thumbs up sign</string>
      <string name="spoken_emoji_1F44E">Thumbs down sign</string>
      <string name="spoken_emoji_1F44F">Clapping hands sign</string>
@@ -922,7 +922,7 @@
      <string name="spoken_emoji_1F643">Upside-down face</string>
      <string name="spoken_emoji_1F644">Face with rolling eyes</string>
      <string name="spoken_emoji_1F645">Face with no good gesture</string>
-     <string name="spoken_emoji_1F646">Face with ok gesture</string>
+     <string name="spoken_emoji_1F646">Face with OK gesture</string>
      <string name="spoken_emoji_1F647">Person bowing deeply</string>
      <string name="spoken_emoji_1F648">See-no-evil monkey</string>
      <string name="spoken_emoji_1F649">Hear-no-evil monkey</string>

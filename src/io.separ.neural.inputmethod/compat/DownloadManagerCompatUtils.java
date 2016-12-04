@@ -32,7 +32,7 @@ public final class DownloadManagerCompatUtils {
                 request /* default return value */, METHOD_setAllowedOverMetered, allowOverMetered);
     }
 
-    public static final boolean hasSetAllowedOverMetered() {
+    public static boolean hasSetAllowedOverMetered() {
         return null != METHOD_setAllowedOverMetered;
     }
 }

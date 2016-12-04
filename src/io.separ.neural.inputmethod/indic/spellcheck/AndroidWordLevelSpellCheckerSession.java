@@ -263,7 +263,6 @@ public abstract class AndroidWordLevelSpellCheckerSession extends Session {
             final String text = inText.replaceAll(
                     AndroidSpellCheckerService.APOSTROPHE, AndroidSpellCheckerService.SINGLE_QUOTE);
             final int capitalizeType = StringUtils.getCapitalizationType(text);
-            boolean isInDict = true;
             if (!mService.hasMainDictionaryForLocale(mLocale)) {
                 return AndroidSpellCheckerService.getNotInDictEmptySuggestions(
                         false /* reportAsTypo */);
@@ -287,7 +286,7 @@ public abstract class AndroidWordLevelSpellCheckerSession extends Session {
                     mLocale, composer, prevWordsInfo, proximityInfo);
             final Result result = getResult(capitalizeType, mLocale, suggestionsLimit,
                     mService.getRecommendedThreshold(), text, suggestionResults);
-            isInDict = isInDictForAnyCapitalization(text, capitalizeType);
+            boolean isInDict = isInDictForAnyCapitalization(text, capitalizeType);
             if (DBG) {
                 Log.i(TAG, "Spell checking results for " + text + " with suggestion limit "
                         + suggestionsLimit);
@@ -343,7 +342,7 @@ public abstract class AndroidWordLevelSpellCheckerSession extends Session {
         }
         if (DBG) {
             for (final SuggestedWordInfo suggestedWordInfo : suggestionResults) {
-                Log.i(TAG, "" + suggestedWordInfo.mScore + " " + suggestedWordInfo.mWord);
+                Log.i(TAG, suggestedWordInfo.mScore + ' ' + suggestedWordInfo.mWord);
             }
         }
         final ArrayList<String> suggestions = new ArrayList<>();

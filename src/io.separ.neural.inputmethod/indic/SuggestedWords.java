@@ -340,7 +340,7 @@ public class SuggestedWords {
             if (TextUtils.isEmpty(mDebugString)) {
                 return mWord;
             } else {
-                return mWord + " (" + mDebugString + ")";
+                return mWord + " (" + mDebugString + ')';
             }
         }
 
@@ -350,9 +350,8 @@ public class SuggestedWords {
             if (candidates.isEmpty()) {
                 return false;
             }
-            final boolean didRemoveTypedWord;
             /* startIndexExclusive */
-            didRemoveTypedWord = !TextUtils.isEmpty(typedWord) && removeSuggestedWordInfoFrom(typedWord, candidates, -1 /* startIndexExclusive */);
+            final boolean didRemoveTypedWord = !TextUtils.isEmpty(typedWord) && removeSuggestedWordInfoFrom(typedWord, candidates, -1 /* startIndexExclusive */);
             for (int i = 0; i < candidates.size(); ++i) {
                 removeSuggestedWordInfoFrom(candidates.get(i).mWord, candidates,
                         i /* startIndexExclusive */);

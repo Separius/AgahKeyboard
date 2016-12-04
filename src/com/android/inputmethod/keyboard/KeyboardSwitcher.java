@@ -61,7 +61,6 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     private MainKeyboardView mKeyboardView;
     private EmojiPalettesView mEmojiPalettesView;
     private LinearLayout mSettingsViewPager;
-    private Button mBackFromSettingsKey;
     private LatinIME mLatinIME;
     private boolean mIsHardwareAcceleratedDrawingEnabled;
 
@@ -313,7 +312,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     // Implements {@link KeyboardState.SwitchActions}.
     @Override
     public void startDoubleTapShiftKeyTimer() {
-        final MainKeyboardView keyboardView = getMainKeyboardView();
+        final MainKeyboardView keyboardView = mKeyboardView;
         if (keyboardView != null) {
             keyboardView.startDoubleTapShiftKeyTimer();
         }
@@ -322,7 +321,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     // Implements {@link KeyboardState.SwitchActions}.
     @Override
     public void cancelDoubleTapShiftKeyTimer() {
-        final MainKeyboardView keyboardView = getMainKeyboardView();
+        final MainKeyboardView keyboardView = mKeyboardView;
         if (keyboardView != null) {
             keyboardView.cancelDoubleTapShiftKeyTimer();
         }
@@ -331,7 +330,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     // Implements {@link KeyboardState.SwitchActions}.
     @Override
     public boolean isInDoubleTapShiftKeyTimeout() {
-        final MainKeyboardView keyboardView = getMainKeyboardView();
+        final MainKeyboardView keyboardView = mKeyboardView;
         return keyboardView != null && keyboardView.isInDoubleTapShiftKeyTimeout();
     }
 
@@ -387,7 +386,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mSettingsViewPager = (LinearLayout) mCurrentInputView.findViewById(R.id.settings_pager_view);
         ((ViewPager)mCurrentInputView.findViewById(R.id.settings_pager_tabs)).setAdapter(
                 new InlineSettingsAdaptor(mLatinIME));
-        mBackFromSettingsKey = (Button) mCurrentInputView.findViewById(R.id.backFromSettingsKey);
+        Button mBackFromSettingsKey = (Button) mCurrentInputView.findViewById(R.id.backFromSettingsKey);
         mBackFromSettingsKey.setEnabled(true);
         mBackFromSettingsKey.setOnClickListener(new View.OnClickListener() {
             @Override

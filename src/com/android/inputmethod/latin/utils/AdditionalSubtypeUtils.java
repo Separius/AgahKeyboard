@@ -89,7 +89,7 @@ public final class AdditionalSubtypeUtils {
     public static String getPrefSubtype(final InputMethodSubtype subtype) {
         final String localeString = subtype.getLocale();
         final String keyboardLayoutSetName = SubtypeLocaleUtils.getKeyboardLayoutSetName(subtype);
-        final String layoutExtraValue = KEYBOARD_LAYOUT_SET + "=" + keyboardLayoutSetName;
+        final String layoutExtraValue = KEYBOARD_LAYOUT_SET + '=' + keyboardLayoutSetName;
         final String extraValue = StringUtils.removeFromCommaSplittableTextIfExists(
                 layoutExtraValue, StringUtils.removeFromCommaSplittableTextIfExists(
                         IS_ADDITIONAL_SUBTYPE, subtype.getExtraValue()));
@@ -176,13 +176,13 @@ public final class AdditionalSubtypeUtils {
             final String keyboardLayoutSetName, final boolean isAsciiCapable,
             final boolean isEmojiCapable) {
         final ArrayList<String> extraValueItems = new ArrayList<>();
-        extraValueItems.add(KEYBOARD_LAYOUT_SET + "=" + keyboardLayoutSetName);
+        extraValueItems.add(KEYBOARD_LAYOUT_SET + '=' + keyboardLayoutSetName);
         if (isAsciiCapable) {
             extraValueItems.add(ASCII_CAPABLE);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN &&
                 SubtypeLocaleUtils.isExceptionalLocale(localeString)) {
-            extraValueItems.add(UNTRANSLATABLE_STRING_IN_SUBTYPE_NAME + "=" +
+            extraValueItems.add(UNTRANSLATABLE_STRING_IN_SUBTYPE_NAME + '=' +
                     SubtypeLocaleUtils.getKeyboardLayoutSetDisplayName(keyboardLayoutSetName));
         }
         if (isEmojiCapable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -218,10 +218,10 @@ public final class AdditionalSubtypeUtils {
         // - EmojiCapable
         // - isAdditionalSubtype
         final ArrayList<String> compatibilityExtraValueItems = new ArrayList<>();
-        compatibilityExtraValueItems.add(KEYBOARD_LAYOUT_SET + "=" + keyboardLayoutSetName);
+        compatibilityExtraValueItems.add(KEYBOARD_LAYOUT_SET + '=' + keyboardLayoutSetName);
         compatibilityExtraValueItems.add(ASCII_CAPABLE);
         if (SubtypeLocaleUtils.isExceptionalLocale(localeString)) {
-            compatibilityExtraValueItems.add(UNTRANSLATABLE_STRING_IN_SUBTYPE_NAME + "=" +
+            compatibilityExtraValueItems.add(UNTRANSLATABLE_STRING_IN_SUBTYPE_NAME + '=' +
                     SubtypeLocaleUtils.getKeyboardLayoutSetDisplayName(keyboardLayoutSetName));
         }
         compatibilityExtraValueItems.add(EMOJI_CAPABLE);

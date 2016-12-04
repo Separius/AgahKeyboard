@@ -93,7 +93,7 @@ public final class LanguageModelParam {
             if (StringUtils.isEmptyStringOrWhiteSpaces(tempWord)) {
                 // just skip this token
                 if (DEBUG_TOKEN) {
-                    Log.d(TAG, "--- isEmptyStringOrWhiteSpaces: \"" + tempWord + "\"");
+                    Log.d(TAG, "--- isEmptyStringOrWhiteSpaces: \"" + tempWord + '"');
                 }
                 continue;
             }
@@ -101,14 +101,14 @@ public final class LanguageModelParam {
                     tempWord, spacingAndPunctuations)) {
                 if (DEBUG_TOKEN) {
                     Log.d(TAG, "--- not looksValidForDictionaryInsertion: \""
-                            + tempWord + "\"");
+                            + tempWord + '"');
                 }
                 // Sentence terminator found. Split.
                 prevWordsInfo = PrevWordsInfo.EMPTY_PREV_WORDS_INFO;
                 continue;
             }
             if (DEBUG_TOKEN) {
-                Log.d(TAG, "--- word: \"" + tempWord + "\"");
+                Log.d(TAG, "--- word: \"" + tempWord + '"');
             }
             final LanguageModelParam languageModelParam =
                     detectWhetherVaildWordOrNotAndGetLanguageModelParam(

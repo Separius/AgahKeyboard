@@ -113,11 +113,11 @@ abstract public class ExpandableBinaryDictionary extends Dictionary {
      */
     protected abstract void loadInitialContentsLocked();
 
-    private boolean matchesExpectedBinaryDictFormatVersionForThisType(final int formatVersion) {
+    private static boolean matchesExpectedBinaryDictFormatVersionForThisType(final int formatVersion) {
         return formatVersion == FormatSpec.VERSION4;
     }
 
-    private boolean needsToMigrateDictionary(final int formatVersion) {
+    private static boolean needsToMigrateDictionary(final int formatVersion) {
         // When we bump up the dictionary format version, the old version should be added to here
         // for supporting migration. Note that native code has to support reading such formats.
         return formatVersion == FormatSpec.VERSION4_ONLY_FOR_TESTING;
@@ -159,7 +159,7 @@ abstract public class ExpandableBinaryDictionary extends Dictionary {
 
     public static String getDictName(final String name, final Locale locale,
             final File dictFile) {
-        return dictFile != null ? dictFile.getName() : name + "." + locale.toString();
+        return dictFile != null ? dictFile.getName() : name + '.' + locale.toString();
     }
 
     private void asyncExecuteTaskWithWriteLock(final Runnable task) {
@@ -534,7 +534,7 @@ abstract public class ExpandableBinaryDictionary extends Dictionary {
                 Log.w(TAG, "Start stress in loading: " + mDictName);
                 Thread.sleep(15000);
                 Log.w(TAG, "End stress in loading");
-            } catch (InterruptedException e) {
+            } catch (InterruptedException ignored) {
             }
         }
         final BinaryDictionary oldBinaryDictionary = mBinaryDictionary;

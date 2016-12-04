@@ -57,7 +57,7 @@ public class BatchInputArbiter {
      * @param eventTime the time of this event.
      * @return the elapsed time in millisecond from the first gesture down.
      */
-    public int getElapsedTimeSinceFirstDown(final long eventTime) {
+    public static int getElapsedTimeSinceFirstDown(final long eventTime) {
         return (int)(eventTime - sGestureFirstDownTime);
     }
 
