@@ -20,10 +20,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.karumi.dexter.Dexter;
+
 public final class SetupActivity extends Activity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Dexter.initialize(getApplicationContext());
         final Intent intent = new Intent();
         intent.setClass(this, SetupWizardActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP

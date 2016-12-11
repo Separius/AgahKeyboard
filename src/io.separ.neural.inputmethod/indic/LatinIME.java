@@ -71,6 +71,7 @@ import com.android.inputmethod.latin.utils.LeakGuardHandlerWrapper;
 import com.android.inputmethod.latin.utils.StatsUtils;
 import com.android.inputmethod.latin.utils.SubtypeLocaleUtils;
 import com.android.inputmethod.latin.utils.ViewLayoutUtils;
+import com.karumi.dexter.Dexter;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -577,6 +578,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
         StatsUtils.onCreate(mSettings.getCurrent());
         FontUtils.initialize(this);
+        Dexter.initialize(this);
         //SpeechUtils.initialize(this);
     }
 
@@ -1318,6 +1320,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 return true;
             }
             return false;
+        case Constants.CUSTOM_CODE_CHNAGE_LANGUAGE:
+            Log.e("SEPAR", "onCustomRequest");
+            switchToNextSubtype();
+            return true;
         }
         return false;
     }
@@ -1398,30 +1404,30 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     }
 
     public void SendRichContentSample(int id){
-        final File imagesDir = new File(getFilesDir(), "images");
-        imagesDir.mkdirs();
-        int resId;
-        String type;
-        String name;
-        if(id == 0) {
-            resId = R.raw.setup_welcome_image;
-            type = RichInputConnection.MIME_TYPE_PNG;
-            name = "image.png";
-        } else if(id == 1) {
-            resId = R.raw.animated_gif;
-            type = RichInputConnection.MIME_TYPE_GIF;
-            name = "image.gif";
-        } else {
-            resId = R.raw.animated_webp;
-            type = RichInputConnection.MIME_TYPE_WEBP;
-            name = "image.webp";
-        }
-        File mPngFile = RichInputConnection.getFileForResource(this, resId, imagesDir, name);
-        Intent resInt = mInputLogic.mConnection.doCommitContent("Test", type, mPngFile);
-        if(resInt != null) {
-            resInt.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(resInt);
-        }
+            final File imagesDir = new File(getFilesDir(), "images");
+            imagesDir.mkdirs();
+            int resId;
+            String type;
+            String name;
+            if (id == 0) {
+                resId = R.raw.setup_welcome_image;
+                type = RichInputConnection.MIME_TYPE_PNG;
+                name = "image.png";
+            } else if (id == 1) {
+                resId = R.raw.animated_gif;
+                type = RichInputConnection.MIME_TYPE_GIF;
+                name = "image.gif";
+            } else {
+                resId = R.raw.animated_webp;
+                type = RichInputConnection.MIME_TYPE_WEBP;
+                name = "image.webp";
+            }
+            File mPngFile = RichInputConnection.getFileForResource(this, resId, imagesDir, name);
+            Intent resInt = mInputLogic.mConnection.doCommitContent("Test", type, mPngFile);
+            if (resInt != null) {
+                resInt.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(resInt);
+            }
     }
 
     // Called from PointerTracker through the KeyboardActionListener interface

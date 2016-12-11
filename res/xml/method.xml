@@ -33,6 +33,5 @@
         android:label="@string/keyboard_name_fa"
         android:imeSubtypeLocale="fa"
         android:imeSubtypeMode="keyboard"
-        android:imeSubtypeExtraValue="TrySuppressingImeSwitcher,SupportTouchPositionCorrection,EmojiCapable"
-        android:isAsciiCapable="false" />
+        android:imeSubtypeExtraValue="TrySuppressingImeSwitcher,SupportTouchPositionCorrection,EmojiCapable" />
 </input-method>

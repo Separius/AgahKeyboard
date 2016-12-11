@@ -18,15 +18,16 @@ dependencies {
     compile 'com.android.support:support-v4:25.0.1'
     compile 'com.android.support:support-v13:25.0.1'
     compile 'com.google.code.findbugs:jsr305:3.0.0'
+    compile 'com.karumi:dexter:2.3.1'
     compile fileTree(include: '*.jar', dir: 'libs')
 }
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 25
     buildToolsVersion '25.0.0'
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 21
+        targetSdkVersion 25
     }
     sourceSets {
         main {
@@ -61,6 +62,7 @@ android {
     }
     lintOptions {
         checkReleaseBuilds false
+        enable 'MissingPermission'
     }
     productFlavors {
     }

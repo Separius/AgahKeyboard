@@ -20,15 +20,15 @@
         android:versionCode="25"
         android:versionName="2.0.2">
 
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />  <!--CONTACTS-->
+    <uses-permission android:name="android.permission.READ_CONTACTS" /> <!--CONTACTS-->
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!--STORAGE-->
     <uses-permission android:name="android.permission.WRITE_USER_DICTIONARY" />
-    <!--<uses-permission android:name="android.permission.RECORD_AUDIO" />-->
+    <!--<uses-permission android:name="android.permission.RECORD_AUDIO" />--> <!--MICROPHONE-->
 
     <application android:label="@string/english_ime_name"
             android:icon="@drawable/ic_launcher_keyboard"
