@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
 import android.media.AudioManager;
 import android.os.Build;
@@ -836,11 +835,15 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         switcher.updateKeyboardTheme();
         final MainKeyboardView mainKeyboardView = switcher.getMainKeyboardView();
         try {
-            mainKeyboardView.setBackgroundColor(ColorUtils.getColor(getApplicationContext(), getCurrentInputBinding().getUid()));
+            Integer newColor = ColorUtils.getColor(getApplicationContext(), getCurrentInputBinding().getUid());
+            if (newColor != null)
+                mainKeyboardView.setBackgroundColor(newColor);
+            else {
+                switcher.forceUpdateKeyboardTheme();
+            }
         }catch (Exception e){
-            mainKeyboardView.setBackgroundColor(Color.WHITE);
+            switcher.forceUpdateKeyboardTheme();
         }
-
         // If we are starting input in a different text field from before, we'll have to reload
         // settings, so currentSettingsValues can't be final.
         SettingsValues currentSettingsValues = mSettings.getCurrent();
@@ -1320,8 +1323,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 return true;
             }
             return false;
-        case Constants.CUSTOM_CODE_CHNAGE_LANGUAGE:
-            Log.e("SEPAR", "onCustomRequest");
+        case Constants.CUSTOM_CODE_CHANGE_LANGUAGE:
             switchToNextSubtype();
             return true;
         }
@@ -1332,14 +1334,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         return mOptionsDialog != null && mOptionsDialog.isShowing();
     }
 
-    // TODO: Revise the language switch key behavior to make it much smarter and more reasonable.
     public void switchToNextSubtype() {
         final IBinder token = getWindow().getWindow().getAttributes().token;
-        //TODO /*SEPAR*/
-//        if (shouldSwitchToOtherInputMethods()) {
-//            mRichImm.switchToNextInputMethod(token, false /* onlyCurrentIme */);
-//            return;
-//        }
         mSubtypeState.switchSubtype(token, mRichImm);
     }
 

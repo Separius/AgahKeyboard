@@ -37,11 +37,12 @@
                 latin:keyStyle="settingsMoreKeysStyle" />
         </case>
         <case
-            latin:keyboardLayoutSet="dvorak"
-        >
+            latin:languageCode="fa">
             <Key
-                latin:keySpec="!"
-                latin:moreKeys="!text/morekeys_exclamation,%"
+                latin:keySpec="،"
+                latin:moreKeys="!text/morekeys_tablet_comma,%"
+                latin:keyHintLabel="!text/keyhintlabel_tablet_comma"
+                latin:keyLabelFlags="hasPopupHint"
                 latin:keyStyle="settingsMoreKeysStyle" />
         </case>
         <default>

@@ -27,6 +27,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Region;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.text.TextUtils;
@@ -39,6 +40,7 @@ import com.android.inputmethod.latin.utils.TypefaceUtils;
 
 import java.util.HashSet;
 
+import io.separ.neural.inputmethod.Utils.ColorUtils;
 import io.separ.neural.inputmethod.indic.Constants;
 import io.separ.neural.inputmethod.indic.R;
 
@@ -343,9 +345,13 @@ public class KeyboardView extends View {
         params.mAnimAlpha = Constants.Color.ALPHA_OPAQUE;
 
         if (!key.isSpacer()) {
-            final Drawable background = key.selectBackgroundDrawable(
-                    mKeyBackground, mFunctionalKeyBackground, mSpacebarBackground);
-            onDrawKeyBackground(key, canvas, background);
+            if(ColorUtils.lastColor == null) {
+                final Drawable background = key.selectBackgroundDrawable(
+                        mKeyBackground, mFunctionalKeyBackground, mSpacebarBackground);
+                onDrawKeyBackground(key, canvas, background);
+            }else{
+                onDrawKeyBackground(key, canvas, new ColorDrawable(ColorUtils.lastColor));
+            }
         }
         onDrawKeyTopVisuals(key, canvas, paint, params);
 

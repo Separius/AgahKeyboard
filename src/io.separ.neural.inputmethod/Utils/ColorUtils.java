@@ -16,11 +16,15 @@ import java.util.HashMap;
 public class ColorUtils {
     private static final HashMap<String, Integer> appColors = new HashMap<>();
 
-    public static int getColor(@NonNull Context context, int uid){
+    public static Integer lastColor;
+
+    public static Integer getColor(@NonNull Context context, int uid){
         PackageManager pm = context.getPackageManager();
         String appName = pm.getNameForUid(uid);
-        if(appColors.containsKey(appName))
+        if(appColors.containsKey(appName)) {
+            lastColor = appColors.get(appName);
             return appColors.get(appName);
+        }
         try {
             Context c = context.createPackageContext(appName, Context.CONTEXT_IGNORE_SECURITY);
             Resources res = c.getResources();
@@ -31,15 +35,18 @@ public class ColorUtils {
             a.recycle();
             if(color != 0) {
                 appColors.put(appName, color);
+                lastColor = color;
                 return color;
             } else {
-                appColors.put(appName, Color.WHITE);
-                return Color.WHITE;
+                appColors.put(appName, null);
+                lastColor = null;
+                return null;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            appColors.put(appName, Color.WHITE);
-            return Color.WHITE;
+            appColors.put(appName, null);
+            lastColor = null;
+            return null;
         }
     }
 }

@@ -996,7 +996,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         if(key != null && key.getCode() == CODE_SPACE && isSpaceSwipe){
             isSpaceSwipe = false;
             Log.e("SEPAR", "Must change language"); //TODO must not insert space on the keyboard?
-            sListener.onCustomRequest(Constants.CUSTOM_CODE_CHNAGE_LANGUAGE);
+            sListener.onCustomRequest(Constants.CUSTOM_CODE_CHANGE_LANGUAGE);
             //must call LatinIME#switchToNextSubtype
         }
         if (DEBUG_EVENT) {

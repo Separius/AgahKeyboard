@@ -40,13 +40,11 @@
             latin:languageCode="fa">
             <Key
                 latin:keySpec="،"
-                latin:keyLabelFlags="hasPopupHint"
                 latin:keyStyle="settingsMoreKeysStyle" />
         </case>
         <default>
             <Key
                 latin:keySpec="!text/keyspec_comma"
-                latin:keyLabelFlags="hasPopupHint"
                 latin:keyStyle="settingsMoreKeysStyle" />
         </default>
     </switch>

@@ -97,6 +97,20 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
                 InputMethodServiceCompatUtils.enableHardwareAcceleration(mLatinIME);
     }
 
+    public void forceUpdateKeyboardTheme(){
+        forceUpdateKeyboardThemeAndContextThemeWrapper(mLatinIME, KeyboardTheme.getKeyboardTheme(mPrefs));
+        if (mKeyboardView != null) {
+            mLatinIME.setInputView(onCreateInputView(mIsHardwareAcceleratedDrawingEnabled));
+        }
+    }
+
+    private void forceUpdateKeyboardThemeAndContextThemeWrapper(final Context context,
+                                                              final KeyboardTheme keyboardTheme) {
+        mKeyboardTheme = keyboardTheme;
+        mThemeContext = new ContextThemeWrapper(context, keyboardTheme.mStyleId);
+        KeyboardLayoutSet.onKeyboardThemeChanged();
+    }
+
     public void updateKeyboardTheme() {
         final boolean themeUpdated = updateKeyboardThemeAndContextThemeWrapper(
                 mLatinIME, KeyboardTheme.getKeyboardTheme(mPrefs));
@@ -249,7 +263,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     private void setMainKeyboardFrame(final SettingsValues settingsValues) {
         mMainKeyboardFrame.setVisibility(
                 settingsValues.mHasHardwareKeyboard ? View.GONE : View.VISIBLE);
-        mMainKeyboardFrame.setAlpha(1f);
+        //mMainKeyboardFrame.setAlpha(1f);
         mEmojiPalettesView.setVisibility(View.GONE);
         mEmojiPalettesView.stopEmojiPalettes();
         mSettingsViewPager.setVisibility(View.GONE);
@@ -259,19 +273,19 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     @Override
     public void setEmojiKeyboard() {
         final Keyboard keyboard = mKeyboardLayoutSet.getKeyboard(KeyboardId.ELEMENT_ALPHABET);
-        //mMainKeyboardFrame.setVisibility(View.GONE);
+        mMainKeyboardFrame.setVisibility(View.GONE);
         mEmojiPalettesView.startEmojiPalettes(
                 mKeyboardTextsSet.getText(KeyboardTextsSet.SWITCH_TO_ALPHA_KEY_LABEL),
                 mKeyboardView.getKeyVisualAttribute(), keyboard.mIconsSet);
-        mEmojiPalettesView.setAlpha(0f);
+        //mEmojiPalettesView.setAlpha(0f);
         mEmojiPalettesView.setVisibility(View.VISIBLE);
-        mEmojiPalettesView.animate().alpha(1f).setDuration(500).setListener(null);
+        /*mEmojiPalettesView.animate().alpha(1f).setDuration(500).setListener(null);
         mMainKeyboardFrame.animate().alpha(0f).setDuration(500).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 mMainKeyboardFrame.setVisibility(View.GONE);
             }
-        });
+        });*/
         mSettingsViewPager.setVisibility(View.GONE);
     }
 
