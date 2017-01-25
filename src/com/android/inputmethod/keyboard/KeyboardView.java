@@ -348,7 +348,8 @@ public class KeyboardView extends View {
             if(ColorUtils.lastColor == null) {
                 final Drawable background = key.selectBackgroundDrawable(
                         mKeyBackground, mFunctionalKeyBackground, mSpacebarBackground);
-                onDrawKeyBackground(key, canvas, background);
+                //onDrawKeyBackground(key, canvas, background);
+                onDrawKeyBackground(key, canvas, new ColorDrawable(Color.parseColor("#FFE0E0E0")));
             }else{
                 onDrawKeyBackground(key, canvas, new ColorDrawable(ColorUtils.lastColor));
             }

@@ -55,6 +55,7 @@ import com.android.inputmethod.latin.utils.TypefaceUtils;
 import java.util.WeakHashMap;
 
 import io.separ.neural.inputmethod.Utils.FontUtils;
+import io.separ.neural.inputmethod.Utils.SwipeUtils;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 import io.separ.neural.inputmethod.accessibility.MainKeyboardAccessibilityDelegate;
 import io.separ.neural.inputmethod.annotations.ExternallyReferenced;
@@ -624,13 +625,14 @@ public final class MainKeyboardView extends KeyboardView implements PointerTrack
             return;
         }
         final int code = key.getCode();
-        if (code == Constants.CODE_SPACE || code == Constants.CODE_LANGUAGE_SWITCH) {
-            // Long pressing the space key invokes IME switcher dialog.
-            if (listener.onCustomRequest(Constants.CUSTOM_CODE_SHOW_INPUT_METHOD_PICKER)) {
+        //if (code == Constants.CODE_SPACE || code == Constants.CODE_LANGUAGE_SWITCH) {
+        if (code == Constants.CODE_SPACE) {
+            return;
+            /*if (listener.onCustomRequest(Constants.CUSTOM_CODE_SHOW_INPUT_METHOD_PICKER)) {
                 tracker.onLongPressed();
-                listener.onReleaseKey(code, false /* withSliding */);
+                listener.onReleaseKey(code, false *//* withSliding *//*);
                 return;
-            }
+            }*/
         }
         openMoreKeysPanel(key, tracker);
     }
@@ -710,6 +712,8 @@ public final class MainKeyboardView extends KeyboardView implements PointerTrack
         if (getKeyboard() == null) {
             return false;
         }
+        if(SwipeUtils.GestureListener.onTouch(me))
+            return true;
         if (mNonDistinctMultitouchHelper != null) {
             if (me.getPointerCount() > 1 && mKeyTimerHandler.isInKeyRepeat()) {
                 // Key repeating timer will be canceled if 2 or more keys are in action.

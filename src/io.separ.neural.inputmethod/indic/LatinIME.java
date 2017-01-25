@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
 import android.media.AudioManager;
 import android.os.Build;
@@ -82,6 +83,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.separ.neural.inputmethod.Utils.ColorUtils;
 import io.separ.neural.inputmethod.Utils.FontUtils;
+import io.separ.neural.inputmethod.Utils.SwipeUtils;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 import io.separ.neural.inputmethod.annotations.UsedForTesting;
 import io.separ.neural.inputmethod.compat.CursorAnchorInfoCompatWrapper;
@@ -118,7 +120,7 @@ import static io.separ.neural.inputmethod.indic.Constants.ImeOption.NO_MICROPHON
 public class LatinIME extends InputMethodService implements KeyboardActionListener,
         SuggestionStripView.Listener, SuggestionStripViewAccessor,
         DictionaryFacilitator.DictionaryInitializationListener,
-        ImportantNoticeDialog.ImportantNoticeDialogListener {
+        ImportantNoticeDialog.ImportantNoticeDialogListener, SwipeUtils.SelectionChanger {
     private static final String TAG = LatinIME.class.getSimpleName();
     private static final boolean TRACE = false;
     private static boolean DEBUG = false;
@@ -578,6 +580,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         StatsUtils.onCreate(mSettings.getCurrent());
         FontUtils.initialize(this);
         Dexter.initialize(this);
+        SwipeUtils.init(this, this);
         //SpeechUtils.initialize(this);
     }
 
@@ -839,10 +842,12 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             if (newColor != null)
                 mainKeyboardView.setBackgroundColor(newColor);
             else {
-                switcher.forceUpdateKeyboardTheme();
+                mainKeyboardView.setBackgroundColor(Color.parseColor("#FFE0E0E0"));
+                //switcher.forceUpdateKeyboardTheme();
             }
         }catch (Exception e){
-            switcher.forceUpdateKeyboardTheme();
+            mainKeyboardView.setBackgroundColor(Color.parseColor("#FFE0E0E0"));
+            //switcher.forceUpdateKeyboardTheme();
         }
         // If we are starting input in a different text field from before, we'll have to reload
         // settings, so currentSettingsValues can't be final.
@@ -1323,9 +1328,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 return true;
             }
             return false;
-        case Constants.CUSTOM_CODE_CHANGE_LANGUAGE:
-            switchToNextSubtype();
-            return true;
         }
         return false;
     }
@@ -1927,5 +1929,39 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             return fallbackValue;
         }
         return mRichImm.shouldOfferSwitchingToNextInputMethod(token, fallbackValue);
+    }
+
+    public void moveCursorBack() {
+        changeSelection(-1, -1);
+    }
+
+    public void moveCursorNext() {
+        changeSelection(1, 1);
+    }
+
+    public synchronized void changeSelection(int startChange, int endChange) {
+        RichInputConnection connection = this.mInputLogic.mConnection;
+        int startSelection = connection.getExpectedSelectionStart() + startChange;
+        int endSelection = connection.getExpectedSelectionEnd() + endChange;
+        Log.i(TAG, "start : " + startSelection + " end : " + endSelection + " textlenght " + connection.getTextLenght());
+        if (startSelection >= 0 && endSelection <= connection.getTextLenght()) {
+            connection.setSelection(startSelection, endSelection);
+        }
+        this.mInputLogic.finishInput();
+        connection.finishComposingText();
+    }
+
+    public boolean isSelectionEmpty() {
+        return this.mInputLogic.mConnection.getExpectedSelectionEnd() == this.mInputLogic.mConnection.getExpectedSelectionStart();
+    }
+
+    public int getKeyboardHeight() {
+        return mKeyboardSwitcher.getMainKeyboardView().getHeight();
+    }
+
+    public void restartInput() {
+        this.mKeyboardSwitcher.onHideWindow();
+        super.hideWindow();
+        showWindow(true);
     }
 }

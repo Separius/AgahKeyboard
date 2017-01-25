@@ -163,6 +163,11 @@ public final class RichInputConnection {
         }
     }
 
+    public int getTextLenght() {
+        CharSequence selectedText = getSelectedText(0);
+        return (getTextAfterCursor(512, 0).length() + getTextBeforeCursor(512, 0).length()) + (selectedText == null ? 0 : selectedText.length());
+    }
+
     public void beginBatchEdit() {
         if (++mNestLevel == 1) {
             mIC = mParent.getCurrentInputConnection();

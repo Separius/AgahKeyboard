@@ -41,8 +41,10 @@ import io.separ.neural.inputmethod.indic.Constants;
 import io.separ.neural.inputmethod.indic.R;
 
 import static com.android.inputmethod.keyboard.internal.KeyboardIconsSet.ICON_UNDEFINED;
+import static io.separ.neural.inputmethod.indic.Constants.CODE_DELETE;
 import static io.separ.neural.inputmethod.indic.Constants.CODE_OUTPUT_TEXT;
 import static io.separ.neural.inputmethod.indic.Constants.CODE_SHIFT;
+import static io.separ.neural.inputmethod.indic.Constants.CODE_SPACE;
 import static io.separ.neural.inputmethod.indic.Constants.CODE_SWITCH_ALPHA_SYMBOL;
 import static io.separ.neural.inputmethod.indic.Constants.CODE_UNSPECIFIED;
 
@@ -543,6 +545,14 @@ public class Key implements Comparable<Key> {
 
     public final boolean isShift() {
         return mCode == CODE_SHIFT;
+    }
+
+    public final boolean isDelete() {
+        return getCode() == CODE_DELETE;
+    }
+
+    public final boolean isSpaceBar() {
+        return getCode() == LABEL_FLAGS_FONT_MONO_SPACE;
     }
 
     public final boolean isModifier() {

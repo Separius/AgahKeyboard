@@ -43,6 +43,7 @@ import io.separ.neural.inputmethod.indic.define.DebugFlags;
 import io.separ.neural.inputmethod.indic.settings.Settings;
 
 import static io.separ.neural.inputmethod.indic.Constants.CODE_SPACE;
+import static java.lang.Math.abs;
 
 public final class PointerTracker implements PointerTrackerQueue.Element,
         BatchInputArbiterListener {
@@ -202,8 +203,6 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
 
     private final BatchInputArbiter mBatchInputArbiter;
     private final GestureStrokeDrawingPoints mGestureStrokeDrawingPoints;
-
-    private boolean isSpaceSwipe = false;
 
     // TODO: Add PointerTrackerFactory singleton and move some class static methods into it.
     public static void init(final TypedArray mainKeyboardViewAttr, final TimerProxy timerProxy,
@@ -714,10 +713,6 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         // disabled when the key is repeating.
         mIsDetectingGesture = (mKeyboard != null) && mKeyboard.mId.isAlphabetKeyboard()
                 && key != null && !key.isModifier();
-        if(key != null && key.getCode() == CODE_SPACE)
-            isSpaceSwipe = true;
-        else
-            isSpaceSwipe = false;
         if (mIsDetectingGesture) {
             mBatchInputArbiter.addDownEventPoint(x, y, eventTime,
                     sTypingTimeRecorder.getLastLetterTypingTime(), getActivePointerTrackerCount());
@@ -993,12 +988,6 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
 
     private void onUpEvent(final int x, final int y, final long eventTime) {
         final Key key = getKeyOn(x, y);
-        if(key != null && key.getCode() == CODE_SPACE && isSpaceSwipe){
-            isSpaceSwipe = false;
-            Log.e("SEPAR", "Must change language"); //TODO must not insert space on the keyboard?
-            sListener.onCustomRequest(Constants.CUSTOM_CODE_CHANGE_LANGUAGE);
-            //must call LatinIME#switchToNextSubtype
-        }
         if (DEBUG_EVENT) {
             printTouchEvent("onUpEvent  :", x, y, eventTime);
         }
