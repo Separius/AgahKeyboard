@@ -579,7 +579,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
         StatsUtils.onCreate(mSettings.getCurrent());
         FontUtils.initialize(this);
-        Dexter.initialize(this);
+        //Dexter.initialize(this);
         SwipeUtils.init(this, this);
         //SpeechUtils.initialize(this);
     }
