@@ -54,6 +54,13 @@
                     android:resource="@xml/spellchecker" />
         </service>
 
+        <service android:label="accessibility_label" android:name="io.separ.neural.inputmethod.colors.WindowChangeDetectingService" android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data android:name="android.accessibilityservice" android:resource="@xml/accessibilityservice" />
+        </service>
+
         <activity android:name=".setup.SetupActivity"
                 android:theme="@style/platformActivityTheme"
                 android:label="@string/english_ime_name"

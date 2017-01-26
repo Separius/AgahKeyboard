@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<accessibility-service
+    android:accessibilityEventTypes="typeWindowStateChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagIncludeNotImportantViews"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

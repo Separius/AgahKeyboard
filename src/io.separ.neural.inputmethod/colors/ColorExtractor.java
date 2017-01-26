@@ -31,7 +31,7 @@ public class ColorExtractor {
     }
 
     protected static ColorProfile getContextProfile(Context context, String packageName) throws NameNotFoundException {
-        Context context1 = context.createPackageContext(packageName, 3);
+        Context context1 = context.createPackageContext(packageName, Context.CONTEXT_IGNORE_SECURITY);
         Resources res = context.getPackageManager().getResourcesForApplication(packageName);
         if (context1 == null) {
             return new ColorProfile();

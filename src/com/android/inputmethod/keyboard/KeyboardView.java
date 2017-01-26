@@ -44,6 +44,16 @@ import io.separ.neural.inputmethod.Utils.ColorUtils;
 import io.separ.neural.inputmethod.indic.Constants;
 import io.separ.neural.inputmethod.indic.R;
 
+import static com.android.inputmethod.keyboard.Key.BACKGROUND_TYPE_ACTION;
+import static com.android.inputmethod.keyboard.Key.BACKGROUND_TYPE_EMPTY;
+import static com.android.inputmethod.keyboard.Key.BACKGROUND_TYPE_FUNCTIONAL;
+import static com.android.inputmethod.keyboard.Key.BACKGROUND_TYPE_NORMAL;
+import static com.android.inputmethod.keyboard.Key.BACKGROUND_TYPE_SPACEBAR;
+import static com.android.inputmethod.keyboard.Key.BACKGROUND_TYPE_STICKY_OFF;
+import static com.android.inputmethod.keyboard.Key.BACKGROUND_TYPE_STICKY_ON;
+import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
+import static io.separ.neural.inputmethod.colors.ColorUtils.ForceType.ONLY_FLAT;
+
 /**
  * A view that renders a virtual {@link Keyboard}.
  *
@@ -287,6 +297,12 @@ public class KeyboardView extends View {
         final int height = getHeight();
         final Paint paint = mPaint;
 
+        if (this instanceof MoreKeysKeyboardView) {
+            getBackground().setColorFilter(colorProfile.getPrimary(), PorterDuff.Mode.MULTIPLY);
+        } else {
+            ColorUtils.drawBackground(canvas, colorProfile.getPrimary(), ONLY_FLAT);
+        }
+
         // Calculate clip region and set.
         final boolean drawAllKeys = mInvalidateAllKeys || mInvalidatedKeys.isEmpty();
         final boolean isHardwareAccelerated = canvas.isHardwareAccelerated();
@@ -334,6 +350,41 @@ public class KeyboardView extends View {
         mInvalidateAllKeys = false;
     }
 
+    /*private void onDrawKey(Key key, Canvas canvas, Paint paint) {
+        boolean z = true;
+        int keyDrawX = key.getDrawX() + getPaddingLeft();
+        int keyDrawY = key.getY() + getPaddingTop();
+        canvas.translate((float) keyDrawX, (float) keyDrawY);
+        KeyDrawParams params = this.mKeyDrawParams.mayCloneAndUpdateParams(this.mKeyboard.mMostCommonKeyHeight - this.mKeyboard.mVerticalGap, key.getVisualAttributes());
+        params.mAnimAlpha = 255;
+        if (!key.isSpacer()) {
+            switch (key.getType()) {
+                case BACKGROUND_TYPE_NORMAL *//*1*//*:
+                    Drawable drawable = this.mKeyBackground;
+                    onDrawKeyBackground(key, canvas, key.getNormalBackground(drawable, z, colorProfile.getPrimary()));
+                    break;
+                case BACKGROUND_TYPE_FUNCTIONAL *//*2*//*:
+                    onDrawKeyBackground(key, canvas, key.getNormalBackground(this.mKeyBackground, z, colorProfile.getPrimaryDark()));
+                    break;
+                case BACKGROUND_TYPE_STICKY_OFF *//*3*//*:
+                    onDrawKeyBackground(key, canvas, key.getNormalBackground(this.mKeyBackground, z, colorProfile.getPrimaryDark()));
+                    onDrawKeyBackground(key, canvas, key.getStickyBackground(this.mKeyBackground, z, colorProfile.getAccent()));
+                    break;
+                case BACKGROUND_TYPE_STICKY_ON *//*4*//*:
+                    onDrawKeyBackground(key, canvas, key.getNormalBackground(this.mKeyBackground, z, colorProfile.getPrimaryDark()));
+                    onDrawKeyBackground(key, canvas, key.getStickyBackground(this.mKeyBackground, true, colorProfile.getAccent()));
+                    break;
+                case BACKGROUND_TYPE_ACTION *//*5*//*:
+                    onDrawKeyBackground(key, canvas, key.getActionBackground(this.mKeyBackground, colorProfile.getPrimaryDark()));
+                    break;
+                case BACKGROUND_TYPE_SPACEBAR *//*6*//*:
+                    onDrawKeyBackground(key, canvas, key.getSpaceBarBackground(this.mSpacebarBackground, colorProfile.getPrimary(), PorterDuff.Mode.MULTIPLY));
+            }
+        }
+        onDrawKeyTopVisuals(key, canvas, paint, params);
+        canvas.translate((float) (-keyDrawX), (float) (-keyDrawY));
+    }*/
+
     private void onDrawKey(final Key key, final Canvas canvas, final Paint paint) {
         final int keyDrawX = key.getDrawX() + getPaddingLeft();
         final int keyDrawY = key.getY() + getPaddingTop();
@@ -345,17 +396,19 @@ public class KeyboardView extends View {
         params.mAnimAlpha = Constants.Color.ALPHA_OPAQUE;
 
         if (!key.isSpacer()) {
-            if(ColorUtils.lastColor == null) {
-                final Drawable background = key.selectBackgroundDrawable(
-                        mKeyBackground, mFunctionalKeyBackground, mSpacebarBackground);
-                //onDrawKeyBackground(key, canvas, background);
-                onDrawKeyBackground(key, canvas, new ColorDrawable(Color.parseColor("#FFE0E0E0")));
-            }else{
-                onDrawKeyBackground(key, canvas, new ColorDrawable(ColorUtils.lastColor));
+            boolean z = false;
+            switch (key.getType()) {
+                case BACKGROUND_TYPE_ACTION:
+                    onDrawKeyBackground(key, canvas, key.getActionBackground(this.mKeyBackground, colorProfile.getPrimaryDark()));
+                    break;
+                case BACKGROUND_TYPE_SPACEBAR:
+                    onDrawKeyBackground(key, canvas, key.getSpaceBarBackground(this.mSpacebarBackground, colorProfile.getPrimary(), PorterDuff.Mode.MULTIPLY));
+                    break;
+                default:
+                    onDrawKeyBackground(key, canvas, new ColorDrawable(ColorUtils.colorProfile.getPrimary()));
             }
         }
         onDrawKeyTopVisuals(key, canvas, paint, params);
-
         canvas.translate(-keyDrawX, -keyDrawY);
     }
 
@@ -436,6 +489,7 @@ public class KeyboardView extends View {
 
             if (key.isEnabled()) {
                 paint.setColor(key.selectTextColor(params));
+                paint.setColor(colorProfile.getText());
                 // Set a drop shadow for the text if the shadow radius is positive value.
                 if (mKeyTextShadowRadius > 0.0f) {
                     paint.setShadowLayer(mKeyTextShadowRadius, 0.0f, 0.0f, params.mTextShadowColor);
@@ -540,7 +594,10 @@ public class KeyboardView extends View {
 
     protected static void drawIcon(final Canvas canvas, final Drawable icon, final int x,
             final int y, final int width, final int height) {
-        canvas.translate(x, y);
+        icon.clearColorFilter();
+        icon.setColorFilter(null);
+        icon.setColorFilter(colorProfile.getTextColor(), PorterDuff.Mode.SRC_IN);
+        canvas.translate((float) x, (float) y);
         icon.setBounds(0, 0, width, height);
         icon.draw(canvas);
         canvas.translate(-x, -y);

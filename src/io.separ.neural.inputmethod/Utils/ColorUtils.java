@@ -2,51 +2,53 @@ package io.separ.neural.inputmethod.Utils;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.graphics.Color;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
 import java.util.HashMap;
+
+import io.separ.neural.inputmethod.colors.ColorProfile;
+
+import static io.separ.neural.inputmethod.colors.ColorUtils.setProfileFromApp;
 
 /**
  * Created by sepehr on 11/23/16.
  */
 
 public class ColorUtils {
-    private static final HashMap<String, Integer> appColors = new HashMap<>();
+    private static final HashMap<String, ColorProfile> appColors = new HashMap<>();
 
-    public static Integer lastColor;
+    public static ColorProfile colorProfile;
 
-    public static Integer getColor(@NonNull Context context, int uid){
+    public static void getColor(@NonNull Context context, int uid){
         PackageManager pm = context.getPackageManager();
         String appName = pm.getNameForUid(uid);
-        if(appColors.containsKey(appName)) {
-            lastColor = appColors.get(appName);
-            return appColors.get(appName);
-        }
-        try {
-            Context c = context.createPackageContext(appName, Context.CONTEXT_IGNORE_SECURITY);
-            Resources res = c.getResources();
-            Resources.Theme theme = res.newTheme();
-            theme.applyStyle(pm.getPackageInfo(appName, PackageManager.GET_META_DATA).applicationInfo.theme, false);
-            TypedArray a = theme.obtainStyledAttributes(new int[] {res.getIdentifier("android:colorPrimary", "attr", appName), res.getIdentifier("colorPrimary", "attr", appName)});
-            int color = a.getColor(0, a.getColor(1, 0));
-            a.recycle();
-            if(color != 0) {
-                appColors.put(appName, color);
-                lastColor = color;
-                return color;
-            } else {
-                appColors.put(appName, null);
-                lastColor = null;
-                return null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            appColors.put(appName, null);
-            lastColor = null;
-            return null;
-        }
+        if(!appColors.containsKey(appName)) {
+            colorProfile = setProfileFromApp(context, appName);
+            appColors.put(appName, colorProfile);
+        }else
+            colorProfile = appColors.get(appName);
+    }
+
+    public static void drawBackground(Canvas canvas, int mDrawColor, io.separ.neural.inputmethod.colors.ColorUtils.ForceType forceType) {
+        Rect canvasBound;
+        Drawable d;
+        canvasBound = canvas.getClipBounds();
+        d = getBackground(canvasBound.width(), canvasBound.height(), mDrawColor);
+        d.setBounds(canvasBound);
+        d.draw(canvas);
+    }
+
+    public static Drawable getBackground(int width, int height, int color) {
+        return buildFlat(width, height, color);
+    }
+
+    private static Drawable buildFlat(int width, int height, int color) {
+        ColorDrawable d = new ColorDrawable(color);
+        d.setBounds(0, height, width, 0);
+        return d;
     }
 }

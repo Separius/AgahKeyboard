@@ -86,6 +86,7 @@ import io.separ.neural.inputmethod.Utils.FontUtils;
 import io.separ.neural.inputmethod.Utils.SwipeUtils;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 import io.separ.neural.inputmethod.annotations.UsedForTesting;
+import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.compat.CursorAnchorInfoCompatWrapper;
 import io.separ.neural.inputmethod.compat.InputMethodServiceCompatUtils;
 import io.separ.neural.inputmethod.dictionarypack.DictionaryPackConstants;
@@ -838,17 +839,12 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         switcher.updateKeyboardTheme();
         final MainKeyboardView mainKeyboardView = switcher.getMainKeyboardView();
         try {
-            Integer newColor = ColorUtils.getColor(getApplicationContext(), getCurrentInputBinding().getUid());
-            if (newColor != null)
-                mainKeyboardView.setBackgroundColor(newColor);
-            else {
-                mainKeyboardView.setBackgroundColor(Color.parseColor("#FFE0E0E0"));
-                //switcher.forceUpdateKeyboardTheme();
-            }
+            ColorUtils.getColor(getApplicationContext(), getCurrentInputBinding().getUid());
         }catch (Exception e){
-            mainKeyboardView.setBackgroundColor(Color.parseColor("#FFE0E0E0"));
-            //switcher.forceUpdateKeyboardTheme();
+            e.printStackTrace();
         }
+//        mainKeyboardView.setBackgroundColor(newColor.getPrimary());
+//        mainKeyboardView.setBackgroundColor(Color.parseColor("#FFE0E0E0"));
         // If we are starting input in a different text field from before, we'll have to reload
         // settings, so currentSettingsValues can't be final.
         SettingsValues currentSettingsValues = mSettings.getCurrent();

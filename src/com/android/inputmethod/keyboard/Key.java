@@ -17,6 +17,7 @@
 package com.android.inputmethod.keyboard;
 
 import android.content.res.TypedArray;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -37,6 +38,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import io.separ.neural.inputmethod.Utils.FontUtils;
+import io.separ.neural.inputmethod.colors.ColorUtils;
 import io.separ.neural.inputmethod.indic.Constants;
 import io.separ.neural.inputmethod.indic.R;
 
@@ -543,6 +545,10 @@ public class Key implements Comparable<Key> {
         return mBackgroundType == BACKGROUND_TYPE_ACTION;
     }
 
+    public int getType() {
+        return this.mBackgroundType;
+    }
+
     public final boolean isShift() {
         return mCode == CODE_SHIFT;
     }
@@ -874,6 +880,10 @@ public class Key implements Comparable<Key> {
             return pressed ? mPressedState : mReleasedState;
         }
 
+        public int[] getState(boolean pressed, ColorUtils.ButtonType buttonType) {
+            return pressed ? this.mPressedState : this.mReleasedState;
+        }
+
         public static final KeyBackgroundState[] STATES = {
             // 0: BACKGROUND_TYPE_EMPTY
             new KeyBackgroundState(android.R.attr.state_empty),
@@ -927,5 +937,17 @@ public class Key implements Comparable<Key> {
                     null /* hintLabel */, 0 /* labelFlags */, BACKGROUND_TYPE_EMPTY, x, y, width,
                     height, params.mHorizontalGap, params.mVerticalGap);
         }
+    }
+
+    public Drawable getSpaceBarBackground(Drawable mSpacebarBackground, int mDrawColor, PorterDuff.Mode mode) {
+        mSpacebarBackground.setColorFilter(mDrawColor, mode);
+        return mSpacebarBackground;
+    }
+
+    public Drawable getActionBackground(Drawable normalDrawable, int mDrawColor) {
+        ColorUtils.ButtonType type = ColorUtils.getButtonType();
+        normalDrawable.setState(KeyBackgroundState.STATES[type != ColorUtils.ButtonType.NONE ? BACKGROUND_TYPE_NORMAL : BACKGROUND_TYPE_ACTION].getState(this.mPressed, type));
+        normalDrawable.setColorFilter(mDrawColor, type != ColorUtils.ButtonType.NONE ? PorterDuff.Mode.MULTIPLY : PorterDuff.Mode.SRC_ATOP);
+        return normalDrawable;
     }
 }
