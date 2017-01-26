@@ -22,7 +22,7 @@ public class SwipeUtils {
     private static SharedPreferences preferences;
     private static SelectionChanger selectionChanger;
     private static SwipeType selectionDirection;
-    private static int padingModeState;
+    private static boolean didAct;
 
     /* renamed from: com.android.inputmethodcommon.SwipeUtils.1 */
     static /* synthetic */ class C02571 {
@@ -86,10 +86,12 @@ public class SwipeUtils {
             otherLastMoveY = -1.0f;
             handler = new Handler();
             mLongPressed = new C02581();
+            didAct = false;
         }
 
         private static boolean handleDown(MotionEvent event) {
             isLongPress = false;
+            didAct = false;
             onDownKey = SwipeUtils.getKey(event);
             if (onDownKey != null && SwipeUtils.isHotGestureKey(onDownKey)) {
                 PointerTracker.setGestureHandlingEnabledByUser(false);
@@ -102,13 +104,18 @@ public class SwipeUtils {
             return false;
         }
 
-        private static boolean handleUp() {
+        private static boolean handleUp(MotionEvent event) {
             handler.removeCallbacks(mLongPressed);
+            boolean retVal = false;
+            if(isLongPress == false && SwipeUtils.isHotGestureKey(onDownKey))
+                retVal = shortSwipe(event);
             PointerTracker.setGestureHandlingEnabledByUser(true);
             onDownKey = null;
             otherOnDownKey = null;
             isLongPress = false;
-            return false;
+            retVal = retVal || didAct;
+            didAct = false;
+            return retVal;
         }
 
         private static boolean handleMove(MotionEvent event) {
@@ -116,23 +123,27 @@ public class SwipeUtils {
                 return false;
             }
             if (onDownKey != null && onDownKey.isDelete()) {
+                //TODO: selectionChanger.deleteLastWord();
                 return false;
             }
             handleLongMove(event);
             return true;
         }
 
-        private static void handleLongMove(MotionEvent event) {
+        private static boolean handleLongMove(MotionEvent event) {
             float distance = lastMoveX - event.getX();
             float minMove = (float) SizeUtils.pxFromDp(SwipeUtils.context, 5.0f);
             if (Math.abs(lastMoveY - event.getY()) > ((float) SizeUtils.pxFromDp(SwipeUtils.context, 10.0f))) {
                 lastMoveX = event.getX();
                 lastMoveY = event.getY();
+                return false;
             } else if (Math.abs(distance) > minMove) {
-                SwipeUtils.longSwipe(onDownKey, distance < 0.0f ? SwipeType.RIGHT : SwipeType.LEFT, event.getRawY() < ((float) SizeUtils.getScreenHeightInPx(SwipeUtils.context)) - ((float) (SwipeUtils.selectionChanger.getKeyboardHeight() / 3)));
+                boolean retVal = SwipeUtils.longSwipe(onDownKey, distance < 0.0f ? SwipeType.RIGHT : SwipeType.LEFT, event.getRawY() < ((float) SizeUtils.getScreenHeightInPx(SwipeUtils.context)) - ((float) (SwipeUtils.selectionChanger.getKeyboardHeight() / 3)));
                 lastMoveX = event.getX();
                 lastMoveY = event.getY();
+                return retVal;
             }
+            return false;
         }
 
         public static boolean onTouch(MotionEvent event) {
@@ -140,7 +151,7 @@ public class SwipeUtils {
                 case 0:
                     return handleDown(event);
                 case 1:
-                    return handleUp();
+                    return handleUp(event);
                 case 2:
                     return handleMove(event);
                 default:
@@ -148,20 +159,16 @@ public class SwipeUtils {
             }
         }
 
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            PointerTracker.setGestureHandlingEnabledByUser(Settings.getInstance().getCurrent().mGestureInputEnabled);
-            if (isLongPress) {
-                return false;
-            }
+        public static boolean shortSwipe(MotionEvent event){
             try {
-                float diffY = e2.getY() - e1.getY();
-                float diffX = e2.getX() - e1.getX();
+                float diffY = event.getY() - lastMoveY;
+                float diffX = event.getX() - lastMoveX;
                 float distance = (float) Math.sqrt(Math.pow((double) diffX, 2.0d) + Math.pow((double) diffY, 2.0d));
                 if (Math.abs(diffX) > Math.abs(diffY)) {
-                    if (distance < DIFFERENCE_FACTOR_THRESHOLD * Math.abs(diffX) && Math.abs(diffX) > ((float) SizeUtils.pxFromDp(SwipeUtils.context, 25.0f)) && Math.abs(diffY) < ((float) SizeUtils.pxFromDp(SwipeUtils.context, 25.0f)) && Math.abs(velocityX) > 10.0f) {
+                    if (distance < DIFFERENCE_FACTOR_THRESHOLD * Math.abs(diffX) && Math.abs(diffX) > ((float) SizeUtils.pxFromDp(SwipeUtils.context, 25.0f)) && Math.abs(diffY) < ((float) SizeUtils.pxFromDp(SwipeUtils.context, 25.0f))) {
                         return SwipeUtils.swipe(onDownKey, diffX > 0.0f ? SwipeType.RIGHT : SwipeType.LEFT);
                     }
-                } else if (distance < DIFFERENCE_FACTOR_THRESHOLD * Math.abs(diffY) && Math.abs(diffY) > ((float) SizeUtils.pxFromDp(SwipeUtils.context, 25.0f)) && Math.abs(diffX) < ((float) SizeUtils.pxFromDp(SwipeUtils.context, 25.0f)) && Math.abs(velocityY) > 10.0f) {
+                } else if (distance < DIFFERENCE_FACTOR_THRESHOLD * Math.abs(diffY) && Math.abs(diffY) > ((float) SizeUtils.pxFromDp(SwipeUtils.context, 25.0f)) && Math.abs(diffX) < ((float) SizeUtils.pxFromDp(SwipeUtils.context, 25.0f))) {
                     return SwipeUtils.swipe(onDownKey, diffY > 0.0f ? SwipeType.BOTTOM : SwipeType.TOP);
                 }
             } catch (Exception exception) {
@@ -183,6 +190,14 @@ public class SwipeUtils {
         void moveCursorNext();
 
         void restartInput();
+
+        void changeLanguageNext();
+
+        void changeLanguagePrev();
+
+        void deleteLastWord();
+
+        void deleteAllWords();
     }
 
     enum SwipeType {
@@ -202,13 +217,7 @@ public class SwipeUtils {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public static boolean oneHandSwipe() {
-//        return Settings.getInstance().getCurrent().mOneHandSwipe;
-        return true;
-    }
-
     public static boolean spaceBarSelection() {
-//        return Settings.getInstance().getCurrent().mSpacebarSwipe;
         return true;
     }
 
@@ -224,60 +233,39 @@ public class SwipeUtils {
         return PointerTracker.getPointerTracker(event.getPointerId(actionIndex)).getKeyOn((int) event.getX(), (int) event.getY());
     }
 
-    private static void spaceBarSwipe(SwipeType type) {
-        int paddingType = padingModeState;
-        PaddingMode newMode = null;
+    private static boolean spaceBarSwipe(SwipeType type) {
         switch (C02571.$SwitchMap$com$android$inputmethodcommon$SwipeUtils$SwipeType[type.ordinal()]) {
             case 1:
-                if (oneHandSwipe()) {
-                    if (PaddingMode.getMode(paddingType) != PaddingMode.NO) {
-                        if (PaddingMode.getMode(paddingType) == PaddingMode.LEFT) {
-                            newMode = PaddingMode.NO;
-                            break;
-                        }
-                    }
-                    newMode = PaddingMode.RIGHT;
-                    break;
-                }
+                selectionChanger.changeLanguageNext();
                 break;
             case 2:
-                if (oneHandSwipe()) {
-                    if (PaddingMode.getMode(paddingType) != PaddingMode.NO) {
-                        if (PaddingMode.getMode(paddingType) == PaddingMode.RIGHT) {
-                            newMode = PaddingMode.NO;
-                            break;
-                        }
-                    }
-                    newMode = PaddingMode.LEFT;
-                    break;
-                }
+                selectionChanger.changeLanguagePrev();
                 break;
-        }
-        if (newMode != null) {
-            padingModeState = newMode.getID();
-            selectionChanger.restartInput();
-        }
-    }
-
-    private static boolean swipe(Key key, SwipeType type) {
-        if (key != null) {
-            String str = TAG;
-            String str2 = "Swiping on %s key to %s";
-            Object[] objArr = new Object[2];
-            objArr[0] = key.toShortString();
-            objArr[1] = type == SwipeType.LEFT ? "Left" : "Right";
-            Log.i(str, String.format(str2, objArr));
-            if (key.isSpaceBar()) {
-                spaceBarSwipe(type);
-                return true;
-            }
         }
         return false;
     }
 
-    private static void longSwipe(Key key, SwipeType type, boolean shouldSelect) {
+    private static boolean deleteSwipe(SwipeType type) {
+        if (type == SwipeType.LEFT)
+            selectionChanger.deleteLastWord();
+        if (type == SwipeType.TOP)
+            selectionChanger.deleteAllWords();
+        return false;
+    }
+
+    private static boolean swipe(Key key, SwipeType type) {
+        if (key != null) {
+            if (key.isDelete())
+                return deleteSwipe(type);
+            if (key.isSpaceBar())
+                return spaceBarSwipe(type);
+        }
+        return false;
+    }
+
+    private static boolean longSwipe(Key key, SwipeType type, boolean shouldSelect) {
         if (key == null || !spaceBarSelection() || !key.isSpaceBar()) {
-            return;
+            return false;
         }
         if (shouldSelect) {
             if (selectionChanger.isSelectionEmpty()) {
@@ -299,32 +287,7 @@ public class SwipeUtils {
         } else {
             selectionChanger.moveCursorBack();
         }
-    }
-
-    private static void longDoubleSwipe(Key key1, Key key2, SwipeType type, boolean movingTheLeft) {
-        int i = 0;
-        int i2 = 1;
-        if (key1 != null && key2 != null && key1.isSpaceBar() && key2.isSpaceBar() && spaceBarSelection()) {
-            int i3;
-            String str = TAG;
-            String str2 = "Moving the %s pointer to %s";
-            Object[] objArr = new Object[2];
-            objArr[0] = movingTheLeft ? "Left" : "Right";
-            objArr[1] = type == SwipeType.LEFT ? "Left" : "Right";
-            Log.i(str, String.format(str2, objArr));
-            if (movingTheLeft) {
-                i3 = 1;
-            } else {
-                i3 = 0;
-            }
-            int startChange = i3 * (type == SwipeType.LEFT ? -1 : 1);
-            if (!movingTheLeft) {
-                i = 1;
-            }
-            if (type == SwipeType.LEFT) {
-                i2 = -1;
-            }
-            selectionChanger.changeSelection(startChange, i * i2);
-        }
+        didAct = true;
+        return true;
     }
 }

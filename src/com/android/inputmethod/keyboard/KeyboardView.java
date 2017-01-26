@@ -350,41 +350,6 @@ public class KeyboardView extends View {
         mInvalidateAllKeys = false;
     }
 
-    /*private void onDrawKey(Key key, Canvas canvas, Paint paint) {
-        boolean z = true;
-        int keyDrawX = key.getDrawX() + getPaddingLeft();
-        int keyDrawY = key.getY() + getPaddingTop();
-        canvas.translate((float) keyDrawX, (float) keyDrawY);
-        KeyDrawParams params = this.mKeyDrawParams.mayCloneAndUpdateParams(this.mKeyboard.mMostCommonKeyHeight - this.mKeyboard.mVerticalGap, key.getVisualAttributes());
-        params.mAnimAlpha = 255;
-        if (!key.isSpacer()) {
-            switch (key.getType()) {
-                case BACKGROUND_TYPE_NORMAL *//*1*//*:
-                    Drawable drawable = this.mKeyBackground;
-                    onDrawKeyBackground(key, canvas, key.getNormalBackground(drawable, z, colorProfile.getPrimary()));
-                    break;
-                case BACKGROUND_TYPE_FUNCTIONAL *//*2*//*:
-                    onDrawKeyBackground(key, canvas, key.getNormalBackground(this.mKeyBackground, z, colorProfile.getPrimaryDark()));
-                    break;
-                case BACKGROUND_TYPE_STICKY_OFF *//*3*//*:
-                    onDrawKeyBackground(key, canvas, key.getNormalBackground(this.mKeyBackground, z, colorProfile.getPrimaryDark()));
-                    onDrawKeyBackground(key, canvas, key.getStickyBackground(this.mKeyBackground, z, colorProfile.getAccent()));
-                    break;
-                case BACKGROUND_TYPE_STICKY_ON *//*4*//*:
-                    onDrawKeyBackground(key, canvas, key.getNormalBackground(this.mKeyBackground, z, colorProfile.getPrimaryDark()));
-                    onDrawKeyBackground(key, canvas, key.getStickyBackground(this.mKeyBackground, true, colorProfile.getAccent()));
-                    break;
-                case BACKGROUND_TYPE_ACTION *//*5*//*:
-                    onDrawKeyBackground(key, canvas, key.getActionBackground(this.mKeyBackground, colorProfile.getPrimaryDark()));
-                    break;
-                case BACKGROUND_TYPE_SPACEBAR *//*6*//*:
-                    onDrawKeyBackground(key, canvas, key.getSpaceBarBackground(this.mSpacebarBackground, colorProfile.getPrimary(), PorterDuff.Mode.MULTIPLY));
-            }
-        }
-        onDrawKeyTopVisuals(key, canvas, paint, params);
-        canvas.translate((float) (-keyDrawX), (float) (-keyDrawY));
-    }*/
-
     private void onDrawKey(final Key key, final Canvas canvas, final Paint paint) {
         final int keyDrawX = key.getDrawX() + getPaddingLeft();
         final int keyDrawY = key.getY() + getPaddingTop();

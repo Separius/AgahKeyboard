@@ -465,7 +465,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
     }
 
     private static boolean needsToSuppressKeyPreviewPopup(final long eventTime) {
-        return GestureEnabler.shouldHandleGesture() && sTypingTimeRecorder.needsToSuppressKeyPreviewPopup(eventTime);
+        return sGestureEnabler.shouldHandleGesture() && sTypingTimeRecorder.needsToSuppressKeyPreviewPopup(eventTime);
     }
 
     private void setPressedKeyGraphics(final Key key, final long eventTime) {
@@ -706,7 +706,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         }
         sPointerTrackerQueue.add(this);
         onDownEventInternal(x, y, eventTime);
-        if (!GestureEnabler.shouldHandleGesture()) {
+        if (!sGestureEnabler.shouldHandleGesture()) {
             return;
         }
         // A gesture should start only from a non-modifier key. Note that the gesture detection is
@@ -810,7 +810,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
             return;
         }
 
-        if (GestureEnabler.shouldHandleGesture() && me != null) {
+        if (sGestureEnabler.shouldHandleGesture() && me != null) {
             // Add historical points to gesture path.
             final int pointerIndex = me.findPointerIndex(mPointerId);
             final int historicalSize = me.getHistorySize();
@@ -958,7 +958,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         final Key oldKey = mCurrentKey;
         final Key newKey = onMoveKey(x, y);
 
-        if (GestureEnabler.shouldHandleGesture()) {
+        if (sGestureEnabler.shouldHandleGesture()) {
             // Register move event on gesture tracker.
             onGestureMoveEvent(x, y, eventTime, true /* isMajorEvent */, newKey);
             if (sInGesture) {

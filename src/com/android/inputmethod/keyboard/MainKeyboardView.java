@@ -64,6 +64,8 @@ import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.indic.SuggestedWords;
 import io.separ.neural.inputmethod.indic.settings.DebugSettings;
 
+import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
+
 /**
  * A view that is responsible for detecting key presses and touch movements.
  *
@@ -912,7 +914,8 @@ public final class MainKeyboardView extends KeyboardView implements PointerTrack
         } else {
             paint.clearShadowLayer();
         }
-        paint.setColor(mLanguageOnSpacebarTextColor);
+        //paint.setColor(mLanguageOnSpacebarTextColor);
+        paint.setColor(colorProfile.getIcon());
         paint.setAlpha(mLanguageOnSpacebarAnimAlpha);
         canvas.drawText(language, width / 2, baseline - descent, paint);
         paint.clearShadowLayer();

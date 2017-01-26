@@ -22,13 +22,15 @@ public final class GestureEnabler {
     private boolean mMainDictionaryAvailable;
     private boolean mGestureHandlingEnabledByInputField;
     private boolean mGestureHandlingEnabledByUser;
+    private boolean mShouldHandleGesture;
 
     private void updateGestureHandlingMode() {
         /* True if we should handle gesture events. */
-        boolean mShouldHandleGesture = mMainDictionaryAvailable
+        /*boolean mShouldHandleGesture = mMainDictionaryAvailable
                 && mGestureHandlingEnabledByInputField
                 && mGestureHandlingEnabledByUser
-                && !AccessibilityUtils.getInstance().isTouchExplorationEnabled();
+                && !AccessibilityUtils.getInstance().isTouchExplorationEnabled();*/
+        mShouldHandleGesture = mGestureHandlingEnabledByUser && mGestureHandlingEnabledByInputField;
     }
 
     // Note that this method is called from a non-UI thread.
@@ -47,8 +49,7 @@ public final class GestureEnabler {
         updateGestureHandlingMode();
     }
 
-    public static boolean shouldHandleGesture() {
-        return true; //**SEPAR**
-        //return mShouldHandleGesture;
+    public boolean shouldHandleGesture() {
+        return mShouldHandleGesture;
     }
 }

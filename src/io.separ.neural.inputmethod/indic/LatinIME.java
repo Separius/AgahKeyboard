@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -88,7 +87,6 @@ import io.separ.neural.inputmethod.Utils.SwipeUtils;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 import io.separ.neural.inputmethod.annotations.UsedForTesting;
 import io.separ.neural.inputmethod.colors.ColorManager;
-import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.colors.NavManager;
 import io.separ.neural.inputmethod.compat.CursorAnchorInfoCompatWrapper;
 import io.separ.neural.inputmethod.compat.InputMethodServiceCompatUtils;
@@ -116,7 +114,6 @@ import static io.separ.neural.inputmethod.indic.Constants.ImeOption.FORCE_ASCII;
 import static io.separ.neural.inputmethod.indic.Constants.ImeOption.NO_MICROPHONE;
 import static io.separ.neural.inputmethod.indic.Constants.ImeOption.NO_MICROPHONE_COMPAT;
 
-//import android.net.ConnectivityManager;
 
 /**
  * Input method implementation for Qwerty'ish keyboard.
@@ -2001,5 +1998,79 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         this.mKeyboardSwitcher.onHideWindow();
         super.hideWindow();
         showWindow(true);
+    }
+
+    public void changeLanguageNext(){
+        switchToNextSubtype();
+    }
+
+    public void changeLanguagePrev(){
+        switchToNextSubtype();
+    }
+
+    private static boolean isBackWordStopChar(int c) {
+        return !Character.isLetter(c);
+    }
+
+    public void forceSuggestedWord(String word) {
+        SuggestedWordInfo info = new SuggestedWordInfo(word, 0, 0, null, 0, 0);
+        ArrayList<SuggestedWordInfo> infoList = new ArrayList();
+        infoList.add(info);
+        forceSuggestedWord(new SuggestedWords(infoList, null, false, false, false, 0));
+    }
+
+    private void forceSuggestedWord(SuggestedWords suggestedWords) {
+        setSuggestedWords(suggestedWords);
+    }
+
+    public void deleteLastWord() {
+        RichInputConnection conn = this.mInputLogic.mConnection;
+        conn.finishComposingText();
+        CharSequence cs = conn.getTextBeforeCursor(128, 0);
+        CharSequence as = conn.getTextAfterCursor(128, 0);
+        if (!TextUtils.isEmpty(cs)) {
+            int inputLength = cs.length();
+            int adx = 0;
+            int idx = inputLength - 1;
+            while (adx < as.length() && !isBackWordStopChar(as.charAt(adx))) {
+                adx++;
+            }
+            while (idx > 0 && isBackWordStopChar(cs.charAt(idx))) {
+                idx--;
+            }
+            while (idx > 0 && !isBackWordStopChar(cs.charAt(idx))) {
+                idx--;
+            }
+            CharSequence chars = conn.getTextBeforeCursor(inputLength - idx, 0);
+            if (chars.charAt(0) == ' ') {
+                idx++;
+            }
+            if (chars.charAt(chars.length() - 1) == ' ') {
+                adx = -1;
+            }
+            CharSequence charsAfter = conn.getTextAfterCursor(Math.max(adx, 0), 0);
+            if (charsAfter != null) {
+                forceSuggestedWord(chars.toString().replaceAll("\\s+", LastComposedWord.NOT_A_SEPARATOR) + charsAfter.toString().replaceAll("\\s+", LastComposedWord.NOT_A_SEPARATOR) + (adx != 0 ? Constants.WORD_SEPARATOR : LastComposedWord.NOT_A_SEPARATOR));
+            }
+            conn.deleteSurroundingText(inputLength - idx, adx + 1);
+            this.mInputLogic.finishInput();
+            this.mKeyboardSwitcher.requestUpdatingShiftState(getCurrentAutoCapsState(), getCurrentRecapitalizeState());
+        }
+    }
+
+    public void deleteAllWords() {
+        RichInputConnection conn = this.mInputLogic.mConnection;
+        conn.finishComposingText();
+        CharSequence cs = conn.getTextBeforeCursor(Constants.EDITOR_CONTENTS_CACHE_SIZE, 0);
+        if (!TextUtils.isEmpty(cs)) {
+            int inputLength = cs.length();
+            CharSequence chars = conn.getTextBeforeCursor(inputLength, 0);
+            if (chars != null) {
+                forceSuggestedWord(chars.toString());
+            }
+            conn.deleteSurroundingText(inputLength, 0);
+            this.mInputLogic.finishInput();
+            this.mKeyboardSwitcher.requestUpdatingShiftState(getCurrentAutoCapsState(), getCurrentRecapitalizeState());
+        }
     }
 }
