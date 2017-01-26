@@ -66,6 +66,10 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
 
     private KeyboardState mState;
 
+    public LatinIME getmLatinIME(){
+        return mLatinIME;
+    }
+
     private KeyboardLayoutSet mKeyboardLayoutSet;
     // TODO: The following {@link KeyboardTextsSet} should be in {@link KeyboardLayoutSet}.
     private final KeyboardTextsSet mKeyboardTextsSet = new KeyboardTextsSet();

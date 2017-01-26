@@ -25,6 +25,7 @@ import android.os.SystemClock;
 
 import com.android.inputmethod.latin.utils.ResizableIntArray;
 
+import io.separ.neural.inputmethod.Utils.ColorUtils;
 import io.separ.neural.inputmethod.indic.Constants;
 
 /**
@@ -186,7 +187,8 @@ final class GestureTrailDrawingPoints {
         mTrailStartIndex = startIndex;
 
         if (startIndex < trailSize) {
-            paint.setColor(params.mTrailColor);
+            //paint.setColor(params.mTrailColor);
+            paint.setColor(ColorUtils.colorProfile.getIcon());
             paint.setStyle(Paint.Style.FILL);
             final RoundedLine roundedLine = mRoundedLine;
             int p1x = getXCoordValue(xCoords[startIndex]);

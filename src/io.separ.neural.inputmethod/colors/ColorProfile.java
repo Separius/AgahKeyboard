@@ -6,14 +6,13 @@ package io.separ.neural.inputmethod.colors;
 
 import android.graphics.Color;
 
-import io.separ.neural.inputmethod.indic.Constants;
-
 public class ColorProfile {
     private int accent;
     private float darkFactor;
     private int primary;
     private int primaryDark;
     private int text;
+    private int icon;
 
     public ColorProfile() {
         this.primary = 1000;
@@ -24,6 +23,7 @@ public class ColorProfile {
         this.primaryDark = 1000;
         this.accent = 1000;
         this.text = 1000;
+        this.icon = 1000;
     }
 
     private boolean isInvertDark() {
@@ -35,6 +35,8 @@ public class ColorProfile {
         this.primaryDark = 1000;
         this.accent = 1000;
         this.darkFactor = 1.f;
+        this.text = 1000;
+        this.icon = 1000;
         setProfile(primary, primaryDark, accent);
     }
 
@@ -62,6 +64,8 @@ public class ColorProfile {
         this.primary = 1000;
         this.primaryDark = 1000;
         this.accent = 1000;
+        this.text = 1000;
+        this.icon = 1000;
     }
 
     public void setProfile(int primary, int primaryDark, int accent) {
@@ -82,6 +86,17 @@ public class ColorProfile {
             this.text = Color.WHITE;
         else
             this.text = Color.BLACK;
+        /*float[] hsv = new float[3];
+        Color.RGBToHSV(Color.red(primary), Color.green(primary), Color.blue(primary), hsv);
+        hsv[0] = ((int)hsv[0]+180)%360;
+        hsv[1] = 1.f - hsv[1];
+        hsv[1] = 1.f - hsv[2];
+        this.icon = Color.HSVToColor(Color.alpha(primary), hsv);*/
+        this.icon = Color.rgb(Color.red(primary) ^ 0x80, Color.green(primary) ^ 0x80, Color.blue(primary) ^ 0x80);
+    }
+
+    public int getIcon(){
+        return icon;
     }
 
     public int getText(){
@@ -94,6 +109,7 @@ public class ColorProfile {
         this.primaryDark = newProfile.primaryDark;
         this.accent = newProfile.accent;
         this.text = newProfile.text;
+        this.icon = newProfile.icon;
     }
 
     public int getPrimary() {

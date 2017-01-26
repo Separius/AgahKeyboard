@@ -28,6 +28,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Debug;
 import android.os.IBinder;
@@ -86,7 +87,9 @@ import io.separ.neural.inputmethod.Utils.FontUtils;
 import io.separ.neural.inputmethod.Utils.SwipeUtils;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 import io.separ.neural.inputmethod.annotations.UsedForTesting;
+import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.colors.ColorProfile;
+import io.separ.neural.inputmethod.colors.NavManager;
 import io.separ.neural.inputmethod.compat.CursorAnchorInfoCompatWrapper;
 import io.separ.neural.inputmethod.compat.InputMethodServiceCompatUtils;
 import io.separ.neural.inputmethod.dictionarypack.DictionaryPackConstants;
@@ -121,7 +124,7 @@ import static io.separ.neural.inputmethod.indic.Constants.ImeOption.NO_MICROPHON
 public class LatinIME extends InputMethodService implements KeyboardActionListener,
         SuggestionStripView.Listener, SuggestionStripViewAccessor,
         DictionaryFacilitator.DictionaryInitializationListener,
-        ImportantNoticeDialog.ImportantNoticeDialogListener, SwipeUtils.SelectionChanger {
+        ImportantNoticeDialog.ImportantNoticeDialogListener, SwipeUtils.SelectionChanger, ColorManager.OnFinishCalculateProfile {
     private static final String TAG = LatinIME.class.getSimpleName();
     private static final boolean TRACE = false;
     private static boolean DEBUG = false;
@@ -188,6 +191,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     private final boolean mIsHardwareAcceleratedDrawingEnabled;
 
     public final UIHandler mHandler = new UIHandler(this);
+
+    private NavManager navManager;
 
     public static final class UIHandler extends LeakGuardHandlerWrapper<LatinIME> {
         private static final int MSG_UPDATE_SHIFT_STATE = 0;
@@ -580,9 +585,15 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
         StatsUtils.onCreate(mSettings.getCurrent());
         FontUtils.initialize(this);
-        //Dexter.initialize(this);
+        Dexter.initialize(this);
         SwipeUtils.init(this, this);
+        this.colorManager = new ColorManager(this);
+        this.navManager = new NavManager(this);
         //SpeechUtils.initialize(this);
+    }
+
+    public void finishCalculatingProfile() {
+        this.colorManager.setDarkFactor(0.4f);
     }
 
     // Has to be package-visible for unit tests
@@ -690,6 +701,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         unregisterReceiver(mDictionaryPackInstallReceiver);
         unregisterReceiver(mDictionaryDumpBroadcastReceiver);
         StatsUtils.onDestroy();
+        this.navManager.killService();
         super.onDestroy();
     }
 
@@ -799,11 +811,14 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     @Override
     public void onStartInput(final EditorInfo editorInfo, final boolean restarting) {
+        if (isInputViewShown())
+            handleKeyboardColor(editorInfo);
         mHandler.onStartInput(editorInfo, restarting);
     }
 
     @Override
     public void onStartInputView(final EditorInfo editorInfo, final boolean restarting) {
+        handleKeyboardColor(editorInfo);
         mHandler.onStartInputView(editorInfo, restarting);
     }
 
@@ -829,6 +844,18 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     private void onStartInputInternal(final EditorInfo editorInfo, final boolean restarting) {
         super.onStartInput(editorInfo, restarting);
+    }
+
+    private ColorManager colorManager;
+
+    private void handleKeyboardColor(EditorInfo editorInfo) {
+        this.colorManager.calculateProfile(this, editorInfo.packageName);
+    }
+
+    public void getOverlayPermission(){
+        Intent permissionIntent = new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION", Uri.parse("package:" + this.getPackageName()));
+        permissionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        this.startActivity(permissionIntent);
     }
 
     @SuppressWarnings("deprecation")
@@ -1002,9 +1029,19 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         if (TRACE) Debug.startMethodTracing("/data/trace/latinime");
     }
 
+    public void onWindowShown() {
+        super.onWindowShown();
+        if (this.navManager != null) {
+            this.navManager.show();
+        }
+    }
+
     @Override
     public void onWindowHidden() {
         super.onWindowHidden();
+        if (this.navManager != null) {
+            this.navManager.hide();
+        }
         final MainKeyboardView mainKeyboardView = mKeyboardSwitcher.getMainKeyboardView();
         if (mainKeyboardView != null) {
             mainKeyboardView.closing();
@@ -1953,6 +1990,11 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     public int getKeyboardHeight() {
         return mKeyboardSwitcher.getMainKeyboardView().getHeight();
+    }
+
+    public void restartInput(boolean resetAnimation) {
+        this.navManager.setNotHide(!resetAnimation);
+        restartInput();
     }
 
     public void restartInput() {

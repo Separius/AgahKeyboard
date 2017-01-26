@@ -596,7 +596,8 @@ public class KeyboardView extends View {
             final int y, final int width, final int height) {
         icon.clearColorFilter();
         icon.setColorFilter(null);
-        icon.setColorFilter(colorProfile.getTextColor(), PorterDuff.Mode.SRC_IN);
+        //icon.setColorFilter(colorProfile.getTextColor(), PorterDuff.Mode.SRC_IN);
+        icon.setColorFilter(colorProfile.getIcon(), PorterDuff.Mode.SRC_IN);
         canvas.translate((float) x, (float) y);
         icon.setBounds(0, 0, width, height);
         icon.draw(canvas);
