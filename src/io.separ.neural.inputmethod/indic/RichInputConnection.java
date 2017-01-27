@@ -66,6 +66,8 @@ import java.util.Arrays;
 import io.separ.neural.inputmethod.compat.InputConnectionCompatUtils;
 import io.separ.neural.inputmethod.indic.settings.SpacingAndPunctuations;
 
+import static io.separ.neural.inputmethod.Utils.SwipeUtils.changedLanguage;
+
 /**
  * Enrichment class for InputConnection to simplify interaction and add functionality.
  *
@@ -310,6 +312,10 @@ public final class RichInputConnection {
             final int color, final int coloredTextLength) {
         if (DEBUG_BATCH_NESTING) checkBatchEdit();
         if (DEBUG_PREVIOUS_TEXT) checkConsistencyForDebug();
+        if(text.equals(" ") && changedLanguage) {
+            changedLanguage = false;
+            return;
+        }
         mCommittedTextBeforeComposingText.append(text);
         // TODO: the following is exceedingly error-prone. Right now when the cursor is in the
         // middle of the composing word mComposingText only holds the part of the composing text

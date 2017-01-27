@@ -8,6 +8,8 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.separ.neural.inputmethod.Utils.ColorUtils.getColor;
+
 public class ColorManager {
     private static ColorProfile lastProfile;
     private static List<OnColorChange> observers;
@@ -64,7 +66,7 @@ public class ColorManager {
     }
 
     public void calculateProfile(Context context, String packageName) {
-        ColorProfile colorProfile = ColorUtils.getProfile(context, packageName);
+        ColorProfile colorProfile = getColor(context, packageName);
         if (!lastProfile.equals(colorProfile)) {
             lastProfile.setProfile(colorProfile);
             notifyObservers();

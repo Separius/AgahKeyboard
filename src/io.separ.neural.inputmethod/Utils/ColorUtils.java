@@ -26,11 +26,16 @@ public class ColorUtils {
     public static void getColor(@NonNull Context context, int uid){
         PackageManager pm = context.getPackageManager();
         String appName = pm.getNameForUid(uid);
+        getColor(context, appName);
+    }
+
+    public static ColorProfile getColor(@NonNull Context context, String appName){
         if(!appColors.containsKey(appName)) {
             colorProfile = setProfileFromApp(context, appName);
             appColors.put(appName, colorProfile);
         }else
             colorProfile = appColors.get(appName);
+        return colorProfile;
     }
 
     public static void drawBackground(Canvas canvas, int mDrawColor, io.separ.neural.inputmethod.colors.ColorUtils.ForceType forceType) {

@@ -224,6 +224,7 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
         mSettingsKey.setVisibility(shouldBeVisible ? VISIBLE : INVISIBLE);
     }
 
+    //TODO: performance
     public void setSuggestions(final SuggestedWords suggestedWords, final boolean isRtlLanguage) {
         clear();
         mStripVisibilityGroup.setLayoutDirection(isRtlLanguage);

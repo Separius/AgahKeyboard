@@ -23,6 +23,7 @@ public class SwipeUtils {
     private static SelectionChanger selectionChanger;
     private static SwipeType selectionDirection;
     private static boolean didAct;
+    public static boolean changedLanguage;
 
     /* renamed from: com.android.inputmethodcommon.SwipeUtils.1 */
     static /* synthetic */ class C02571 {
@@ -109,12 +110,12 @@ public class SwipeUtils {
             boolean retVal = false;
             if(isLongPress == false && SwipeUtils.isHotGestureKey(onDownKey))
                 retVal = shortSwipe(event);
-            PointerTracker.setGestureHandlingEnabledByUser(true);
             onDownKey = null;
             otherOnDownKey = null;
             isLongPress = false;
             retVal = retVal || didAct;
             didAct = false;
+            PointerTracker.setGestureHandlingEnabledByUser(true);
             return retVal;
         }
 
@@ -237,9 +238,11 @@ public class SwipeUtils {
         switch (C02571.$SwitchMap$com$android$inputmethodcommon$SwipeUtils$SwipeType[type.ordinal()]) {
             case 1:
                 selectionChanger.changeLanguageNext();
+                changedLanguage = true;
                 break;
             case 2:
                 selectionChanger.changeLanguagePrev();
+                changedLanguage = true;
                 break;
         }
         return false;

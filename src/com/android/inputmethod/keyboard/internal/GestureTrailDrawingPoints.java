@@ -162,61 +162,46 @@ final class GestureTrailDrawingPoints {
         }
     }
 
-    private boolean drawGestureTrailLocked(final Canvas canvas, final Paint paint,
-            final Rect outBoundsRect, final GestureTrailDrawingParams params) {
-        // Initialize bounds rectangle.
+    //TODO root of all evil
+    private boolean drawGestureTrailLocked(Canvas canvas, Paint paint, Rect outBoundsRect, GestureTrailDrawingParams params) {
         outBoundsRect.setEmpty();
-        final int trailSize = mEventTimes.getLength();
+        int trailSize = this.mEventTimes.getLength();
         if (trailSize == 0) {
-            return false;
+            return DEBUG_SHOW_POINTS;
         }
-
-        final int[] eventTimes = mEventTimes.getPrimitiveArray();
-        final int[] xCoords = mXCoordinates.getPrimitiveArray();
-        final int[] yCoords = mYCoordinates.getPrimitiveArray();
-        final int[] pointTypes = mPointTypes.getPrimitiveArray();
-        final int sinceDown = (int)(SystemClock.uptimeMillis() - mCurrentTimeBase);
-        int startIndex;
-        for (startIndex = mTrailStartIndex; startIndex < trailSize; startIndex++) {
-            final int elapsedTime = sinceDown - eventTimes[startIndex];
-            // Skip too old trail points.
-            if (elapsedTime < params.mTrailLingerDuration) {
-                break;
-            }
+        int[] eventTimes = this.mEventTimes.getPrimitiveArray();
+        int[] xCoords = this.mXCoordinates.getPrimitiveArray();
+        int[] yCoords = this.mYCoordinates.getPrimitiveArray();
+        int sinceDown = (int) (SystemClock.uptimeMillis() - this.mCurrentTimeBase);
+        int startIndex = this.mTrailStartIndex;
+        while (startIndex < trailSize && sinceDown - eventTimes[startIndex] >= params.mTrailLingerDuration) {
+            startIndex += POINT_TYPE_SAMPLED;
         }
-        mTrailStartIndex = startIndex;
-
+        this.mTrailStartIndex = startIndex;
         if (startIndex < trailSize) {
-            //paint.setColor(params.mTrailColor);
             paint.setColor(ColorUtils.colorProfile.getIcon());
             paint.setStyle(Paint.Style.FILL);
-            final RoundedLine roundedLine = mRoundedLine;
+            RoundedLine roundedLine = this.mRoundedLine;
             int p1x = getXCoordValue(xCoords[startIndex]);
             int p1y = yCoords[startIndex];
-            final int lastTime = sinceDown - eventTimes[startIndex];
-            float r1 = getWidth(lastTime, params) / 2.0f;
-            for (int i = startIndex + 1; i < trailSize; i++) {
-                final int elapsedTime = sinceDown - eventTimes[i];
-                final int p2x = getXCoordValue(xCoords[i]);
-                final int p2y = yCoords[i];
-                final float r2 = getWidth(elapsedTime, params) / 2.0f;
-                // Draw trail line only when the current point isn't a down point.
+            float r1 = getWidth(sinceDown - eventTimes[startIndex], params) / 2.0f;
+            for (int i = startIndex + POINT_TYPE_SAMPLED; i < trailSize; i += POINT_TYPE_SAMPLED) {
+                int elapsedTime = sinceDown - eventTimes[i];
+                int p2x = getXCoordValue(xCoords[i]);
+                int p2y = yCoords[i];
+                float r2 = getWidth(elapsedTime, params) / 2.0f;
                 if (!isDownEventXCoord(xCoords[i])) {
-                    final float body1 = r1 * params.mTrailBodyRatio;
-                    final float body2 = r2 * params.mTrailBodyRatio;
-                    final Path path = roundedLine.makePath(p1x, p1y, body1, p2x, p2y, body2);
+                    Path path = roundedLine.makePath((float) p1x, (float) p1y, r1 * params.mTrailBodyRatio, (float) p2x, (float) p2y, r2 * params.mTrailBodyRatio);
                     if (!path.isEmpty()) {
-                        roundedLine.getBounds(mRoundedLineBounds);
+                        roundedLine.getBounds(this.mRoundedLineBounds);
                         if (params.mTrailShadowEnabled) {
-                            final float shadow2 = r2 * params.mTrailShadowRatio;
+                            float shadow2 = r2 * params.mTrailShadowRatio;
                             paint.setShadowLayer(shadow2, 0.0f, 0.0f, params.mTrailColor);
-                            final int shadowInset = -(int)Math.ceil(shadow2);
-                            mRoundedLineBounds.inset(shadowInset, shadowInset);
+                            int shadowInset = -((int) Math.ceil((double) shadow2));
+                            this.mRoundedLineBounds.inset(shadowInset, shadowInset);
                         }
-                        // Take union for the bounds.
-                        outBoundsRect.union(mRoundedLineBounds);
-                        final int alpha = getAlpha(elapsedTime, params);
-                        paint.setAlpha(alpha);
+                        outBoundsRect.union(this.mRoundedLineBounds);
+                        paint.setAlpha(getAlpha(elapsedTime, params));
                         canvas.drawPath(path, paint);
                     }
                 }
@@ -224,34 +209,21 @@ final class GestureTrailDrawingPoints {
                 p1y = p2y;
                 r1 = r2;
             }
-            if (DEBUG_SHOW_POINTS) {
-                debugDrawPoints(canvas, startIndex, trailSize, paint);
-            }
         }
-
-        final int newSize = trailSize - startIndex;
+        int newSize = trailSize - startIndex;
         if (newSize < startIndex) {
-            mTrailStartIndex = 0;
+            this.mTrailStartIndex = 0;
             if (newSize > 0) {
                 System.arraycopy(eventTimes, startIndex, eventTimes, 0, newSize);
                 System.arraycopy(xCoords, startIndex, xCoords, 0, newSize);
                 System.arraycopy(yCoords, startIndex, yCoords, 0, newSize);
-                if (DEBUG_SHOW_POINTS) {
-                    System.arraycopy(pointTypes, startIndex, pointTypes, 0, newSize);
-                }
             }
-            mEventTimes.setLength(newSize);
-            mXCoordinates.setLength(newSize);
-            mYCoordinates.setLength(newSize);
-            if (DEBUG_SHOW_POINTS) {
-                mPointTypes.setLength(newSize);
-            }
-            // The start index of the last segment of the stroke
-            // {@link mLastInterpolatedDrawIndex} should also be updated because all array
-            // elements have just been shifted for compaction or been zeroed.
-            mLastInterpolatedDrawIndex = Math.max(mLastInterpolatedDrawIndex - startIndex, 0);
+            this.mEventTimes.setLength(newSize);
+            this.mXCoordinates.setLength(newSize);
+            this.mYCoordinates.setLength(newSize);
+            this.mLastInterpolatedDrawIndex = Math.max(this.mLastInterpolatedDrawIndex - startIndex, 0);
         }
-        return newSize > 0;
+        return newSize > 0 ? true : DEBUG_SHOW_POINTS;
     }
 
     private void debugDrawPoints(final Canvas canvas, final int startIndex, final int endIndex,

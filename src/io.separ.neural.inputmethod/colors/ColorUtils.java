@@ -106,8 +106,6 @@ public class ColorUtils {
             newProfile.setProfile(Color.parseColor(BATTERY_COLOR), darkerColor(Color.parseColor(BATTERY_COLOR)), -1);
             return newProfile;
         }
-        String[] strArr;
-        int color;
         newProfile = setProfileFromApp(context, packageName);
         return newProfile;
     }
