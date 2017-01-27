@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/smart_intro_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <include android:id="@id/webber" layout="@layout/neural_net_web_view" />
+    <LinearLayout android:gravity="center" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
+        <TextView android:textSize="30sp" android:textColor="@color/white" android:padding="20dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Neural network
+technology" android:textAllCaps="true" android:fontFamily="sans-serif-light" android:textAlignment="4" />
+        <TextView android:textSize="15sp" android:textColor="@color/white" android:padding="20dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Get ready for your first truly machine learning powered keyboard." android:textAllCaps="true" android:fontFamily="sans-serif-light" android:textAlignment="4" />
+        <android.support.v7.widget.AppCompatCheckBox android:textColor="@color/white" android:id="@id/auth_checkbox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="30dp" android:checked="true" android:text="Help us improving your typing experience collecting anonymous data." android:buttonTint="@color/white" />
+    </LinearLayout>
+</RelativeLayout>

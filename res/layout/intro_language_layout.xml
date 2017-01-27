@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/language_intro_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="30sp" android:textColor="@color/white" android:padding="20dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/select_your_languages" android:textAllCaps="true" android:fontFamily="sans-serif-light" android:textAlignment="4" />
+    <io.separ.neural.inputmethod.indic.setup.IntroButton android:textColor="@color/white" android:id="@id/language_button" android:padding="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/languages" />
+</LinearLayout>

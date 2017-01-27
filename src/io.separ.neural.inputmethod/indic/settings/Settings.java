@@ -125,6 +125,8 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     private static final float UNDEFINED_PREFERENCE_VALUE_FLOAT = -1.0f;
     private static final int UNDEFINED_PREFERENCE_VALUE_INT = -1;
 
+    public static final String WIZARD_COMPLETED = "wizard_completed_v4";
+
     private Context mContext;
     private Resources mRes;
     private SharedPreferences mPrefs;
@@ -385,6 +387,14 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
 
     public static boolean isInternal(final SharedPreferences prefs) {
         return prefs.getBoolean(PREF_KEY_IS_INTERNAL, false);
+    }
+
+    public static void writeWizardCompleted(SharedPreferences prefs, boolean isCompleted) {
+        prefs.edit().putBoolean(WIZARD_COMPLETED, isCompleted).apply();
+    }
+
+    public static boolean readWizardCompleted(SharedPreferences prefs) {
+        return prefs.getBoolean(WIZARD_COMPLETED, HAS_UI_TO_ACCEPT_TYPED_WORD);
     }
 
     public void writeLastUsedPersonalizationToken(byte[] token) {

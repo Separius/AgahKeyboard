@@ -71,7 +71,6 @@ import com.android.inputmethod.latin.utils.LeakGuardHandlerWrapper;
 import com.android.inputmethod.latin.utils.StatsUtils;
 import com.android.inputmethod.latin.utils.SubtypeLocaleUtils;
 import com.android.inputmethod.latin.utils.ViewLayoutUtils;
-import com.karumi.dexter.Dexter;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -582,7 +581,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
         StatsUtils.onCreate(mSettings.getCurrent());
         FontUtils.initialize(this);
-        Dexter.initialize(this);
         SwipeUtils.init(this, this);
         this.colorManager = new ColorManager(this);
         this.navManager = new NavManager(this);

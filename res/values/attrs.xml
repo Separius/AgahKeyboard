@@ -566,4 +566,10 @@
         <attr name="minValue" format="integer" />
         <attr name="stepValue" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="EnableButtonLayout">
+        <attr name="number" format="integer" />
+        <attr name="buttonText" format="string" />
+    </declare-styleable>
+
 </resources>

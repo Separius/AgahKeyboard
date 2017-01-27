@@ -19,7 +19,7 @@ dependencies {
     compile 'com.android.support:palette-v7:25.1.0'
     compile 'com.android.support:support-v13:25.0.1'
     compile 'com.google.code.findbugs:jsr305:3.0.0'
-    compile 'com.karumi:dexter:2.3.1'
+    compile 'com.github.paolorotolo:appintro:4.1.0'
     compile fileTree(include: '*.jar', dir: 'libs')
 }
 

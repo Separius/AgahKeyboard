@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 
@@ -141,7 +142,7 @@ public final class SettingsValues {
                 res.getString(R.string.auto_correction_threshold_mode_index_modest));
         mIncludesOtherImesInLanguageSwitchList = !Settings.ENABLE_SHOW_LANGUAGE_SWITCH_KEY_SETTINGS || prefs.getBoolean(Settings.PREF_INCLUDE_OTHER_IMES_IN_LANGUAGE_SWITCH_LIST, false) /* forcibly */;
         mShowsLanguageSwitchKey = !Settings.ENABLE_SHOW_LANGUAGE_SWITCH_KEY_SETTINGS || Settings.readShowsLanguageSwitchKey(prefs) /* forcibly */;
-        mUseContactsDict = prefs.getBoolean(Settings.PREF_KEY_USE_CONTACTS_DICT, true);
+        mUseContactsDict  = prefs.getBoolean(Settings.PREF_KEY_USE_CONTACTS_DICT, true) && ContextCompat.checkSelfPermission(context, "android.permission.READ_CONTACTS") == 0;
         mUsePersonalizedDicts = prefs.getBoolean(Settings.PREF_KEY_USE_PERSONALIZED_DICTS, true);
         mUseDoubleSpacePeriod = prefs.getBoolean(Settings.PREF_KEY_USE_DOUBLE_SPACE_PERIOD, true)
                 && inputAttributes.mIsGeneralTextInput;

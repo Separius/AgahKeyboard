@@ -33,12 +33,6 @@ import com.android.inputmethod.latin.BinaryDictionary;
 import com.android.inputmethod.latin.PrevWordsInfo;
 import com.android.inputmethod.latin.utils.ExecutorUtils;
 import com.android.inputmethod.latin.utils.StringUtils;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,9 +41,6 @@ import java.util.Locale;
 
 import io.separ.neural.inputmethod.annotations.UsedForTesting;
 import io.separ.neural.inputmethod.indic.personalization.AccountUtils;
-
-// Package name change //
-// Package name change //
 
 public class ContactsBinaryDictionary extends ExpandableBinaryDictionary {
 
@@ -131,33 +122,9 @@ public class ContactsBinaryDictionary extends ExpandableBinaryDictionary {
 
     @Override
     public void loadInitialContentsLocked() {
-        Log.e("SEPAR", "0");
         loadDeviceAccountsEmailAddressesLocked();
-        Log.e("SEPAR", "1");
-        Dexter.checkPermission(new PermissionListener() {
-            @Override
-            public void onPermissionGranted(PermissionGrantedResponse response) {
-                Log.e("SEPAR", "2");
-                loadDictionaryForUriLocked(ContactsContract.Profile.CONTENT_URI);
-                // TODO: Switch this URL to the newer ContactsContract too
-                loadDictionaryForUriLocked(Contacts.CONTENT_URI);
-                Log.e("SEPAR", "3");
-            }
-
-            @Override
-            public void onPermissionDenied(PermissionDeniedResponse response) {
-                Log.e("SEPAR", "4");
-            }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                Log.e("SEPAR", "5");
-                token.continuePermissionRequest();
-                Log.e("SEPAR", "6");
-
-            }
-        }, Manifest.permission.READ_CONTACTS);
-        Log.e("SEPAR", "7");
+        loadDictionaryForUriLocked(ContactsContract.Profile.CONTENT_URI);
+        loadDictionaryForUriLocked(Contacts.CONTENT_URI);
     }
 
     private void loadDeviceAccountsEmailAddressesLocked() {
@@ -192,7 +159,9 @@ public class ContactsBinaryDictionary extends ExpandableBinaryDictionary {
             Log.e(TAG, "SQLiteException in the remote Contacts process.", e);
         } catch (final IllegalStateException e) {
             Log.e(TAG, "Contacts DB is having problems", e);
-        } finally {
+        } catch (SecurityException e) {
+            Log.e(TAG, "Permission not available", e);
+        }finally {
             if (null != cursor) {
                 cursor.close();
             }

@@ -17,6 +17,7 @@
 package io.separ.neural.inputmethod.indic;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.inputmethod.InputMethodSubtype;
@@ -229,7 +230,9 @@ public class DictionaryFacilitator {
         // TODO: Make subDictTypesToUse configurable by resource or a static final list.
         final HashSet<String> subDictTypesToUse = new HashSet<>();
         if (useContactsDict) {
-            subDictTypesToUse.add(Dictionary.TYPE_CONTACTS);
+            if (ContextCompat.checkSelfPermission(context, "android.permission.READ_CONTACTS") == 0) {
+                subDictTypesToUse.add(Dictionary.TYPE_CONTACTS);
+            }
         }
         subDictTypesToUse.add(Dictionary.TYPE_USER);
         if (usePersonalizedDicts) {

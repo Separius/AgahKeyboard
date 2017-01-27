@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="auth">false</item>
+    <item type="id" name="enable">false</item>
+    <item type="id" name="select_keyboard">false</item>
+    <item type="id" name="language_button">false</item>
+    <item type="id" name="webber">false</item>
+    <item type="id" name="auth_checkbox">false</item>
+</resources>
