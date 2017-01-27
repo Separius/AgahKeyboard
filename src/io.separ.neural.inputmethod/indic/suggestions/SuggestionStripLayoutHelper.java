@@ -73,11 +73,6 @@ final class SuggestionStripLayoutHelper {
     public final int mDividerWidth;
     public final int mSuggestionsStripHeight;
     private final int mSuggestionsCountInStrip;
-    public final int mMoreSuggestionsRowHeight;
-    private int mMaxMoreSuggestionsRow;
-    public final float mMinMoreSuggestionsWidth;
-    public final int mMoreSuggestionsBottomGap;
-    private boolean mMoreSuggestionsAvailable;
 
     // The index of these {@link ArrayList} is the position in the suggestion strip. The indices
     // increase towards the right for LTR scripts and the left for RTL scripts, starting with 0.
@@ -94,7 +89,6 @@ final class SuggestionStripLayoutHelper {
     private final float mCenterSuggestionWeight;
     private final int mCenterPositionInStrip;
     private final int mTypedWordPositionWhenAutocorrect;
-    private final Drawable mMoreSuggestionsHint;
     private static final String MORE_SUGGESTIONS_HINT = "\u2026";
     private static final String LEFTWARDS_ARROW = "\u2190";
     private static final String RIGHTWARDS_ARROW = "\u2192";
@@ -143,60 +137,11 @@ final class SuggestionStripLayoutHelper {
         mCenterSuggestionWeight = ResourceUtils.getFraction(a,
                 R.styleable.SuggestionStripView_centerSuggestionPercentile,
                 DEFAULT_CENTER_SUGGESTION_PERCENTILE);
-        mMaxMoreSuggestionsRow = a.getInt(
-                R.styleable.SuggestionStripView_maxMoreSuggestionsRow,
-                DEFAULT_MAX_MORE_SUGGESTIONS_ROW);
-        mMinMoreSuggestionsWidth = ResourceUtils.getFraction(a,
-                R.styleable.SuggestionStripView_minMoreSuggestionsWidth, 1.0f);
-        a.recycle();
-
-        mMoreSuggestionsHint = getMoreSuggestionsHint(res,
-                res.getDimension(R.dimen.config_more_suggestions_hint_text_size),
-                mColorAutoCorrect);
         mCenterPositionInStrip = mSuggestionsCountInStrip / 2;
         // Assuming there are at least three suggestions. Also, note that the suggestions are
         // laid out according to script direction, so this is left of the center for LTR scripts
         // and right of the center for RTL scripts.
         mTypedWordPositionWhenAutocorrect = mCenterPositionInStrip - 1;
-        mMoreSuggestionsBottomGap = res.getDimensionPixelOffset(
-                R.dimen.config_more_suggestions_bottom_gap);
-        mMoreSuggestionsRowHeight = res.getDimensionPixelSize(
-                R.dimen.config_more_suggestions_row_height);
-    }
-
-    public int getMaxMoreSuggestionsRow() {
-        return mMaxMoreSuggestionsRow;
-    }
-
-    private int getMoreSuggestionsHeight() {
-        return mMaxMoreSuggestionsRow * mMoreSuggestionsRowHeight + mMoreSuggestionsBottomGap;
-    }
-
-    public void setMoreSuggestionsHeight(final int remainingHeight) {
-        final int currentHeight = getMoreSuggestionsHeight();
-        if (currentHeight <= remainingHeight) {
-            return;
-        }
-
-        mMaxMoreSuggestionsRow = (remainingHeight - mMoreSuggestionsBottomGap)
-                / mMoreSuggestionsRowHeight;
-    }
-
-    private static Drawable getMoreSuggestionsHint(final Resources res, final float textSize,
-            final int color) {
-        final Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setTextAlign(Align.CENTER);
-        paint.setTextSize(textSize);
-        paint.setColor(color);
-        final Rect bounds = new Rect();
-        paint.getTextBounds(MORE_SUGGESTIONS_HINT, 0, MORE_SUGGESTIONS_HINT.length(), bounds);
-        final int width = Math.round(bounds.width() + 0.5f);
-        final int height = Math.round(bounds.height() + 0.5f);
-        final Bitmap buffer = Bitmap.createBitmap(width, (height * 3 / 2), Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(buffer);
-        canvas.drawText(MORE_SUGGESTIONS_HINT, width / 2, height, paint);
-        return new BitmapDrawable(res, buffer);
     }
 
     private CharSequence getStyledSuggestedWord(final SuggestedWords suggestedWords,
@@ -374,7 +319,6 @@ final class SuggestionStripLayoutHelper {
             // Layout only the most relevant suggested word at the center of the suggestion strip
             // by consolidating all slots in the strip.
             final int countInStrip = 1;
-            mMoreSuggestionsAvailable = (suggestedWords.size() > countInStrip);
             layoutWord(mCenterPositionInStrip, stripWidth - mPadding);
             stripView.addView(centerWordView);
             setLayoutWeight(centerWordView, 1.0f, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -386,7 +330,6 @@ final class SuggestionStripLayoutHelper {
         }
 
         final int countInStrip = mSuggestionsCountInStrip;
-        mMoreSuggestionsAvailable = (suggestedWords.size() > countInStrip);
         int x = 0;
         for (int positionInStrip = 0; positionInStrip < countInStrip; positionInStrip++) {
             if (positionInStrip != 0) {
@@ -429,15 +372,8 @@ final class SuggestionStripLayoutHelper {
     private TextView layoutWord(final int positionInStrip, final int width) {
         final TextView wordView = mWordViews.get(positionInStrip);
         final CharSequence word = wordView.getText();
-        if (positionInStrip == mCenterPositionInStrip && mMoreSuggestionsAvailable) {
-            // TODO: This "more suggestions hint" should have a nicely designed icon.
-            wordView.setCompoundDrawablesWithIntrinsicBounds(
-                    null, null, null, mMoreSuggestionsHint);
-            // HACK: Align with other TextViews that have no compound drawables.
-            wordView.setCompoundDrawablePadding(-mMoreSuggestionsHint.getIntrinsicHeight());
-        } else {
-            wordView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-        }
+        wordView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+
         // {@link StyleSpan} in a content description may cause an issue of TTS/TalkBack.
         // Use a simple {@link String} to avoid the issue.
         wordView.setContentDescription(TextUtils.isEmpty(word) ? null : word.toString());
@@ -544,7 +480,6 @@ final class SuggestionStripLayoutHelper {
             stripView.addView(wordView);
             setLayoutWeight(wordView, 1.0f, mSuggestionsStripHeight);
         }
-        mMoreSuggestionsAvailable = (punctuationSuggestions.size() > countInStrip);
         return countInStrip;
     }
 

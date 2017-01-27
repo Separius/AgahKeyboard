@@ -453,7 +453,7 @@ public class KeyboardView extends View {
             }
 
             if (key.isEnabled()) {
-                paint.setColor(key.selectTextColor(params));
+                //paint.setColor(key.selectTextColor(params));
                 paint.setColor(colorProfile.getText());
                 // Set a drop shadow for the text if the shadow radius is positive value.
                 if (mKeyTextShadowRadius > 0.0f) {
@@ -477,7 +477,8 @@ public class KeyboardView extends View {
         final String hintLabel = key.getHintLabel();
         if (hintLabel != null) {
             paint.setTextSize(key.selectHintTextSize(params));
-            paint.setColor(key.selectHintTextColor(params));
+            //paint.setColor(key.selectHintTextColor(params));
+            paint.setColor(colorProfile.getText());
             // TODO: Should add a way to specify type face for hint letters
             paint.setTypeface(Typeface.DEFAULT_BOLD);
             blendAlpha(paint, params.mAnimAlpha);
@@ -549,7 +550,8 @@ public class KeyboardView extends View {
 
         paint.setTypeface(params.mTypeface);
         paint.setTextSize(params.mHintLetterSize);
-        paint.setColor(params.mHintLabelColor);
+        //paint.setColor(params.mHintLabelColor);
+        paint.setColor(colorProfile.getText());
         paint.setTextAlign(Align.CENTER);
         final float hintX = keyWidth - mKeyHintLetterPadding
                 - TypefaceUtils.getReferenceCharWidth(paint) / 2.0f;
@@ -576,7 +578,7 @@ public class KeyboardView extends View {
             paint.setTypeface(mKeyDrawParams.mTypeface);
             paint.setTextSize(mKeyDrawParams.mLabelSize);
         } else {
-            paint.setColor(key.selectTextColor(mKeyDrawParams));
+            paint.setColor(colorProfile.getText());
             paint.setTypeface(Key.selectTypeface(mKeyDrawParams));
             paint.setTextSize(key.selectTextSize(mKeyDrawParams));
         }

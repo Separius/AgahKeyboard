@@ -113,13 +113,14 @@ public class ColorProfile {
     }
 
     public int getPrimary() {
-        if (isInvertDark()) {
+        return this.primary;
+        /*if (isInvertDark()) {
             return getPrimaryDarkIgnore();
         }
         if (this.primary != 1000) {
             return ColorUtils.darkerColor(this.primary, this.darkFactor);
         }
-        return Color.parseColor(ColorUtils.MATERIAL_LIGHT);
+        return Color.parseColor(ColorUtils.MATERIAL_LIGHT);*/
     }
 
     public int getPrimaryIgnore() {

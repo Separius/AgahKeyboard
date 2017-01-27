@@ -162,7 +162,6 @@ final class GestureTrailDrawingPoints {
         }
     }
 
-    //TODO root of all evil
     private boolean drawGestureTrailLocked(Canvas canvas, Paint paint, Rect outBoundsRect, GestureTrailDrawingParams params) {
         outBoundsRect.setEmpty();
         int trailSize = this.mEventTimes.getLength();
