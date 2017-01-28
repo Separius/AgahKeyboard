@@ -9,6 +9,8 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.widget.Button;
 
+import io.separ.neural.inputmethod.indic.R;
+
 public class IntroButton extends Button {
     private ButtonState state;
 
@@ -43,14 +45,14 @@ public class IntroButton extends Button {
     }
 
     private void init() {
-        //setBackgroundResource(C0594R.drawable.intro_button_background);
+        setBackgroundResource(R.drawable.intro_button_background);
         setTextColor(-1);
     }
 
     public void setCompletedState() {
         this.state = ButtonState.DONE;
         setTextColor(Color.parseColor("#80FFFFFF"));
-        //setBackgroundResource(C0594R.drawable.intro_button_completed);
+        setBackgroundResource(R.drawable.intro_button_completed);
     }
 
     public boolean isCompleted() {

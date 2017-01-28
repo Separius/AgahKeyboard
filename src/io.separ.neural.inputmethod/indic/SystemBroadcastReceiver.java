@@ -28,7 +28,6 @@ import com.android.inputmethod.keyboard.KeyboardLayoutSet;
 import com.android.inputmethod.latin.utils.UncachedInputMethodManagerUtils;
 
 import io.separ.neural.inputmethod.compat.IntentCompatUtils;
-import io.separ.neural.inputmethod.indic.setup.LauncherIconVisibilityManager;
 
 /**
  * This class detects the {@link Intent#ACTION_MY_PACKAGE_REPLACED} broadcast intent when this IME
@@ -72,13 +71,10 @@ public final class SystemBroadcastReceiver extends BroadcastReceiver {
             final RichInputMethodManager richImm = RichInputMethodManager.getInstance();
             final InputMethodSubtype[] additionalSubtypes = RichInputMethodManager.getAdditionalSubtypes(context);
             richImm.setAdditionalInputMethodSubtypes(additionalSubtypes);
-            LauncherIconVisibilityManager.updateSetupWizardIconVisibility(context);
         } else if (Intent.ACTION_BOOT_COMPLETED.equals(intentAction)) {
             Log.i(TAG, "Boot has been completed");
-            LauncherIconVisibilityManager.updateSetupWizardIconVisibility(context);
         } else if (IntentCompatUtils.is_ACTION_USER_INITIALIZE(intentAction)) {
             Log.i(TAG, "User initialize");
-            LauncherIconVisibilityManager.updateSetupWizardIconVisibility(context);
         } else if (Intent.ACTION_LOCALE_CHANGED.equals(intentAction)) {
             Log.i(TAG, "System locale changed");
             KeyboardLayoutSet.onSystemLocaleChanged();

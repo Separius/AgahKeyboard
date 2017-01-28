@@ -31,12 +31,6 @@
         android:key="pref_keypress_sound_volume"
         android:title="@string/prefs_keypress_sound_volume_settings"
         latin:maxValue="100" /> <!-- percent -->
-    <!-- The settings for showing setup wizard application icon shouldn't be persistent and
-         the default value is added programmatically. -->
-    <CheckBoxPreference
-        android:key="pref_show_setup_wizard_icon"
-        android:title="@string/show_setup_wizard_icon"
-        android:summary="@string/show_setup_wizard_icon_summary" />
     <!-- title will be set programmatically to embed application name -->
     <CheckBoxPreference
         android:key="pref_enable_metrics_logging"

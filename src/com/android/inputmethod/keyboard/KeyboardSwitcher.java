@@ -39,6 +39,7 @@ import com.android.inputmethod.latin.utils.ResourceUtils;
 import com.android.inputmethod.latin.utils.ScriptUtils;
 
 import io.separ.neural.inputmethod.Utils.FontUtils;
+import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.compat.InputMethodServiceCompatUtils;
 import io.separ.neural.inputmethod.indic.InputView;
 import io.separ.neural.inputmethod.indic.LatinIME;
@@ -418,6 +419,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mKeyboardView.setKeyboardActionListener(mLatinIME);
         mEmojiPalettesView.setHardwareAcceleratedDrawingEnabled(isHardwareAcceleratedDrawingEnabled);
         mEmojiPalettesView.setKeyboardActionListener(mLatinIME);
+        ColorManager.addObserver(mEmojiPalettesView);
         return mCurrentInputView;
     }
 

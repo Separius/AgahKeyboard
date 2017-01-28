@@ -28,7 +28,6 @@ import android.preference.TwoStatePreference;
 import io.separ.neural.inputmethod.indic.AudioAndHapticFeedbackManager;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.indic.define.ProductionFlags;
-import io.separ.neural.inputmethod.indic.setup.LauncherIconVisibilityManager;
 
 /**
  * "Advanced" settings sub screen.
@@ -89,10 +88,6 @@ public final class AdvancedSettingsFragment extends SubScreenFragment {
                     Settings.readKeyPreviewPopupEnabled(prefs, res));
         }
 
-        if (!res.getBoolean(R.bool.config_setup_wizard_available)) {
-            removePreference(Settings.PREF_SHOW_SETUP_WIZARD_ICON);
-        }
-
         if (ProductionFlags.IS_METRICS_LOGGING_SUPPORTED) {
             final Preference enableMetricsLogging =
                     findPreference(Settings.PREF_ENABLE_METRICS_LOGGING);
@@ -116,11 +111,6 @@ public final class AdvancedSettingsFragment extends SubScreenFragment {
     public void onResume() {
         super.onResume();
         final SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
-        final TwoStatePreference showSetupWizardIcon =
-                (TwoStatePreference)findPreference(Settings.PREF_SHOW_SETUP_WIZARD_ICON);
-        if (showSetupWizardIcon != null) {
-            showSetupWizardIcon.setChecked(Settings.readShowSetupWizardIcon(prefs, getActivity()));
-        }
         updateListPreferenceSummaryToCurrentValue(Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY);
     }
 
@@ -130,8 +120,6 @@ public final class AdvancedSettingsFragment extends SubScreenFragment {
         if (key.equals(Settings.PREF_POPUP_ON)) {
             setPreferenceEnabled(Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY,
                     Settings.readKeyPreviewPopupEnabled(prefs, res));
-        } else if (key.equals(Settings.PREF_SHOW_SETUP_WIZARD_ICON)) {
-            LauncherIconVisibilityManager.updateSetupWizardIconVisibility(getActivity());
         }
         updateListPreferenceSummaryToCurrentValue(Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY);
         refreshEnablingsOfKeypressSoundAndVibrationSettings();

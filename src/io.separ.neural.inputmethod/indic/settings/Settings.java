@@ -96,7 +96,6 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     public static final String PREF_GESTURE_PREVIEW_TRAIL = "pref_gesture_preview_trail";
     public static final String PREF_GESTURE_FLOATING_PREVIEW_TEXT =
             "pref_gesture_floating_preview_text";
-    public static final String PREF_SHOW_SETUP_WIZARD_ICON = "pref_show_setup_wizard_icon";
     public static final String PREF_PHRASE_GESTURE_ENABLED = "pref_gesture_space_aware";
 
     public static final String PREF_INPUT_LANGUAGE = "input_language";
@@ -359,23 +358,6 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         return res.getBoolean(R.bool.config_use_fullscreen_mode);
     }
 
-    public static boolean readShowSetupWizardIcon(final SharedPreferences prefs,
-            final Context context) {
-        final boolean enableSetupWizardByConfig = context.getResources().getBoolean(
-                R.bool.config_setup_wizard_available);
-        if (!enableSetupWizardByConfig) {
-            return false;
-        }
-        if (!prefs.contains(PREF_SHOW_SETUP_WIZARD_ICON)) {
-            final ApplicationInfo appInfo = context.getApplicationInfo();
-            final boolean isApplicationInSystemImage =
-                    (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
-            // Default value
-            return !isApplicationInSystemImage;
-        }
-        return prefs.getBoolean(PREF_SHOW_SETUP_WIZARD_ICON, false);
-    }
-
     public static boolean readHasHardwareKeyboard(final Configuration conf) {
         // The standard way of finding out whether we have a hardware keyboard. This code is taken
         // from InputMethodService#onEvaluateInputShown, which canonically determines this.
@@ -394,7 +376,7 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     }
 
     public static boolean readWizardCompleted(SharedPreferences prefs) {
-        return prefs.getBoolean(WIZARD_COMPLETED, HAS_UI_TO_ACCEPT_TYPED_WORD);
+        return prefs.getBoolean(WIZARD_COMPLETED, false);
     }
 
     public void writeLastUsedPersonalizationToken(byte[] token) {

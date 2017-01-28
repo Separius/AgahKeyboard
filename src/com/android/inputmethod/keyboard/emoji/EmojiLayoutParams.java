@@ -57,7 +57,8 @@ final class EmojiLayoutParams {
         mEmojiPagerHeight = defaultKeyboardHeight - mEmojiActionBarHeight
                 - mEmojiCategoryPageIdViewHeight;
         mEmojiPagerBottomMargin = 0;
-        mEmojiKeyboardHeight = mEmojiPagerHeight - mEmojiPagerBottomMargin - 1;
+        //mEmojiKeyboardHeight = mEmojiPagerHeight - mEmojiPagerBottomMargin - 1;
+        mEmojiKeyboardHeight = mEmojiPagerHeight - mEmojiPagerBottomMargin;
     }
 
     public void setPagerProperties(final ViewPager vp) {

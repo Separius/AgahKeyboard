@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import io.separ.neural.inputmethod.indic.setup.IntroActivity;
 
@@ -21,13 +22,14 @@ public class StartActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (Settings.readWizardCompleted(prefs)) {
             startActivity(new Intent(this, SettingsActivity.class));
             return;
         }
-        prefs.edit().clear().apply();*/
+        prefs.edit().clear().apply();
         startActivity(new Intent(this, IntroActivity.class));
+        Log.e("SEPAR", "onDonePressed2");
     }
 
     protected String getActivityName() {

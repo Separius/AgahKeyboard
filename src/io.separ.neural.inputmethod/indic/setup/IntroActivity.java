@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import com.android.inputmethod.latin.utils.UncachedInputMethodManagerUtils;
 import com.github.paolorotolo.appintro.AppIntro2;
@@ -32,11 +33,13 @@ public class IntroActivity extends AppIntro2 {
         this.enableFragment = new EnableFragment();
         addSlide(this.enableFragment);
         addSlide(new LanguageFragment());
-        addSlide(new SmartKeyboardFragment());
     }
 
     public void onDonePressed(Fragment currentFragment) {
+        super.onDonePressed(currentFragment);
+        Log.e("SEPAR", "onDonePressed");
         Settings.writeWizardCompleted(PreferenceManager.getDefaultSharedPreferences(this), true);
+        finish();
     }
 
     protected void onResume() {

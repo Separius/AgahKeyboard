@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
@@ -49,11 +51,14 @@ import com.android.inputmethod.latin.utils.ResourceUtils;
 import java.util.concurrent.TimeUnit;
 
 import io.separ.neural.inputmethod.Utils.FontUtils;
+import io.separ.neural.inputmethod.colors.ColorManager;
+import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.indic.AudioAndHapticFeedbackManager;
 import io.separ.neural.inputmethod.indic.Constants;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.indic.SubtypeSwitcher;
 
+import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
 import static io.separ.neural.inputmethod.indic.Constants.NOT_A_COORDINATE;
 
 /**
@@ -69,7 +74,7 @@ import static io.separ.neural.inputmethod.indic.Constants.NOT_A_COORDINATE;
  */
 public final class EmojiPalettesView extends LinearLayout implements OnTabChangeListener,
         ViewPager.OnPageChangeListener, View.OnClickListener, View.OnTouchListener,
-        EmojiPageKeyboardView.OnKeyEventListener {
+        EmojiPageKeyboardView.OnKeyEventListener, ColorManager.OnColorChange {
     private final int mFunctionalKeyBackgroundId;
     private final int mSpacebarBackgroundId;
     private final boolean mCategoryIndicatorEnabled;
@@ -81,6 +86,8 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
     private EmojiPalettesAdapter mEmojiPalettesAdapter;
     private final EmojiLayoutParams mEmojiLayoutParams;
 
+    private LinearLayout mEmojiTopBar;
+    private LinearLayout mActionBar;
     private ImageButton mDeleteKey;
     private TextView mAlphabetKeyLeft;
     private TextView mAlphabetKeyRight;
@@ -90,6 +97,7 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
     private ViewPager mEmojiPager;
     private int mCurrentPagerPosition = 0;
     private EmojiCategoryPageIndicatorView mEmojiCategoryPageIndicatorView;
+    private View mSpacebar;
 
     private KeyboardActionListener mKeyboardActionListener = KeyboardActionListener.EMPTY_LISTENER;
 
@@ -166,6 +174,7 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
 
     @Override
     protected void onFinishInflate() {
+        mEmojiTopBar = (LinearLayout)findViewById(R.id.emoji_top_bar);
         mTabHost = (TabHost)findViewById(R.id.emoji_category_tabhost);
         mTabHost.setup();
         for (final EmojiCategory.CategoryProperties properties
@@ -200,8 +209,8 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
 
         setCurrentCategoryId(mEmojiCategory.getCurrentCategoryId(), true /* force */);
 
-        final LinearLayout actionBar = (LinearLayout)findViewById(R.id.emoji_action_bar);
-        mEmojiLayoutParams.setActionBarProperties(actionBar);
+        mActionBar = (LinearLayout)findViewById(R.id.emoji_action_bar);
+        mEmojiLayoutParams.setActionBarProperties(mActionBar);
 
         // deleteKey depends only on OnTouchListener.
         mDeleteKey = (ImageButton)findViewById(R.id.emoji_keyboard_delete);
@@ -226,13 +235,53 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
         mAlphabetKeyRight.setTag(Constants.CODE_ALPHA_FROM_EMOJI);
         mAlphabetKeyRight.setOnTouchListener(this);
         mAlphabetKeyRight.setOnClickListener(this);
-        View mSpacebar = findViewById(R.id.emoji_keyboard_space);
+        mSpacebar = findViewById(R.id.emoji_keyboard_space);
         mSpacebar.setBackgroundResource(mSpacebarBackgroundId);
         mSpacebar.setTag(Constants.CODE_SPACE);
         mSpacebar.setOnTouchListener(this);
         mSpacebar.setOnClickListener(this);
         mEmojiLayoutParams.setKeyProperties(mSpacebar);
         mSpacebarIcon = findViewById(R.id.emoji_keyboard_space_icon);
+    }
+
+    public void onColorChange(ColorProfile newProfile){
+        int darkBackground = colorProfile.getPrimaryDark();
+        int iconColor = colorProfile.getIcon();
+        if(mActionBar != null){
+            mActionBar.setBackgroundColor(darkBackground);
+        }
+        if(mDeleteKey != null) {
+            mDeleteKey.setBackgroundColor(darkBackground);
+            mDeleteKey.setColorFilter(iconColor);
+        }
+        if(mAlphabetKeyLeft != null) {
+            mAlphabetKeyLeft.setBackgroundColor(darkBackground);
+            mAlphabetKeyLeft.setTextColor(iconColor);
+            mAlphabetKeyLeft.setText(mAlphabetKeyLeft.getText());
+        }
+        if(mAlphabetKeyRight != null) {
+            mAlphabetKeyRight.setBackgroundColor(darkBackground);
+            mAlphabetKeyRight.setTextColor(iconColor);
+            mAlphabetKeyRight.setText(mAlphabetKeyRight.getText());
+        }
+        if(mTabHost != null){
+            TabWidget tabWidget = mTabHost.getTabWidget();
+            for(int i=0; i<tabWidget.getChildCount(); ++i) {
+                ImageView currentTab = (ImageView)tabWidget.getChildTabViewAt(i);
+                currentTab.setBackgroundColor(darkBackground);
+                currentTab.setColorFilter(iconColor);
+            }
+            tabWidget.setBackgroundColor(darkBackground);
+        }
+        if(mEmojiCategoryPageIndicatorView != null)
+            mEmojiCategoryPageIndicatorView.setColors(colorProfile.getText(),darkBackground);
+        if(mEmojiTopBar != null)
+            mEmojiTopBar.setBackgroundColor(darkBackground);
+        if(mSpacebar != null) {
+            Drawable newBackground = mSpacebar.getBackground();
+            newBackground.setColorFilter(colorProfile.getPrimary(), PorterDuff.Mode.OVERLAY);
+            mSpacebar.setBackground(newBackground);
+        }
     }
 
     @Override

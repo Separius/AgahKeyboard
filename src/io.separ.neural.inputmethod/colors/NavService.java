@@ -195,7 +195,8 @@ public class NavService extends Service implements ColorManager.OnColorChange, O
     @SuppressLint({"NewApi"})
     public void show(boolean animate) {
         if (VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(this)) {
-            KeyboardSwitcher.getInstance().getmLatinIME().getOverlayPermission();
+            return;
+            //KeyboardSwitcher.getInstance().getmLatinIME().getOverlayPermission();
         }
         if (KeyboardSwitcher.getInstance().getmLatinIME().isInputViewShown()) {
             if (!(this.barColor.isAttachedToWindow() || this.viewAdded || (VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(this)))) {
