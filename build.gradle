@@ -9,7 +9,6 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
-
 repositories {
     mavenCentral()
 }
@@ -21,6 +20,9 @@ dependencies {
     compile 'com.google.code.findbugs:jsr305:3.0.0'
     compile 'com.github.paolorotolo:appintro:4.1.0'
     compile fileTree(include: '*.jar', dir: 'libs')
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }
 
 android {

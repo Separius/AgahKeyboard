@@ -71,6 +71,7 @@ import com.android.inputmethod.latin.utils.LeakGuardHandlerWrapper;
 import com.android.inputmethod.latin.utils.StatsUtils;
 import com.android.inputmethod.latin.utils.SubtypeLocaleUtils;
 import com.android.inputmethod.latin.utils.ViewLayoutUtils;
+import com.squareup.leakcanary.LeakCanary;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -535,9 +536,12 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 InputMethodServiceCompatUtils.enableHardwareAcceleration(this);
         Log.i(TAG, "Hardware accelerated drawing: " + mIsHardwareAcceleratedDrawingEnabled);
     }
-
     @Override
     public void onCreate() {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(getApplication());
         Settings.init(this);
         DebugFlags.init(PreferenceManager.getDefaultSharedPreferences(this));
         RichInputMethodManager.init(this);
