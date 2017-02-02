@@ -25,6 +25,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -40,7 +41,6 @@ import com.android.inputmethod.latin.utils.ResourceUtils;
 import com.android.inputmethod.latin.utils.ScriptUtils;
 
 import io.separ.neural.inputmethod.Utils.FontUtils;
-import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.compat.InputMethodServiceCompatUtils;
 import io.separ.neural.inputmethod.indic.InputView;
 import io.separ.neural.inputmethod.indic.LatinIME;
@@ -282,7 +282,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     public void setEmojiKeyboard() {
         final Keyboard keyboard = mKeyboardLayoutSet.getKeyboard(KeyboardId.ELEMENT_ALPHABET);
         mMainKeyboardFrame.setVisibility(View.GONE);
-        mEmojiDrawer.show(220, false);
+        mEmojiDrawer.show(600, false);
         /*mEmojiPalettesView.startEmojiPalettes(
                 mKeyboardTextsSet.getText(KeyboardTextsSet.SWITCH_TO_ALPHA_KEY_LABEL),
                 mKeyboardView.getKeyVisualAttribute(), keyboard.mIconsSet);*/
@@ -411,6 +411,12 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mMainKeyboardFrame = mCurrentInputView.findViewById(R.id.main_keyboard_frame);
         //mEmojiPalettesView = (EmojiPalettesView)mCurrentInputView.findViewById(R.id.emoji_palettes_view);
         mEmojiDrawer = (EmojiDrawer) mCurrentInputView.findViewById(R.id.emoji_drawer);
+        mEmojiDrawer.setEmojiEventListener(new EmojiDrawer.EmojiEventListener() {
+            @Override public void onKeyEvent(KeyEvent keyEvent) {}
+            @Override public void onEmojiSelected(String emoji) {
+                Log.e("SEPAR", "onEmojiSelected: "+ emoji);
+            }
+        });
         mSettingsViewPager = (LinearLayout) mCurrentInputView.findViewById(R.id.settings_pager_view);
         ((ViewPager)mCurrentInputView.findViewById(R.id.settings_pager_tabs)).setAdapter(
                 new InlineSettingsAdaptor(mLatinIME));

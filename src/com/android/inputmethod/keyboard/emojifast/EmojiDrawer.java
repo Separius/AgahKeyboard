@@ -67,10 +67,6 @@ public class EmojiDrawer extends LinearLayout {
 
     public void show(int height, boolean immediate) {
         if (this.pager == null) initView();
-        ViewGroup.LayoutParams params = getLayoutParams();
-        params.height = height;
-        Log.w("EmojiDrawer", "showing emoji drawer with height " + params.height);
-        setLayoutParams(params);
         setVisibility(VISIBLE);
         if (drawerListener != null) drawerListener.onShown();
     }
@@ -96,6 +92,7 @@ public class EmojiDrawer extends LinearLayout {
         if (recentModel.getEmoji().length == 0) {
             pager.setCurrentItem(1);
         }
+        Log.e("SEPAR", "initializeEmojiGrid: "+pager.getAdapter().getPageTitle(0));
         strip.setViewPager(pager);
     }
 
@@ -120,6 +117,11 @@ public class EmojiDrawer extends LinearLayout {
             this.context  = context;
             this.pages    = pages;
             this.listener = listener;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int index){
+            return "Text";
         }
 
         @Override

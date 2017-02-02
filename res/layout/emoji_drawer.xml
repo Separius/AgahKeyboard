@@ -5,12 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    style="?attr/emojiPalettesViewStyle">
 
     <LinearLayout
+        android:id="@+id/emoji_top_bar"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="@dimen/config_suggestions_strip_height"
+        style="?attr/suggestionStripViewStyle"
+        >
 
         <com.astuetz.PagerSlidingTabStrip android:id="@+id/tabs"
             android:layout_weight="1"
@@ -27,6 +31,6 @@
         android:id="@+id/emoji_pager"
         android:visibility="visible"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
 </com.android.inputmethod.keyboard.emojifast.EmojiDrawer>
