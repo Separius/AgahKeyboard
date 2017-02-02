@@ -23,6 +23,9 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.6'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }
 
 android {
@@ -72,5 +75,9 @@ android {
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_7
         sourceCompatibility JavaVersion.VERSION_1_7
+    }
+    packagingOptions{
+        pickFirst 'META-INF/license.txt'
+        pickFirst 'META-INF/LICENSE'
     }
 }
