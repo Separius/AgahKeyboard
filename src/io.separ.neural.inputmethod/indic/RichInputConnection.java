@@ -62,6 +62,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.separ.neural.inputmethod.compat.InputConnectionCompatUtils;
 import io.separ.neural.inputmethod.indic.settings.SpacingAndPunctuations;
@@ -313,6 +315,7 @@ public final class RichInputConnection {
         if (DEBUG_BATCH_NESTING) checkBatchEdit();
         if (DEBUG_PREVIOUS_TEXT) checkConsistencyForDebug();
         if(text.equals(" ") && changedLanguage) {
+            //TODO cancel double space InputLogic.cancelDoubleSpacePeriodCountdown()
             changedLanguage = false;
             return;
         }
@@ -413,6 +416,18 @@ public final class RichInputConnection {
         // never blocks or initiates IPC.
         return CapsModeUtils.getCapsMode(mCommittedTextBeforeComposingText, inputType,
                 spacingAndPunctuations, hasSpaceBefore);
+    }
+
+    private final String twoCharEmojiRegex = "([🇦-🇿]){2}$"; //A to Z
+
+    public int getDeleteCountConsideringEmoji(){
+        Matcher matchEmo = Pattern.compile(twoCharEmojiRegex).matcher(mCommittedTextBeforeComposingText.toString());
+        if(matchEmo.find())
+            return 4;
+        int code = getCodePointBeforeCursor();
+        if(code == Constants.NOT_A_CODE)
+            return code;
+        return Character.isSupplementaryCodePoint(code) ? 2 : 1;
     }
 
     public int getCodePointBeforeCursor() {

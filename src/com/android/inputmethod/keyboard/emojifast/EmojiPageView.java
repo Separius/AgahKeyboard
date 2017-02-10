@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -21,7 +19,6 @@ public class EmojiPageView extends FrameLayout {
     private static final String TAG = EmojiPageView.class.getSimpleName();
 
     private EmojiPageModel         model;
-    private EmojiSelectionListener listener;
     private GridView               grid;
 
     public EmojiPageView(Context context) {
@@ -37,17 +34,12 @@ public class EmojiPageView extends FrameLayout {
         final View view = LayoutInflater.from(getContext()).inflate(R.layout.emoji_grid_layout, this, true);
         grid = (GridView) view.findViewById(R.id.emoji);
         grid.setColumnWidth(getResources().getDimensionPixelSize(R.dimen.emoji_drawer_size) + 2 * getResources().getDimensionPixelSize(R.dimen.emoji_drawer_item_padding));
-        grid.setOnItemClickListener(new OnItemClickListener() {
-            @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (listener != null) listener.onEmojiSelected(((EmojiView)view).getEmoji());
-            }
-        });
     }
 
     public void onSelected() {
-        if (model.isDynamic() && grid != null && grid.getAdapter() != null) {
+        /*if (model.isDynamic() && grid != null && grid.getAdapter() != null) {
             ((EmojiGridAdapter)grid.getAdapter()).notifyDataSetChanged();
-        }
+        }*/
     }
 
     public void setModel(EmojiPageModel model) {
@@ -56,23 +48,28 @@ public class EmojiPageView extends FrameLayout {
     }
 
     public void setEmojiSelectedListener(EmojiSelectionListener listener) {
-        this.listener = listener;
+        ((EmojiGridAdapter)grid.getAdapter()).setListener(listener);
     }
 
     private static class EmojiGridAdapter extends BaseAdapter {
 
         protected final Context                context;
         private   final int                    emojiSize;
-        private   final EmojiPageModel         model;
+        private final String[] modelEmojis;
+        private EmojiSelectionListener listener;
 
         public EmojiGridAdapter(Context context, EmojiPageModel model) {
             this.context   = context;
             this.emojiSize = (int) context.getResources().getDimension(R.dimen.emoji_drawer_size);
-            this.model     = model;
+            modelEmojis = model.getEmoji();
+        }
+
+        public void setListener(EmojiSelectionListener listener){
+            this.listener = listener;
         }
 
         @Override public int getCount() {
-            return model.getEmoji().length;
+            return modelEmojis.length;
         }
 
         @Override
@@ -82,6 +79,8 @@ public class EmojiPageView extends FrameLayout {
 
         @Override
         public long getItemId(int position) {
+            if(listener != null)
+                listener.onEmojiSelected(modelEmojis[position]);
             return position;
         }
 
@@ -98,7 +97,7 @@ public class EmojiPageView extends FrameLayout {
                 view = emojiView;
             }
 
-            view.setEmoji(model.getEmoji()[position]);
+            view.setEmoji(modelEmojis[position]);
             return view;
         }
     }

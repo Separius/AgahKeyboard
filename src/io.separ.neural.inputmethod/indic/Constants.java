@@ -181,7 +181,7 @@ public final class Constants {
     // TODO: Set this value appropriately.
     public static final int GET_SUGGESTED_WORDS_TIMEOUT = 200;
     // How many continuous deletes at which to start deleting at a higher speed.
-    public static final int DELETE_ACCELERATE_AT = 20;
+    public static final int DELETE_ACCELERATE_AT = 20; //TODO delete behavior is here?
 
     public static final String WORD_SEPARATOR = " ";
 

@@ -176,32 +176,17 @@ final class EmojiCategory {
         addShownCategoryId(EmojiCategory.ID_RECENTS);
         int defaultCategoryId = EmojiCategory.ID_SYMBOLS;
         if (BuildCompatUtils.EFFECTIVE_SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (canShowUnicodeEightEmoji()) {
-                defaultCategoryId = EmojiCategory.ID_EIGHT_SMILEY_PEOPLE;
-                addShownCategoryId(EmojiCategory.ID_EIGHT_SMILEY_PEOPLE);
-                addShownCategoryId(EmojiCategory.ID_EIGHT_ANIMALS_NATURE);
-                addShownCategoryId(EmojiCategory.ID_EIGHT_FOOD_DRINK);
-                addShownCategoryId(EmojiCategory.ID_EIGHT_TRAVEL_PLACES);
-                addShownCategoryId(EmojiCategory.ID_EIGHT_ACTIVITY);
-                addShownCategoryId(EmojiCategory.ID_EIGHT_OBJECTS);
-                addShownCategoryId(EmojiCategory.ID_EIGHT_SYMBOLS);
-                addShownCategoryId(EmojiCategory.ID_EIGHT_FLAGS);
-            } else {
-                defaultCategoryId = EmojiCategory.ID_PEOPLE;
-                addShownCategoryId(EmojiCategory.ID_PEOPLE);
-                addShownCategoryId(EmojiCategory.ID_OBJECTS);
-                addShownCategoryId(EmojiCategory.ID_NATURE);
-                addShownCategoryId(EmojiCategory.ID_PLACES);
-                addShownCategoryId(EmojiCategory.ID_SYMBOLS);
-                if (canShowFlagEmoji()) {
-                    addShownCategoryId(EmojiCategory.ID_FLAGS);
-                }
-            }
+            defaultCategoryId = EmojiCategory.ID_EIGHT_SMILEY_PEOPLE;
+            addShownCategoryId(EmojiCategory.ID_EIGHT_SMILEY_PEOPLE);
+            addShownCategoryId(EmojiCategory.ID_EIGHT_FOOD_DRINK);
+            addShownCategoryId(EmojiCategory.ID_EIGHT_ANIMALS_NATURE);
+            addShownCategoryId(EmojiCategory.ID_EIGHT_TRAVEL_PLACES);
+            addShownCategoryId(EmojiCategory.ID_EIGHT_SYMBOLS);
+            addShownCategoryId(EmojiCategory.ID_EIGHT_FLAGS);
         } else {
             mCurrentCategoryId =
-                    Settings.readLastShownEmojiCategoryId(mPrefs, EmojiCategory.ID_SYMBOLS);
+                    Settings.readLastShownEmojiCategoryId(mPrefs, EmojiCategory.ID_EMOTICONS);
         }
-        addShownCategoryId(EmojiCategory.ID_SYMBOLS);
         addShownCategoryId(EmojiCategory.ID_EMOTICONS);
 
         DynamicGridKeyboard recentsKbd =
@@ -343,7 +328,7 @@ final class EmojiCategory {
         int sum = 0;
         for (final CategoryProperties properties : mShownCategories) {
             final int temp = sum;
-            sum += properties.mPageCount;
+            sum += 1;
             if (sum > position) {
                 return new Pair<>(properties.mCategoryId, position - temp);
             }

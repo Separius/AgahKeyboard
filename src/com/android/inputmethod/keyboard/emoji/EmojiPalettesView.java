@@ -24,13 +24,18 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,21 +44,25 @@ import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
-import com.android.inputmethod.keyboard.Key;
 import com.android.inputmethod.keyboard.KeyboardActionListener;
 import com.android.inputmethod.keyboard.KeyboardLayoutSet;
 import com.android.inputmethod.keyboard.KeyboardView;
+import com.android.inputmethod.keyboard.emojifast.EmojiPageModel;
+import com.android.inputmethod.keyboard.emojifast.EmojiPageView;
+import com.android.inputmethod.keyboard.emojifast.EmojiPages;
+import com.android.inputmethod.keyboard.emojifast.RecentEmojiPageModel;
 import com.android.inputmethod.keyboard.internal.KeyDrawParams;
 import com.android.inputmethod.keyboard.internal.KeyVisualAttributes;
 import com.android.inputmethod.keyboard.internal.KeyboardIconsSet;
 import com.android.inputmethod.latin.utils.ResourceUtils;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.separ.neural.inputmethod.Utils.FontUtils;
 import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.colors.ColorProfile;
-import io.separ.neural.inputmethod.indic.AudioAndHapticFeedbackManager;
 import io.separ.neural.inputmethod.indic.Constants;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.indic.SubtypeSwitcher;
@@ -74,16 +83,15 @@ import static io.separ.neural.inputmethod.indic.Constants.NOT_A_COORDINATE;
  */
 public final class EmojiPalettesView extends LinearLayout implements OnTabChangeListener,
         ViewPager.OnPageChangeListener, View.OnClickListener, View.OnTouchListener,
-        EmojiPageKeyboardView.OnKeyEventListener, ColorManager.OnColorChange {
+        ColorManager.OnColorChange {
     private final int mFunctionalKeyBackgroundId;
     private final int mSpacebarBackgroundId;
     private final boolean mCategoryIndicatorEnabled;
     private final int mCategoryIndicatorDrawableResId;
     private final int mCategoryIndicatorBackgroundResId;
-    private final int mCategoryPageIndicatorColor;
     private final int mCategoryPageIndicatorBackground;
     private final DeleteKeyOnTouchListener mDeleteKeyOnTouchListener;
-    private EmojiPalettesAdapter mEmojiPalettesAdapter;
+    private EmojiPagerAdapter mEmojiPalettesAdapter;
     private final EmojiLayoutParams mEmojiLayoutParams;
 
     private LinearLayout mEmojiTopBar;
@@ -96,8 +104,10 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
     private TabHost mTabHost;
     private ViewPager mEmojiPager;
     private int mCurrentPagerPosition = 0;
-    private EmojiCategoryPageIndicatorView mEmojiCategoryPageIndicatorView;
     private View mSpacebar;
+
+    private List<EmojiPageModel> models;
+    private RecentEmojiPageModel recentModel;
 
     private KeyboardActionListener mKeyboardActionListener = KeyboardActionListener.EMPTY_LISTENER;
 
@@ -136,12 +146,18 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
                 R.styleable.EmojiPalettesView_categoryIndicatorDrawable, 0);
         mCategoryIndicatorBackgroundResId = emojiPalettesViewAttr.getResourceId(
                 R.styleable.EmojiPalettesView_categoryIndicatorBackground, 0);
-        mCategoryPageIndicatorColor = emojiPalettesViewAttr.getColor(
-                R.styleable.EmojiPalettesView_categoryPageIndicatorColor, 0);
         mCategoryPageIndicatorBackground = emojiPalettesViewAttr.getColor(
                 R.styleable.EmojiPalettesView_categoryPageIndicatorBackground, 0);
         emojiPalettesViewAttr.recycle();
         mDeleteKeyOnTouchListener = new DeleteKeyOnTouchListener(context);
+        initializePageModels();
+    }
+
+    private void initializePageModels() {
+        this.models = new LinkedList<>();
+        this.recentModel = new RecentEmojiPageModel(getContext());
+        this.models.add(recentModel);
+        this.models.addAll(EmojiPages.PAGES);
     }
 
     @Override
@@ -163,8 +179,6 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
         tspec.setContent(R.id.emoji_keyboard_dummy);
         final ImageView iconView = (ImageView)LayoutInflater.from(getContext()).inflate(
                 R.layout.emoji_keyboard_tab_icon, null);
-        // TODO: Replace background color with its own setting rather than using the
-        //       category page indicator background as a workaround.
         iconView.setBackgroundColor(mCategoryPageIndicatorBackground);
         iconView.setImageResource(mEmojiCategory.getCategoryTabIcon(categoryId));
         iconView.setContentDescription(mEmojiCategory.getAccessibilityDescription(categoryId));
@@ -181,7 +195,7 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
                 : mEmojiCategory.getShownCategories()) {
             addTab(mTabHost, properties.mCategoryId);
         }
-        mTabHost.setOnTabChangedListener(this);
+        mTabHost.setOnTabChangedListener(this); //TODO
         final TabWidget tabWidget = mTabHost.getTabWidget();
         tabWidget.setStripEnabled(mCategoryIndicatorEnabled);
         if (mCategoryIndicatorEnabled) {
@@ -192,20 +206,24 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
             tabWidget.setRightStripDrawable(mCategoryIndicatorBackgroundResId);
         }
 
-        mEmojiPalettesAdapter = new EmojiPalettesAdapter(mEmojiCategory, this);
+        mEmojiPalettesAdapter = new EmojiPagerAdapter(getContext(),
+                models,
+                new EmojiPageView.EmojiSelectionListener() {
+                    @Override
+                    public void onEmojiSelected(String emoji) {
+                        recentModel.onCodePointSelected(emoji);
+                        mKeyboardActionListener.onTextInput(emoji);
+                    }
+                });
 
         mEmojiPager = (ViewPager)findViewById(R.id.emoji_keyboard_pager);
         mEmojiPager.setAdapter(mEmojiPalettesAdapter);
+        if (recentModel.getEmoji().length == 0)
+            mEmojiPager.setCurrentItem(1);
         mEmojiPager.setOnPageChangeListener(this);
         mEmojiPager.setOffscreenPageLimit(0);
         mEmojiPager.setPersistentDrawingCache(PERSISTENT_NO_CACHE);
         mEmojiLayoutParams.setPagerProperties(mEmojiPager);
-
-        mEmojiCategoryPageIndicatorView =
-                (EmojiCategoryPageIndicatorView)findViewById(R.id.emoji_category_page_id_view);
-        mEmojiCategoryPageIndicatorView.setColors(
-                mCategoryPageIndicatorColor, mCategoryPageIndicatorBackground);
-        mEmojiLayoutParams.setCategoryPageIdViewProperties(mEmojiCategoryPageIndicatorView);
 
         setCurrentCategoryId(mEmojiCategory.getCurrentCategoryId(), true /* force */);
 
@@ -244,6 +262,59 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
         mSpacebarIcon = findViewById(R.id.emoji_keyboard_space_icon);
     }
 
+    public static class EmojiPagerAdapter extends PagerAdapter
+    {
+        private Context                context;
+        private List<EmojiPageModel>   pages;
+        private EmojiPageView.EmojiSelectionListener listener;
+
+        public EmojiPagerAdapter(@NonNull Context context,
+                                 @NonNull List<EmojiPageModel> pages,
+                                 @Nullable EmojiPageView.EmojiSelectionListener listener)
+        {
+            super();
+            this.context  = context;
+            this.pages    = pages;
+            this.listener = listener;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int index){
+            return "Text";
+        }
+
+        @Override
+        public int getCount() {
+            return pages.size();
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            EmojiPageView page = new EmojiPageView(context);
+            page.setModel(pages.get(position));
+            page.setEmojiSelectedListener(listener);
+            container.addView(page);
+            return page;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View)object);
+        }
+
+        @Override
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+            EmojiPageView current = (EmojiPageView) object;
+            current.onSelected();
+            super.setPrimaryItem(container, position, object);
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+    }
+
     public void onColorChange(ColorProfile newProfile){
         int darkBackground = colorProfile.getPrimaryDark();
         int iconColor = colorProfile.getIcon();
@@ -273,8 +344,6 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
             }
             tabWidget.setBackgroundColor(darkBackground);
         }
-        if(mEmojiCategoryPageIndicatorView != null)
-            mEmojiCategoryPageIndicatorView.setColors(colorProfile.getText(),darkBackground);
         if(mEmojiTopBar != null)
             mEmojiTopBar.setBackgroundColor(darkBackground);
         if(mSpacebar != null) {
@@ -294,11 +363,8 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
 
     @Override
     public void onTabChanged(final String tabId) {
-        AudioAndHapticFeedbackManager.getInstance().performHapticAndAudioFeedback(
-                Constants.CODE_UNSPECIFIED, this);
         final int categoryId = mEmojiCategory.getCategoryId(tabId);
         setCurrentCategoryId(categoryId, false /* force */);
-        updateEmojiCategoryPageIdView();
     }
 
     @Override
@@ -306,8 +372,6 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
         final Pair<Integer, Integer> newPos =
                 mEmojiCategory.getCategoryIdAndPageIdFromPagePosition(position);
         setCurrentCategoryId(newPos.first /* categoryId */, false /* force */);
-        mEmojiCategory.setCurrentCategoryPageId(newPos.second /* categoryPageId */);
-        updateEmojiCategoryPageIdView();
         mCurrentPagerPosition = position;
     }
 
@@ -319,24 +383,6 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
     @Override
     public void onPageScrolled(final int position, final float positionOffset,
             final int positionOffsetPixels) {
-        mEmojiPalettesAdapter.onPageScrolled();
-        final Pair<Integer, Integer> newPos =
-                mEmojiCategory.getCategoryIdAndPageIdFromPagePosition(position);
-        final int newCategoryId = newPos.first;
-        final int newCategorySize = mEmojiCategory.getCategoryPageSize(newCategoryId);
-        final int currentCategoryId = mEmojiCategory.getCurrentCategoryId();
-        final int currentCategoryPageId = mEmojiCategory.getCurrentCategoryPageId();
-        final int currentCategorySize = mEmojiCategory.getCurrentCategoryPageSize();
-        if (newCategoryId == currentCategoryId) {
-            mEmojiCategoryPageIndicatorView.setCategoryPageId(
-                    newCategorySize, newPos.second, positionOffset);
-        } else if (newCategoryId > currentCategoryId) {
-            mEmojiCategoryPageIndicatorView.setCategoryPageId(
-                    currentCategorySize, currentCategoryPageId, positionOffset);
-        } else if (newCategoryId < currentCategoryId) {
-            mEmojiCategoryPageIndicatorView.setCategoryPageId(
-                    currentCategorySize, currentCategoryPageId, positionOffset - 1);
-        }
     }
 
     /**
@@ -352,6 +398,7 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
             return false;
         }
         final Object tag = v.getTag();
+        Log.e("SEPAR", "onTouch: " + tag);
         if (!(tag instanceof Integer)) {
             return false;
         }
@@ -371,42 +418,13 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
     @Override
     public void onClick(View v) {
         final Object tag = v.getTag();
+        Log.e("SEPAR", "onClick: " + tag);
         if (!(tag instanceof Integer)) {
             return;
         }
         final int code = (Integer) tag;
         mKeyboardActionListener.onCodeInput(code, NOT_A_COORDINATE, NOT_A_COORDINATE,
                 false /* isKeyRepeat */);
-        mKeyboardActionListener.onReleaseKey(code, false /* withSliding */);
-    }
-
-    /**
-     * Called from {@link EmojiPageKeyboardView} through
-     * {@link com.android.inputmethod.keyboard.emoji.EmojiPageKeyboardView.OnKeyEventListener}
-     * interface to handle touch events from non-View-based elements such as Emoji buttons.
-     */
-    @Override
-    public void onPressKey(final Key key) {
-        final int code = key.getCode();
-        mKeyboardActionListener.onPressKey(code, 0 /* repeatCount */, true /* isSinglePointer */);
-    }
-
-    /**
-     * Called from {@link EmojiPageKeyboardView} through
-     * {@link com.android.inputmethod.keyboard.emoji.EmojiPageKeyboardView.OnKeyEventListener}
-     * interface to handle touch events from non-View-based elements such as Emoji buttons.
-     */
-    @Override
-    public void onReleaseKey(final Key key) {
-        mEmojiPalettesAdapter.addRecentKey(key);
-        mEmojiCategory.saveLastTypedCategoryPage();
-        final int code = key.getCode();
-        if (code == Constants.CODE_OUTPUT_TEXT) {
-            mKeyboardActionListener.onTextInput(key.getOutputText());
-        } else {
-            mKeyboardActionListener.onCodeInput(code, NOT_A_COORDINATE, NOT_A_COORDINATE,
-                    false /* isKeyRepeat */);
-        }
         mKeyboardActionListener.onReleaseKey(code, false /* withSliding */);
     }
 
@@ -441,11 +459,10 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
         setupAlphabetKey(mAlphabetKeyRight, switchToAlphaLabel, params);
         mEmojiPager.setAdapter(mEmojiPalettesAdapter);
         mEmojiPager.setCurrentItem(mCurrentPagerPosition);
+        setCurrentCategoryId(mEmojiCategory.getCurrentCategoryId(), true);
     }
 
     public void stopEmojiPalettes() {
-        mEmojiPalettesAdapter.releaseCurrentKey(true /* withKeyRegistering */);
-        mEmojiPalettesAdapter.flushPendingRecentKeys();
         mEmojiPager.setAdapter(null);
     }
 
@@ -454,38 +471,14 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
         mDeleteKeyOnTouchListener.setKeyboardActionListener(mKeyboardActionListener);
     }
 
-    private void updateEmojiCategoryPageIdView() {
-        if (mEmojiCategoryPageIndicatorView == null) {
-            return;
-        }
-        mEmojiCategoryPageIndicatorView.setCategoryPageId(
-                mEmojiCategory.getCurrentCategoryPageSize(),
-                mEmojiCategory.getCurrentCategoryPageId(), 0.0f /* offset */);
-    }
-
     private void setCurrentCategoryId(final int categoryId, final boolean force) {
         final int oldCategoryId = mEmojiCategory.getCurrentCategoryId();
-        if (oldCategoryId == categoryId && !force) {
+        if (oldCategoryId == categoryId && !force)
             return;
-        }
-
-        if (oldCategoryId == EmojiCategory.ID_RECENTS) {
-            // Needs to save pending updates for recent keys when we get out of the recents
-            // category because we don't want to move the recent emojis around while the user
-            // is in the recents category.
-            mEmojiPalettesAdapter.flushPendingRecentKeys();
-        }
-
         mEmojiCategory.setCurrentCategoryId(categoryId);
         final int newTabId = mEmojiCategory.getTabIdFromCategoryId(categoryId);
-        final int newCategoryPageId = mEmojiCategory.getPageIdFromCategoryId(categoryId);
-        if (force || mEmojiCategory.getCategoryIdAndPageIdFromPagePosition(
-                mEmojiPager.getCurrentItem()).first != categoryId) {
-            mEmojiPager.setCurrentItem(newCategoryPageId, false /* smoothScroll */);
-        }
-        if (force || mTabHost.getCurrentTab() != newTabId) {
-            mTabHost.setCurrentTab(newTabId);
-        }
+        mTabHost.setCurrentTab(newTabId);
+        mEmojiPager.setCurrentItem(newTabId, true);
     }
 
     private static class DeleteKeyOnTouchListener implements OnTouchListener {

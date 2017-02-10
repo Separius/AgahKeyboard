@@ -16,8 +16,6 @@
 
 package com.android.inputmethod.keyboard;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -25,7 +23,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -34,13 +31,13 @@ import android.widget.LinearLayout;
 
 import com.android.inputmethod.keyboard.KeyboardLayoutSet.KeyboardLayoutSetException;
 import com.android.inputmethod.keyboard.emoji.EmojiPalettesView;
-import com.android.inputmethod.keyboard.emojifast.EmojiDrawer;
 import com.android.inputmethod.keyboard.internal.KeyboardState;
 import com.android.inputmethod.keyboard.internal.KeyboardTextsSet;
 import com.android.inputmethod.latin.utils.ResourceUtils;
 import com.android.inputmethod.latin.utils.ScriptUtils;
 
 import io.separ.neural.inputmethod.Utils.FontUtils;
+import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.compat.InputMethodServiceCompatUtils;
 import io.separ.neural.inputmethod.indic.InputView;
 import io.separ.neural.inputmethod.indic.LatinIME;
@@ -61,8 +58,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     private InputView mCurrentInputView;
     private View mMainKeyboardFrame;
     private MainKeyboardView mKeyboardView;
-    //private EmojiPalettesView mEmojiPalettesView;
-    private EmojiDrawer mEmojiDrawer;
+    private EmojiPalettesView mEmojiPalettesView;
     private LinearLayout mSettingsViewPager;
     private LatinIME mLatinIME;
     private boolean mIsHardwareAcceleratedDrawingEnabled;
@@ -102,20 +98,6 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mState = new KeyboardState(this);
         mIsHardwareAcceleratedDrawingEnabled =
                 InputMethodServiceCompatUtils.enableHardwareAcceleration(mLatinIME);
-    }
-
-    public void forceUpdateKeyboardTheme(){
-        forceUpdateKeyboardThemeAndContextThemeWrapper(mLatinIME, KeyboardTheme.getKeyboardTheme(mPrefs));
-        if (mKeyboardView != null) {
-            mLatinIME.setInputView(onCreateInputView(mIsHardwareAcceleratedDrawingEnabled));
-        }
-    }
-
-    private void forceUpdateKeyboardThemeAndContextThemeWrapper(final Context context,
-                                                              final KeyboardTheme keyboardTheme) {
-        mKeyboardTheme = keyboardTheme;
-        mThemeContext = new ContextThemeWrapper(context, keyboardTheme.mStyleId);
-        KeyboardLayoutSet.onKeyboardThemeChanged();
     }
 
     public void updateKeyboardTheme() {
@@ -270,10 +252,8 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     private void setMainKeyboardFrame(final SettingsValues settingsValues) {
         mMainKeyboardFrame.setVisibility(
                 settingsValues.mHasHardwareKeyboard ? View.GONE : View.VISIBLE);
-        //mMainKeyboardFrame.setAlpha(1f);
-        //mEmojiPalettesView.setVisibility(View.GONE);
-        //mEmojiPalettesView.stopEmojiPalettes();
-        mEmojiDrawer.setVisibility(View.GONE);
+        mEmojiPalettesView.setVisibility(View.GONE);
+        mEmojiPalettesView.stopEmojiPalettes();
         mSettingsViewPager.setVisibility(View.GONE);
     }
 
@@ -282,20 +262,10 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     public void setEmojiKeyboard() {
         final Keyboard keyboard = mKeyboardLayoutSet.getKeyboard(KeyboardId.ELEMENT_ALPHABET);
         mMainKeyboardFrame.setVisibility(View.GONE);
-        mEmojiDrawer.show(600, false);
-        /*mEmojiPalettesView.startEmojiPalettes(
+        mEmojiPalettesView.startEmojiPalettes(
                 mKeyboardTextsSet.getText(KeyboardTextsSet.SWITCH_TO_ALPHA_KEY_LABEL),
-                mKeyboardView.getKeyVisualAttribute(), keyboard.mIconsSet);*/
-        //mEmojiPalettesView.setAlpha(0f);
-        //mEmojiPalettesView.setVisibility(View.VISIBLE);
-        mEmojiDrawer.setVisibility(View.VISIBLE);
-        /*mEmojiPalettesView.animate().alpha(1f).setDuration(500).setListener(null);
-        mMainKeyboardFrame.animate().alpha(0f).setDuration(500).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mMainKeyboardFrame.setVisibility(View.GONE);
-            }
-        });*/
+                mKeyboardView.getKeyVisualAttribute(), keyboard.mIconsSet);
+        mEmojiPalettesView.setVisibility(View.VISIBLE);
         mSettingsViewPager.setVisibility(View.GONE);
     }
 
@@ -303,13 +273,11 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         if(mSettingsViewPager.getVisibility() == View.VISIBLE){
             mSettingsViewPager.setVisibility(View.GONE);
             mMainKeyboardFrame.setVisibility(View.VISIBLE);
-            //mEmojiPalettesView.setVisibility(View.GONE);
-            mEmojiDrawer.setVisibility(View.GONE);
+            mEmojiPalettesView.setVisibility(View.GONE);
         }else {
             mSettingsViewPager.setVisibility(View.VISIBLE);
             mMainKeyboardFrame.setVisibility(View.GONE);
-            //mEmojiPalettesView.setVisibility(View.GONE);
-            mEmojiDrawer.setVisibility(View.GONE);
+            mEmojiPalettesView.setVisibility(View.GONE);
         }
     }
 
@@ -369,8 +337,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     }
 
     public boolean isShowingEmojiPalettes() {
-        //return mEmojiPalettesView != null && mEmojiPalettesView.isShown();
-        return mEmojiDrawer != null && mEmojiDrawer.isShown();
+        return mEmojiPalettesView != null && mEmojiPalettesView.isShown();
     }
 
     public boolean isShowingMoreKeysPanel() {
@@ -379,8 +346,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
 
     public View getVisibleKeyboardView() {
         if (isShowingEmojiPalettes()) {
-            return mEmojiDrawer;
-            //return mEmojiPalettesView;
+            return mEmojiPalettesView;
         }
         return mKeyboardView;
     }
@@ -394,9 +360,9 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
             mKeyboardView.cancelAllOngoingEvents();
             mKeyboardView.deallocateMemory();
         }
-        /*if (mEmojiPalettesView != null) {
+        if (mEmojiPalettesView != null) {
             mEmojiPalettesView.stopEmojiPalettes();
-        }*/
+        }
     }
 
     public View onCreateInputView(final boolean isHardwareAcceleratedDrawingEnabled) {
@@ -409,14 +375,8 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mCurrentInputView = (InputView)LayoutInflater.from(mThemeContext).inflate(
                 R.layout.input_view, null);
         mMainKeyboardFrame = mCurrentInputView.findViewById(R.id.main_keyboard_frame);
-        //mEmojiPalettesView = (EmojiPalettesView)mCurrentInputView.findViewById(R.id.emoji_palettes_view);
-        mEmojiDrawer = (EmojiDrawer) mCurrentInputView.findViewById(R.id.emoji_drawer);
-        mEmojiDrawer.setEmojiEventListener(new EmojiDrawer.EmojiEventListener() {
-            @Override public void onKeyEvent(KeyEvent keyEvent) {}
-            @Override public void onEmojiSelected(String emoji) {
-                Log.e("SEPAR", "onEmojiSelected: "+ emoji);
-            }
-        });
+        mEmojiPalettesView = (EmojiPalettesView)mCurrentInputView.findViewById(
+                R.id.emoji_palettes_view);
         mSettingsViewPager = (LinearLayout) mCurrentInputView.findViewById(R.id.settings_pager_view);
         ((ViewPager)mCurrentInputView.findViewById(R.id.settings_pager_tabs)).setAdapter(
                 new InlineSettingsAdaptor(mLatinIME));
@@ -432,9 +392,9 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mKeyboardView = (MainKeyboardView) mCurrentInputView.findViewById(R.id.keyboard_view);
         mKeyboardView.setHardwareAcceleratedDrawingEnabled(isHardwareAcceleratedDrawingEnabled);
         mKeyboardView.setKeyboardActionListener(mLatinIME);
-        /*mEmojiPalettesView.setHardwareAcceleratedDrawingEnabled(isHardwareAcceleratedDrawingEnabled);
+        mEmojiPalettesView.setHardwareAcceleratedDrawingEnabled(isHardwareAcceleratedDrawingEnabled);
         mEmojiPalettesView.setKeyboardActionListener(mLatinIME);
-        ColorManager.addObserver(mEmojiPalettesView);*/
+        ColorManager.addObserver(mEmojiPalettesView);
         return mCurrentInputView;
     }
 

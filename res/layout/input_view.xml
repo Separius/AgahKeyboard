@@ -26,12 +26,9 @@
     <include
         android:id="@+id/main_keyboard_frame"
         layout="@layout/main_keyboard_frame" />
-    <!--<include
-        android:id="@+id/emoji_palettes_view"
-        layout="@layout/emoji_palettes_view" />-->
     <include
-        android:id="@+id/emoji_drawer"
-        layout="@layout/emoji_drawer" />
+        android:id="@+id/emoji_palettes_view"
+        layout="@layout/emoji_palettes_view" />
     <include
         android:id="@+id/settings_pager_view"
         layout="@layout/settings_pager_view" />

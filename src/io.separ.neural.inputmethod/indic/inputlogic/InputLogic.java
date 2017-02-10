@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
+import io.separ.neural.inputmethod.Utils.SwipeUtils;
 import io.separ.neural.inputmethod.compat.CursorAnchorInfoCompatWrapper;
 import io.separ.neural.inputmethod.compat.SuggestionSpanUtils;
 import io.separ.neural.inputmethod.event.Event;
@@ -466,7 +467,7 @@ public final class InputLogic {
         }
 
         // TODO: Consolidate the double-space period timer, mLastKeyTime, and the space state.
-        if (processedEvent.mCodePoint != Constants.CODE_SPACE) {
+        if (processedEvent.mCodePoint != Constants.CODE_SPACE || SwipeUtils.changedLanguage) {
             cancelDoubleSpacePeriodCountdown();
         }
 
@@ -1020,6 +1021,7 @@ public final class InputLogic {
     private void handleBackspaceEvent(final Event event, final InputTransaction inputTransaction,
             // TODO: remove this argument, put it into settingsValues
             final int currentKeyboardScriptId) {
+        //TODO handle two char emojis
         mSpaceState = SpaceState.NONE;
         mDeleteCount++;
 
@@ -1097,7 +1099,7 @@ public final class InputLogic {
             // We should backspace one char and restart suggestion if at the end of a word.
             if (mConnection.hasSelection()) {
                 // If there is a selection, remove it.
-                // We also need to unlearn the selected text.
+                // We also need to unlearn the selected text. (TODO?)
                 final int numCharsDeleted = mConnection.getExpectedSelectionEnd()
                         - mConnection.getExpectedSelectionStart();
                 mConnection.setSelection(mConnection.getExpectedSelectionEnd(),
@@ -1123,8 +1125,9 @@ public final class InputLogic {
                         sendDownUpKeyEvent(KeyEvent.KEYCODE_DEL);
                     }
                 } else {
-                    final int codePointBeforeCursor = mConnection.getCodePointBeforeCursor();
-                    if (codePointBeforeCursor == Constants.NOT_A_CODE) {
+                    final int lengthToDelete = mConnection.getDeleteCountConsideringEmoji();
+                    Log.e(TAG, "lengthToDelete: "+lengthToDelete);
+                    if (lengthToDelete == Constants.NOT_A_CODE) {
                         // HACK for backward compatibility with broken apps that haven't realized
                         // yet that hardware keyboards are not the only way of inputting text.
                         // Nothing to delete before the cursor. We should not do anything, but many
@@ -1134,17 +1137,12 @@ public final class InputLogic {
                         mConnection.deleteSurroundingText(1, 0);
                         return;
                     }
-                    final int lengthToDelete =
-                            Character.isSupplementaryCodePoint(codePointBeforeCursor) ? 2 : 1;
+
                     mConnection.deleteSurroundingText(lengthToDelete, 0);
                     if (mDeleteCount > Constants.DELETE_ACCELERATE_AT) {
-                        final int codePointBeforeCursorToDeleteAgain =
-                                mConnection.getCodePointBeforeCursor();
-                        if (codePointBeforeCursorToDeleteAgain != Constants.NOT_A_CODE) {
-                            final int lengthToDeleteAgain = Character.isSupplementaryCodePoint(
-                                    codePointBeforeCursorToDeleteAgain) ? 2 : 1;
+                        final int lengthToDeleteAgain = mConnection.getDeleteCountConsideringEmoji();
+                        if (lengthToDeleteAgain != Constants.NOT_A_CODE)
                             mConnection.deleteSurroundingText(lengthToDeleteAgain, 0);
-                        }
                     }
                 }
             }
@@ -1219,6 +1217,8 @@ public final class InputLogic {
     }
 
     public void startDoubleSpacePeriodCountdown(final InputTransaction inputTransaction) {
+        if(SwipeUtils.changedLanguage)
+            return;
         mDoubleSpacePeriodCountdownStart = inputTransaction.mTimestamp;
     }
 
