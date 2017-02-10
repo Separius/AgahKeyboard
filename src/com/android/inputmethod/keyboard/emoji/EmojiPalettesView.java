@@ -398,7 +398,6 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
             return false;
         }
         final Object tag = v.getTag();
-        Log.e("SEPAR", "onTouch: " + tag);
         if (!(tag instanceof Integer)) {
             return false;
         }
@@ -418,7 +417,6 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
     @Override
     public void onClick(View v) {
         final Object tag = v.getTag();
-        Log.e("SEPAR", "onClick: " + tag);
         if (!(tag instanceof Integer)) {
             return;
         }
@@ -463,6 +461,7 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
     }
 
     public void stopEmojiPalettes() {
+        recentModel.persist();
         mEmojiPager.setAdapter(null);
     }
 

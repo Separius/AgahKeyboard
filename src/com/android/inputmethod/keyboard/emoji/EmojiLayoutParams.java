@@ -68,12 +68,6 @@ final class EmojiLayoutParams {
         vp.setLayoutParams(lp);
     }
 
-    public void setCategoryPageIdViewProperties(final View v) {
-        final LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) v.getLayoutParams();
-        lp.height = mEmojiCategoryPageIdViewHeight;
-        v.setLayoutParams(lp);
-    }
-
     public int getActionBarHeight() {
         return mEmojiActionBarHeight - mBottomPadding;
     }

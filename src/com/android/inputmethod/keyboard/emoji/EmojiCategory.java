@@ -159,7 +159,6 @@ final class EmojiCategory {
             new ConcurrentHashMap<>();
 
     private int mCurrentCategoryId = EmojiCategory.ID_UNSPECIFIED;
-    private int mCurrentCategoryPageId = 0;
 
     public EmojiCategory(final SharedPreferences prefs, final Resources res,
             final KeyboardLayoutSet layoutSet, final TypedArray emojiPaletteViewAttr) {
@@ -248,41 +247,9 @@ final class EmojiCategory {
         return mCurrentCategoryId;
     }
 
-    public int getCurrentCategoryPageSize() {
-        return getCategoryPageSize(mCurrentCategoryId);
-    }
-
-    public int getCategoryPageSize(final int categoryId) {
-        for (final CategoryProperties prop : mShownCategories) {
-            if (prop.mCategoryId == categoryId) {
-                return prop.mPageCount;
-            }
-        }
-        Log.w(TAG, "Invalid category id: " + categoryId);
-        // Should not reach here.
-        return 0;
-    }
-
     public void setCurrentCategoryId(final int categoryId) {
         mCurrentCategoryId = categoryId;
         Settings.writeLastShownEmojiCategoryId(mPrefs, categoryId);
-    }
-
-    public void setCurrentCategoryPageId(final int id) {
-        mCurrentCategoryPageId = id;
-    }
-
-    public int getCurrentCategoryPageId() {
-        return mCurrentCategoryPageId;
-    }
-
-    public void saveLastTypedCategoryPage() {
-        Settings.writeLastTypedEmojiCategoryPageId(
-                mPrefs, mCurrentCategoryId, mCurrentCategoryPageId);
-    }
-
-    public boolean isInRecentTab() {
-        return mCurrentCategoryId == EmojiCategory.ID_RECENTS;
     }
 
     public int getTabIdFromCategoryId(final int categoryId) {
@@ -293,26 +260,6 @@ final class EmojiCategory {
         }
         Log.w(TAG, "categoryId not found: " + categoryId);
         return 0;
-    }
-
-    // Returns the view pager's page position for the categoryId
-    public int getPageIdFromCategoryId(final int categoryId) {
-        final int lastSavedCategoryPageId =
-                Settings.readLastTypedEmojiCategoryPageId(mPrefs, categoryId);
-        int sum = 0;
-        for (int i = 0; i < mShownCategories.size(); ++i) {
-            final CategoryProperties props = mShownCategories.get(i);
-            if (props.mCategoryId == categoryId) {
-                return sum + lastSavedCategoryPageId;
-            }
-            sum += props.mPageCount;
-        }
-        Log.w(TAG, "categoryId not found: " + categoryId);
-        return 0;
-    }
-
-    public int getRecentTabId() {
-        return getTabIdFromCategoryId(EmojiCategory.ID_RECENTS);
     }
 
     private int getCategoryPageCount(final int categoryId) {
@@ -332,16 +279,6 @@ final class EmojiCategory {
             if (sum > position) {
                 return new Pair<>(properties.mCategoryId, position - temp);
             }
-        }
-        return null;
-    }
-
-    // Returns a keyboard from the view pager's page position.
-    public DynamicGridKeyboard getKeyboardFromPagePosition(final int position) {
-        final Pair<Integer, Integer> categoryAndId =
-                getCategoryIdAndPageIdFromPagePosition(position);
-        if (categoryAndId != null) {
-            return getKeyboard(categoryAndId.first, categoryAndId.second);
         }
         return null;
     }
@@ -385,14 +322,6 @@ final class EmojiCategory {
         }
     }
 
-    public int getTotalPageCountOfAllCategories() {
-        int sum = 0;
-        for (CategoryProperties properties : mShownCategories) {
-            sum += properties.mPageCount;
-        }
-        return sum;
-    }
-
     private static final Comparator<Key> EMOJI_KEY_COMPARATOR = new Comparator<Key>() {
         @Override
         public int compare(final Key lhs, final Key rhs) {
@@ -421,41 +350,5 @@ final class EmojiCategory {
             retval[i / maxPageCount][i % maxPageCount] = keys.get(i);
         }
         return retval;
-    }
-
-    /*SEPAR TODO*/
-    private static boolean canShowFlagEmoji() {
-        return true;
-        /*Paint paint = new Paint();
-        String switzerland = "\uD83C\uDDE8\uD83C\uDDED"; //  U+1F1E8 U+1F1ED Flag for Switzerland
-        //try {
-            //return false;
-            //return paint.hasGlyph(switzerland);
-        //} catch (NoSuchMethodError e) {
-            // Compare display width of single-codepoint emoji to width of flag emoji to determine
-            // whether flag is rendered as single glyph or two adjacent regional indicator symbols.
-            float flagWidth = paint.measureText(switzerland);
-            float standardWidth = paint.measureText("\uD83D\uDC27"); //  U+1F427 Penguin
-            return flagWidth < standardWidth * 1.25;
-            // This assumes that a valid glyph for the flag emoji must be less than 1.25 times
-            // the width of the penguin.
-        //}*/
-    }
-
-    /*SEPAR TODO*/
-    private static boolean canShowUnicodeEightEmoji() {
-        return true;
-        /*Paint paint = new Paint();
-        String cheese = "\uD83E\uDDC0"; //  U+1F9C0 Cheese wedge
-        //try {
-            //return false;
-            //return paint.hasGlyph(cheese);
-        //} catch (NoSuchMethodError e) {
-            float cheeseWidth = paint.measureText(cheese);
-            float tofuWidth = paint.measureText("\uFFFE");
-            return cheeseWidth > tofuWidth;
-            // This assumes that a valid glyph for the cheese wedge must be greater than the width
-            // of the noncharacter.
-        //}*/
     }
 }

@@ -1126,7 +1126,6 @@ public final class InputLogic {
                     }
                 } else {
                     final int lengthToDelete = mConnection.getDeleteCountConsideringEmoji();
-                    Log.e(TAG, "lengthToDelete: "+lengthToDelete);
                     if (lengthToDelete == Constants.NOT_A_CODE) {
                         // HACK for backward compatibility with broken apps that haven't realized
                         // yet that hardware keyboards are not the only way of inputting text.

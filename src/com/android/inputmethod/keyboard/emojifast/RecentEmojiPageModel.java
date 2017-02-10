@@ -23,6 +23,7 @@ public class RecentEmojiPageModel implements EmojiPageModel {
     private static final String TAG                  = RecentEmojiPageModel.class.getSimpleName();
     private static final String EMOJI_LRU_PREFERENCE = "pref_recent_emoji2";
     private static final int    EMOJI_LRU_SIZE       = 50;
+    private static boolean needsToPersist = false;
 
     private final SharedPreferences     prefs;
     private final LinkedHashSet<String> recentlyUsed;
@@ -73,24 +74,29 @@ public class RecentEmojiPageModel implements EmojiPageModel {
             iterator.next();
             iterator.remove();
         }
+        needsToPersist = true;
+    }
 
-        final LinkedHashSet<String> latestRecentlyUsed = new LinkedHashSet<>(recentlyUsed);
-        new AsyncTask<Void, Void, Void>() {
+    public void persist(){
+        if(needsToPersist) {
+            final LinkedHashSet<String> latestRecentlyUsed = new LinkedHashSet<>(recentlyUsed);
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        String serialized = JsonUtils.toJson(latestRecentlyUsed);
+                        prefs.edit()
+                                .putString(EMOJI_LRU_PREFERENCE, serialized)
+                                .apply();
+                        needsToPersist = false;
+                    } catch (IOException e) {
+                        Log.w(TAG, e);
+                    }
 
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    String serialized = JsonUtils.toJson(latestRecentlyUsed);
-                    prefs.edit()
-                            .putString(EMOJI_LRU_PREFERENCE, serialized)
-                            .apply();
-                } catch (IOException e) {
-                    Log.w(TAG, e);
+                    return null;
                 }
-
-                return null;
-            }
-        }.execute();
+            }.execute();
+        }
     }
 
     private String[] toReversePrimitiveArray(@NonNull LinkedHashSet<String> emojiSet) {

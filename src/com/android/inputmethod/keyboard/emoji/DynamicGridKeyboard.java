@@ -46,9 +46,7 @@ final class DynamicGridKeyboard extends Keyboard {
     private final int mVerticalStep;
     private final int mColumnsNum;
     private final int mMaxKeyCount;
-    private final boolean mIsRecents;
     private final ArrayDeque<GridKey> mGridKeys = new ArrayDeque<>();
-    private final ArrayDeque<Key> mPendingKeys = new ArrayDeque<>();
 
     private List<Key> mCachedGridKeys;
 
@@ -61,7 +59,6 @@ final class DynamicGridKeyboard extends Keyboard {
         mVerticalStep = key0.getHeight() + mVerticalGap;
         mColumnsNum = mBaseWidth / mHorizontalStep;
         mMaxKeyCount = maxKeyCount;
-        mIsRecents = categoryId == EmojiCategory.ID_RECENTS;
         mPrefs = prefs;
     }
 
@@ -72,28 +69,6 @@ final class DynamicGridKeyboard extends Keyboard {
             }
         }
         throw new RuntimeException("Can't find template key: code=" + code);
-    }
-
-    public void addPendingKey(final Key usedKey) {
-        synchronized (mLock) {
-            mPendingKeys.addLast(usedKey);
-        }
-    }
-
-    public void flushPendingRecentKeys() {
-        synchronized (mLock) {
-            while (!mPendingKeys.isEmpty()) {
-                addKey(mPendingKeys.pollFirst(), true);
-            }
-            saveRecentKeys();
-        }
-    }
-
-    public void addKeyFirst(final Key usedKey) {
-        addKey(usedKey, true);
-        if (mIsRecents) {
-            saveRecentKeys();
-        }
     }
 
     public void addKeyLast(final Key usedKey) {
@@ -128,19 +103,6 @@ final class DynamicGridKeyboard extends Keyboard {
                 index++;
             }
         }
-    }
-
-    private void saveRecentKeys() {
-        final ArrayList<Object> keys = new ArrayList<>();
-        for (final Key key : mGridKeys) {
-            if (key.getOutputText() != null) {
-                keys.add(key.getOutputText());
-            } else {
-                keys.add(key.getCode());
-            }
-        }
-        final String jsonStr = JsonUtils.listToJsonStr(keys);
-        Settings.writeEmojiRecentKeys(mPrefs, jsonStr);
     }
 
     private static Key getKeyByCode(final Collection<DynamicGridKeyboard> keyboards,
