@@ -18,6 +18,8 @@ package io.separ.neural.inputmethod.indic;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -59,6 +61,9 @@ import com.android.inputmethod.keyboard.KeyboardSwitcher;
 import com.android.inputmethod.keyboard.MainKeyboardView;
 import com.android.inputmethod.keyboard.TextDecoratorUi;
 import com.android.inputmethod.keyboard.actionrow.ActionRowView;
+import com.android.inputmethod.keyboard.actionrow.FrequentEmojiHandler;
+import com.android.inputmethod.keyboard.actionrow.NeuralNetSuggestor;
+import com.android.inputmethod.keyboard.actionrow.NeuralRowHelper;
 import com.android.inputmethod.latin.utils.ApplicationUtils;
 import com.android.inputmethod.latin.utils.CapsModeUtils;
 import com.android.inputmethod.latin.utils.CoordinateUtils;
@@ -99,6 +104,7 @@ import io.separ.neural.inputmethod.event.InputTransaction;
 import io.separ.neural.inputmethod.indic.Suggest.OnGetSuggestedWordsCallback;
 import io.separ.neural.inputmethod.indic.SuggestedWords.SuggestedWordInfo;
 import io.separ.neural.inputmethod.indic.define.DebugFlags;
+import io.separ.neural.inputmethod.indic.define.JniLibName;
 import io.separ.neural.inputmethod.indic.define.ProductionFlags;
 import io.separ.neural.inputmethod.indic.inputlogic.InputLogic;
 import io.separ.neural.inputmethod.indic.personalization.ContextualDictionaryUpdater;
@@ -194,37 +200,48 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     @Override
     public void onCopy() {
-
+        ((ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText(JniLibName.JNI_LIB_NAME, this.mInputLogic.mConnection.getSelectedText(0)));
     }
 
     @Override
     public void onCut() {
-
+        ((ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText(JniLibName.JNI_LIB_NAME, this.mInputLogic.mConnection.getSelectedText(0)));
+        this.mInputLogic.mConnection.mIC.performContextMenuAction(16908320);
     }
 
     @Override
-    public void onEmojiClicked(String str, boolean z) {
-
+    public void onEmojiClicked(String emoji, boolean z) {
+        FrequentEmojiHandler.getInstance(this).onEmojiClicked(emoji);
+        updateStateAfterInputTransaction(this.mInputLogic.onTextInput(this.mSettings.getCurrent(), Event.createSoftwareTextEvent(emoji, 1), this.mKeyboardSwitcher.getKeyboardShiftMode(), this.mHandler));
+        this.mKeyboardSwitcher.onCodeInput(-4, getCurrentAutoCapsState(), getCurrentRecapitalizeState());
     }
 
     @Override
-    public void onNumberClicked(String str) {
-
+    public void onNumberClicked(String number) {
+        updateStateAfterInputTransaction(this.mInputLogic.onCodeInput(this.mSettings.getCurrent(), Event.createSoftwareKeypressEvent(number.codePointAt(0), 0, 0, 0, false), this.mKeyboardSwitcher.getKeyboardShiftMode(), this.mKeyboardSwitcher.getCurrentKeyboardScriptId(), this.mHandler));
+        this.mKeyboardSwitcher.onCodeInput(-4, getCurrentAutoCapsState(), getCurrentRecapitalizeState());
     }
 
     @Override
     public void onPaste() {
-
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboard.getPrimaryClip() != null && clipboard.getPrimaryClip().getItemAt(0) != null) {
+            CharSequence text = clipboard.getPrimaryClip().getItemAt(0).getText();
+            this.mInputLogic.finishInput();
+            if (text != null)
+                this.mInputLogic.mConnection.commitText(text, this.mInputLogic.mConnection.getExpectedSelectionEnd());
+        }
     }
 
     @Override
-    public void onPunctuationClicked(String str) {
-
+    public void onPunctuationClicked(String punctuation) {
+        updateStateAfterInputTransaction(this.mInputLogic.onCodeInput(this.mSettings.getCurrent(), Event.createSoftwareTextEvent(punctuation, 1), this.mKeyboardSwitcher.getKeyboardShiftMode(), this.mKeyboardSwitcher.getCurrentKeyboardScriptId(), this.mHandler));
+        this.mKeyboardSwitcher.onCodeInput(-4, getCurrentAutoCapsState(), getCurrentRecapitalizeState());
     }
 
     @Override
     public void onSelectAll() {
-
+        this.mInputLogic.mConnection.mIC.performContextMenuAction(16908319);
     }
 
     public static final class UIHandler extends LeakGuardHandlerWrapper<LatinIME> {
@@ -624,6 +641,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         SwipeUtils.init(this, this);
         this.colorManager = new ColorManager(this);
         this.navManager = new NavManager(this);
+        NeuralNetSuggestor.getInstance().initLibrary(getApplicationContext());
         //SpeechUtils.initialize(this);
     }
 
@@ -1493,6 +1511,12 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             }
     }
 
+    @Override
+    public void onEmojiInput(final String rawText) {
+        FrequentEmojiHandler.getInstance(this).onEmojiClicked(rawText);
+        onTextInput(rawText);
+    }
+
     // Called from PointerTracker through the KeyboardActionListener interface
     @Override
     public void onTextInput(final String rawText) {
@@ -1590,8 +1614,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 || shouldShowSuggestionCandidates
                 || currentSettingsValues.isApplicationSpecifiedCompletionsOn();
         final boolean shouldShowSuggestionsStrip = shouldShowSuggestionsStripUnlessPassword
-                && !currentSettingsValues.mInputAttributes.mIsPasswordField
-                && !mKeyboardSwitcher.isShowingEmojiPalettes();
+                && !currentSettingsValues.mInputAttributes.mIsPasswordField;
         mSuggestionStripView.updateVisibility(shouldShowSuggestionsStrip, isFullscreenMode());
         if (!shouldShowSuggestionsStrip) {
             return;

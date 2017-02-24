@@ -65,6 +65,8 @@ public interface KeyboardActionListener {
      */
     void onTextInput(String text);
 
+    void onEmojiInput(String text);
+
     /**
      * Called when user started batch input.
      */
@@ -128,5 +130,7 @@ public interface KeyboardActionListener {
         public boolean onCustomRequest(int requestCode) {
             return false;
         }
+        @Override
+        public void onEmojiInput(String text){}
     }
 }

@@ -33,7 +33,7 @@ public class RecentEmojiPageModel implements EmojiPageModel {
         this.recentlyUsed = getPersistedCache();
     }
 
-    private LinkedHashSet<String> getPersistedCache() {
+    public static LinkedHashSet<String> getPersistedCache(SharedPreferences prefs){
         String serialized = prefs.getString(EMOJI_LRU_PREFERENCE, "[]");
         try {
             CollectionType collectionType = TypeFactory.defaultInstance()
@@ -43,6 +43,10 @@ public class RecentEmojiPageModel implements EmojiPageModel {
             Log.w(TAG, e);
             return new LinkedHashSet<>();
         }
+    }
+
+    private LinkedHashSet<String> getPersistedCache() {
+        return getPersistedCache(prefs);
     }
 
     @Override public int getIconAttr() {
@@ -99,7 +103,7 @@ public class RecentEmojiPageModel implements EmojiPageModel {
         }
     }
 
-    private String[] toReversePrimitiveArray(@NonNull LinkedHashSet<String> emojiSet) {
+    public static String[] toReversePrimitiveArray(@NonNull LinkedHashSet<String> emojiSet) {
         String[] emojis = new String[emojiSet.size()];
         int i = emojiSet.size() - 1;
         for (String emoji : emojiSet) {

@@ -47,6 +47,7 @@ import android.widget.TextView;
 import com.android.inputmethod.keyboard.KeyboardActionListener;
 import com.android.inputmethod.keyboard.KeyboardLayoutSet;
 import com.android.inputmethod.keyboard.KeyboardView;
+import com.android.inputmethod.keyboard.actionrow.FrequentEmojiHandler;
 import com.android.inputmethod.keyboard.emojifast.EmojiPageModel;
 import com.android.inputmethod.keyboard.emojifast.EmojiPageView;
 import com.android.inputmethod.keyboard.emojifast.EmojiPages;
@@ -212,7 +213,7 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
                     @Override
                     public void onEmojiSelected(String emoji) {
                         recentModel.onCodePointSelected(emoji);
-                        mKeyboardActionListener.onTextInput(emoji);
+                        mKeyboardActionListener.onEmojiInput(emoji);
                     }
                 });
 

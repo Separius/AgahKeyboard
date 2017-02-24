@@ -1,24 +1,21 @@
 package com.android.inputmethod.keyboard.actionrow;
 
-import android.animation.Animator;
 import android.animation.LayoutTransition;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.android.inputmethod.keyboard.emojifast.RecentEmojiPageModel;
 
 import java.util.ArrayList;
 
@@ -49,42 +46,27 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
     private LinearLayout neuralEmojiLayout;
     private LinearLayout neuralLayout;
     private LinearLayout neuralNumberLayout;
+    private String[] lastRowElements;
 
     public boolean onTouch(View v, MotionEvent event) {
         return false;
     }
 
-    /* renamed from: com.android.inputmethod.keyboard.actionrow.ActionRowView.12 */
+    /*on number clicked*/
     class AnonymousClass12 implements OnClickListener {
-        final /* synthetic */ TextView val$view;
-
+        final TextView val$view;
         AnonymousClass12(TextView textView) {
             this.val$view = textView;
         }
-
         public void onClick(View tview) {
             AudioAndHapticFeedbackManager.getInstance().performHapticAndAudioFeedback(-15, ActionRowView.this);
             ActionRowView.this.mListener.onNumberClicked(this.val$view.getText().toString());
         }
     }
 
-    /* renamed from: com.android.inputmethod.keyboard.actionrow.ActionRowView.14 */
-    class AnonymousClass14 implements OnClickListener {
-        final /* synthetic */ TextView val$view;
-
-        AnonymousClass14(TextView textView) {
-            this.val$view = textView;
-        }
-
-        public void onClick(View tview) {
-            AudioAndHapticFeedbackManager.getInstance().performHapticAndAudioFeedback(-15, ActionRowView.this);
-            ActionRowView.this.mListener.onNumberClicked(this.val$view.getText().toString());
-        }
-    }
-
-    /* renamed from: com.android.inputmethod.keyboard.actionrow.ActionRowView.15 */
+    /*on punctuation clicked*/
     class AnonymousClass15 implements OnClickListener {
-        final /* synthetic */ TextView val$view;
+        final TextView val$view;
 
         AnonymousClass15(TextView textView) {
             this.val$view = textView;
@@ -96,42 +78,9 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         }
     }
 
-    /* renamed from: com.android.inputmethod.keyboard.actionrow.ActionRowView.17 */
-    class AnonymousClass17 implements Animator.AnimatorListener {
-        final /* synthetic */ int val$currentItem;
-
-        AnonymousClass17(int i) {
-            this.val$currentItem = i;
-        }
-
-        public void onAnimationStart(Animator animation) {
-            ActionRowView.this.beginFakeDrag();
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            if (ActionRowView.this.isFakeDragging() && ActionRowView.this.getAdapter().getCount() > 0) {
-                ActionRowView.this.endFakeDrag();
-            }
-            ActionRowView.this.setCurrentItem(this.val$currentItem);
-        }
-
-        public void onAnimationCancel(Animator animation) {
-            ActionRowView.this.setCurrentItem(this.val$currentItem);
-        }
-
-        @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-        public void onAnimationRepeat(Animator animation) {
-            if (animation.getInterpolator() instanceof AccelerateInterpolator) {
-                animation.setInterpolator(new DecelerateInterpolator());
-            } else {
-                animation.setInterpolator(new AccelerateInterpolator());
-            }
-        }
-    }
-
-    /* renamed from: com.android.inputmethod.keyboard.actionrow.ActionRowView.1 */
+    /*neural emoji*/
     class C02231 implements Runnable {
-        final /* synthetic */ String[] val$rowElements;
+        final String[] val$rowElements;
 
         C02231(String[] strArr) {
             this.val$rowElements = strArr;
@@ -146,11 +95,12 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
             }
             ActionRowView.this.neuralLayout.removeAllViews();
             ActionRowView.this.neuralLayout.addView(ActionRowView.this.neuralEmojiLayout);
+            ActionRowView.this.lastRowElements = this.val$rowElements;
             ActionRowView.this.neuralLayout.forceLayout();
         }
     }
 
-    /* renamed from: com.android.inputmethod.keyboard.actionrow.ActionRowView.2 */
+    /* neural punctuation */
     class C02242 implements Runnable {
         C02242() {
         }
@@ -162,7 +112,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         }
     }
 
-    /* renamed from: com.android.inputmethod.keyboard.actionrow.ActionRowView.3 */
+    /* neural number */
     class C02253 implements Runnable {
         C02253() {
         }
@@ -174,22 +124,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         }
     }
 
-    /* renamed from: com.android.inputmethod.keyboard.actionrow.ActionRowView.4 */
-    class C02264 extends AsyncTask<Void, Void, Void> {
-        C02264() {
-        }
-
-        protected Void doInBackground(Void... params) {
-            try {
-                Thread.sleep(30);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
-
-    /* renamed from: com.android.inputmethod.keyboard.actionrow.ActionRowView.7 */
+    /* onSelectAll */
     class C02297 implements OnClickListener {
         C02297() {
         }
@@ -200,7 +135,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         }
     }
 
-    /* renamed from: com.android.inputmethod.keyboard.actionrow.ActionRowView.8 */
+    /* onCut */
     class C02308 implements OnClickListener {
         C02308() {
         }
@@ -211,7 +146,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         }
     }
 
-    /* renamed from: com.android.inputmethod.keyboard.actionrow.ActionRowView.9 */
+    /* onCopy */
     class C02319 implements OnClickListener {
         C02319() {
         }
@@ -310,7 +245,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
 
     public void setAdapter(ActionRowAdapter adapter) {
         super.setAdapter(adapter);
-        setCurrentItem(0, false);
+        setCurrentItem((this.layoutToShow.length * 1000) + getNumberRowSpan(), false);
     }
 
     private int getNumberRowSpan() {
@@ -395,7 +330,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         LinearLayout layout = new LinearLayout(getContext());
         layout.setGravity(17);
         layout.setWeightSum(1.f);
-        layout.setLayoutParams(new LayoutParams());
+        layout.setLayoutParams(new LinearLayout.LayoutParams(-1, -1, 1.f));
         NeuralRowHelper.getInstance().setNeuralListener(this);
         this.neuralLayout = layout;
         layout.addView(this.neuralEmojiLayout);
@@ -441,7 +376,49 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         this.emojiLayout = new LinearLayout(getContext());
         this.emojiLayout.setGravity(17);
         this.emojiLayout.setWeightSum(1.f);
+        fillEmojiLayout();
         return this.emojiLayout;
+    }
+
+    //TODO fill this with frequency of usage not recent usage
+    private void fillEmojiLayout() {
+        String[] emojiArray = RecentEmojiPageModel.toReversePrimitiveArray(RecentEmojiPageModel.getPersistedCache(PreferenceManager.getDefaultSharedPreferences(getContext())));
+        int i=0;
+        for (String emoji : emojiArray) {
+            i++;
+            if(i>DEFAULT_SUGGESTED_EMOJI.length)
+                break;
+            addSingleEmoji(emoji);
+        }
+        for(int j=0; i<=DEFAULT_SUGGESTED_EMOJI.length; i++, j++)
+            addSingleEmoji(DEFAULT_SUGGESTED_EMOJI[j]);
+    }
+
+    class AnonymousClass11 implements OnClickListener {
+        final TextView val$view;
+
+        AnonymousClass11(TextView  emojiconTextView) {
+            this.val$view = emojiconTextView;
+        }
+
+        public void onClick(View tview) {
+            AudioAndHapticFeedbackManager.getInstance().performHapticAndAudioFeedback(-15, ActionRowView.this);
+            ActionRowView.this.mListener.onEmojiClicked(this.val$view.getText().toString(), false);
+        }
+    }
+
+    private void addSingleEmoji(String emoji){
+        TextView view = new TextView(getContext());
+        view.setTypeface(FontUtils.getTypeface("emoji"));
+        view.setText(emoji);
+        view.setGravity(17);
+        view.setTextSize(1, 22.0f * 1.f);
+        view.setSoundEffectsEnabled(false);
+        view.setAlpha(1.f);
+        view.setOnClickListener(new AnonymousClass11(view));
+        view.setLayoutParams(new LinearLayout.LayoutParams(-1, -1, 1.f / ((float) DEFAULT_SUGGESTED_EMOJI.length)));
+        view.setBackgroundResource(R.drawable.action_row_bg);
+        this.emojiLayout.addView(view);
     }
 
     private LinearLayout addNumbers() {
@@ -459,18 +436,19 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
             view.setSoundEffectsEnabled(false);
             view.setOnClickListener(new AnonymousClass12(view));
             view.setOnTouchListener(this);
-            view.setLayoutParams(new LayoutParams());
+            view.setLayoutParams(new LinearLayout.LayoutParams(-1, -1, 1.f / ((float) numbersArray.length)));
             view.setBackgroundResource(R.drawable.action_row_bg);
             layout.addView(view);
         }
         return layout;
     }
 
+    //TODO, must correct the emoji predictor for this to work
     public void buildNeuralLayouts() {
         LinearLayout layout = new LinearLayout(getContext());
         layout.setGravity(17);
         layout.setWeightSum(1.f);
-        layout.setLayoutParams(new LayoutParams());
+        layout.setLayoutParams(new LinearLayout.LayoutParams(-1, -1, 1.f));
         for (String letter : NUMBER_ARRAY) {
             TextView view = new TextView(getContext());
             view.setText(letter);
@@ -479,9 +457,9 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
             view.setTextColor(this.colorProfile.getTextColor());
             view.setTextSize(1, 1.f * 22.0f);
             view.setSoundEffectsEnabled(false);
-            view.setOnClickListener(new AnonymousClass14(view));
+            view.setOnClickListener(new AnonymousClass12(view));
             view.setOnTouchListener(this);
-            view.setLayoutParams(new LayoutParams());
+            view.setLayoutParams(new LinearLayout.LayoutParams(-1, -1, 1.f / ((float) NUMBER_ARRAY.length)));
             view.setBackgroundResource(R.drawable.action_row_bg);
             layout.addView(view);
         }
@@ -489,7 +467,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         layout = new LinearLayout(getContext());
         layout.setGravity(17);
         layout.setWeightSum(1.f);
-        layout.setLayoutParams(new LayoutParams());
+        layout.setLayoutParams(new LinearLayout.LayoutParams(-1, -1, 1.f));
         for (String letter2 : DOTS_ARRAY) {
             TextView view = new TextView(getContext());
             view.setText(letter2);
@@ -500,7 +478,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
             view.setSoundEffectsEnabled(false);
             view.setOnClickListener(new AnonymousClass15(view));
             view.setOnTouchListener(this);
-            view.setLayoutParams(new LayoutParams());
+            view.setLayoutParams(new LinearLayout.LayoutParams(-1, -1, 1.f / ((float) DOTS_ARRAY.length)));
             view.setBackgroundResource(R.drawable.action_row_bg);
             layout.addView(view);
         }
@@ -508,7 +486,26 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         layout = new LinearLayout(getContext());
         layout.setGravity(17);
         layout.setWeightSum(1.f);
-        layout.setLayoutParams(new LayoutParams());
+        layout.setLayoutParams(new LinearLayout.LayoutParams(-1, -1, 1.f));
+        String[] toUse;
+        if (this.lastRowElements != null) {
+            toUse = this.lastRowElements;
+        } else {
+            toUse = FrequentEmojiHandler.getInstance(getContext()).getMostFrequentEmojis(8).toArray(new String[0]);
+        }
+        for (String letter22 : toUse) {
+            TextView view = new TextView(getContext());
+            view.setTypeface(FontUtils.getTypeface("emoji"));
+            view.setText(letter22);
+            view.setGravity(17);
+            view.setTextSize(1, 22.0f * 1.f);
+            view.setSoundEffectsEnabled(false);
+            view.setAlpha(1.f);
+            view.setOnClickListener(new AnonymousClass11(view));
+            view.setLayoutParams(new LinearLayout.LayoutParams(-1, -1, 1.f / ((float) DEFAULT_SUGGESTED_EMOJI.length)));
+            view.setBackgroundResource(R.drawable.action_row_bg);
+            layout.addView(view);
+        }
         this.neuralEmojiLayout = layout;
     }
 }
