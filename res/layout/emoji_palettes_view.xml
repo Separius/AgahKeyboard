@@ -25,18 +25,16 @@
     android:orientation="vertical"
     style="?attr/emojiPalettesViewStyle"
     >
-    <!--<io.separ.neural.inputmethod.indic.suggestions.SuggestionStripView
-        android:id="@+id/suggestion_strip_view"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/config_suggestions_strip_height"
-        android:gravity="center_vertical"
-        style="?attr/suggestionStripViewStyle" />-->
+        android:layout_height="@dimen/config_suggestions_strip_height">
     <LinearLayout
         android:id="@+id/emoji_top_bar"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="@dimen/config_suggestions_strip_height"
         style="?attr/suggestionStripViewStyle"
+        android:layout_alignParentLeft="true"
         >
         <TabHost
             android:id="@+id/emoji_category_tabhost"
@@ -65,53 +63,24 @@
             </FrameLayout>
         </TabHost>
         <include layout="@layout/suggestion_divider" />
-        <!-- TODO: Implement KeyView and replace this. -->
-        <!-- Provide audio and haptic feedback by ourselves based on the keyboard settings.
-             We just need to ignore the system's audio and haptic feedback settings. -->
-        <ImageButton
-            android:id="@+id/emoji_keyboard_delete"
+        <View
             android:layout_width="0dip"
             android:layout_weight="12.5"
+            android:gravity="center"
+            android:layout_height="match_parent" />
+        </LinearLayout>
+        <SearchView
+            android:id="@+id/media_search"
+            android:layout_width="match_parent"
+            android:gravity="center"
             android:layout_height="match_parent"
             android:hapticFeedbackEnabled="false"
             android:soundEffectsEnabled="false"
-            android:contentDescription="@string/spoken_description_delete" />
-    </LinearLayout>
+            android:layout_alignParentRight="true"
+            android:layoutDirection="rtl" />
+    </FrameLayout>
     <android.support.v4.view.ViewPager
         android:id="@+id/emoji_keyboard_pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <LinearLayout
-        android:id="@+id/emoji_action_bar"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        >
-        <TextView
-                android:id="@+id/emoji_keyboard_alphabet_left"
-                android:layout_width="0dip"
-                android:layout_weight="0.15"
-                android:gravity="center"
-                android:layout_height="match_parent"
-                android:hapticFeedbackEnabled="false"
-                android:soundEffectsEnabled="false"
-                android:layout_alignParentLeft="true"/>
-        <SearchView
-                android:id="@+id/media_search"
-                android:layout_width="0dip"
-                android:layout_weight="0.15"
-                android:gravity="center"
-                android:layout_height="match_parent"
-                android:hapticFeedbackEnabled="false"
-                android:soundEffectsEnabled="false"
-                android:layout_alignParentRight="true"/>
-        <ImageButton
-            android:layout_width="0dip"
-            android:layout_weight="0.15"
-            android:layout_height="match_parent"
-            android:hapticFeedbackEnabled="false"
-            android:soundEffectsEnabled="false"
-            android:contentDescription="@string/spoken_description_delete" />
-    </LinearLayout>
 </com.android.inputmethod.keyboard.emoji.EmojiPalettesView>

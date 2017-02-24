@@ -1243,7 +1243,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         if (visibleKeyboardView == null || !hasSuggestionStripView()) {
             return;
         }
-        final int inputHeight = mInputView.getHeight() - (mKeyboardSwitcher.isShowingEmojiPalettes() ? 0 : this.mKeyboardSwitcher.getActionRowView().getHeight());
+        final int inputHeight = mInputView.getHeight() - (mKeyboardSwitcher.isShowingEmojiPalettes() ? this.mKeyboardSwitcher.getmMediaBottomBar().getHeight() : this.mKeyboardSwitcher.getActionRowView().getHeight());
         final boolean hasHardwareKeyboard = settingsValues.mHasHardwareKeyboard;
         if (hasHardwareKeyboard && visibleKeyboardView.getVisibility() == View.GONE) {
             // If there is a hardware keyboard and a visible software keyboard view has been hidden,

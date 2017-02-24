@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.inputmethod.keyboard.emoji.MediaBottomBar
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/emoji_keyboard_alphabet_left"
+        android:layout_width="0dip"
+        android:layout_weight="0.125"
+        android:gravity="center"
+        android:layout_height="match_parent"
+        android:hapticFeedbackEnabled="false"
+        android:soundEffectsEnabled="false"
+        android:layout_alignParentLeft="true"/>
+    <SearchView
+        android:layout_width="0dip"
+        android:layout_weight="0.75"
+        android:gravity="center"
+        android:layout_height="match_parent"
+        android:hapticFeedbackEnabled="false"
+        android:soundEffectsEnabled="false"
+        android:layout_alignParentRight="true"
+        android:layoutDirection="rtl"
+        />
+    <ImageButton
+        android:id="@+id/emoji_keyboard_delete"
+        android:layout_width="0dip"
+        android:layout_weight="0.125"
+        android:layout_height="match_parent"
+        android:hapticFeedbackEnabled="false"
+        android:soundEffectsEnabled="false"
+        android:contentDescription="@string/spoken_description_delete" />
+</com.android.inputmethod.keyboard.emoji.MediaBottomBar>

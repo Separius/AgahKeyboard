@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 import com.android.inputmethod.keyboard.KeyboardLayoutSet.KeyboardLayoutSetException;
 import com.android.inputmethod.keyboard.actionrow.ActionRowView;
 import com.android.inputmethod.keyboard.emoji.EmojiPalettesView;
+import com.android.inputmethod.keyboard.emoji.MediaBottomBar;
 import com.android.inputmethod.keyboard.internal.KeyboardState;
 import com.android.inputmethod.keyboard.internal.KeyboardTextsSet;
 import com.android.inputmethod.latin.utils.ResourceUtils;
@@ -60,6 +61,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     private View mMainKeyboardFrame;
     private MainKeyboardView mKeyboardView;
     private EmojiPalettesView mEmojiPalettesView;
+    private MediaBottomBar mMediaBottomBar;
     private LinearLayout mSettingsViewPager;
     private LatinIME mLatinIME;
     private boolean mIsHardwareAcceleratedDrawingEnabled;
@@ -256,6 +258,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mMainKeyboardFrame.setVisibility(
                 settingsValues.mHasHardwareKeyboard ? View.GONE : View.VISIBLE);
         mEmojiPalettesView.setVisibility(View.GONE);
+        mMediaBottomBar.setVisibility(View.GONE);
         mEmojiPalettesView.stopEmojiPalettes();
         mSettingsViewPager.setVisibility(View.GONE);
     }
@@ -265,10 +268,11 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     public void setEmojiKeyboard() {
         final Keyboard keyboard = mKeyboardLayoutSet.getKeyboard(KeyboardId.ELEMENT_ALPHABET);
         mMainKeyboardFrame.setVisibility(View.GONE);
-        mEmojiPalettesView.startEmojiPalettes(
-                mKeyboardTextsSet.getText(KeyboardTextsSet.SWITCH_TO_ALPHA_KEY_LABEL),
-                mKeyboardView.getKeyVisualAttribute(), keyboard.mIconsSet);
+        mEmojiPalettesView.startEmojiPalettes();
         mEmojiPalettesView.setVisibility(View.VISIBLE);
+        mMediaBottomBar.setVisibility(View.VISIBLE);
+        mMediaBottomBar.startMediaBottomBar(mKeyboardTextsSet.getText(KeyboardTextsSet.SWITCH_TO_ALPHA_KEY_LABEL),
+                mKeyboardView.getKeyVisualAttribute(), keyboard.mIconsSet);
         mSettingsViewPager.setVisibility(View.GONE);
     }
 
@@ -277,10 +281,12 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
             mSettingsViewPager.setVisibility(View.GONE);
             mMainKeyboardFrame.setVisibility(View.VISIBLE);
             mEmojiPalettesView.setVisibility(View.GONE);
+            mMediaBottomBar.setVisibility(View.GONE);
         }else {
             mSettingsViewPager.setVisibility(View.VISIBLE);
             mMainKeyboardFrame.setVisibility(View.GONE);
             mEmojiPalettesView.setVisibility(View.GONE);
+            mMediaBottomBar.setVisibility(View.GONE);
         }
     }
 
@@ -380,6 +386,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mMainKeyboardFrame = mCurrentInputView.findViewById(R.id.main_keyboard_frame);
         mEmojiPalettesView = (EmojiPalettesView)mCurrentInputView.findViewById(
                 R.id.emoji_palettes_view);
+        mMediaBottomBar = (MediaBottomBar) mCurrentInputView.findViewById(R.id.media_bottom_bar);
         mSettingsViewPager = (LinearLayout) mCurrentInputView.findViewById(R.id.settings_pager_view);
         ((ViewPager)mCurrentInputView.findViewById(R.id.settings_pager_tabs)).setAdapter(
                 new InlineSettingsAdaptor(mLatinIME));
@@ -397,7 +404,9 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mKeyboardView.setKeyboardActionListener(mLatinIME);
         mEmojiPalettesView.setHardwareAcceleratedDrawingEnabled(isHardwareAcceleratedDrawingEnabled);
         mEmojiPalettesView.setKeyboardActionListener(mLatinIME);
+        mMediaBottomBar.setKeyboardActionListener(mLatinIME);
         ColorManager.addObserver(mEmojiPalettesView);
+        ColorManager.addObserver(mMediaBottomBar);
         this.mActionRowView = (ActionRowView) this.mCurrentInputView.findViewById(R.id.action_row);
         this.mActionRowView.setListener(this.mLatinIME);
         return mCurrentInputView;
@@ -436,5 +445,9 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
             return ScriptUtils.SCRIPT_UNKNOWN;
         }
         return mKeyboardLayoutSet.getScriptId();
+    }
+
+    public MediaBottomBar getmMediaBottomBar(){
+        return mMediaBottomBar;
     }
 }
