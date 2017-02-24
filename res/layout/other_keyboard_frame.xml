@@ -28,25 +28,13 @@
     <!-- To ensure that key preview popup is correctly placed when the current system locale is
          one of RTL locales, layoutDirection="ltr" is needed in the SDK version 17+. -->
     <!--<io.separ.neural.inputmethod.indic.suggestions.SuggestionStripView
-        android:id="@+id/suggestion_strip_view"
-        android:layoutDirection="ltr"
+        android:id="@+id/suggestion_strip_view2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/config_suggestions_strip_height"
         android:gravity="center_vertical"
         style="?attr/suggestionStripViewStyle" />-->
 
-    <!--it was visibil:0-->
-    <com.android.inputmethod.keyboard.actionrow.ActionRowView android:id="@+id/action_row"
-        android:layoutDirection="ltr"  android:gravity="center_vertical"
-        android:background="@color/white" android:visibility="visible" android:scrollbars="none"
-        android:clickable="true" android:longClickable="false" android:layout_width="match_parent"
-        android:layout_height="@dimen/config_suggestions_strip_height" android:overScrollMode="never"/>
-
-    <!-- To ensure that key preview popup is correctly placed when the current system locale is
-         one of RTL locales, layoutDirection="ltr" is needed in the SDK version 17+. -->
-    <com.android.inputmethod.keyboard.MainKeyboardView
-        android:id="@+id/keyboard_view"
-        android:layoutDirection="ltr"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <include
+        android:id="@+id/emoji_palettes_view"
+        layout="@layout/emoji_palettes_view" />
 </LinearLayout>

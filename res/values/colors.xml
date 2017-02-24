@@ -85,4 +85,6 @@
     <!-- Accent color for the notification. We need to match this to the OS build -->
     <color name="notification_accent_color">#FF607D8B</color>
     <color name="white">#ffffffff</color>
+    <color name="normalKey">#00ffffff</color>
+    <color name="normalKeyPressed">#55000000</color>
 </resources>

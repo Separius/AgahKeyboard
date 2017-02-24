@@ -58,6 +58,7 @@ import com.android.inputmethod.keyboard.KeyboardId;
 import com.android.inputmethod.keyboard.KeyboardSwitcher;
 import com.android.inputmethod.keyboard.MainKeyboardView;
 import com.android.inputmethod.keyboard.TextDecoratorUi;
+import com.android.inputmethod.keyboard.actionrow.ActionRowView;
 import com.android.inputmethod.latin.utils.ApplicationUtils;
 import com.android.inputmethod.latin.utils.CapsModeUtils;
 import com.android.inputmethod.latin.utils.CoordinateUtils;
@@ -120,7 +121,7 @@ import static io.separ.neural.inputmethod.indic.Constants.ImeOption.NO_MICROPHON
  */
 public class LatinIME extends InputMethodService implements KeyboardActionListener,
         SuggestionStripView.Listener, SuggestionStripViewAccessor,
-        DictionaryFacilitator.DictionaryInitializationListener,
+        DictionaryFacilitator.DictionaryInitializationListener, ActionRowView.Listener,
         ImportantNoticeDialog.ImportantNoticeDialogListener, SwipeUtils.SelectionChanger, ColorManager.OnFinishCalculateProfile {
     private static final String TAG = LatinIME.class.getSimpleName();
     private static final boolean TRACE = false;
@@ -190,6 +191,41 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     public final UIHandler mHandler = new UIHandler(this);
 
     private NavManager navManager;
+
+    @Override
+    public void onCopy() {
+
+    }
+
+    @Override
+    public void onCut() {
+
+    }
+
+    @Override
+    public void onEmojiClicked(String str, boolean z) {
+
+    }
+
+    @Override
+    public void onNumberClicked(String str) {
+
+    }
+
+    @Override
+    public void onPaste() {
+
+    }
+
+    @Override
+    public void onPunctuationClicked(String str) {
+
+    }
+
+    @Override
+    public void onSelectAll() {
+
+    }
 
     public static final class UIHandler extends LeakGuardHandlerWrapper<LatinIME> {
         private static final int MSG_UPDATE_SHIFT_STATE = 0;
@@ -645,7 +681,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
     }
 
-    private void resetSuggest() {
+    public void resetSuggest() {
         final Locale switcherSubtypeLocale = mSubtypeSwitcher.getCurrentSubtypeLocale();
         final String switcherLocaleStr = switcherSubtypeLocale.toString();
         final Locale subtypeLocale;
@@ -1189,7 +1225,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         if (visibleKeyboardView == null || !hasSuggestionStripView()) {
             return;
         }
-        final int inputHeight = mInputView.getHeight();
+        final int inputHeight = mInputView.getHeight() - (mKeyboardSwitcher.isShowingEmojiPalettes() ? 0 : this.mKeyboardSwitcher.getActionRowView().getHeight());
         final boolean hasHardwareKeyboard = settingsValues.mHasHardwareKeyboard;
         if (hasHardwareKeyboard && visibleKeyboardView.getVisibility() == View.GONE) {
             // If there is a hardware keyboard and a visible software keyboard view has been hidden,
@@ -1198,9 +1234,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             outInsets.visibleTopInsets = inputHeight;
             return;
         }
-        final int suggestionsHeight = (!mKeyboardSwitcher.isShowingEmojiPalettes()
-                && mSuggestionStripView.getVisibility() == View.VISIBLE)
-                ? mSuggestionStripView.getHeight() : 0;
+        final int suggestionsHeight = mSuggestionStripView.getVisibility() == View.VISIBLE ? mSuggestionStripView.getHeight() : 0;
         final int visibleTopY = inputHeight - visibleKeyboardView.getHeight() - suggestionsHeight;
         // Need to set touchable region only if a keyboard view is being shown.
         if (visibleKeyboardView.isShown()) {

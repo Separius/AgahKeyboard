@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.android.inputmethod.keyboard.KeyboardLayoutSet.KeyboardLayoutSetException;
+import com.android.inputmethod.keyboard.actionrow.ActionRowView;
 import com.android.inputmethod.keyboard.emoji.EmojiPalettesView;
 import com.android.inputmethod.keyboard.internal.KeyboardState;
 import com.android.inputmethod.keyboard.internal.KeyboardTextsSet;
@@ -62,6 +63,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     private LinearLayout mSettingsViewPager;
     private LatinIME mLatinIME;
     private boolean mIsHardwareAcceleratedDrawingEnabled;
+    private ActionRowView mActionRowView;
 
     private KeyboardState mState;
 
@@ -216,6 +218,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     // Implements {@link KeyboardState.SwitchActions}.
     @Override
     public void setAlphabetKeyboard() {
+        mActionRowView.setNumberRowVisible(true);
         setKeyboard(mKeyboardLayoutSet.getKeyboard(KeyboardId.ELEMENT_ALPHABET));
     }
 
@@ -395,6 +398,8 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mEmojiPalettesView.setHardwareAcceleratedDrawingEnabled(isHardwareAcceleratedDrawingEnabled);
         mEmojiPalettesView.setKeyboardActionListener(mLatinIME);
         ColorManager.addObserver(mEmojiPalettesView);
+        this.mActionRowView = (ActionRowView) this.mCurrentInputView.findViewById(R.id.action_row);
+        this.mActionRowView.setListener(this.mLatinIME);
         return mCurrentInputView;
     }
 
@@ -402,6 +407,10 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         if (mKeyboardView != null) {
             mKeyboardView.updateShortcutKey(mSubtypeSwitcher.isShortcutImeReady());
         }
+    }
+
+    public ActionRowView getActionRowView() {
+        return this.mActionRowView;
     }
 
     public int getKeyboardShiftMode() {

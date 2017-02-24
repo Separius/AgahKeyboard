@@ -26,8 +26,9 @@ public final class JniUtils {
     static {
         try {
             System.loadLibrary(JniLibName.JNI_LIB_NAME);
+            System.loadLibrary(JniLibName.JNI_NEURAL_LIB_NAME);
         } catch (UnsatisfiedLinkError ule) {
-            Log.e(TAG, "Could not load native library " + JniLibName.JNI_LIB_NAME, ule);
+            Log.e(TAG, "Could not load native library", ule);
         }
     }
 

@@ -6,4 +6,8 @@
     <item type="id" name="language_button">false</item>
     <item type="id" name="webber">false</item>
     <item type="id" name="auth_checkbox">false</item>
+    <item type="id" name="copy">false</item>
+    <item type="id" name="cut">false</item>
+    <item type="id" name="paste">false</item>
+    <item type="id" name="select">false</item>
 </resources>

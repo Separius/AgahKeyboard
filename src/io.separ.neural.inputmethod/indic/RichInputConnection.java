@@ -315,7 +315,6 @@ public final class RichInputConnection {
         if (DEBUG_BATCH_NESTING) checkBatchEdit();
         if (DEBUG_PREVIOUS_TEXT) checkConsistencyForDebug();
         if(text.equals(" ") && changedLanguage) {
-            //TODO cancel double space InputLogic.cancelDoubleSpacePeriodCountdown()
             changedLanguage = false;
             return;
         }

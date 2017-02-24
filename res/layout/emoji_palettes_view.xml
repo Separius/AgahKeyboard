@@ -26,6 +26,12 @@
     android:orientation="vertical"
     style="?attr/emojiPalettesViewStyle"
 >
+    <!--<io.separ.neural.inputmethod.indic.suggestions.SuggestionStripView
+        android:id="@+id/suggestion_strip_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/config_suggestions_strip_height"
+        android:gravity="center_vertical"
+        style="?attr/suggestionStripViewStyle" />-->
     <LinearLayout
         android:id="@+id/emoji_top_bar"
         android:orientation="horizontal"
