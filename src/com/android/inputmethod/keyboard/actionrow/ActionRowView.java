@@ -380,9 +380,9 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         return this.emojiLayout;
     }
 
-    //TODO fill this with frequency of usage not recent usage
     private void fillEmojiLayout() {
         String[] emojiArray = RecentEmojiPageModel.toReversePrimitiveArray(RecentEmojiPageModel.getPersistedCache(PreferenceManager.getDefaultSharedPreferences(getContext())));
+        //String[] emojiArray = FrequentEmojiHandler.getInstance(getContext()).getMostFrequentEmojis(8).toArray(new String[0]); //TODO use this
         int i=0;
         for (String emoji : emojiArray) {
             i++;
@@ -390,7 +390,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
                 break;
             addSingleEmoji(emoji);
         }
-        for(int j=0; i<=DEFAULT_SUGGESTED_EMOJI.length; i++, j++)
+        for(int j=0; i<DEFAULT_SUGGESTED_EMOJI.length; i++, j++)
             addSingleEmoji(DEFAULT_SUGGESTED_EMOJI[j]);
     }
 

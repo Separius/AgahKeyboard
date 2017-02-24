@@ -30,5 +30,8 @@
             android:clickable="true" android:longClickable="false" android:layout_width="match_parent"
             android:layout_height="@dimen/config_suggestions_strip_height" android:overScrollMode="never" android:gravity="center_vertical"/>
     </LinearLayout>
+        <SearchView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/config_suggestions_strip_height"></SearchView>
     </LinearLayout>
 </FrameLayout>

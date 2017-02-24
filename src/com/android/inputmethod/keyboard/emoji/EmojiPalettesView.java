@@ -99,13 +99,13 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
     private LinearLayout mActionBar;
     private ImageButton mDeleteKey;
     private TextView mAlphabetKeyLeft;
-    private TextView mAlphabetKeyRight;
+    //private TextView mAlphabetKeyRight;
     // TODO: Remove this workaround.
     private View mSpacebarIcon;
     private TabHost mTabHost;
     private ViewPager mEmojiPager;
     private int mCurrentPagerPosition = 0;
-    private View mSpacebar;
+    //private View mSpacebar;
 
     private List<EmojiPageModel> models;
     private RecentEmojiPageModel recentModel;
@@ -249,18 +249,18 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
         mAlphabetKeyLeft.setTag(Constants.CODE_ALPHA_FROM_EMOJI);
         mAlphabetKeyLeft.setOnTouchListener(this);
         mAlphabetKeyLeft.setOnClickListener(this);
-        mAlphabetKeyRight = (TextView)findViewById(R.id.emoji_keyboard_alphabet_right);
+        /*mAlphabetKeyRight = (TextView)findViewById(R.id.emoji_keyboard_alphabet_right);
         mAlphabetKeyRight.setBackgroundResource(mFunctionalKeyBackgroundId);
         mAlphabetKeyRight.setTag(Constants.CODE_ALPHA_FROM_EMOJI);
         mAlphabetKeyRight.setOnTouchListener(this);
-        mAlphabetKeyRight.setOnClickListener(this);
-        mSpacebar = findViewById(R.id.emoji_keyboard_space);
+        mAlphabetKeyRight.setOnClickListener(this);*/
+        /*mSpacebar = findViewById(R.id.emoji_keyboard_space);
         mSpacebar.setBackgroundResource(mSpacebarBackgroundId);
         mSpacebar.setTag(Constants.CODE_SPACE);
         mSpacebar.setOnTouchListener(this);
         mSpacebar.setOnClickListener(this);
         mEmojiLayoutParams.setKeyProperties(mSpacebar);
-        mSpacebarIcon = findViewById(R.id.emoji_keyboard_space_icon);
+        mSpacebarIcon = findViewById(R.id.emoji_keyboard_space_icon);*/
     }
 
     public static class EmojiPagerAdapter extends PagerAdapter
@@ -331,11 +331,11 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
             mAlphabetKeyLeft.setTextColor(iconColor);
             mAlphabetKeyLeft.setText(mAlphabetKeyLeft.getText());
         }
-        if(mAlphabetKeyRight != null) {
+        /*if(mAlphabetKeyRight != null) {
             mAlphabetKeyRight.setBackgroundColor(darkBackground);
             mAlphabetKeyRight.setTextColor(iconColor);
             mAlphabetKeyRight.setText(mAlphabetKeyRight.getText());
-        }
+        }*/
         if(mTabHost != null){
             TabWidget tabWidget = mTabHost.getTabWidget();
             for(int i=0; i<tabWidget.getChildCount(); ++i) {
@@ -347,11 +347,11 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
         }
         if(mEmojiTopBar != null)
             mEmojiTopBar.setBackgroundColor(darkBackground);
-        if(mSpacebar != null) {
+        /*if(mSpacebar != null) {
             Drawable newBackground = mSpacebar.getBackground();
             newBackground.setColorFilter(colorProfile.getPrimary(), PorterDuff.Mode.OVERLAY);
             mSpacebar.setBackground(newBackground);
-        }
+        }*/
     }
 
     @Override
@@ -455,7 +455,7 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
         final KeyDrawParams params = new KeyDrawParams();
         params.updateParams(mEmojiLayoutParams.getActionBarHeight(), keyVisualAttr);
         setupAlphabetKey(mAlphabetKeyLeft, switchToAlphaLabel, params);
-        setupAlphabetKey(mAlphabetKeyRight, switchToAlphaLabel, params);
+        //setupAlphabetKey(mAlphabetKeyRight, switchToAlphaLabel, params);
         mEmojiPager.setAdapter(mEmojiPalettesAdapter);
         mEmojiPager.setCurrentItem(mCurrentPagerPosition);
         setCurrentCategoryId(mEmojiCategory.getCurrentCategoryId(), true);

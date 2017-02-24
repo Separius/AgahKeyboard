@@ -5,7 +5,7 @@ package com.android.inputmethod.keyboard.actionrow;
  */
 public class ActionRowSettingsActivity {
     public static final String CLIP_ID = "clip";
-    public static final String DEFAULT_LAYOUTS = "number, clip, emoji, neural";
+    public static final String DEFAULT_LAYOUTS = "number, clip, emoji";
     public static final String EMOJI_ID = "emoji";
     public static final String NEURAL_ID = "neural";
     public static final String NUMBER_ID = "number";
