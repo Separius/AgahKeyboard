@@ -52,9 +52,9 @@ final class EmojiLayoutParams {
                 (int) (res.getDimension(R.dimen.config_emoji_category_page_id_height));
         final int baseheight = defaultKeyboardHeight - mBottomPadding - mTopPadding
                 + mKeyVerticalGap;
-        mEmojiActionBarHeight = baseheight / DEFAULT_KEYBOARD_ROWS
-                - (mKeyVerticalGap - mBottomPadding) / 2;
-        mEmojiPagerHeight = defaultKeyboardHeight - mEmojiActionBarHeight
+        //mEmojiActionBarHeight = baseheight / DEFAULT_KEYBOARD_ROWS - (mKeyVerticalGap - mBottomPadding) / 2;
+        mEmojiActionBarHeight = res.getDimensionPixelSize(R.dimen.config_suggestions_strip_height);
+                mEmojiPagerHeight = defaultKeyboardHeight - mEmojiActionBarHeight
                 - mEmojiCategoryPageIdViewHeight;
         mEmojiPagerBottomMargin = 0;
         //mEmojiKeyboardHeight = mEmojiPagerHeight - mEmojiPagerBottomMargin - 1;
