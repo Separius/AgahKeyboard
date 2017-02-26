@@ -47,7 +47,6 @@ import android.widget.TextView;
 import com.android.inputmethod.keyboard.KeyboardActionListener;
 import com.android.inputmethod.keyboard.KeyboardLayoutSet;
 import com.android.inputmethod.keyboard.KeyboardView;
-import com.android.inputmethod.keyboard.actionrow.FrequentEmojiHandler;
 import com.android.inputmethod.keyboard.emojifast.EmojiPageModel;
 import com.android.inputmethod.keyboard.emojifast.EmojiPageView;
 import com.android.inputmethod.keyboard.emojifast.EmojiPages;
@@ -150,8 +149,8 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
         final int width = ResourceUtils.getDefaultKeyboardWidth(res)
                 + getPaddingLeft() + getPaddingRight();
         final int height = ResourceUtils.getDefaultKeyboardHeight(res)
-                + getPaddingTop() + getPaddingBottom()
-                - 2*(res.getDimensionPixelSize(R.dimen.config_suggestions_strip_height));
+                // res.getDimensionPixelSize(R.dimen.config_suggestions_strip_height)
+                + getPaddingTop() + getPaddingBottom();
         setMeasuredDimension(width, height);
     }
 
@@ -206,6 +205,7 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
         mEmojiPager.setOffscreenPageLimit(0);
         mEmojiPager.setPersistentDrawingCache(PERSISTENT_NO_CACHE);
         mEmojiLayoutParams.setPagerProperties(mEmojiPager);
+
         setCurrentCategoryId(mEmojiCategory.getCurrentCategoryId(), true /* force */);
     }
 

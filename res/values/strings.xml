@@ -595,5 +595,4 @@ Tip: You can download and remove dictionaries by going to &lt;b>Languages&#160;&
     <string name="languages">Languages</string>
     <string name="authorization">Authorization</string>
     <string name="select">Select</string>
-    <string name="copy_something">Copy something to paste :)</string>
 </resources>

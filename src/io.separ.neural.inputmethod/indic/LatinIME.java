@@ -62,8 +62,6 @@ import com.android.inputmethod.keyboard.MainKeyboardView;
 import com.android.inputmethod.keyboard.TextDecoratorUi;
 import com.android.inputmethod.keyboard.actionrow.ActionRowView;
 import com.android.inputmethod.keyboard.actionrow.FrequentEmojiHandler;
-import com.android.inputmethod.keyboard.actionrow.NeuralNetSuggestor;
-import com.android.inputmethod.keyboard.actionrow.NeuralRowHelper;
 import com.android.inputmethod.latin.utils.ApplicationUtils;
 import com.android.inputmethod.latin.utils.CapsModeUtils;
 import com.android.inputmethod.latin.utils.CoordinateUtils;
@@ -641,7 +639,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         SwipeUtils.init(this, this);
         this.colorManager = new ColorManager(this);
         this.navManager = new NavManager(this);
-        NeuralNetSuggestor.getInstance().initLibrary(getApplicationContext());
         //SpeechUtils.initialize(this);
     }
 
@@ -1243,7 +1240,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         if (visibleKeyboardView == null || !hasSuggestionStripView()) {
             return;
         }
-        final int inputHeight = mInputView.getHeight() - (mKeyboardSwitcher.isShowingEmojiPalettes() ? this.mKeyboardSwitcher.getmMediaBottomBar().getHeight() : this.mKeyboardSwitcher.getActionRowView().getHeight());
+
+        //final int inputHeight = mInputView.getHeight() - (mKeyboardSwitcher.isShowingEmojiPalettes() ? this.mKeyboardSwitcher.getmMediaBottomBar().getHeight() : this.mKeyboardSwitcher.getActionRowView().getHeight());
+        final int inputHeight = mInputView.getHeight();
+        //final int inputHeight = mInputView.getHeight() - (mKeyboardSwitcher.isShowingEmojiPalettes() ? 0 : this.mKeyboardSwitcher.getActionRowView().getHeight());
         final boolean hasHardwareKeyboard = settingsValues.mHasHardwareKeyboard;
         if (hasHardwareKeyboard && visibleKeyboardView.getVisibility() == View.GONE) {
             // If there is a hardware keyboard and a visible software keyboard view has been hidden,
@@ -1252,7 +1252,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             outInsets.visibleTopInsets = inputHeight;
             return;
         }
-        final int suggestionsHeight = mSuggestionStripView.getVisibility() == View.VISIBLE ? mSuggestionStripView.getHeight() : 0;
+        //SEPAR TODO::this is for the action row
+        final int suggestionsHeight = (!mKeyboardSwitcher.isShowingEmojiPalettes()) ?
+                ((mSuggestionStripView.getVisibility() == View.VISIBLE)
+                ? mSuggestionStripView.getHeight()*2 : mSuggestionStripView.getHeight()) : mSuggestionStripView.getHeight();
         final int visibleTopY = inputHeight - visibleKeyboardView.getHeight() - suggestionsHeight;
         // Need to set touchable region only if a keyboard view is being shown.
         if (visibleKeyboardView.isShown()) {

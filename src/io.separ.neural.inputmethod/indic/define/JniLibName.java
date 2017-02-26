@@ -22,5 +22,4 @@ public final class JniLibName {
     }
 
     public static final String JNI_LIB_NAME = "jni_latinime";
-    public static final String JNI_NEURAL_LIB_NAME = "chrooma_neural";
 }
