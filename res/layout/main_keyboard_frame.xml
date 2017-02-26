@@ -27,12 +27,12 @@
 
     <!-- To ensure that key preview popup is correctly placed when the current system locale is
          one of RTL locales, layoutDirection="ltr" is needed in the SDK version 17+. -->
-    <!--<io.separ.neural.inputmethod.indic.suggestions.SuggestionStripView
+    <io.separ.neural.inputmethod.indic.suggestions.SuggestionStripView
         android:id="@+id/suggestion_strip_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/config_suggestions_strip_height"
         android:gravity="center_vertical"
-        style="?attr/suggestionStripViewStyle" />-->
+        style="?attr/suggestionStripViewStyle" />
 
     <!--it was visibil:0-->
     <com.android.inputmethod.keyboard.actionrow.ActionRowView android:id="@+id/action_row"

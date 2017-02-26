@@ -25,9 +25,6 @@
     android:orientation="vertical"
     style="?attr/emojiPalettesViewStyle"
     >
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/config_suggestions_strip_height">
     <LinearLayout
         android:id="@+id/emoji_top_bar"
         android:orientation="horizontal"
@@ -62,23 +59,7 @@
                     android:visibility="gone" />
             </FrameLayout>
         </TabHost>
-        <include layout="@layout/suggestion_divider" />
-        <View
-            android:layout_width="0dip"
-            android:layout_weight="12.5"
-            android:gravity="center"
-            android:layout_height="match_parent" />
-        </LinearLayout>
-        <SearchView
-            android:id="@+id/media_search"
-            android:layout_width="match_parent"
-            android:gravity="center"
-            android:layout_height="match_parent"
-            android:hapticFeedbackEnabled="false"
-            android:soundEffectsEnabled="false"
-            android:layout_alignParentRight="true"
-            android:layoutDirection="rtl" />
-    </FrameLayout>
+    </LinearLayout>
     <android.support.v4.view.ViewPager
         android:id="@+id/emoji_keyboard_pager"
         android:layout_width="match_parent"

@@ -29,18 +29,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:orientation="vertical" >
-    <io.separ.neural.inputmethod.indic.suggestions.SuggestionStripView
-        android:id="@+id/suggestion_strip_view"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/config_suggestions_strip_height"
-        android:gravity="center_vertical"
-        style="?attr/suggestionStripViewStyle" />
-    <include
-        android:id="@+id/main_keyboard_frame"
-        layout="@layout/main_keyboard_frame" />
-    <include
-        android:id="@+id/other_keyboard_frame"
-        layout="@layout/other_keyboard_frame" />
+        <include
+            android:id="@+id/main_keyboard_frame"
+            layout="@layout/main_keyboard_frame" />
+        <include
+            android:id="@+id/other_keyboard_frame"
+            layout="@layout/other_keyboard_frame" />
     </LinearLayout>
     <include
         android:id="@+id/settings_pager_view"

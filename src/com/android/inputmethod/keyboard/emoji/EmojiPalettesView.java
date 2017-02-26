@@ -150,9 +150,8 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
         final int width = ResourceUtils.getDefaultKeyboardWidth(res)
                 + getPaddingLeft() + getPaddingRight();
         final int height = ResourceUtils.getDefaultKeyboardHeight(res)
-                + res.getDimensionPixelSize(R.dimen.config_suggestions_strip_height)
                 + getPaddingTop() + getPaddingBottom()
-                - (int) (res.getDimensionPixelSize(R.dimen.config_suggestions_strip_height)*1.35f);
+                - 2*(res.getDimensionPixelSize(R.dimen.config_suggestions_strip_height));
         setMeasuredDimension(width, height);
     }
 
