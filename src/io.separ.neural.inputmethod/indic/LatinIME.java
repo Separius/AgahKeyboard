@@ -60,6 +60,7 @@ import com.android.inputmethod.keyboard.KeyboardId;
 import com.android.inputmethod.keyboard.KeyboardSwitcher;
 import com.android.inputmethod.keyboard.MainKeyboardView;
 import com.android.inputmethod.keyboard.TextDecoratorUi;
+import com.android.inputmethod.keyboard.top.TopDisplayController;
 import com.android.inputmethod.keyboard.top.actionrow.ActionRowView;
 import com.android.inputmethod.keyboard.top.actionrow.FrequentEmojiHandler;
 import com.android.inputmethod.latin.utils.ApplicationUtils;
@@ -145,6 +146,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
      */
     private static final String SCHEME_PACKAGE = "package";
 
+    private static final String ACTION_ROW_PAGE_STATE = "ACTION_ROW_PAGE_STATE";
+
     private final Settings mSettings;
     private final DictionaryFacilitator mDictionaryFacilitator =
             new DictionaryFacilitator(
@@ -196,6 +199,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     private NavManager navManager;
 
+    private TopDisplayController mTopDisplayController;
+
     @Override
     public void onCopy() {
         ((ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText(JniLibName.JNI_LIB_NAME, this.mInputLogic.mConnection.getSelectedText(0)));
@@ -210,13 +215,13 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     @Override
     public void onEmojiClicked(String emoji, boolean z) {
         FrequentEmojiHandler.getInstance(this).onEmojiClicked(emoji);
-        updateStateAfterInputTransaction(this.mInputLogic.onTextInput(this.mSettings.getCurrent(), Event.createSoftwareTextEvent(emoji, 1), this.mKeyboardSwitcher.getKeyboardShiftMode(), this.mHandler));
+        updateStateAfterInputTransaction(this.mInputLogic.onTextInput(this.mSettings.getCurrent(), Event.createSoftwareTextEvent(emoji, 1), this.mKeyboardSwitcher.getKeyboardShiftMode(), this.mHandler), false);
         this.mKeyboardSwitcher.onCodeInput(-4, getCurrentAutoCapsState(), getCurrentRecapitalizeState());
     }
 
     @Override
     public void onNumberClicked(String number) {
-        updateStateAfterInputTransaction(this.mInputLogic.onCodeInput(this.mSettings.getCurrent(), Event.createSoftwareKeypressEvent(number.codePointAt(0), 0, 0, 0, false), this.mKeyboardSwitcher.getKeyboardShiftMode(), this.mKeyboardSwitcher.getCurrentKeyboardScriptId(), this.mHandler));
+        updateStateAfterInputTransaction(this.mInputLogic.onCodeInput(this.mSettings.getCurrent(), Event.createSoftwareKeypressEvent(number.codePointAt(0), 0, 0, 0, false), this.mKeyboardSwitcher.getKeyboardShiftMode(), this.mKeyboardSwitcher.getCurrentKeyboardScriptId(), this.mHandler), false);
         this.mKeyboardSwitcher.onCodeInput(-4, getCurrentAutoCapsState(), getCurrentRecapitalizeState());
     }
 
@@ -232,14 +237,23 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     }
 
     @Override
-    public void onPunctuationClicked(String punctuation) {
-        updateStateAfterInputTransaction(this.mInputLogic.onCodeInput(this.mSettings.getCurrent(), Event.createSoftwareTextEvent(punctuation, 1), this.mKeyboardSwitcher.getKeyboardShiftMode(), this.mKeyboardSwitcher.getCurrentKeyboardScriptId(), this.mHandler));
-        this.mKeyboardSwitcher.onCodeInput(-4, getCurrentAutoCapsState(), getCurrentRecapitalizeState());
+    public int getActionRowPageState(){
+        return PreferenceManager.getDefaultSharedPreferences(this).getInt(ACTION_ROW_PAGE_STATE, 0);
+    }
+
+    @Override
+    public void setActionRowPageState(int pos){
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(ACTION_ROW_PAGE_STATE, pos).commit();
     }
 
     @Override
     public void onSelectAll() {
         this.mInputLogic.mConnection.mIC.performContextMenuAction(16908319);
+    }
+
+    @Override
+    public void onServiceClicked(int serviceId){
+        //TODO call serviceViewController, hide actionView, change state of emoji button
     }
 
     public static final class UIHandler extends LeakGuardHandlerWrapper<LatinIME> {
@@ -743,6 +757,9 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     @Override
     public void onDestroy() {
+        if (this.mTopDisplayController != null) {
+            this.mTopDisplayController.drop();
+        }
         mDictionaryFacilitator.closeDictionaries();
         mPersonalizationDictionaryUpdater.onDestroy();
         mContextualDictionaryUpdater.onDestroy();
@@ -803,6 +820,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         super.setInputView(view);
         mInputView = view;
         mSuggestionStripView = (SuggestionStripView)view.findViewById(R.id.suggestion_strip_view);
+        this.mTopDisplayController = new TopDisplayController(view);
         if (hasSuggestionStripView()) {
             mSuggestionStripView.setListener(this, view);
         }
@@ -870,6 +888,9 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     public void onStartInputView(final EditorInfo editorInfo, final boolean restarting) {
         handleKeyboardColor(editorInfo);
         mHandler.onStartInputView(editorInfo, restarting);
+        if (this.mTopDisplayController != null) {
+            this.mTopDisplayController.updateBarVisibility();
+        }
     }
 
     @Override
@@ -1241,9 +1262,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             return;
         }
 
-        //final int inputHeight = mInputView.getHeight() - (mKeyboardSwitcher.isShowingEmojiPalettes() ? this.mKeyboardSwitcher.getmMediaBottomBar().getHeight() : this.mKeyboardSwitcher.getActionRowView().getHeight());
         final int inputHeight = mInputView.getHeight();
-        //final int inputHeight = mInputView.getHeight() - (mKeyboardSwitcher.isShowingEmojiPalettes() ? 0 : this.mKeyboardSwitcher.getActionRowView().getHeight());
         final boolean hasHardwareKeyboard = settingsValues.mHasHardwareKeyboard;
         if (hasHardwareKeyboard && visibleKeyboardView.getVisibility() == View.GONE) {
             // If there is a hardware keyboard and a visible software keyboard view has been hidden,
@@ -1254,8 +1273,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
         //SEPAR TODO::this is for the action row
         final int suggestionsHeight = (!mKeyboardSwitcher.isShowingEmojiPalettes()) ?
-                ((mSuggestionStripView.getVisibility() == View.VISIBLE)
-                ? mSuggestionStripView.getHeight()*2 : mSuggestionStripView.getHeight()) : mSuggestionStripView.getHeight();
+                mTopDisplayController.getHeight() : mSuggestionStripView.getHeight();//bottom bar
         final int visibleTopY = inputHeight - visibleKeyboardView.getHeight() - suggestionsHeight;
         // Need to set touchable region only if a keyboard view is being shown.
         if (visibleKeyboardView.isShown()) {
@@ -1541,6 +1559,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     @Override
     public void onUpdateBatchInput(final InputPointers batchPointers) {
         mInputLogic.onUpdateBatchInput(mSettings.getCurrent(), batchPointers, mKeyboardSwitcher);
+        if (mTopDisplayController != null)
+            mTopDisplayController.showSuggestions();
     }
 
     @Override
@@ -1724,22 +1744,16 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
     }
 
-    /**
-     * After an input transaction has been executed, some state must be updated. This includes
-     * the shift state of the keyboard and suggestions. This method looks at the finished
-     * inputTransaction to find out what is necessary and updates the state accordingly.
-     * @param inputTransaction The transaction that has been executed.
-     */
-    private void updateStateAfterInputTransaction(final InputTransaction inputTransaction) {
+    private void updateStateAfterInputTransaction(final InputTransaction inputTransaction, boolean showSuggest) {
         switch (inputTransaction.getRequiredShiftUpdate()) {
-        case InputTransaction.SHIFT_UPDATE_LATER:
-            mHandler.postUpdateShiftState();
-            break;
-        case InputTransaction.SHIFT_UPDATE_NOW:
-            mKeyboardSwitcher.requestUpdatingShiftState(getCurrentAutoCapsState(),
-                    getCurrentRecapitalizeState());
-            break;
-        default: // SHIFT_NO_UPDATE
+            case InputTransaction.SHIFT_UPDATE_LATER:
+                mHandler.postUpdateShiftState();
+                break;
+            case InputTransaction.SHIFT_UPDATE_NOW:
+                mKeyboardSwitcher.requestUpdatingShiftState(getCurrentAutoCapsState(),
+                        getCurrentRecapitalizeState());
+                break;
+            default: // SHIFT_NO_UPDATE
         }
         if (inputTransaction.requiresUpdateSuggestions()) {
             final int inputStyle;
@@ -1756,6 +1770,18 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         if (inputTransaction.didAffectContents()) {
             mSubtypeState.setCurrentSubtypeHasBeenUsed();
         }
+        if ((inputTransaction.mEvent.mKeyCode >= 0 || inputTransaction.mEvent.mKeyCode == Constants.CODE_DELETE) && mTopDisplayController != null && showSuggest)
+            mTopDisplayController.showSuggestions();
+    }
+
+    /**
+     * After an input transaction has been executed, some state must be updated. This includes
+     * the shift state of the keyboard and suggestions. This method looks at the finished
+     * inputTransaction to find out what is necessary and updates the state accordingly.
+     * @param inputTransaction The transaction that has been executed.
+     */
+    private void updateStateAfterInputTransaction(final InputTransaction inputTransaction) {
+        updateStateAfterInputTransaction(inputTransaction, true);
     }
 
     private void hapticAndAudioFeedback(final int code, final int repeatCount) {

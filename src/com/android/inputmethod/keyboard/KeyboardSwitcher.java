@@ -50,6 +50,7 @@ import io.separ.neural.inputmethod.indic.WordComposer;
 import io.separ.neural.inputmethod.indic.inlinesettings.InlineSettingsAdaptor;
 import io.separ.neural.inputmethod.indic.settings.Settings;
 import io.separ.neural.inputmethod.indic.settings.SettingsValues;
+import me.relex.circleindicator.CircleIndicator;
 
 public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     private static final String TAG = KeyboardSwitcher.class.getSimpleName();
@@ -220,7 +221,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     // Implements {@link KeyboardState.SwitchActions}.
     @Override
     public void setAlphabetKeyboard() {
-        mActionRowView.setNumberRowVisible(true);
+        mActionRowView.setActionRowVisible();
         setKeyboard(mKeyboardLayoutSet.getKeyboard(KeyboardId.ELEMENT_ALPHABET));
     }
 
@@ -409,6 +410,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         ColorManager.addObserver(mMediaBottomBar);
         this.mActionRowView = (ActionRowView) this.mCurrentInputView.findViewById(R.id.action_row);
         this.mActionRowView.setListener(this.mLatinIME);
+        mActionRowView.setCircleIndicator((CircleIndicator) this.mCurrentInputView.findViewById(R.id.actionrow_page_indicator));
         return mCurrentInputView;
     }
 

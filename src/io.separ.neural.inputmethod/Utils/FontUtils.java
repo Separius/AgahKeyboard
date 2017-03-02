@@ -44,4 +44,8 @@ public class FontUtils {
     public static void setIsEmoji(boolean emoji){
         isEmoji = emoji;
     }
+
+    public static Typeface getCurrentLocaleTypeface(){
+        return mTypefaces.get(currentLocale);
+    }
 }

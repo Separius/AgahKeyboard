@@ -1,12 +1,13 @@
 package com.android.inputmethod.keyboard.top.actionrow;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +18,14 @@ import android.widget.TextView;
 import com.android.inputmethod.keyboard.emojifast.RecentEmojiPageModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import io.separ.neural.inputmethod.Utils.FontUtils;
 import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.indic.AudioAndHapticFeedbackManager;
-import io.separ.neural.inputmethod.indic.LastComposedWord;
 import io.separ.neural.inputmethod.indic.R;
-import io.separ.neural.inputmethod.indic.SuggestedWords;
+import me.relex.circleindicator.CircleIndicator;
 
 /**
  * Created by sepehr on 2/24/17.
@@ -33,11 +34,13 @@ import io.separ.neural.inputmethod.indic.SuggestedWords;
 public class ActionRowView extends ViewPager implements ColorManager.OnColorChange, View.OnTouchListener {
     public static final String[] DEFAULT_SUGGESTED_EMOJI;
     private static final String[] NUMBER_ARRAY;
+    private static final int[] SERVICE_IMAGE_IDS;
     private ActionRowAdapter adapter;
     private ColorProfile colorProfile;
-    private LinearLayout emojiLayout;
     private String[] layoutToShow;
     private Listener mListener;
+    private HashMap<String, LinearLayout> layouts;
+    private CircleIndicator mIndicator;
 
     public boolean onTouch(View v, MotionEvent event) {
         return false;
@@ -52,6 +55,17 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         public void onClick(View tview) {
             AudioAndHapticFeedbackManager.getInstance().performHapticAndAudioFeedback(-15, ActionRowView.this);
             mListener.onNumberClicked(this.val$view.getText().toString());
+        }
+    }
+
+    /*service click handler*/
+    class serviceClickListener implements OnClickListener {
+        final int serviceId;
+        serviceClickListener(int serviceId) {
+            this.serviceId = serviceId;
+        }
+        public void onClick(View v) {
+            mListener.onServiceClicked(serviceId);
         }
     }
 
@@ -99,9 +113,13 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
 
         void onPaste();
 
-        void onPunctuationClicked(String str);
-
         void onSelectAll();
+
+        void onServiceClicked(int id);
+
+        int getActionRowPageState();
+
+        void setActionRowPageState(int pos);
     }
 
     private class ActionRowAdapter extends PagerAdapter {
@@ -111,6 +129,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
             this.views = new ArrayList();
         }
 
+        @Override
         public int getItemPosition(Object object) {
             int index = this.views.indexOf(object);
             if (index == -1) {
@@ -120,17 +139,19 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         }
 
         public Object instantiateItem(ViewGroup container, int position) {
-            View v = ActionRowView.this.createViewFromID(ActionRowView.this.layoutToShow[position % ActionRowView.this.layoutToShow.length]);
+            //View v = ActionRowView.this.createViewFromID(ActionRowView.this.layoutToShow[position % ActionRowView.this.layoutToShow.length]);
+            View v = layouts.get(ActionRowView.this.layoutToShow[position % ActionRowView.this.layoutToShow.length]);
             this.views.add(v);
             container.addView(v);
             return v;
         }
 
         public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
         }
 
         public int getCount() {
-            return ActionRowView.this.layoutToShow.length == 1 ? 1 : SuggestedWords.SuggestedWordInfo.MAX_SCORE;
+            return ActionRowView.this.layoutToShow.length;
         }
 
         public boolean isViewFromObject(View view, Object object) {
@@ -138,6 +159,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         }
 
         public View getView(int position) {
+            mListener.setActionRowPageState(position);
             return (View) this.views.get(position);
         }
     }
@@ -145,6 +167,13 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
     static {
         NUMBER_ARRAY = "1,2,3,4,5,6,7,8,9,0".split("\\s*,\\s*");
         DEFAULT_SUGGESTED_EMOJI = "\u2764,\ud83d\ude15,\ud83d\ude18,\ud83d\ude22,\ud83d\ude3b,\ud83d\ude0a,\ud83d\ude09,\ud83d\ude0d".split("\\s*,\\s*");
+        SERVICE_IMAGE_IDS = new int[] {R.id.gif_service_action_button, R.id.maps_service_action_button, R.id.google_service_action_button,
+                R.id.customization_service_action_button, R.id.contacts_service_action_button, R.id.foursquare_service_action_button};
+    }
+
+    public void setCircleIndicator(CircleIndicator ci){
+        mIndicator = ci;
+        mIndicator.setViewPager(this);
     }
 
     public ActionRowView(Context context) {
@@ -161,16 +190,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
 
     public void setAdapter(ActionRowAdapter adapter) {
         super.setAdapter(adapter);
-        setCurrentItem((this.layoutToShow.length * 1000) + getNumberRowSpan(), false);
-    }
-
-    private int getNumberRowSpan() {
-        for (int i = 0; i < this.layoutToShow.length; i++) {
-            if (this.layoutToShow[i].equals(ActionRowSettingsActivity.NUMBER_ID)) {
-                return i;
-            }
-        }
-        return 0;
+        setCurrentItem(mListener==null?0:mListener.getActionRowPageState(), false); //TODO hold state
     }
 
     protected void onPageScrolled(int position, float offset, int offsetPixels) {
@@ -183,6 +203,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         adapter = new ActionRowAdapter();
         setAdapter(adapter);
         invalidate();
+        setupLayouts();
     }
 
     protected void onAttachedToWindow() {
@@ -190,26 +211,28 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         ColorManager.addObserverAndCall(this);
     }
 
-    public void setNumberRowVisible(boolean visible) {
-        String layouts = ActionRowSettingsActivity.DEFAULT_LAYOUTS;
-        if (visible) {
-            this.layoutToShow = layouts.split("\\s*,\\s*");
-        } else {
-            this.layoutToShow = layouts.replaceAll("number,", LastComposedWord.NOT_A_SEPARATOR).split("\\s*,\\s*");
-            if (this.layoutToShow.length == 1 && this.layoutToShow[0].equals(ActionRowSettingsActivity.NUMBER_ID)) {
-                this.layoutToShow = new String[]{ActionRowSettingsActivity.CLIP_ID};
-            }
-        }
+    public void setActionRowVisible() {
+        /*layoutToShow = ActionRowSettingsActivity.DEFAULT_LAYOUTS.split("\\s*,\\s*");
         adapter = new ActionRowAdapter();
-        setAdapter(adapter);
+        Log.e("SEPAR", "adap3");
+        setAdapter(adapter);*/
     }
 
     private void init() {
         setBackgroundColor(Color.parseColor("#eceff1"));
-        this.layoutToShow = ActionRowSettingsActivity.DEFAULT_LAYOUTS.split("\\s*,\\s*");
+        layoutToShow = ActionRowSettingsActivity.DEFAULT_LAYOUTS.split("\\s*,\\s*");
         adapter = new ActionRowAdapter();
         setAdapter(adapter);
         ColorManager.addObserverAndCall(this);
+        setupLayouts();
+    }
+
+    private void setupLayouts(){
+        layouts = new HashMap<>();
+        layouts.put(ActionRowSettingsActivity.NUMBER_ID, addNumbers());
+        layouts.put(ActionRowSettingsActivity.CLIP_ID, addButtons());
+        layouts.put(ActionRowSettingsActivity.EMOJI_ID, addEmojis()); //TODO update this on change
+        layouts.put(ActionRowSettingsActivity.SERVCICE_ID, addServices());
     }
 
     private View addEmptyView() {
@@ -227,6 +250,8 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
             return addButtons();
         if (identifier.equals(ActionRowSettingsActivity.EMOJI_ID))
             return addEmojis();
+        if (identifier.equals(ActionRowSettingsActivity.SERVCICE_ID))
+            return addServices();
         return addEmptyView();
     }
 
@@ -260,15 +285,27 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         return layout;
     }
 
-    private LinearLayout addEmojis() {
-        this.emojiLayout = new LinearLayout(getContext());
-        this.emojiLayout.setGravity(17);
-        this.emojiLayout.setWeightSum(1.f);
-        fillEmojiLayout();
-        return this.emojiLayout;
+    private LinearLayout addServices(){
+        LinearLayout layout = (LinearLayout) View.inflate(getContext(), R.layout.services_action_layout, null);
+        for(int currentServiceViewId : SERVICE_IMAGE_IDS) {
+            ImageView imageView = (ImageView) layout.findViewById(currentServiceViewId);
+            imageView.setColorFilter(this.colorProfile.getTextColor());
+            imageView.setSoundEffectsEnabled(false);
+            imageView.setOnClickListener(new serviceClickListener(currentServiceViewId));
+            imageView.setBackgroundResource(R.drawable.action_row_bg);
+        }
+        return layout;
     }
 
-    private void fillEmojiLayout() {
+    private LinearLayout addEmojis() {
+        LinearLayout emojiLayout = new LinearLayout(getContext());
+        emojiLayout.setGravity(17);
+        emojiLayout.setWeightSum(1.f);
+        fillEmojiLayout(emojiLayout);
+        return emojiLayout;
+    }
+
+    private void fillEmojiLayout(LinearLayout emojiLayout) {
         String[] emojiArray = RecentEmojiPageModel.toReversePrimitiveArray(RecentEmojiPageModel.getPersistedCache(PreferenceManager.getDefaultSharedPreferences(getContext())));
         //String[] emojiArray = FrequentEmojiHandler.getInstance(getContext()).getMostFrequentEmojis(8).toArray(new String[0]); //TODO use this
         int i=0;
@@ -276,10 +313,10 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
             i++;
             if(i>DEFAULT_SUGGESTED_EMOJI.length)
                 break;
-            addSingleEmoji(emoji);
+            emojiLayout.addView(addSingleEmoji(emoji));
         }
         for(int j=0; i<DEFAULT_SUGGESTED_EMOJI.length; i++, j++)
-            addSingleEmoji(DEFAULT_SUGGESTED_EMOJI[j]);
+            emojiLayout.addView(addSingleEmoji(DEFAULT_SUGGESTED_EMOJI[j]));
     }
 
     class AnonymousClass11 implements OnClickListener {
@@ -295,7 +332,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         }
     }
 
-    private void addSingleEmoji(String emoji){
+    private View addSingleEmoji(String emoji){
         TextView view = new TextView(getContext());
         view.setTypeface(FontUtils.getTypeface("emoji"));
         view.setText(emoji);
@@ -306,7 +343,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         view.setOnClickListener(new AnonymousClass11(view));
         view.setLayoutParams(new LinearLayout.LayoutParams(-1, -1, 1.f / ((float) DEFAULT_SUGGESTED_EMOJI.length)));
         view.setBackgroundResource(R.drawable.action_row_bg);
-        this.emojiLayout.addView(view);
+        return view;
     }
 
     private LinearLayout addNumbers() {
@@ -318,7 +355,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
             TextView view = new TextView(getContext());
             view.setText(number);
             view.setGravity(17);
-            view.setTypeface(FontUtils.getTypeface());
+            view.setTypeface(FontUtils.getCurrentLocaleTypeface());
             view.setTextColor(this.colorProfile.getTextColor());
             view.setTextSize(1, 22.0f * 1.f);
             view.setSoundEffectsEnabled(false);
@@ -330,4 +367,6 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         }
         return layout;
     }
+
+
 }

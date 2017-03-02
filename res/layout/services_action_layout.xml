@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:gravity="center" android:id="@+id/gif_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/content_copy" android:layout_weight="1.0" />
+    <ImageView android:gravity="center" android:id="@+id/maps_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/content_cut" android:layout_weight="1.0" />
+    <ImageView android:gravity="center" android:id="@+id/google_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/content_paste" android:layout_weight="1.0" />
+    <ImageView android:gravity="center" android:id="@+id/customization_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/content_select_all" android:layout_weight="1.0" />
+    <ImageView android:gravity="center" android:id="@+id/contacts_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/content_select_all" android:layout_weight="1.0" />
+    <ImageView android:gravity="center" android:id="@+id/foursquare_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/content_select_all" android:layout_weight="1.0" />
+</LinearLayout>
