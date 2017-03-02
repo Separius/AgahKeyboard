@@ -115,6 +115,11 @@ import io.separ.neural.inputmethod.indic.settings.SettingsActivity;
 import io.separ.neural.inputmethod.indic.settings.SettingsValues;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripView;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripViewAccessor;
+import io.separ.neural.inputmethod.slash.EventBusExt;
+import io.separ.neural.inputmethod.slash.NeuralApplication;
+import io.separ.neural.inputmethod.slash.SearchResultsEvent;
+import io.separ.neural.inputmethod.slash.SearchRetryErrorEvent;
+import io.separ.neural.inputmethod.slash.ServiceRequestEvent;
 
 import static io.separ.neural.inputmethod.indic.Constants.ImeOption.FORCE_ASCII;
 import static io.separ.neural.inputmethod.indic.Constants.ImeOption.NO_MICROPHONE;
@@ -173,6 +178,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     private View mInputView;
     private SuggestionStripView mSuggestionStripView;
     private TextView mExtractEditText;
+
+    private EventBusHandler mEventHandler;
 
     private RichInputMethodManager mRichImm;
     @UsedForTesting final KeyboardSwitcher mKeyboardSwitcher;
@@ -243,7 +250,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     @Override
     public void setActionRowPageState(int pos){
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(ACTION_ROW_PAGE_STATE, pos).commit();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(ACTION_ROW_PAGE_STATE, pos).apply();
     }
 
     @Override
@@ -654,6 +661,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         this.colorManager = new ColorManager(this);
         this.navManager = new NavManager(this);
         //SpeechUtils.initialize(this);
+        this.mEventHandler = new EventBusHandler();
     }
 
     public void finishCalculatingProfile() {
@@ -888,6 +896,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     public void onStartInputView(final EditorInfo editorInfo, final boolean restarting) {
         handleKeyboardColor(editorInfo);
         mHandler.onStartInputView(editorInfo, restarting);
+        this.mEventHandler.register();
         if (this.mTopDisplayController != null) {
             this.mTopDisplayController.updateBarVisibility();
         }
@@ -896,6 +905,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     @Override
     public void onFinishInputView(final boolean finishingInput) {
         mHandler.onFinishInputView(finishingInput);
+        this.mEventHandler.unregister();
     }
 
     @Override
@@ -2160,6 +2170,56 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             conn.deleteSurroundingText(inputLength, 0);
             this.mInputLogic.finishInput();
             this.mKeyboardSwitcher.requestUpdatingShiftState(getCurrentAutoCapsState(), getCurrentRecapitalizeState());
+        }
+    }
+
+    public class EventBusHandler {
+        public void register() {
+            if (!EventBusExt.getDefault().isRegistered(this)) {
+                EventBusExt.getDefault().register(this);
+            }
+        }
+
+        public void unregister() {
+            if (EventBusExt.getDefault().isRegistered(this)) {
+                EventBusExt.getDefault().unregister(this);
+            }
+        }
+
+        public void onEventMainThread(SearchItemSelectedEvent event) {
+            LatinIME.this.mInputLogic.stopSearchingResults();
+            if (ShareUtils.shareMediaThroughIntent(LatinIME.this, event.getItem(), LatinIME.this.mHostPackageName))
+                return;
+            shareItemThroughText(event);
+        }
+
+        private void shareItemThroughText(SearchItemSelectedEvent event) {
+            String output = event.getItem().getOutput();
+            if (TextUtils.isEmpty(output)) {
+                output = event.getItem().getSlashShort();
+            }
+            if (LatinIME.this.mSettings.getCurrent().mCopySearchOutputEnabled) {
+                ((ClipboardManager) LatinIME.this.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText(event.getItem().getTitle(), output));
+            }
+            NeuralApplication.getInstance();
+            String stringToReplace = event.getItem().getAnyOutput();
+            if (stringToReplace == null) {
+                stringToReplace = "";
+            }
+            LatinIME.this.mInputLogic.replaceCommandForOutput("", stringToReplace, false);
+            LatinIME.this.mKeyboardSwitcher.setAlphabetKeyboardExternal(LatinIME.this.getCurrentAutoCapsState(), LatinIME.this.getCurrentRecapitalizeState());
+        }
+
+        public void onEventMainThread(ServiceRequestEvent event) {
+            LatinIME.this.mTopDisplayController.setVisualState(event.getState());
+        }
+
+        public void onEventMainThread(SearchRetryErrorEvent event) {
+            LatinIME.this.mTopDisplayController.showRetryErrorMessage(event.isNetworkError());
+        }
+
+        public void onEventMainThread(SearchResultsEvent event) {
+            LatinIME.this.mTopDisplayController.setSearchItems(event.getSource(), event.getItems(), event.getAuthorizedStatus());
         }
     }
 }

@@ -5,6 +5,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.android.inputmethod.keyboard.top.actionrow.ActionRowView;
+import com.android.inputmethod.keyboard.top.services.ServiceResultsView;
 
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripView;
@@ -19,7 +20,7 @@ public class TopDisplayController {
     private final ActionRowView mActionRowView;
     private final View mSuggestionsStripHackyContainer;
     private final SuggestionStripView mSuggestionsStripView;
-    private final Object mServiceResultsView;
+    private final ServiceResultsView mServiceResultsView;
     private final View mActionRowContainer;
 
     public int getHeight() {
@@ -52,16 +53,16 @@ public class TopDisplayController {
         mSuggestionsStripView = (SuggestionStripView) parent.findViewById(R.id.suggestion_strip_view);
         mSuggestionsStripHackyContainer = parent.findViewById(R.id.suggestion_strip_hacky_container);
         mSuggestionsStripHackyContainer.setVisibility(View.GONE);
-        mServiceResultsView = parent.findViewById(R.id.suggestion_source_results);
-        //mServiceResultsView.setVisibility(View.GONE);
+        mServiceResultsView = (ServiceResultsView) parent.findViewById(R.id.suggestion_source_results);
+        mServiceResultsView.setVisibility(View.GONE);
     }
 
     public void showSuggestions() {
         if (this.mSuggestionsStripView.getVisibility() == View.VISIBLE) {
-            /*if (this.mServiceResultsView.getVisibility() == View.VISIBLE) {
+            if (this.mServiceResultsView.getVisibility() == View.VISIBLE) {
                 this.mSuggestionsStripHackyContainer.setVisibility(View.GONE);
                 return;
-            }*/
+            }
             mActionRowContainer.removeCallbacks(this.hideSuggestionAfter);
             mActionRowContainer.setVisibility(View.GONE);
             this.mSuggestionsStripHackyContainer.setVisibility(View.VISIBLE);
