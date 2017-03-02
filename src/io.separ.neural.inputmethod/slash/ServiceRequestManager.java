@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.android.inputmethod.keyboard.top.services.ServiceResultsView;
 
+import java.util.Random;
+
 /**
  * Created by sepehr on 3/2/17.
  */
@@ -90,19 +92,19 @@ public class ServiceRequestManager {
             cancelLastRequest();
             boolean shouldShowLoading = true;
             boolean shouldDoRequest = true;
-            //TODO uncomment, works
-            /*if ("contacts".equals(slash)) {
+            if ("contacts".equals(slash)) {
                 TaskQueue.loadQueueDefault(NeuralApplication.getInstance()).execute(new ServiceQueryContactsTask(query, ServiceQueryContactsTask.SearchType.Phone));
                 shouldDoRequest = false;
                 shouldShowLoading = false;
-            }*/
-            /*if (shouldDoRequest) {
+            }
+            if (shouldDoRequest) {
                 RServiceItem service = null;//TODO
                 if (service != null) {
                     isLocationAware = service.isLocation_aware();
                 }
-                this.request = new C04101(slash, query, action, isLocationAware, useCache);
-            }*/
+                //this.request = new C04101(slash, query, action, isLocationAware, useCache);//TODO
+                this.request = new C04101("google", "Hello", action, false, false);
+            }
             this.handler.postDelayed(this.request, 0);
             if (shouldShowLoading) {
                 EventBusExt.getDefault().post(new ServiceRequestEvent(ServiceResultsView.VisualSate.Loading.setMessage(slash), slash));

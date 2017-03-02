@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.fasterxml.jackson.core.util.MinimalPrettyPrinter;
+import com.github.ybq.android.spinkit.SpinKitView;
 
 import io.separ.neural.inputmethod.Utils.ColorUtils;
 import io.separ.neural.inputmethod.indic.R;
@@ -49,6 +50,7 @@ public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItem
     }
 
     public static class SearchItemViewHolder extends RecyclerView.ViewHolder implements Runnable {
+        private final SpinKitView loading;
         TextView bottom;
         Button connectButton;
         TextView header;
@@ -105,6 +107,7 @@ public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItem
             this.titleContainer = view.findViewById(R.id.title_container);
             this.bottom = (TextView) view.findViewById(R.id.item_bottom);
             this.preview = (ImageButton) view.findViewById(R.id.preview);
+            this.loading = (SpinKitView) view.findViewById(R.id.service_loading_container);
             if (this.preview != null) {
                 this.preview.setOnClickListener(new C04441());
             }
@@ -232,6 +235,9 @@ public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItem
                 vh.header.setText(item.getTitle());
                 vh.header.setTextColor(ColorUtils.colorProfile.getTextColor());
                 break;
+            case RESULT_TYPE_LOADING:
+                vh.loading.setVisibility(View.VISIBLE);
+                vh.titleContainer.setVisibility(View.VISIBLE);
         }
         if (pos > getItemCount() - 2 && this.mLoadNextPage != null) {
             this.mLoadNextPage.run();
@@ -334,8 +340,10 @@ public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItem
         String displayType = item.getDisplayType();
         if(displayType.equals(GENERIC_MESSAGE_TYPE))
             return RESULT_TYPE_GENERIC_MESSAGE;
-        else if(displayType.equals(MEDIA_TYPE) || displayType.equals(LOADING_TYPE))
+        else if(displayType.equals(MEDIA_TYPE))
             return RESULT_TYPE_IMAGE;
+        else if(displayType.equals(LOADING_TYPE))
+            return RESULT_TYPE_LOADING;
         else
             return RESULT_TYPE_DEFAULT;
     }

@@ -135,7 +135,6 @@ public class ResultsRecyclerView extends RecyclerView {
         } else {
             this.mAdapter.setPageLoadingListener(null);
         }
-        invalidateReactViewHack();
     }
 
     private void invalidateReactViewHack() {
@@ -159,7 +158,6 @@ public class ResultsRecyclerView extends RecyclerView {
         this.mAdapter.add(item);
         this.mAdapter.add(item);
         this.mAdapter.add(item);
-        invalidateReactViewHack();
     }
 
     public boolean trySetUnauthPreviewItems(String authorizedStatus, boolean categoryRequiresAuth) {

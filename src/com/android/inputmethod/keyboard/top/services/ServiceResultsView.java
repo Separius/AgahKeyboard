@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -388,17 +389,22 @@ public class ServiceResultsView extends LinearLayout {
     public void setVisualState(VisualSate state) {
         switch (C04687.f932x310c8f71[state.ordinal()]) {
             case 1:
+                Log.e("SEPAR", "1");
                 this.mRecycler.setVisibility(VISIBLE);
                 updateCategoryVisibility();
                 this.mSourceImageView.setVisibility(VISIBLE);
+                Log.e("SEPAR", "2");
                 setServiceImageWithAnimation(state.getMessage());
+                Log.e("SEPAR", "3");
                 this.mSourceError.setVisibility(GONE);
                 this.mSourceError.setClickable(false);
                 if (this.mPreviousState == VisualSate.Loading) {
                     return;
                 }
                 if (this.mRecycler.serviceChanged()) {
+                    Log.e("SEPAR", "4");
                     this.mRecycler.setLoadingItems();
+                    Log.e("SEPAR", "5");
                     this.mPreviousState = VisualSate.Loading;
                     this.mSourceProgress.setVisibility(GONE);
                     return;

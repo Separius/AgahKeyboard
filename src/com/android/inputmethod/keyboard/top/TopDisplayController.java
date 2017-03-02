@@ -8,6 +8,7 @@ import com.android.inputmethod.keyboard.top.actionrow.ActionRowView;
 import com.android.inputmethod.keyboard.top.services.ServiceResultsView;
 
 import java.util.List;
+import java.util.Random;
 
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripView;
@@ -27,6 +28,7 @@ public class TopDisplayController {
     private final SuggestionStripView mSuggestionsStripView;
     private final ServiceResultsView mServiceResultsView;
     private final View mActionRowContainer;
+    private static Random myRand = new Random();
 
     public int getHeight() {
         return holderLayout.getHeight();
@@ -48,7 +50,8 @@ public class TopDisplayController {
 
     public void runSearch(int serviceId, String s) {
         this.mActionRowContainer.setVisibility(GONE);
-        this.mServiceResultsView.runSearch("contacts", "", null);//TODO
+        //this.mServiceResultsView.runSearch((myRand.nextBoolean() ? "contacts" : "maps"), "", null);//TODO
+        this.mServiceResultsView.runSearch("google", "hello", null);//TODO
         if (this.mSuggestionsStripHackyContainer.getVisibility() != GONE) {
             this.mSuggestionsStripHackyContainer.setVisibility(GONE);
         }
