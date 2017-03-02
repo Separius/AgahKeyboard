@@ -77,7 +77,7 @@ public class TaskQueue extends BaseTaskQueue {
     public static synchronized TaskQueue loadQueue(Context context, String name, boolean fifo) {
         TaskQueue taskQueueActual;
         synchronized (TaskQueue.class) {
-            taskQueueActual = (TaskQueue) queueMap.get(name);
+            taskQueueActual = queueMap.get(name);
             if (taskQueueActual == null) {
                 taskQueueActual = new TaskQueue((Application) context.getApplicationContext(), fifo);
                 queueMap.put(name, taskQueueActual);

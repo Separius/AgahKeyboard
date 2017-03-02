@@ -28,6 +28,9 @@ public class RSearchItem {
     private String uid;
     private String uri;
     private String url;
+    private CharSequence previewUrl;
+    private String correctService;
+    private String anyOutput;
 
     public void setTitle(String title) {
         this.title = title;
@@ -59,5 +62,41 @@ public class RSearchItem {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public CharSequence getPreviewUrl() {
+        return previewUrl;
+    }
+
+    public RImage getImage() {
+        return image;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public RDetail getDetail() {
+        return detail;
+    }
+
+    public String getDisplayType() {
+        return displayType;
+    }
+
+    public String getCorrectService() {
+        return correctService;
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public String getSlashShort() {
+        return slashShort;
+    }
+
+    public String getAnyOutput() {
+        return anyOutput;
     }
 }

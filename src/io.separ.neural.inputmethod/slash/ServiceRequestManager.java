@@ -1,6 +1,7 @@
 package io.separ.neural.inputmethod.slash;
 
 import android.os.Handler;
+import android.util.Log;
 
 import com.android.inputmethod.keyboard.top.services.ServiceResultsView;
 
@@ -83,24 +84,26 @@ public class ServiceRequestManager {
     }
 
     public synchronized void postRequest(String slash, String query, String action, boolean useCache) {
+        Log.e("SEPAR", "postRequest: "+slash+" "+query+" "+action+" "+useCache);
         boolean isLocationAware = false;
         synchronized (this) {
             cancelLastRequest();
             boolean shouldShowLoading = true;
             boolean shouldDoRequest = true;
-            if ("contacts".equals(slash)) {
+            //TODO uncomment, works
+            /*if ("contacts".equals(slash)) {
                 TaskQueue.loadQueueDefault(NeuralApplication.getInstance()).execute(new ServiceQueryContactsTask(query, ServiceQueryContactsTask.SearchType.Phone));
                 shouldDoRequest = false;
                 shouldShowLoading = false;
-            }
-            if (shouldDoRequest) {
-                RServiceItem service = DataManager.gi().getServiceBySlash(slash);
+            }*/
+            /*if (shouldDoRequest) {
+                RServiceItem service = null;//TODO
                 if (service != null) {
                     isLocationAware = service.isLocation_aware();
                 }
                 this.request = new C04101(slash, query, action, isLocationAware, useCache);
-                this.handler.postDelayed(this.request, 0);
-            }
+            }*/
+            this.handler.postDelayed(this.request, 0);
             if (shouldShowLoading) {
                 EventBusExt.getDefault().post(new ServiceRequestEvent(ServiceResultsView.VisualSate.Loading.setMessage(slash), slash));
             }

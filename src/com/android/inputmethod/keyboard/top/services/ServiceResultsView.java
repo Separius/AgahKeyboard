@@ -17,12 +17,17 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
+import io.separ.neural.inputmethod.Utils.ColorUtils;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.slash.EventBusExt;
 import io.separ.neural.inputmethod.slash.NeuralApplication;
+import io.separ.neural.inputmethod.slash.RCategory;
 import io.separ.neural.inputmethod.slash.RSearchItem;
+import io.separ.neural.inputmethod.slash.RServiceItem;
 import io.separ.neural.inputmethod.slash.ServiceQueryContactsTask;
 import io.separ.neural.inputmethod.slash.ServiceQuerySearchTask;
+import io.separ.neural.inputmethod.slash.ServiceRequestManager;
+import io.separ.neural.inputmethod.slash.TaskQueueHelper;
 
 /**
  * Created by sepehr on 3/2/17.
@@ -49,7 +54,7 @@ public class ServiceResultsView extends LinearLayout {
     }*/
 
     /* renamed from: co.touchlab.inputmethod.latin.monkey.ui.views.ServiceResultsView.2 */
-    class C04632 implements IOnClickListener {
+    class C04632 implements SearchItemArrayAdapter.IOnClickListener {
         C04632() {
         }
 
@@ -72,7 +77,7 @@ public class ServiceResultsView extends LinearLayout {
 
         public void onClick(int position) {
             if (position < ServiceResultsView.this.mCategoriesList.getAdapter().getItemCount()) {
-                RCategory category = (RCategory) ServiceResultsView.this.mCategoriesList.getAdapter().getItem(position);
+                RCategory category = ServiceResultsView.this.mCategoriesList.getAdapter().getItem(position);
                 ServiceResultsView.this.runSearch(ServiceResultsView.this.mRecycler.getCurrentSlash(), category.getAction(), category.getType());
             }
         }
@@ -135,6 +140,11 @@ public class ServiceResultsView extends LinearLayout {
             setMessage(s);
         }
 
+
+        VisualSate() {
+
+        }
+
         public VisualSate setMessage(String msg) {
             this.message = msg;
             return this;
@@ -164,6 +174,15 @@ public class ServiceResultsView extends LinearLayout {
         init(context, attrs, defStyleAttr);
     }
 
+    class C04621 implements OnClickListener {
+        C04621() {
+        }
+
+        public void onClick(View v) {
+            ServiceRequestManager.getInstance().repostLastRequest();
+        }
+    }
+
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         LayoutInflater.from(context).inflate(R.layout.source_results_strip, this);
         animate().setDuration(75);
@@ -171,11 +190,11 @@ public class ServiceResultsView extends LinearLayout {
         this.mSourceImageView.setCameraDistance(5000.0f);
         this.mSourceImageView.animate().setInterpolator(new LinearInterpolator()).setDuration(150);
         this.mSourceError = (TextView) findViewById(R.id.source_error);
-        //this.mSourceError.setOnClickListener(new C04621());
+        this.mSourceError.setOnClickListener(new C04621());
         this.mSourceError.setClickable(false);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SuggestionStripView, defStyleAttr, R.style.SuggestionStripView);
         if (a != null) {
-            this.mSourceError.setTextColor(a.getColor(2, 0));
+            //this.mSourceError.setTextColor(ColorUtils.colorProfile.getTextColor());
             a.recycle();
         }
         this.mSourceProgress = (ProgressBar) findViewById(R.id.source_progress);
@@ -248,15 +267,10 @@ public class ServiceResultsView extends LinearLayout {
             setSearchMirror(searchString);
         }
         ResultsRecyclerView resultsRecyclerView = this.mRecycler;
-        if ("aac".equals(type) || this.mCategoriesList.firstCategoryRequireAuth()) {
+        if ("aac".equals(type)) {
             z = true;
         }
-        boolean skipRequest = resultsRecyclerView.trySetUnauthPreviewItems(null, z);
         updateCategoryVisibility();
-        if (skipRequest) {
-            setVisualState(VisualSate.Results);
-            return;
-        }
         ServiceRequestManager.getInstance().cancelLastRequest();
         ServiceRequestManager.getInstance().postRequest(slash, searchString, action, useCaching);
     }
@@ -283,7 +297,9 @@ public class ServiceResultsView extends LinearLayout {
 
     public void setSearchMirrorHint(String slash) {
         if (this.mSearchMirror.getTag() == null || !slash.equals((String) this.mSearchMirror.getTag())) {
-            RServiceItem item = DataManager.gi().getServiceBySlash(slash);
+            RServiceItem item = new RServiceItem();
+            item.setSlash(slash);
+            item.setMySlash(false);
             if (item != null) {
                 this.mSearchMirror.setHint(item.getSearchPlaceholder());
             }
@@ -297,11 +313,7 @@ public class ServiceResultsView extends LinearLayout {
         if (serviceChanged) {
             setServiceImageWithAnimation(slash);
             setSearchMirrorHint(slash);
-            if (RServiceItem.PHOTOS.equals(slash)) {
-                this.mSearchContainer.setVisibility(GONE);
-            } else {
-                this.mSearchContainer.setVisibility(VISIBLE);
-            }
+            this.mSearchContainer.setVisibility(VISIBLE);
             updateCategoryVisibility();
         }
     }
@@ -347,19 +359,12 @@ public class ServiceResultsView extends LinearLayout {
 
     private void onNormalItemClick(RSearchItem searchItem, int position) {
         String source = searchItem.getCorrectService();
-        if (DataManager.gi().isServiceExists(source)) {
-            Realm realm = Realm.getDefaultInstance();
-            RServiceItem serviceItem = DataManager.gi().getServiceBySlash(source);
-            boolean saveSearchItem = (serviceItem.isMyslash() || serviceItem.isStaticService()) ? false : true;
-            realm.executeTransactionAsync(new C04676(source, saveSearchItem, searchItem));
-            realm.close();
-        }
         EventBusExt.getDefault().post(new SearchItemSelectedEvent(source, searchItem, Integer.valueOf(position)));
         reset();
     }
 
     private void onPreviewClicked(int position) {
-        ResultsRecyclerView.openPreview(getContext(), ((RSearchItem) this.mRecycler.getAdapter().getItem(position)).getPreviewUrl());
+        ResultsRecyclerView.openPreview(getContext(), (String) ((RSearchItem) this.mRecycler.getAdapter().getItem(position)).getPreviewUrl());
     }
 
     private boolean isViewShown() {
@@ -367,7 +372,9 @@ public class ServiceResultsView extends LinearLayout {
     }
 
     private void setServiceImage(String slash) {
-        RServiceItem item = DataManager.gi().getServiceBySlash(slash);
+        RServiceItem item = new RServiceItem();
+        item.setSlash(slash);
+        item.setMySlash(false);
         if (item != null) {
             ImageUtils.showColoredImage(this.mSourceImageView, item);
         }

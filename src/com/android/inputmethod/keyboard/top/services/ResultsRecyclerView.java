@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.slash.NeuralApplication;
 import io.separ.neural.inputmethod.slash.RSearchItem;
+import io.separ.neural.inputmethod.slash.RServiceItem;
 import io.separ.neural.inputmethod.slash.TaskQueue;
 
 /**
@@ -23,7 +25,6 @@ import io.separ.neural.inputmethod.slash.TaskQueue;
  */
 public class ResultsRecyclerView extends RecyclerView {
     private SearchItemArrayAdapter mAdapter;
-    private Runnable mAuthorizedListener;
     private boolean mChangeListHeight;
     private RServiceItem mCurrentService;
     private String mCurrentSlash;
@@ -38,7 +39,7 @@ public class ResultsRecyclerView extends RecyclerView {
 
         public void run() {
             ResultsRecyclerView.this.mAdapter.setPageLoadingListener(null);
-            TaskQueue.loadQueueDefault(NeuralApplication.getInstance()).execute(new PhotosSearchItemsTask(ResultsRecyclerView.this.mCurrentSlash, "", ResultsRecyclerView.this.mAdapter.getItemCount()));
+            //TaskQueue.loadQueueDefault(NeuralApplication.getInstance()).execute(new PhotosSearchItemsTask(ResultsRecyclerView.this.mCurrentSlash, "", ResultsRecyclerView.this.mAdapter.getItemCount()));
         }
     }
 
@@ -105,7 +106,9 @@ public class ResultsRecyclerView extends RecyclerView {
             return false;
         }
         this.mCurrentSlash = slash;
-        this.mCurrentService = (RServiceItem) this.mRealm.where(RServiceItem.class).equalTo("slash", this.mCurrentSlash).findFirst();
+        this.mCurrentService = new RServiceItem();
+        this.mCurrentService.setSlash(slash);
+        this.mCurrentService.setMySlash(false);
         this.mAdapter.setServiceItem(this.mCurrentService);
         if (this.mChangeListHeight) {
             if (RServiceItem.PHOTOS.equals(slash)) {
@@ -128,7 +131,7 @@ public class ResultsRecyclerView extends RecyclerView {
             this.mAdapter.setItems(items);
         }
         if (RServiceItem.PHOTOS.equals(this.mCurrentSlash)) {
-            this.mAdapter.setPageLoadingListener(this.mLoadNextPhotosPage);
+            //this.mAdapter.setPageLoadingListener(this.mLoadNextPhotosPage);
         } else {
             this.mAdapter.setPageLoadingListener(null);
         }
@@ -172,11 +175,12 @@ public class ResultsRecyclerView extends RecyclerView {
     }
 
     public boolean requiresPermissionAccess() {
-        return PermissionsManager.requiresPermissionAccess(getContext(), this.mCurrentService);
+        return false;
+        //return PermissionsManager.requiresPermissionAccess(getContext(), this.mCurrentService);
     }
 
     private boolean requiresUnauthPreview(String authorizedStatus, boolean categoryRequiresAuth) {
-        if (this.mCurrentService == null || ((this.mCurrentService.getAuthorizedStatus() != null && !RServiceItem.UNAUTHORIZED.equals(this.mCurrentService.getAuthorizedStatus()) && !RServiceItem.UNAUTHORIZED.equals(authorizedStatus)) || TextUtils.isEmpty(this.mCurrentService.getSocialapp()) || !categoryRequiresAuth)) {
+        if (this.mCurrentService == null) {
             return false;
         }
         return true;
@@ -186,9 +190,9 @@ public class ResultsRecyclerView extends RecyclerView {
         getAdapter().clear();
         RSearchItem connectItem = new RSearchItem();
         connectItem.setDisplayType(RSearchItem.PERMISSION_REQUIRED_TYPE);
-        connectItem.setService(PermissionsManager.getPermissionService(this.mCurrentService));
+        /*connectItem.setService(PermissionsManager.getPermissionService(this.mCurrentService));
         connectItem.setOutput(PermissionsManager.getPermissionMessage(getContext(), this.mCurrentService));
-        connectItem.setTitle(PermissionsManager.getPermissionName(getContext(), this.mCurrentService));
+        connectItem.setTitle(PermissionsManager.getPermissionName(getContext(), this.mCurrentService));*/
         this.mAdapter.add(connectItem);
         invalidateReactViewHack();
     }
@@ -211,7 +215,7 @@ public class ResultsRecyclerView extends RecyclerView {
     }
 
     public void setType(String type) {
-        if (this.mSearchResults != null) {
+        /*if (this.mSearchResults != null) {
             this.mSearchResults.removeChangeListener(this.mSharesListener);
         }
         if (RSearchItem.MEDIA_TYPE.equals(type)) {
@@ -220,16 +224,16 @@ public class ResultsRecyclerView extends RecyclerView {
             return;
         }
         this.mSearchResults = this.mRealm.where(RSearchItem.class).contains("displayType", RSearchItem.DEFAULT_TYPE, Case.INSENSITIVE).findAllSortedAsync("addedTimeStamp", Sort.DESCENDING);
-        this.mSearchResults.addChangeListener(this.mSharesListener);
+        this.mSearchResults.addChangeListener(this.mSharesListener);*/
     }
 
     public void drop() {
-        if (this.mSearchResults != null) {
+        /*if (this.mSearchResults != null) {
             this.mSearchResults.removeChangeListener(this.mSharesListener);
         }
         if (this.mCurrentService != null) {
             this.mCurrentService.removeChangeListener(this.mServiceListener);
-        }
+        }*/
     }
 
     public SearchItemArrayAdapter getAdapter() {
@@ -243,13 +247,13 @@ public class ResultsRecyclerView extends RecyclerView {
     }
 
     public void setAuthorizedStatusListener(Runnable listener) {
-        this.mAuthorizedListener = listener;
+        //this.mAuthorizedListener = listener;
     }
 
     private void listenToAuthorizationChange() {
-        if (this.mCurrentService != null) {
+        /*if (this.mCurrentService != null) {
             this.mPreviousAuthorizedStatus = this.mCurrentService.getAuthorizedStatus();
             this.mCurrentService.addChangeListener(this.mServiceListener);
-        }
+        }*/
     }
 }

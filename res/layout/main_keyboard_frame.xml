@@ -27,10 +27,10 @@
     android:animateLayoutChanges="true" >
     <LinearLayout android:orientation="vertical" android:id="@id/keyboard_top_area"
         android:layout_width="match_parent" android:layout_height="wrap_content">
-        <!--<com.android.inputmethod.keyboard.top.services.ServiceResultsView
+        <com.android.inputmethod.keyboard.top.services.ServiceResultsView
             android:orientation="vertical"
             android:id="@id/suggestion_source_results" android:layout_width="match_parent"
-            android:layout_height="wrap_content" style="?attr/suggestionStripViewStyle" />-->
+            android:layout_height="wrap_content" style="?attr/suggestionStripViewStyle" />
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

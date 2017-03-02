@@ -9,4 +9,25 @@ public class RImage {
     private String size;
     private String url;
     private String width;
+    private float aspectRatio;
+
+    public float getAspectRatio() {
+        return aspectRatio;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public int getResId() {
+        return resId;
+    }
+
+    public String getWidth() {
+        return width;
+    }
+
+    public String getHeight() {
+        return height;
+    }
 }

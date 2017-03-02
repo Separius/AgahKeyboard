@@ -69,6 +69,7 @@ import io.separ.neural.inputmethod.indic.settings.SettingsValues;
 import io.separ.neural.inputmethod.indic.settings.SettingsValuesForSuggestion;
 import io.separ.neural.inputmethod.indic.settings.SpacingAndPunctuations;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripViewAccessor;
+import io.separ.neural.inputmethod.slash.RServiceItem;
 
 /**
  * This class manages the input logic.
@@ -119,6 +120,9 @@ public final class InputLogic {
 
     private boolean isIndic;
     private boolean isTransliteration;
+    private boolean mIsSearchingResults;
+    private StringBuilder mSearchText;
+
     /**
      * Create a new instance of the input logic.
      * @param latinIME the instance of the parent LatinIME. We should remove this when we can.
@@ -136,6 +140,8 @@ public final class InputLogic {
         mInputLogicHandler = InputLogicHandler.NULL_HANDLER;
         mSuggest = new Suggest(dictionaryFacilitator);
         mDictionaryFacilitator = dictionaryFacilitator;
+        mIsSearchingResults = false;
+        mSearchText = new StringBuilder();
     }
 
     /**
@@ -459,38 +465,62 @@ public final class InputLogic {
             mDeleteCount = 0;
         }
         mLastKeyTime = inputTransaction.mTimestamp;
-        mConnection.beginBatchEdit();
-        if (!mWordComposer.isComposingWord()) {
-            // TODO: is this useful? It doesn't look like it should be done here, but rather after
-            // a word is committed.
-            mIsAutoCorrectionIndicatorOn = false;
-        }
-
-        // TODO: Consolidate the double-space period timer, mLastKeyTime, and the space state.
-        if (processedEvent.mCodePoint != Constants.CODE_SPACE || SwipeUtils.changedLanguage) {
-            cancelDoubleSpacePeriodCountdown();
-        }
-
-        Event currentEvent = processedEvent;
-        while (null != currentEvent) {
-            if (currentEvent.isConsumed()) {
-                handleConsumedEvent(currentEvent, inputTransaction);
-            } else if (currentEvent.isFunctionalKeyEvent()) {
-                handleFunctionalEvent(currentEvent, inputTransaction, currentKeyboardScriptId,
-                        handler);
-            } else {
-                handleNonFunctionalEvent(currentEvent, inputTransaction, handler);
+        if (!this.mIsSearchingResults) {
+            mConnection.beginBatchEdit();
+            if (!mWordComposer.isComposingWord()) {
+                // TODO: is this useful? It doesn't look like it should be done here, but rather after
+                // a word is committed.
+                mIsAutoCorrectionIndicatorOn = false;
             }
-            currentEvent = currentEvent.mNextEvent;
+
+            // TODO: Consolidate the double-space period timer, mLastKeyTime, and the space state.
+            if (processedEvent.mCodePoint != Constants.CODE_SPACE || SwipeUtils.changedLanguage) {
+                cancelDoubleSpacePeriodCountdown();
+            }
+
+            Event currentEvent = processedEvent;
+            while (null != currentEvent) {
+                if (currentEvent.isConsumed()) {
+                    handleConsumedEvent(currentEvent, inputTransaction);
+                } else if (currentEvent.isFunctionalKeyEvent()) {
+                    handleFunctionalEvent(currentEvent, inputTransaction, currentKeyboardScriptId,
+                            handler);
+                } else {
+                    handleNonFunctionalEvent(currentEvent, inputTransaction, handler);
+                }
+                currentEvent = currentEvent.mNextEvent;
+            }
+            if (!inputTransaction.didAutoCorrect() && processedEvent.mKeyCode != Constants.CODE_SHIFT
+                    && processedEvent.mKeyCode != Constants.CODE_CAPSLOCK
+                    && processedEvent.mKeyCode != Constants.CODE_SWITCH_ALPHA_SYMBOL)
+                mLastComposedWord.deactivate();
+            if (Constants.CODE_DELETE != processedEvent.mKeyCode) {
+                mEnteredText = null;
+            }
+            mConnection.endBatchEdit();
+        }else if (event.mCodePoint != -1) {
+            this.mSearchText.appendCodePoint(event.mCodePoint);
+        } else if (event.mKeyCode == -5 && this.mSearchText.length() > 0) {
+            this.mSearchText.deleteCharAt(this.mSearchText.length() - 1);
         }
-        if (!inputTransaction.didAutoCorrect() && processedEvent.mKeyCode != Constants.CODE_SHIFT
-                && processedEvent.mKeyCode != Constants.CODE_CAPSLOCK
-                && processedEvent.mKeyCode != Constants.CODE_SWITCH_ALPHA_SYMBOL)
-            mLastComposedWord.deactivate();
-        if (Constants.CODE_DELETE != processedEvent.mKeyCode) {
-            mEnteredText = null;
-        }
-        mConnection.endBatchEdit();
+        /*TODO?
+        * if (monekyMode) {
+            MonkeyData monkeyData;
+            CharSequence textBeforeCursor = null;
+            if (this.mIsSearchingResults) {
+                this.mPreviousSearchedText = this.mCurrentSearchedText;
+                RServiceItem rServiceItem = this.mSelectedService;
+                String stringBuilder = this.mSearchText.toString();
+                this.mCurrentSearchedText = stringBuilder;
+                monkeyData = new MonkeyData(null, rServiceItem, stringBuilder);
+            } else {
+                textBeforeCursor = this.mConnection.getTextBeforeCursor(50, 0);
+                monkeyData = StringLogicHelper.parseMonkeyData(this.mLatinIME.getCurrentKeyboardMode(), textBeforeCursor);
+            }
+            Log.w(TAG, "monkeytext: " + textBeforeCursor + "/search: " + monkeyData.searchQuery);
+            inputTransaction.setRequiresMonkeyUpdates();
+            inputTransaction.setMonkeyData(monkeyData);
+        }*/
         return inputTransaction;
     }
 
@@ -2284,5 +2314,14 @@ public final class InputLogic {
 
     public void setIndic(boolean flag) {
         isIndic = flag;
+    }
+
+    public void stopSearchingResults() {
+        this.mIsSearchingResults = false;
+    }
+
+    public void startSearchingResults(RServiceItem item) {
+        this.mIsSearchingResults = true;
+        this.mSearchText.delete(0, this.mSearchText.length());
     }
 }

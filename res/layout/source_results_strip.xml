@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+        <fr.castorflex.android.smoothprogressbar.SmoothProgressBar android:id="@+id/source_progress" android:visibility="gone" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="-1dp" android:indeterminate="true" app:spb_color="#5dddf3" app:spb_stroke_width="2dp"
+            app:spb_stroke_separator_length="4dp" app:spb_sections_count="2" app:spb_speed="2.0" app:spb_progressiveStart_speed="1.5"
+            app:spb_progressiveStop_speed="3.4" app:spb_reversed="false" app:spb_mirror_mode="false" app:spb_progressiveStart_activated="true" />
+        <com.android.inputmethod.keyboard.top.services.ResultsRecyclerView android:id="@+id/source_recycler" android:paddingLeft="10dp"
+            android:clipToPadding="false" android:layout_width="match_parent" android:layout_height="@dimen/search_results_container_height" />
+        <TextView android:gravity="center" android:id="@+id/source_error" android:visibility="gone" android:layout_width="wrap_content"
+            android:layout_height="@dimen/search_results_height" android:layout_below="@id/source_recycler"/>
+        <com.android.inputmethod.keyboard.top.services.CategoriesRecyclerView android:id="@+id/categories" android:paddingLeft="10dp"
+            android:clipToPadding="false" android:layout_width="match_parent" android:layout_height="@dimen/categories_container_height" android:layout_below="@id/source_error" />
+    </RelativeLayout>
+    <android.support.v7.widget.CardView android:id="@id/card_view" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp" android:layout_marginTop="4dp" android:layout_marginRight="10dp" android:layout_marginBottom="2dp"
+        card_view:cardCornerRadius="@dimen/search_bar_border_radius" card_view:cardElevation="0dp" card_view:cardPreventCornerOverlap="false"
+        card_view:contentPaddingLeft="10dp" card_view:contentPaddingRight="10dp">
+        <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@+id/search_container" android:layout_width="match_parent"
+            android:layout_height="@dimen/search_bar_height">
+            <ImageView android:id="@+id/search_placeholder" android:layout_width="16dp" android:layout_height="16dp" android:layout_marginRight="6dp"
+                android:src="@drawable/services_search_icon" />
+            <TextView android:id="@+id/slash_search_mirror" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.0"/>
+            <com.facebook.drawee.view.SimpleDraweeView android:id="@+id/source_image" android:layout_width="@dimen/service_icon_height"
+                android:layout_height="@dimen/service_icon_height" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</merge>

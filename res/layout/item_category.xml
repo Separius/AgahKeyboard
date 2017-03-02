@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/categories_container_height"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="14sp" android:gravity="center" android:id="@+id/category_name" android:paddingLeft="12dp" android:paddingRight="12dp"
+        android:layout_width="wrap_content" android:layout_height="@dimen/categories_text_height" android:text="LoL" android:fontFamily="sans-serif"/>
+</LinearLayout>

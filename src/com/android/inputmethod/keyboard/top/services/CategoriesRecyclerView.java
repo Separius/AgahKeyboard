@@ -6,12 +6,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.separ.neural.inputmethod.slash.RCategory;
+
 /**
  * Created by sepehr on 3/2/17.
  */
 public class CategoriesRecyclerView extends RecyclerView {
     private CategoriesArrayAdapter mAdapter;
-    private RealmResults<RCategory> mCategoriesResults;
+    private List<RCategory> mCategoriesResults;
     private String mCurrentSlash;
 
     public CategoriesRecyclerView(Context context) {
@@ -43,29 +48,13 @@ public class CategoriesRecyclerView extends RecyclerView {
         if (!this.mCurrentSlash.equals(slash)) {
             getAdapter().setSelectedItem(0);
             this.mCurrentSlash = slash;
-            this.mCategoriesResults = this.mRealm.where(RCategory.class).equalTo(NotificationCompatApi24.CATEGORY_SERVICE, Integer.valueOf(((RServiceItem) this.mRealm.where(RServiceItem.class).equalTo("slash", this.mCurrentSlash).findFirst()).getId())).findAllSorted("order");
+            this.mCategoriesResults = new ArrayList<>();
             getAdapter().setItems(this.mCategoriesResults);
         }
         if (this.mCategoriesResults == null) {
             return 0;
         }
         return this.mCategoriesResults.size();
-    }
-
-    public boolean firstCategoryRequireAuth() {
-        return firstCategoryRequireAuth(this.mCategoriesResults);
-    }
-
-    public static boolean firstCategoryRequireAuth(RealmResults<RCategory> results) {
-        if (results == null) {
-            return false;
-        }
-        for (int i = 0; i <= results.size() - 1; i++) {
-            if (!"aac".equals(((RCategory) results.get(i)).getType())) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public boolean isEmpty() {

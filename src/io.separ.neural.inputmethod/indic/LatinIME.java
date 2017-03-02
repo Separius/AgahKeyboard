@@ -63,6 +63,7 @@ import com.android.inputmethod.keyboard.TextDecoratorUi;
 import com.android.inputmethod.keyboard.top.TopDisplayController;
 import com.android.inputmethod.keyboard.top.actionrow.ActionRowView;
 import com.android.inputmethod.keyboard.top.actionrow.FrequentEmojiHandler;
+import com.android.inputmethod.keyboard.top.services.SearchItemSelectedEvent;
 import com.android.inputmethod.latin.utils.ApplicationUtils;
 import com.android.inputmethod.latin.utils.CapsModeUtils;
 import com.android.inputmethod.latin.utils.CoordinateUtils;
@@ -77,6 +78,9 @@ import com.android.inputmethod.latin.utils.StatsUtils;
 import com.android.inputmethod.latin.utils.SubtypeLocaleUtils;
 import com.android.inputmethod.latin.utils.ViewLayoutUtils;
 import com.squareup.leakcanary.LeakCanary;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -260,7 +264,9 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     @Override
     public void onServiceClicked(int serviceId){
-        //TODO call serviceViewController, hide actionView, change state of emoji button
+        //TODO call serviceViewController, hide actionView, change state of emoji button, change the state of input connection
+        this.mTopDisplayController.runSearch(serviceId, "");
+        this.mInputLogic.startSearchingResults(null);
     }
 
     public static final class UIHandler extends LeakGuardHandlerWrapper<LatinIME> {
@@ -2186,10 +2192,11 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             }
         }
 
+        @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEventMainThread(SearchItemSelectedEvent event) {
             LatinIME.this.mInputLogic.stopSearchingResults();
-            if (ShareUtils.shareMediaThroughIntent(LatinIME.this, event.getItem(), LatinIME.this.mHostPackageName))
-                return;
+            /*if (ShareUtils.shareMediaThroughIntent(LatinIME.this, event.getItem(), LatinIME.this.mHostPackageName))
+                return;*/
             shareItemThroughText(event);
         }
 
@@ -2198,26 +2205,29 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             if (TextUtils.isEmpty(output)) {
                 output = event.getItem().getSlashShort();
             }
-            if (LatinIME.this.mSettings.getCurrent().mCopySearchOutputEnabled) {
+            /*if (LatinIME.this.mSettings.getCurrent().mCopySearchOutputEnabled) {
                 ((ClipboardManager) LatinIME.this.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText(event.getItem().getTitle(), output));
-            }
+            }*/
             NeuralApplication.getInstance();
             String stringToReplace = event.getItem().getAnyOutput();
             if (stringToReplace == null) {
                 stringToReplace = "";
             }
-            LatinIME.this.mInputLogic.replaceCommandForOutput("", stringToReplace, false);
-            LatinIME.this.mKeyboardSwitcher.setAlphabetKeyboardExternal(LatinIME.this.getCurrentAutoCapsState(), LatinIME.this.getCurrentRecapitalizeState());
+            //LatinIME.this.mInputLogic.replaceCommandForOutput("", stringToReplace, false);
+            //LatinIME.this.mKeyboardSwitcher.setAlphabetKeyboardExternal(LatinIME.this.getCurrentAutoCapsState(), LatinIME.this.getCurrentRecapitalizeState());
         }
 
+        @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEventMainThread(ServiceRequestEvent event) {
             LatinIME.this.mTopDisplayController.setVisualState(event.getState());
         }
 
+        @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEventMainThread(SearchRetryErrorEvent event) {
             LatinIME.this.mTopDisplayController.showRetryErrorMessage(event.isNetworkError());
         }
 
+        @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEventMainThread(SearchResultsEvent event) {
             LatinIME.this.mTopDisplayController.setSearchItems(event.getSource(), event.getItems(), event.getAuthorizedStatus());
         }

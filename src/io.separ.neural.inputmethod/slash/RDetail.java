@@ -28,4 +28,40 @@ public class RDetail {
     @SerializedName("view_count")
     private String viewCount;
     private String views;
+
+    public String getViews() {
+        return views;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public String getRetweets() {
+        return retweets;
+    }
+
+    public String getFavorites() {
+        return favorites;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getRating() {
+        return rating;
+    }
 }

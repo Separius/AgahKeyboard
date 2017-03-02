@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout fresco:gravity="center"
+    fresco:orientation="vertical"
+    fresco:layout_width="wrap_content"
+    fresco:layout_height="@dimen/icon_height"
+    xmlns:fresco="http://schemas.android.com/apk/res/android">
+    <TextView fresco:textSize="14sp" fresco:gravity="center" fresco:id="@+id/header" fresco:paddingLeft="10dp" fresco:paddingRight="10dp" fresco:layout_width="match_parent" fresco:layout_height="wrap_content" fresco:text="@string/service_result_empty" fresco:lines="2"/>
+</LinearLayout>

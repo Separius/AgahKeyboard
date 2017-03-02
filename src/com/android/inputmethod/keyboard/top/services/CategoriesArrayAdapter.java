@@ -6,10 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import io.separ.neural.inputmethod.Utils.ColorUtils;
+import io.separ.neural.inputmethod.colors.ColorProfile;
+import io.separ.neural.inputmethod.indic.R;
+import io.separ.neural.inputmethod.slash.RCategory;
+
 /**
  * Created by sepehr on 3/2/17.
  */
-public class CategoriesArrayAdapter extends ArrayAdapter<RCategory, CategoryViewHolder> {
+public class CategoriesArrayAdapter extends ArrayAdapter<RCategory, CategoriesArrayAdapter.CategoryViewHolder> {
     private IOnClickListener mClickListener;
     private int mSelectedItem;
 
@@ -38,16 +43,16 @@ public class CategoriesArrayAdapter extends ArrayAdapter<RCategory, CategoryView
         public CategoryViewHolder(View view, IOnClickListener clickListener) {
             super(view);
             this.mClickListener = clickListener;
-            this.name = (TextView) view.findViewById(C0394R.id.name);
+            this.name = (TextView) view.findViewById(R.id.category_name);
             view.setOnClickListener(new C04431(CategoriesArrayAdapter.this));
         }
 
         public void update(RCategory item, int position) {
             this.mPosition = position;
             this.name.setText(item.getName());
-            this.name.setTextColor(ImageUtils.getCategoryTextColor(CategoriesArrayAdapter.this.getContext()));
+            this.name.setTextColor(ColorUtils.colorProfile.getTextColor());
             if (CategoriesArrayAdapter.this.mSelectedItem == position) {
-                this.name.setBackgroundResource(ImageUtils.getCategoryBg());
+                this.name.setBackgroundResource(ColorUtils.colorProfile.getPrimary());
             } else {
                 this.name.setBackgroundColor(0);
             }
@@ -76,7 +81,7 @@ public class CategoriesArrayAdapter extends ArrayAdapter<RCategory, CategoryView
         if (this.mSelectedItem == -1 || getItemCount() == 0) {
             return null;
         }
-        return ((RCategory) getItem(this.mSelectedItem)).getAction();
+        return getItem(this.mSelectedItem).getAction();
     }
 
     public int getSelectedCategoryIndex() {
@@ -84,10 +89,10 @@ public class CategoriesArrayAdapter extends ArrayAdapter<RCategory, CategoryView
     }
 
     public CategoryViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        return new CategoryViewHolder(getLayoutInflater().inflate(C0394R.layout.item_category, viewGroup, false), this.mClickListener);
+        return new CategoryViewHolder(getLayoutInflater().inflate(R.layout.item_category, viewGroup, false), this.mClickListener);
     }
 
     public void onBindViewHolder(CategoryViewHolder vh, int pos) {
-        vh.update((RCategory) getItem(pos), pos);
+        vh.update(getItem(pos), pos);
     }
 }

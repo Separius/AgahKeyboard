@@ -1,7 +1,9 @@
 package io.separ.neural.inputmethod.slash;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.SubscriberExceptionEvent;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by sepehr on 3/2/17.
@@ -31,6 +33,7 @@ public class EventBusExt {
             }
         }
 
+        @Subscribe(threadMode = ThreadMode.BACKGROUND)
         public void onEvent(SubscriberExceptionEvent exceptionEvent) {
             new C03411(exceptionEvent.throwable).start();
         }

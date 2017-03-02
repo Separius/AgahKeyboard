@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="categories_text_height">26.0dip</dimen>
+    <dimen name="icon_height">102.0dip</dimen>
+    <dimen name="icon_height_big">132.0dip</dimen>
+    <dimen name="search_loading_item_width">234.0dip</dimen>
+    <dimen name="card_search_item_radius">8.0dip</dimen>
+    <dimen name="icon_width">102.0dip</dimen>
+    <dimen name="search_result_width">132.0dip</dimen>
+    <dimen name="search_results_container_height">112.0dip</dimen>
+    <dimen name="search_results_container_height_big">141.0dip</dimen>
+    <dimen name="search_results_height">112.0dip</dimen>
+</resources>

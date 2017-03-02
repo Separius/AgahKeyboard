@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,6 +39,7 @@ public abstract class BaseTaskQueue {
             switch (msg.what) {
                 case INSERT_TASK /*0*/:
                     BaseTaskQueue.this.insertTask((Task) msg.obj);
+                    break;
                 case POLL_TASK /*1*/:
                     if (BaseTaskQueue.this.currentTask == null) {
                         Task task = (Task) BaseTaskQueue.this.tasks.poll();
@@ -57,6 +59,7 @@ public abstract class BaseTaskQueue {
                         }
                         BaseTaskQueue.this.callQueueFinished();
                     }
+                    break;
                 case POST_EXE /*2*/:
                     Task tempTask = BaseTaskQueue.this.currentTask;
                     BaseTaskQueue.this.currentTask = null;
@@ -64,6 +67,7 @@ public abstract class BaseTaskQueue {
                     for (QueueListener listener22 : BaseTaskQueue.this.listeners) {
                         listener22.taskFinished(BaseTaskQueue.this, tempTask);
                     }
+                    break;
                 case THROW /*3*/:
                     Throwable cause = (Throwable) msg.obj;
                     if (cause instanceof RuntimeException) {
@@ -71,6 +75,7 @@ public abstract class BaseTaskQueue {
                     } else if (cause instanceof Error) {
                         throw ((Error) cause);
                     } else {
+                        cause.printStackTrace();
                         throw new RuntimeException(cause);
                     }
                 default:
