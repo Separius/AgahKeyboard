@@ -1,4 +1,4 @@
-package com.android.inputmethod.keyboard.actionrow;
+package com.android.inputmethod.keyboard.top.actionrow;
 
 import android.content.Context;
 import android.content.SharedPreferences;

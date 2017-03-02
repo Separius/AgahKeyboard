@@ -10,4 +10,8 @@
     <item type="id" name="cut">false</item>
     <item type="id" name="paste">false</item>
     <item type="id" name="select">false</item>
+    <item type="id" name="keyboard_top_area">false</item>
+    <item type="id" name="suggestion_strip_hacky_container">false</item>
+    <item type="id" name="suggestion_source_results">false</item>
+    <item type="id" name="services_bar">false</item>
 </resources>

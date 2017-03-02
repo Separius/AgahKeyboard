@@ -30,7 +30,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.android.inputmethod.keyboard.KeyboardLayoutSet.KeyboardLayoutSetException;
-import com.android.inputmethod.keyboard.actionrow.ActionRowView;
+import com.android.inputmethod.keyboard.top.actionrow.ActionRowView;
 import com.android.inputmethod.keyboard.emoji.EmojiPalettesView;
 import com.android.inputmethod.keyboard.emoji.MediaBottomBar;
 import com.android.inputmethod.keyboard.internal.KeyboardState;
