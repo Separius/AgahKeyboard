@@ -106,9 +106,7 @@ public class ResultsRecyclerView extends RecyclerView {
             return false;
         }
         this.mCurrentSlash = slash;
-        this.mCurrentService = new RServiceItem();
-        this.mCurrentService.setSlash(slash);
-        this.mCurrentService.setMySlash(false);
+        this.mCurrentService = RServiceItem.serviceItemHashMap.get(slash);
         this.mAdapter.setServiceItem(this.mCurrentService);
         if (this.mChangeListHeight) {
             if (RServiceItem.PHOTOS.equals(slash)) {

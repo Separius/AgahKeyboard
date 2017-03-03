@@ -105,7 +105,8 @@ public final class AudioAndHapticFeedbackManager {
     }
 
     public void performHapticFeedback(final View viewToPerformHapticFeedbackOn) {
-        if (!mSettingsValues.mVibrateOn) {
+        return;
+        /*if (!mSettingsValues.mVibrateOn) {
             return;
         }
         if (mSettingsValues.mKeypressVibrationDuration >= 0) {
@@ -117,7 +118,7 @@ public final class AudioAndHapticFeedbackManager {
             viewToPerformHapticFeedbackOn.performHapticFeedback(
                     HapticFeedbackConstants.KEYBOARD_TAP,
                     HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-        }
+        }*/
     }
 
     public void onSettingsChanged(final SettingsValues settingsValues) {

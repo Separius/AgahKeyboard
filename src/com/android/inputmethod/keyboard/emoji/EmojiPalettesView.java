@@ -246,6 +246,10 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
         public boolean isViewFromObject(View view, Object object) {
             return view == object;
         }
+
+        public void updateColor(int primary) {
+
+        }
     }
 
     public void onColorChange(ColorProfile newProfile){
@@ -262,6 +266,8 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
         }
         if(mEmojiTopBar != null)
             mEmojiTopBar.setBackgroundColor(darkBackground);
+        mEmojiPager.setBackgroundColor(colorProfile.getPrimary());
+        mEmojiPalettesAdapter.updateColor(colorProfile.getPrimary());
     }
 
     @Override

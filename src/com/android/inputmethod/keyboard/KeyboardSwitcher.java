@@ -221,7 +221,6 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     // Implements {@link KeyboardState.SwitchActions}.
     @Override
     public void setAlphabetKeyboard() {
-        mActionRowView.setActionRowVisible();
         setKeyboard(mKeyboardLayoutSet.getKeyboard(KeyboardId.ELEMENT_ALPHABET));
     }
 
@@ -408,9 +407,9 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mMediaBottomBar.setKeyboardActionListener(mLatinIME);
         ColorManager.addObserver(mEmojiPalettesView);
         ColorManager.addObserver(mMediaBottomBar);
-        this.mActionRowView = (ActionRowView) this.mCurrentInputView.findViewById(R.id.action_row);
-        this.mActionRowView.setListener(this.mLatinIME);
-        mActionRowView.setCircleIndicator((CircleIndicator) this.mCurrentInputView.findViewById(R.id.actionrow_page_indicator));
+        mActionRowView = (ActionRowView) mCurrentInputView.findViewById(R.id.action_row);
+        mActionRowView.setListener(this.mLatinIME);
+        mActionRowView.setCircleIndicator((CircleIndicator) mCurrentInputView.findViewById(R.id.actionrow_page_indicator));
         return mCurrentInputView;
     }
 

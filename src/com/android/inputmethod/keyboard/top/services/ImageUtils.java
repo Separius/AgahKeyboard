@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.inputmethod.keyboard.KeyboardTheme;
 import com.facebook.common.util.UriUtil;
@@ -48,17 +49,7 @@ public class ImageUtils {
     }
 
     public static void showColoredImage(SimpleDraweeView target, RServiceItem serviceItem, boolean forceLightTheme) {
-        if ((isLightTheme() || forceLightTheme) && !TextUtils.isEmpty(serviceItem.getImageLight())) {
-            setPlaceholder(target, getDrawableId("cache_" + serviceItem.getSlash() + "_light"));
-            target.setImageURI(Uri.parse(serviceItem.getImageLight()));
-        } else if (!isLightTheme() && !TextUtils.isEmpty(serviceItem.getImageDark())) {
-            setPlaceholder(target, getDrawableId("cache_" + serviceItem.getSlash() + "_dark"));
-            target.setImageURI(Uri.parse(serviceItem.getImageDark()));
-        } else if (TextUtils.isEmpty(serviceItem.getResId())) {
-            showImageFromRessources(target, getDrawableId("icon_myslash"), false, 0);
-        } else {
-            showImageFromRessources(target, getDrawableId("cache_" + serviceItem.getResId() + "_light"), false, 0);
-        }
+        showImageFromRessources(target, getDrawableId("cache_" + serviceItem.getSlash() + "_light"), false, 0);
     }
 
     public static void showSearchItemImage(SimpleDraweeView target, RSearchItem searchItem) {
@@ -96,30 +87,6 @@ public class ImageUtils {
         hierarchy.setFadeDuration(100);
     }
 
-    /*public static void showMonochromeImage(SimpleDraweeView target, RServiceItem serviceItem, int colorFilter) {
-        if (serviceItem.isMyslash()) {
-            String slashPrefix = "/" + serviceItem.getSlash().substring(0, Math.min(3, serviceItem.getSlash().length()));
-            target.setImageURI(Uri.parse(serviceItem.getSlash()));
-            target.setImageURI(Uri.parse(serviceItem.getSlash()));
-            Drawable drawable = TextDrawable.builder().beginConfig().fontSize((int) (NeuralApplication.getInstance().getResources().getDimension(R.dimen.config_suggestions_strip_height) * 0.34f)).textColor(colorFilter).bold().endConfig().buildRect(slashPrefix.toUpperCase(), 0);
-            drawable.setPadding(new Rect());
-            target.getHierarchy().setPlaceholderImage(drawable);
-            return;
-        }
-        target.setColorFilter(new PorterDuffColorFilter(colorFilter, PorterDuff.Mode.SRC_ATOP));
-        int ressourceId = getDrawableId("cache_" + serviceItem.getSlash() + "_bar");
-        if (ressourceId != 0) {
-            ((GenericDraweeHierarchy) target.getHierarchy()).setPlaceholderImage(NeuralApplication.getInstance().getResources().getDrawable(ressourceId), ScalingUtils.ScaleType.FIT_CENTER);
-        } else {
-            ((GenericDraweeHierarchy) target.getHierarchy()).setPlaceholderImage(null);
-        }
-        if (TextUtils.isEmpty(serviceItem.getImageBar())) {
-            target.setImageURI(Uri.parse(""));
-        } else {
-            target.setImageURI(Uri.parse(serviceItem.getImageBar()));
-        }
-    }*/
-
     public static void showImageFromRessources(SimpleDraweeView target, int resId, boolean applyFilter, int colorFilter) {
         Uri uri = new Uri.Builder().scheme(UriUtil.LOCAL_RESOURCE_SCHEME).path(String.valueOf(resId)).build();
         if (applyFilter) {
@@ -128,31 +95,11 @@ public class ImageUtils {
         target.setImageURI(uri);
     }
 
-    public static void updateTheme(Context context) {
-        sThemeId = KeyboardTheme.getKeyboardTheme(PreferenceManager.getDefaultSharedPreferences(context)).mThemeId;
-    }
-
     public static int getThemeId() {
         return sThemeId;
     }
 
-    public static boolean isLightTheme(int themeId) {
-        return themeId == 2 || themeId == 5;
-    }
-
-    public static boolean isLightTheme() {
-        return isLightTheme(sThemeId);
-    }
-
     private static int getDrawableId(String resName) {
         return NeuralApplication.getInstance().getResources().getIdentifier(resName, "drawable", NeuralApplication.getInstance().getPackageName());
-    }
-
-    private static void setPlaceholder(SimpleDraweeView target, int resId) {
-        if (resId != 0) {
-            target.getHierarchy().setPlaceholderImage(NeuralApplication.getInstance().getResources().getDrawable(resId), ScalingUtils.ScaleType.FIT_CENTER);
-        } else {
-            target.getHierarchy().setPlaceholderImage(null);
-        }
     }
 }

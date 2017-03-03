@@ -98,12 +98,10 @@ public class ServiceRequestManager {
                 shouldShowLoading = false;
             }
             if (shouldDoRequest) {
-                RServiceItem service = null;
-                if (service != null) {
+                RServiceItem service = RServiceItem.serviceItemHashMap.get(slash);
+                if (service != null)
                     isLocationAware = service.isLocation_aware();
-                }
                 this.request = new C04101(slash, query, action, isLocationAware, useCache);
-                //this.request = new C04101("google", "Hello", action, false, false);
             }
             this.handler.postDelayed(this.request, 0);
             if (shouldShowLoading) {

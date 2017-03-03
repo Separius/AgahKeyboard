@@ -99,4 +99,12 @@ public class RSearchItem {
     public String getAnyOutput() {
         return anyOutput;
     }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setPreviewUrl(String previewUrl) {
+        this.previewUrl = previewUrl;
+    }
 }

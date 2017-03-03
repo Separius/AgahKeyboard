@@ -1,6 +1,7 @@
 package com.android.inputmethod.keyboard.top.services;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
@@ -8,6 +9,7 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -117,11 +119,14 @@ public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItem
         public void updatePosition(RSearchItem item, int position) {
             this.mPosition = position;
             if (this.preview == null) {
+                Log.e("SEPAR", "updatePosition: 1");
                 return;
             }
             if (TextUtils.isEmpty(item.getPreviewUrl())) {
+                Log.e("SEPAR", "updatePosition: 2");
                 this.preview.setVisibility(View.GONE);
             } else {
+                Log.e("SEPAR", "updatePosition: 3");
                 this.preview.setVisibility(View.VISIBLE);
             }
         }
@@ -233,12 +238,17 @@ public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItem
                 break;
             case RESULT_TYPE_GENERIC_MESSAGE /*6*/:
                 vh.header.setText(item.getTitle());
-                vh.header.setTextColor(ColorUtils.colorProfile.getTextColor());
                 break;
             case RESULT_TYPE_LOADING:
                 vh.loading.setVisibility(View.VISIBLE);
                 vh.titleContainer.setVisibility(View.VISIBLE);
         }
+        if(vh.header != null)
+            vh.header.setTextColor(Color.WHITE);
+        if(vh.subheader != null)
+            vh.subheader.setTextColor(Color.WHITE);
+        if(vh.bottom != null)
+            vh.bottom.setTextColor(Color.WHITE);
         if (pos > getItemCount() - 2 && this.mLoadNextPage != null) {
             this.mLoadNextPage.run();
         }
@@ -253,7 +263,6 @@ public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItem
             }
         }
         vh.header.setText(str);
-        vh.header.setTextColor(ColorUtils.colorProfile.getTextColor());
         vh.connectButton.setText(buttonText);
         if (serviceItem != null) {
             ImageUtils.showColoredImage(vh.imageView, serviceItem);

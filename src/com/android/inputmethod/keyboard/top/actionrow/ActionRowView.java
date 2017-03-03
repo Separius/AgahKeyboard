@@ -167,7 +167,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         DEFAULT_SUGGESTED_EMOJI = "\u2764,\ud83d\ude15,\ud83d\ude18,\ud83d\ude22,\ud83d\ude3b,\ud83d\ude0a,\ud83d\ude09,\ud83d\ude0d".split("\\s*,\\s*");
         SERVICE_IMAGE_IDS = new int[] {R.id.gif_service_action_button, R.id.maps_service_action_button, R.id.google_service_action_button,
                 R.id.customization_service_action_button, R.id.contacts_service_action_button, R.id.foursquare_service_action_button};
-        DEFAULT_SERVICES = new String[] {"gif","maps","google","customization","contacts","foursquare"};
+        DEFAULT_SERVICES = new String[] {"giphy","maps","google","customization","contacts","foursquare"};
     }
 
     public void setCircleIndicator(CircleIndicator ci){
@@ -189,7 +189,8 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
 
     public void setAdapter(ActionRowAdapter adapter) {
         super.setAdapter(adapter);
-        setCurrentItem(mListener==null?0:currentPage, false); //TODO hold state
+        //setCurrentItem(currentPage, false);
+        //mIndicator.setViewPager(this);
     }
 
     protected void onPageScrolled(int position, float offset, int offsetPixels) {
@@ -208,13 +209,6 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         ColorManager.addObserverAndCall(this);
-    }
-
-    public void setActionRowVisible() {
-        /*layoutToShow = ActionRowSettingsActivity.DEFAULT_LAYOUTS.split("\\s*,\\s*");
-        adapter = new ActionRowAdapter();
-        Log.e("SEPAR", "adap3");
-        setAdapter(adapter);*/
     }
 
     private void init() {

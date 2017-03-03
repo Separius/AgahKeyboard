@@ -52,7 +52,8 @@ public class CategoriesArrayAdapter extends ArrayAdapter<RCategory, CategoriesAr
             this.name.setText(item.getName());
             this.name.setTextColor(ColorUtils.colorProfile.getTextColor());
             if (CategoriesArrayAdapter.this.mSelectedItem == position) {
-                this.name.setBackgroundResource(ColorUtils.colorProfile.getPrimary());
+                //this.name.setBackgroundResource(ColorUtils.colorProfile.getPrimary());
+                this.name.setBackgroundColor(0);
             } else {
                 this.name.setBackgroundColor(0);
             }

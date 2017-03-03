@@ -255,6 +255,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     @Override
     public void onServiceClicked(String serviceId){
         //change the state of input connection
+        if(serviceId.equals("customization"))
+            return;
         this.mTopDisplayController.runSearch(serviceId, mInputLogic.mConnection.getmComposingText().toString());
         this.mInputLogic.startSearchingResults();
     }
@@ -340,6 +342,9 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 latinIme.mInputLogic.onUpdateTailBatchInputCompleted(
                         latinIme.mSettings.getCurrent(),
                         (SuggestedWords) msg.obj, latinIme.mKeyboardSwitcher);
+                if(latinIme.mInputLogic.isSearchingResults()){
+                    latinIme.mTopDisplayController.runSearch(latinIme.mInputLogic.getSearchText());
+                }
                 break;
             case MSG_RESET_CACHES:
                 final SettingsValues settingsValues = latinIme.mSettings.getCurrent();
@@ -661,6 +666,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     }
 
     public void finishCalculatingProfile() {
+        mSuggestionStripView.setBackgroundColor(ColorUtils.colorProfile.getPrimary());
         this.colorManager.setDarkFactor(0.4f);
     }
 
@@ -1494,16 +1500,21 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 mInputLogic.onCodeInput(mSettings.getCurrent(), event,
                         mKeyboardSwitcher.getKeyboardShiftMode(),
                         mKeyboardSwitcher.getCurrentKeyboardScriptId(), mHandler);
-        updateSearchAfterCodeInput(codeToSend);
+        int newCodePoint = updateSearchAfterCodeInput(codePoint);
         updateStateAfterInputTransaction(completeInputTransaction);
-        mKeyboardSwitcher.onCodeInput(codePoint, getCurrentAutoCapsState(),
+        mKeyboardSwitcher.onCodeInput(newCodePoint, getCurrentAutoCapsState(),
                 getCurrentRecapitalizeState());
     }
 
-    private void updateSearchAfterCodeInput(int codeToSend){
-        //todo if codetosend is not finish
-        if(mInputLogic.isSearchingResults())
+    private int updateSearchAfterCodeInput(int codeToSend){
+        if(codeToSend == Constants.CODE_EMOJI && mInputLogic.isSearchingResults()){
+            LatinIME.this.mInputLogic.stopSearchingResults();
+            mTopDisplayController.hideAll();
+            return Constants.CODE_UNSPECIFIED;
+        }
+        if(mInputLogic.isSearchingResults() && mInputLogic.getShouldReSearch())
             mTopDisplayController.runSearch(mInputLogic.getSearchText());
+        return codeToSend;
     }
 
     // A helper method to split the code point and the key code. Ultimately, they should not be
@@ -2199,39 +2210,43 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             mTopDisplayController.hideAll();
             /*if (ShareUtils.shareMediaThroughIntent(LatinIME.this, event.getItem(), LatinIME.this.mHostPackageName))
                 return;*/
-            //shareItemThroughText(event);
+            shareItemThroughText(event);
         }
 
         private void shareItemThroughText(SearchItemSelectedEvent event) {
             String output = event.getItem().getOutput();
-            if (TextUtils.isEmpty(output)) {
+            Log.e("Item Click Text", output);
+            /*if (TextUtils.isEmpty(output)) {
                 output = event.getItem().getSlashShort();
             }
-            /*if (LatinIME.this.mSettings.getCurrent().mCopySearchOutputEnabled) {
+            *//*if (LatinIME.this.mSettings.getCurrent().mCopySearchOutputEnabled) {
                 ((ClipboardManager) LatinIME.this.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText(event.getItem().getTitle(), output));
-            }*/
+            }*//*
             NeuralApplication.getInstance();
             String stringToReplace = event.getItem().getAnyOutput();
             if (stringToReplace == null) {
                 stringToReplace = "";
-            }
+            }*/
             //LatinIME.this.mInputLogic.replaceCommandForOutput("", stringToReplace, false);
             //LatinIME.this.mKeyboardSwitcher.setAlphabetKeyboardExternal(LatinIME.this.getCurrentAutoCapsState(), LatinIME.this.getCurrentRecapitalizeState());
         }
 
         @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEventMainThread(ServiceRequestEvent event) {
-            LatinIME.this.mTopDisplayController.setVisualState(event.getState());
+            if(mInputLogic.isSearchingResults())
+                LatinIME.this.mTopDisplayController.setVisualState(event.getState());
         }
 
         @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEventMainThread(SearchRetryErrorEvent event) {
-            LatinIME.this.mTopDisplayController.showRetryErrorMessage(event.isNetworkError());
+            if(mInputLogic.isSearchingResults())
+                LatinIME.this.mTopDisplayController.showRetryErrorMessage(event.isNetworkError());
         }
 
         @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEventMainThread(SearchResultsEvent event) {
-            LatinIME.this.mTopDisplayController.setSearchItems(event.getSource(), event.getItems(), event.getAuthorizedStatus());
+            if(mInputLogic.isSearchingResults())
+                LatinIME.this.mTopDisplayController.setSearchItems(event.getSource(), event.getItems(), event.getAuthorizedStatus());
         }
     }
 }

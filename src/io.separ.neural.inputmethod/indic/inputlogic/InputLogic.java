@@ -71,6 +71,8 @@ import io.separ.neural.inputmethod.indic.settings.SpacingAndPunctuations;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripViewAccessor;
 import io.separ.neural.inputmethod.slash.RServiceItem;
 
+import static io.separ.neural.inputmethod.event.InputTransaction.SHIFT_UPDATE_NOW;
+
 /**
  * This class manages the input logic.
  */
@@ -122,6 +124,7 @@ public final class InputLogic {
     private boolean isTransliteration;
     private boolean mIsSearchingResults;
     private StringBuilder mSearchText;
+    private boolean shouldReSearch;
 
     /**
      * Create a new instance of the input logic.
@@ -265,7 +268,7 @@ public final class InputLogic {
         mSpaceState = SpaceState.NONE;
         mEnteredText = text;
         inputTransaction.setDidAffectContents();
-        inputTransaction.requireShiftUpdate(InputTransaction.SHIFT_UPDATE_NOW);
+        inputTransaction.requireShiftUpdate(SHIFT_UPDATE_NOW);
         return inputTransaction;
     }
 
@@ -333,7 +336,7 @@ public final class InputLogic {
         if (suggestionInfo.isKindOf(SuggestedWordInfo.KIND_APP_DEFINED)) {
             mSuggestedWords = SuggestedWords.EMPTY;
             mSuggestionStripViewAccessor.setNeutralSuggestionStrip();
-            inputTransaction.requireShiftUpdate(InputTransaction.SHIFT_UPDATE_NOW);
+            inputTransaction.requireShiftUpdate(SHIFT_UPDATE_NOW);
             resetComposingState(true /* alsoResetLastComposedWord */);
             mConnection.commitCompletion(suggestionInfo.mApplicationSpecifiedCompletionInfo);
             mConnection.endBatchEdit();
@@ -348,7 +351,7 @@ public final class InputLogic {
         mLastComposedWord.deactivate();
         // Space state must be updated before calling updateShiftState
         mSpaceState = SpaceState.PHANTOM;
-        inputTransaction.requireShiftUpdate(InputTransaction.SHIFT_UPDATE_NOW);
+        inputTransaction.requireShiftUpdate(SHIFT_UPDATE_NOW);
 
         if (shouldShowAddToDictionaryHint) {
             mSuggestionStripViewAccessor.showAddToDictionaryHint(suggestion);
@@ -499,9 +502,13 @@ public final class InputLogic {
             }
             mConnection.endBatchEdit();
         }else if (event.mCodePoint != -1) {
-            this.mSearchText.appendCodePoint(event.mCodePoint);
+            this.mSearchText.appendCodePoint(Character.toLowerCase(event.mCodePoint));
+            this.shouldReSearch = true;
         } else if (event.mKeyCode == -5 && this.mSearchText.length() > 0) {
             this.mSearchText.deleteCharAt(this.mSearchText.length() - 1);
+            this.shouldReSearch = true;
+        }else{
+            this.shouldReSearch = false;
         }
         return inputTransaction;
     }
@@ -582,7 +589,7 @@ public final class InputLogic {
             final InputPointers batchPointers,
             // TODO: remove these arguments
             final KeyboardSwitcher keyboardSwitcher) {
-        if (settingsValues.mPhraseGestureEnabled) {
+        /*if (settingsValues.mPhraseGestureEnabled) {
             final SuggestedWordInfo candidate = mSuggestedWords.getAutoCommitCandidate();
             // If these suggested words have been generated with out of date input pointers, then
             // we skip auto-commit (see comments above on the mSequenceNumber member).
@@ -601,7 +608,7 @@ public final class InputLogic {
                     ++mAutoCommitSequenceNumber;
                 }
             }
-        }
+        }*/
         mInputLogicHandler.onUpdateBatchInput(batchPointers, mAutoCommitSequenceNumber);
     }
 
@@ -663,16 +670,16 @@ public final class InputLogic {
         // A consumed event may have text to commit and an update to the composing state, so
         // we evaluate both. With some combiners, it's possible than an event contains both
         // and we enter both of the following if clauses.
-        final CharSequence textToCommit = event.getTextToCommit();
-        if (!TextUtils.isEmpty(textToCommit)) {
-            mConnection.commitText(textToCommit, 1);
-            inputTransaction.setDidAffectContents();
-        }
-        if (mWordComposer.isComposingWord()) {
-            setComposingTextInternal(mWordComposer.getTypedWord(), 1);
-            inputTransaction.setDidAffectContents();
-            inputTransaction.setRequiresUpdateSuggestions();
-        }
+            final CharSequence textToCommit = event.getTextToCommit();
+            if (!TextUtils.isEmpty(textToCommit)) {
+                mConnection.commitText(textToCommit, 1);
+                inputTransaction.setDidAffectContents();
+            }
+            if (mWordComposer.isComposingWord()) {
+                setComposingTextInternal(mWordComposer.getTypedWord(), 1);
+                inputTransaction.setDidAffectContents();
+                inputTransaction.setRequiresUpdateSuggestions();
+            }
     }
 
     /**
@@ -698,7 +705,7 @@ public final class InputLogic {
                 break;
             case Constants.CODE_SHIFT:
                 performRecapitalization(inputTransaction.mSettingsValues);
-                inputTransaction.requireShiftUpdate(InputTransaction.SHIFT_UPDATE_NOW);
+                inputTransaction.requireShiftUpdate(SHIFT_UPDATE_NOW);
                 if (mSuggestedWords.isPrediction()) {
                     inputTransaction.setRequiresUpdateSuggestions();
                 }
@@ -1026,7 +1033,7 @@ public final class InputLogic {
             mSuggestionStripViewAccessor.setNeutralSuggestionStrip();
         }
 
-        inputTransaction.requireShiftUpdate(InputTransaction.SHIFT_UPDATE_NOW);
+        inputTransaction.requireShiftUpdate(SHIFT_UPDATE_NOW);
     }
 
     /**
@@ -1050,7 +1057,7 @@ public final class InputLogic {
         // can't go any further back, so we can update right away even if it's a key repeat.
         final int shiftUpdateKind =
                 event.isKeyRepeat() && mConnection.getExpectedSelectionStart() > 0
-                ? InputTransaction.SHIFT_UPDATE_LATER : InputTransaction.SHIFT_UPDATE_NOW;
+                ? InputTransaction.SHIFT_UPDATE_LATER : SHIFT_UPDATE_NOW;
         inputTransaction.requireShiftUpdate(shiftUpdateKind);
 
         if (mWordComposer.isCursorFrontOrMiddleOfComposingWord()) {
@@ -1198,7 +1205,7 @@ public final class InputLogic {
         mConnection.deleteSurroundingText(1, 0);
         final String text = event.getTextToCommit() + " ";
         mConnection.commitText(text, 1);
-        inputTransaction.requireShiftUpdate(InputTransaction.SHIFT_UPDATE_NOW);
+        inputTransaction.requireShiftUpdate(SHIFT_UPDATE_NOW);
         return true;
     }
 
@@ -1289,7 +1296,7 @@ public final class InputLogic {
             final String textToInsert = inputTransaction.mSettingsValues.mSpacingAndPunctuations
                     .mSentenceSeparatorAndSpace;
             mConnection.commitText(textToInsert, 1);
-            inputTransaction.requireShiftUpdate(InputTransaction.SHIFT_UPDATE_NOW);
+            inputTransaction.requireShiftUpdate(SHIFT_UPDATE_NOW);
             inputTransaction.setRequiresUpdateSuggestions();
             return true;
         }
@@ -1988,15 +1995,15 @@ public final class InputLogic {
         if (TextUtils.isEmpty(batchInputText)) {
             return;
         }
-        Log.e("SEPAR", "onUpdateTailBatchInputCompleted: "+batchInputText);
-        mConnection.beginBatchEdit();
-        if (SpaceState.PHANTOM == mSpaceState) {
-            promotePhantomSpace(settingsValues);
-        }
-        final SuggestedWordInfo autoCommitCandidate = mSuggestedWords.getAutoCommitCandidate();
-        // Commit except the last word for phrase gesture if the top suggestion is eligible for auto
-        // commit.
-        if (settingsValues.mPhraseGestureEnabled && null != autoCommitCandidate) {
+        if(!mIsSearchingResults) {
+            mConnection.beginBatchEdit();
+            if (SpaceState.PHANTOM == mSpaceState) {
+                promotePhantomSpace(settingsValues);
+            }
+            //final SuggestedWordInfo autoCommitCandidate = mSuggestedWords.getAutoCommitCandidate();
+            // Commit except the last word for phrase gesture if the top suggestion is eligible for auto
+            // commit.
+        /*if (settingsValues.mPhraseGestureEnabled && null != autoCommitCandidate) {
             // Find the last space
             final int indexOfLastSpace = batchInputText.lastIndexOf(Constants.CODE_SPACE) + 1;
             if (0 != indexOfLastSpace) {
@@ -2008,15 +2015,20 @@ public final class InputLogic {
             final String lastWord = batchInputText.substring(indexOfLastSpace);
             mWordComposer.setBatchInputWord(lastWord);
             setComposingTextInternal(lastWord, 1);
-        } else {
-            mWordComposer.setBatchInputWord(batchInputText);
-            setComposingTextInternal(batchInputText, 1);
+        } else */
+            {
+                mWordComposer.setBatchInputWord(batchInputText);
+                setComposingTextInternal(batchInputText, 1);
+            }
+            mConnection.endBatchEdit();
+            // Space state must be updated before calling updateShiftState
+            mSpaceState = SpaceState.PHANTOM;
+            keyboardSwitcher.requestUpdatingShiftState(getCurrentAutoCapsState(settingsValues),
+                    getCurrentRecapitalizeState());
+        }else{
+            mSearchText.append(batchInputText);
+            shouldReSearch = true;//TODO must tell latinime to do this
         }
-        mConnection.endBatchEdit();
-        // Space state must be updated before calling updateShiftState
-        mSpaceState = SpaceState.PHANTOM;
-        keyboardSwitcher.requestUpdatingShiftState(getCurrentAutoCapsState(settingsValues),
-                getCurrentRecapitalizeState());
     }
 
     /**
@@ -2313,5 +2325,9 @@ public final class InputLogic {
 
     public boolean isSearchingResults() {
         return mIsSearchingResults;
+    }
+
+    public boolean getShouldReSearch() {
+        return shouldReSearch;
     }
 }

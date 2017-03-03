@@ -51,6 +51,9 @@ public abstract class BaseQuerySearchTask extends Task {
         this.mItemsSetCalled = true;
         this.items = items;
         this.authorizedStatus = authorizedStatus;
+        for(RSearchItem i : items){
+            i.setPreviewUrl(i.getUrl());
+        }
     }
 
     protected boolean handleError(Context context, Throwable e) {

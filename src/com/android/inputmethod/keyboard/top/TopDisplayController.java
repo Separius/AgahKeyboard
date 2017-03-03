@@ -20,6 +20,8 @@ import static android.view.View.GONE;
  * Created by sepehr on 3/2/17.
  */
 
+//TODO when latin ime stops us, we have to cancel old queries
+
 public class TopDisplayController {
     final Runnable hideSuggestionAfter;
     private final LinearLayout holderLayout; //contains SStrip, ActionRow(nums,emojis,serviceList), ServiceResultsView
@@ -34,7 +36,7 @@ public class TopDisplayController {
     }
 
     public void setVisualState(ServiceResultsView.VisualSate visualState) {
-        this.mServiceResultsView.setVisualState(visualState);
+        mServiceResultsView.setVisualState(visualState);
     }
 
     public void showRetryErrorMessage(boolean network) {

@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -16,6 +17,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
+import io.separ.neural.inputmethod.Utils.ColorUtils;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.slash.EventBusExt;
 import io.separ.neural.inputmethod.slash.NeuralApplication;
@@ -59,10 +61,13 @@ public class ServiceResultsView extends LinearLayout {
 
         public void onClick(boolean parentClicked, boolean previewClicked, boolean connectClicked, int position) {
             if (ServiceResultsView.this.mRecycler.getAdapter().getItemCount() > position) {
+                Log.e("SEPAR", "onClick: 1");
                 if (parentClicked) {
+                    Log.e("SEPAR", "onClick: 2");
                     ServiceResultsView.this.onItemClicked(position);
                 }
                 if (previewClicked) {
+                    Log.e("SEPAR", "onClick: 3");
                     ServiceResultsView.this.onPreviewClicked(position);
                 }
             }
@@ -91,7 +96,7 @@ public class ServiceResultsView extends LinearLayout {
         public void run() {
             ServiceResultsView.this.setServiceImage(this.val$slash);
             ServiceResultsView.this.mSourceImageView.setRotationY(-90.0f);
-            ServiceResultsView.this.mSourceImageView.animate().rotationY(0.0f).setDuration(75).scaleX(SimpleItemTouchHelperCallback.ALPHA_FULL).scaleY(SimpleItemTouchHelperCallback.ALPHA_FULL);
+            ServiceResultsView.this.mSourceImageView.animate().rotationY(0.0f).setDuration(300).scaleX(SimpleItemTouchHelperCallback.ALPHA_FULL).scaleY(SimpleItemTouchHelperCallback.ALPHA_FULL);
         }
     }
 
@@ -189,11 +194,8 @@ public class ServiceResultsView extends LinearLayout {
         this.mCategoriesList.getAdapter().setOnCategoryClickListener(new C04643());
         this.mSearchContainer = findViewById(R.id.search_container);
         this.mSearchPlaceholder = (ImageView) findViewById(R.id.search_placeholder);
+        //this.mSearchPlaceholder.setColorFilter(ColorUtils.colorProfile.getPrimary());
         this.mSearchMirror = (TextView) findViewById(R.id.slash_search_mirror);
-        ImageUtils.updateTheme(context);
-        if (ImageUtils.isLightTheme()) {
-            this.mSearchPlaceholder.setColorFilter(-5524809);
-        }
         setVisualState(TaskQueueHelper.hasTasksOfType(NeuralApplication.getNetworkTaskQueue(), ServiceQuerySearchTask.class, ServiceQueryContactsTask.class) ? VisualSate.Loading : VisualSate.Hide);
         currentContext = new String();
         currentSlash = new String();
@@ -219,6 +221,7 @@ public class ServiceResultsView extends LinearLayout {
         setService(slash);
         currentSlash = slash;
         currentContext = context;
+        runSearch(currentContext, null);
     }
 
     public void runSearch(String searchString, String type) {
@@ -288,10 +291,8 @@ public class ServiceResultsView extends LinearLayout {
     }
 
     public void setSearchMirrorHint(String slash) {
-        if (this.mSearchMirror.getTag() == null || !slash.equals((String) this.mSearchMirror.getTag())) {
-            RServiceItem item = new RServiceItem(); //TODO make a constructor for this
-            item.setSlash(slash);
-            item.setMySlash(false);
+        if (this.mSearchMirror.getTag() == null || !slash.equals(this.mSearchMirror.getTag())) {
+            RServiceItem item = RServiceItem.serviceItemHashMap.get(slash);
             if (item != null) {
                 this.mSearchMirror.setHint(item.getSearchPlaceholder());
             }
@@ -335,7 +336,7 @@ public class ServiceResultsView extends LinearLayout {
     private void setServiceImageWithAnimation(String slash) {
         if (this.mSourceImageView.getTag() == null || !slash.equals(this.mSourceImageView.getTag())) {
             if (isViewShown()) {
-                this.mSourceImageView.animate().rotationY(90.0f).scaleX(0.8f).scaleY(0.8f).setDuration(75).withEndAction(new C04654(slash));
+                this.mSourceImageView.animate().rotationY(90.0f).scaleX(0.8f).scaleY(0.8f).setDuration(300).withEndAction(new C04654(slash));
             } else {
                 setServiceImage(slash);
             }
@@ -368,7 +369,7 @@ public class ServiceResultsView extends LinearLayout {
         item.setSlash(slash);
         item.setMySlash(false);
         if (item != null) {
-            ImageUtils.showColoredImage(this.mSourceImageView, item);//TODO make it work
+            ImageUtils.showColoredImage(this.mSourceImageView, item);
         }
     }
 

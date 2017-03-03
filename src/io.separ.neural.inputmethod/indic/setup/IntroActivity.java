@@ -22,7 +22,7 @@ public class IntroActivity extends AppIntro2 {
     private InputMethodManager mImm;
 
     static {
-        permissions = new String[]{"android.permission.READ_CONTACTS", "android.permission.READ_PHONE_STATE", "android.permission.WRITE_EXTERNAL_STORAGE"};
+        permissions = new String[]{"android.permission.READ_CONTACTS", "android.permission.READ_PHONE_STATE", "android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.ACCESS_COARSE_LOCATION"};
     }
 
     public void onCreate(Bundle savedInstanceState) {
