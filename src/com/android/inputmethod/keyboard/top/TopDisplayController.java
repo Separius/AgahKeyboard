@@ -28,7 +28,6 @@ public class TopDisplayController {
     private final SuggestionStripView mSuggestionsStripView;
     private final ServiceResultsView mServiceResultsView;
     private final View mActionRowContainer;
-    private static Random myRand = new Random();
 
     public int getHeight() {
         return holderLayout.getHeight();
@@ -48,10 +47,13 @@ public class TopDisplayController {
         this.mServiceResultsView.setSearchItems(slash, items, authorizedStatus);
     }
 
-    public void runSearch(int serviceId, String s) {
+    public void runSearch(String query){
+        mServiceResultsView.runSearch(query, null);
+    }
+
+    public void runSearch(String serviceId, String context) {
         this.mActionRowContainer.setVisibility(GONE);
-        //this.mServiceResultsView.runSearch((myRand.nextBoolean() ? "contacts" : "maps"), "", null);//TODO
-        this.mServiceResultsView.runSearch("google", "hello", null);//TODO
+        this.mServiceResultsView.startSearch(serviceId, context);
         if (this.mSuggestionsStripHackyContainer.getVisibility() != GONE) {
             this.mSuggestionsStripHackyContainer.setVisibility(GONE);
         }
@@ -73,6 +75,12 @@ public class TopDisplayController {
 
     public void drop() {
         this.mServiceResultsView.drop();
+    }
+
+    public void hideAll() {
+        mServiceResultsView.setVisibility(GONE);
+        updateBarVisibility();
+        mServiceResultsView.reset();
     }
 
     public TopDisplayController(View parent){

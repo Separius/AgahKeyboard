@@ -48,7 +48,7 @@ public class CategoriesRecyclerView extends RecyclerView {
         if (!this.mCurrentSlash.equals(slash)) {
             getAdapter().setSelectedItem(0);
             this.mCurrentSlash = slash;
-            this.mCategoriesResults = new ArrayList<>();
+            this.mCategoriesResults = new ArrayList<>();//TODO
             getAdapter().setItems(this.mCategoriesResults);
         }
         if (this.mCategoriesResults == null) {

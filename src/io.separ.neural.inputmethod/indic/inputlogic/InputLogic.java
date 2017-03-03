@@ -503,25 +503,11 @@ public final class InputLogic {
         } else if (event.mKeyCode == -5 && this.mSearchText.length() > 0) {
             this.mSearchText.deleteCharAt(this.mSearchText.length() - 1);
         }
-        /*TODO?
-        * if (monekyMode) {
-            MonkeyData monkeyData;
-            CharSequence textBeforeCursor = null;
-            if (this.mIsSearchingResults) {
-                this.mPreviousSearchedText = this.mCurrentSearchedText;
-                RServiceItem rServiceItem = this.mSelectedService;
-                String stringBuilder = this.mSearchText.toString();
-                this.mCurrentSearchedText = stringBuilder;
-                monkeyData = new MonkeyData(null, rServiceItem, stringBuilder);
-            } else {
-                textBeforeCursor = this.mConnection.getTextBeforeCursor(50, 0);
-                monkeyData = StringLogicHelper.parseMonkeyData(this.mLatinIME.getCurrentKeyboardMode(), textBeforeCursor);
-            }
-            Log.w(TAG, "monkeytext: " + textBeforeCursor + "/search: " + monkeyData.searchQuery);
-            inputTransaction.setRequiresMonkeyUpdates();
-            inputTransaction.setMonkeyData(monkeyData);
-        }*/
         return inputTransaction;
+    }
+
+    public String getSearchText(){
+        return mSearchText.toString();
     }
 
     public void onStartBatchInput(final SettingsValues settingsValues,
@@ -2320,8 +2306,12 @@ public final class InputLogic {
         this.mIsSearchingResults = false;
     }
 
-    public void startSearchingResults(RServiceItem item) {
+    public void startSearchingResults() {
         this.mIsSearchingResults = true;
         this.mSearchText.delete(0, this.mSearchText.length());
+    }
+
+    public boolean isSearchingResults() {
+        return mIsSearchingResults;
     }
 }

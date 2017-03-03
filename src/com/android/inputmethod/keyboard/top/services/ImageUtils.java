@@ -31,8 +31,6 @@ import io.separ.neural.inputmethod.slash.RServiceItem;
  * Created by sepehr on 3/2/17.
  */
 public class ImageUtils {
-    //public static final int[] CATEGORIES_BGS;
-    //public static final int[] CATEGORIES_TEXT_COLORS;
     public static final int[] KEYBOARD_BAR_COLORS;
     private static int materialIndex;
     private static int[] sMaterialColors;
@@ -42,8 +40,6 @@ public class ImageUtils {
         sMaterialColors = new int[]{-6543440, -3285959, -26624, -14575885};
         materialIndex = 0;
         KEYBOARD_BAR_COLORS = new int[]{-1, -1, -10786704, -1, -3355444, -12434878, -1};
-        //CATEGORIES_BGS = new int[]{R.drawable.m_dark_category_bg, R.drawable.holo_dark_category_bg, R.drawable.m_light_category_bg, R.drawable.holo_dark_category_bg, R.drawable.zck1_category_bg, R.drawable.zck2_category_bg, R.drawable.zck3_category_bg};
-        //CATEGORIES_TEXT_COLORS = new int[]{R.color.m_dark_category_text, R.color.holo_dark_category_text, R.color.m_light_category_text, R.color.holo_dark_category_text, R.color.zck1_category_text, R.color.zck2_category_text, R.color.zck3_category_text};
         sThemeId = -1;
     }
 
@@ -92,15 +88,15 @@ public class ImageUtils {
         int i = materialIndex;
         materialIndex = i + 1;
         Drawable drawable = new ColorDrawable(iArr[i % sMaterialColors.length]);
-        GenericDraweeHierarchy hierarchy = (GenericDraweeHierarchy) target.getHierarchy();
+        GenericDraweeHierarchy hierarchy = target.getHierarchy();
         if ("4sq".equals(searchItem.getService())) {
-            //hierarchy.setBackgroundImage(new ColorDrawable(-1513240));
+            hierarchy.setBackgroundImage(new ColorDrawable(-1513240));
         }
         hierarchy.setPlaceholderImage(drawable);
         hierarchy.setFadeDuration(100);
-    }/*
+    }
 
-    public static void showMonochromeImage(SimpleDraweeView target, RServiceItem serviceItem, int colorFilter) {
+    /*public static void showMonochromeImage(SimpleDraweeView target, RServiceItem serviceItem, int colorFilter) {
         if (serviceItem.isMyslash()) {
             String slashPrefix = "/" + serviceItem.getSlash().substring(0, Math.min(3, serviceItem.getSlash().length()));
             target.setImageURI(Uri.parse(serviceItem.getSlash()));
@@ -147,14 +143,6 @@ public class ImageUtils {
     public static boolean isLightTheme() {
         return isLightTheme(sThemeId);
     }
-
-    /*//public static int getCategoryBg() {
-        return CATEGORIES_BGS[sThemeId];
-    }
-
-    public static int getCategoryTextColor(Context context) {
-        return context.getResources().getColor(CATEGORIES_TEXT_COLORS[sThemeId]);
-    }*/
 
     private static int getDrawableId(String resName) {
         return NeuralApplication.getInstance().getResources().getIdentifier(resName, "drawable", NeuralApplication.getInstance().getPackageName());

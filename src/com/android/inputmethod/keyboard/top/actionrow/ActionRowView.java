@@ -41,6 +41,8 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
     private Listener mListener;
     private HashMap<String, LinearLayout> layouts;
     private CircleIndicator mIndicator;
+    private int currentPage;
+    private static final String[] DEFAULT_SERVICES;
 
     public boolean onTouch(View v, MotionEvent event) {
         return false;
@@ -65,7 +67,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
             this.serviceId = serviceId;
         }
         public void onClick(View v) {
-            mListener.onServiceClicked(serviceId);
+            mListener.onServiceClicked(DEFAULT_SERVICES[serviceId]);
         }
     }
 
@@ -115,11 +117,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
 
         void onSelectAll();
 
-        void onServiceClicked(int id);
-
-        int getActionRowPageState();
-
-        void setActionRowPageState(int pos);
+        void onServiceClicked(String id);
     }
 
     private class ActionRowAdapter extends PagerAdapter {
@@ -159,7 +157,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         }
 
         public View getView(int position) {
-            mListener.setActionRowPageState(position);
+            currentPage = position;
             return (View) this.views.get(position);
         }
     }
@@ -169,6 +167,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         DEFAULT_SUGGESTED_EMOJI = "\u2764,\ud83d\ude15,\ud83d\ude18,\ud83d\ude22,\ud83d\ude3b,\ud83d\ude0a,\ud83d\ude09,\ud83d\ude0d".split("\\s*,\\s*");
         SERVICE_IMAGE_IDS = new int[] {R.id.gif_service_action_button, R.id.maps_service_action_button, R.id.google_service_action_button,
                 R.id.customization_service_action_button, R.id.contacts_service_action_button, R.id.foursquare_service_action_button};
+        DEFAULT_SERVICES = new String[] {"gif","maps","google","customization","contacts","foursquare"};
     }
 
     public void setCircleIndicator(CircleIndicator ci){
@@ -190,7 +189,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
 
     public void setAdapter(ActionRowAdapter adapter) {
         super.setAdapter(adapter);
-        setCurrentItem(mListener==null?0:mListener.getActionRowPageState(), false); //TODO hold state
+        setCurrentItem(mListener==null?0:currentPage, false); //TODO hold state
     }
 
     protected void onPageScrolled(int position, float offset, int offsetPixels) {
@@ -219,6 +218,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
     }
 
     private void init() {
+        currentPage=0;
         setBackgroundColor(Color.parseColor("#eceff1"));
         layoutToShow = ActionRowSettingsActivity.DEFAULT_LAYOUTS.split("\\s*,\\s*");
         adapter = new ActionRowAdapter();
@@ -287,12 +287,14 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
 
     private LinearLayout addServices(){
         LinearLayout layout = (LinearLayout) View.inflate(getContext(), R.layout.services_action_layout, null);
+        int i=0;
         for(int currentServiceViewId : SERVICE_IMAGE_IDS) {
             ImageView imageView = (ImageView) layout.findViewById(currentServiceViewId);
             imageView.setColorFilter(this.colorProfile.getTextColor());
             imageView.setSoundEffectsEnabled(false);
-            imageView.setOnClickListener(new serviceClickListener(currentServiceViewId));
+            imageView.setOnClickListener(new serviceClickListener(i));
             imageView.setBackgroundResource(R.drawable.action_row_bg);
+            i++;
         }
         return layout;
     }

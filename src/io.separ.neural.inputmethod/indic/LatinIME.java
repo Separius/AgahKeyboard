@@ -248,25 +248,15 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     }
 
     @Override
-    public int getActionRowPageState(){
-        return PreferenceManager.getDefaultSharedPreferences(this).getInt(ACTION_ROW_PAGE_STATE, 0);
-    }
-
-    @Override
-    public void setActionRowPageState(int pos){
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(ACTION_ROW_PAGE_STATE, pos).apply();
-    }
-
-    @Override
     public void onSelectAll() {
         this.mInputLogic.mConnection.mIC.performContextMenuAction(16908319);
     }
 
     @Override
-    public void onServiceClicked(int serviceId){
-        //TODO call serviceViewController, hide actionView, change state of emoji button, change the state of input connection
-        this.mTopDisplayController.runSearch(serviceId, "");
-        this.mInputLogic.startSearchingResults(null);
+    public void onServiceClicked(String serviceId){
+        //change the state of input connection
+        this.mTopDisplayController.runSearch(serviceId, mInputLogic.mConnection.getmComposingText().toString());
+        this.mInputLogic.startSearchingResults();
     }
 
     public static final class UIHandler extends LeakGuardHandlerWrapper<LatinIME> {
@@ -902,6 +892,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     public void onStartInputView(final EditorInfo editorInfo, final boolean restarting) {
         handleKeyboardColor(editorInfo);
         mHandler.onStartInputView(editorInfo, restarting);
+        mInputLogic.stopSearchingResults();
         this.mEventHandler.register();
         if (this.mTopDisplayController != null) {
             this.mTopDisplayController.updateBarVisibility();
@@ -911,6 +902,9 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     @Override
     public void onFinishInputView(final boolean finishingInput) {
         mHandler.onFinishInputView(finishingInput);
+        if (this.mTopDisplayController != null)
+            this.mTopDisplayController.hideAll();
+        mInputLogic.stopSearchingResults();
         this.mEventHandler.unregister();
     }
 
@@ -1500,9 +1494,16 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 mInputLogic.onCodeInput(mSettings.getCurrent(), event,
                         mKeyboardSwitcher.getKeyboardShiftMode(),
                         mKeyboardSwitcher.getCurrentKeyboardScriptId(), mHandler);
+        updateSearchAfterCodeInput(codeToSend);
         updateStateAfterInputTransaction(completeInputTransaction);
         mKeyboardSwitcher.onCodeInput(codePoint, getCurrentAutoCapsState(),
                 getCurrentRecapitalizeState());
+    }
+
+    private void updateSearchAfterCodeInput(int codeToSend){
+        //todo if codetosend is not finish
+        if(mInputLogic.isSearchingResults())
+            mTopDisplayController.runSearch(mInputLogic.getSearchText());
     }
 
     // A helper method to split the code point and the key code. Ultimately, they should not be
@@ -2195,9 +2196,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEventMainThread(SearchItemSelectedEvent event) {
             LatinIME.this.mInputLogic.stopSearchingResults();
+            mTopDisplayController.hideAll();
             /*if (ShareUtils.shareMediaThroughIntent(LatinIME.this, event.getItem(), LatinIME.this.mHostPackageName))
                 return;*/
-            shareItemThroughText(event);
+            //shareItemThroughText(event);
         }
 
         private void shareItemThroughText(SearchItemSelectedEvent event) {

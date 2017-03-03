@@ -2,10 +2,8 @@ package com.android.inputmethod.keyboard.top.services;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -18,7 +16,6 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
-import io.separ.neural.inputmethod.Utils.ColorUtils;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.slash.EventBusExt;
 import io.separ.neural.inputmethod.slash.NeuralApplication;
@@ -44,6 +41,8 @@ public class ServiceResultsView extends LinearLayout {
     private TextView mSourceError;
     private SimpleDraweeView mSourceImageView;
     private ProgressBar mSourceProgress;
+    private String currentSlash;
+    private String currentContext;
 
     /*class C04621 implements OnClickListener {
         C04621() {
@@ -54,7 +53,6 @@ public class ServiceResultsView extends LinearLayout {
         }
     }*/
 
-    /* renamed from: co.touchlab.inputmethod.latin.monkey.ui.views.ServiceResultsView.2 */
     class C04632 implements SearchItemArrayAdapter.IOnClickListener {
         C04632() {
         }
@@ -71,7 +69,6 @@ public class ServiceResultsView extends LinearLayout {
         }
     }
 
-    /* renamed from: co.touchlab.inputmethod.latin.monkey.ui.views.ServiceResultsView.3 */
     class C04643 implements CategoriesArrayAdapter.IOnClickListener {
         C04643() {
         }
@@ -79,12 +76,11 @@ public class ServiceResultsView extends LinearLayout {
         public void onClick(int position) {
             if (position < ServiceResultsView.this.mCategoriesList.getAdapter().getItemCount()) {
                 RCategory category = ServiceResultsView.this.mCategoriesList.getAdapter().getItem(position);
-                ServiceResultsView.this.runSearch(ServiceResultsView.this.mRecycler.getCurrentSlash(), category.getAction(), category.getType());
+                ServiceResultsView.this.runSearch(category.getAction(), category.getType());
             }
         }
     }
 
-    /* renamed from: co.touchlab.inputmethod.latin.monkey.ui.views.ServiceResultsView.4 */
     class C04654 implements Runnable {
         final /* synthetic */ String val$slash;
 
@@ -99,7 +95,6 @@ public class ServiceResultsView extends LinearLayout {
         }
     }
 
-    /* renamed from: co.touchlab.inputmethod.latin.monkey.ui.views.ServiceResultsView.7 */
     static /* synthetic */ class C04687 {
         static final /* synthetic */ int[] f932x310c8f71;
 
@@ -137,14 +132,7 @@ public class ServiceResultsView extends LinearLayout {
 
         private String message;
 
-        private VisualSate(String s) {
-            setMessage(s);
-        }
-
-
-        VisualSate() {
-
-        }
+        VisualSate() {}
 
         public VisualSate setMessage(String msg) {
             this.message = msg;
@@ -193,11 +181,7 @@ public class ServiceResultsView extends LinearLayout {
         this.mSourceError = (TextView) findViewById(R.id.source_error);
         this.mSourceError.setOnClickListener(new C04621());
         this.mSourceError.setClickable(false);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SuggestionStripView, defStyleAttr, R.style.SuggestionStripView);
-        if (a != null) {
-            //this.mSourceError.setTextColor(ColorUtils.colorProfile.getTextColor());
-            a.recycle();
-        }
+        //this.mSourceError.setTextColor(ColorUtils.colorProfile.getTextColor());
         this.mSourceProgress = (ProgressBar) findViewById(R.id.source_progress);
         this.mRecycler = (ResultsRecyclerView) findViewById(R.id.source_recycler);
         this.mRecycler.getAdapter().setOnSearchItemClickListener(new C04632());
@@ -211,6 +195,8 @@ public class ServiceResultsView extends LinearLayout {
             this.mSearchPlaceholder.setColorFilter(-5524809);
         }
         setVisualState(TaskQueueHelper.hasTasksOfType(NeuralApplication.getNetworkTaskQueue(), ServiceQuerySearchTask.class, ServiceQueryContactsTask.class) ? VisualSate.Loading : VisualSate.Hide);
+        currentContext = new String();
+        currentSlash = new String();
     }
 
     public void drop() {
@@ -228,10 +214,14 @@ public class ServiceResultsView extends LinearLayout {
         return this.mRecycler;
     }
 
-    public void runSearch(String slash, String searchString, String type) {
-        boolean z = false;
+    public void startSearch(String slash, String context){
         setVisibility(VISIBLE);
         setService(slash);
+        currentSlash = slash;
+        currentContext = context;
+    }
+
+    public void runSearch(String searchString, String type) {
         String action = null;
         int categoryIndex = this.mCategoriesList.getAdapter().getSelectedCategoryIndex();
         boolean useCaching = false;
@@ -259,21 +249,22 @@ public class ServiceResultsView extends LinearLayout {
             setSearchMirror("");
         } else {
             if (TextUtils.isEmpty(searchString)) {
-                action = "prepopulate";
-                useCaching = true;
-                this.mCategoriesList.getAdapter().setSelectedItem(0);
+                if(TextUtils.isEmpty(currentContext)) {
+                    action = "prepopulate";
+                    useCaching = true;
+                    this.mCategoriesList.getAdapter().setSelectedItem(0);
+                }else{
+                    searchString = currentContext;
+                    this.mCategoriesList.getAdapter().setSelectedItem(-1);
+                }
             } else {
                 this.mCategoriesList.getAdapter().setSelectedItem(-1);
             }
             setSearchMirror(searchString);
         }
-        ResultsRecyclerView resultsRecyclerView = this.mRecycler;
-        if ("aac".equals(type)) {
-            z = true;
-        }
         updateCategoryVisibility();
         ServiceRequestManager.getInstance().cancelLastRequest();
-        ServiceRequestManager.getInstance().postRequest(slash, searchString, action, useCaching);
+        ServiceRequestManager.getInstance().postRequest(currentSlash, searchString, action, useCaching);
     }
 
     public void clear() {
@@ -298,7 +289,7 @@ public class ServiceResultsView extends LinearLayout {
 
     public void setSearchMirrorHint(String slash) {
         if (this.mSearchMirror.getTag() == null || !slash.equals((String) this.mSearchMirror.getTag())) {
-            RServiceItem item = new RServiceItem();
+            RServiceItem item = new RServiceItem(); //TODO make a constructor for this
             item.setSlash(slash);
             item.setMySlash(false);
             if (item != null) {
@@ -310,7 +301,7 @@ public class ServiceResultsView extends LinearLayout {
 
     public void setService(String slash) {
         boolean serviceChanged = this.mRecycler.setService(slash);
-        int categoriesSize = this.mCategoriesList.setService(slash);
+        this.mCategoriesList.setService(slash);
         if (serviceChanged) {
             setServiceImageWithAnimation(slash);
             setSearchMirrorHint(slash);
@@ -342,7 +333,7 @@ public class ServiceResultsView extends LinearLayout {
     }
 
     private void setServiceImageWithAnimation(String slash) {
-        if (this.mSourceImageView.getTag() == null || !slash.equals((String) this.mSourceImageView.getTag())) {
+        if (this.mSourceImageView.getTag() == null || !slash.equals(this.mSourceImageView.getTag())) {
             if (isViewShown()) {
                 this.mSourceImageView.animate().rotationY(90.0f).scaleX(0.8f).scaleY(0.8f).setDuration(75).withEndAction(new C04654(slash));
             } else {
@@ -353,7 +344,7 @@ public class ServiceResultsView extends LinearLayout {
     }
 
     private void onItemClicked(int position) {
-        RSearchItem searchItem = (RSearchItem) this.mRecycler.getAdapter().getItem(position);
+        RSearchItem searchItem = this.mRecycler.getAdapter().getItem(position);
         if (!RSearchItem.LOADING_TYPE.equals(searchItem.getDisplayType()) && !RSearchItem.CONNECT_TO_USE_TYPE.equals(searchItem.getDisplayType()) && !RSearchItem.GENERIC_MESSAGE_TYPE.equals(searchItem.getDisplayType()) && !RSearchItem.PERMISSION_REQUIRED_TYPE.equals(searchItem.getDisplayType()))
             onNormalItemClick(searchItem, position);
     }
@@ -365,7 +356,7 @@ public class ServiceResultsView extends LinearLayout {
     }
 
     private void onPreviewClicked(int position) {
-        ResultsRecyclerView.openPreview(getContext(), (String) ((RSearchItem) this.mRecycler.getAdapter().getItem(position)).getPreviewUrl());
+        ResultsRecyclerView.openPreview(getContext(), (String)this.mRecycler.getAdapter().getItem(position).getPreviewUrl());
     }
 
     private boolean isViewShown() {
@@ -377,7 +368,7 @@ public class ServiceResultsView extends LinearLayout {
         item.setSlash(slash);
         item.setMySlash(false);
         if (item != null) {
-            ImageUtils.showColoredImage(this.mSourceImageView, item);
+            ImageUtils.showColoredImage(this.mSourceImageView, item);//TODO make it work
         }
     }
 
@@ -389,22 +380,17 @@ public class ServiceResultsView extends LinearLayout {
     public void setVisualState(VisualSate state) {
         switch (C04687.f932x310c8f71[state.ordinal()]) {
             case 1:
-                Log.e("SEPAR", "1");
                 this.mRecycler.setVisibility(VISIBLE);
                 updateCategoryVisibility();
                 this.mSourceImageView.setVisibility(VISIBLE);
-                Log.e("SEPAR", "2");
                 setServiceImageWithAnimation(state.getMessage());
-                Log.e("SEPAR", "3");
                 this.mSourceError.setVisibility(GONE);
                 this.mSourceError.setClickable(false);
                 if (this.mPreviousState == VisualSate.Loading) {
                     return;
                 }
                 if (this.mRecycler.serviceChanged()) {
-                    Log.e("SEPAR", "4");
                     this.mRecycler.setLoadingItems();
-                    Log.e("SEPAR", "5");
                     this.mPreviousState = VisualSate.Loading;
                     this.mSourceProgress.setVisibility(GONE);
                     return;

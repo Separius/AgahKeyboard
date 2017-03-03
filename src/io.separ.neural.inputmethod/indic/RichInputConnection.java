@@ -108,6 +108,11 @@ public final class RichInputConnection {
      * text if any. It is refreshed when the cursor moves by calling upon the TextView.
      */
     private final StringBuilder mCommittedTextBeforeComposingText = new StringBuilder();
+
+    public StringBuilder getmComposingText() {
+        return mComposingText;
+    }
+
     /**
      * This contains the currently composing text, as LatinIME thinks the TextView is seeing it.
      */
