@@ -1,9 +1,11 @@
 package io.separ.neural.inputmethod.slash;
 
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.inputmethod.keyboard.top.services.ServiceResultsView;
+import com.android.inputmethod.keyboard.top.services.tenor.TenorApiManager;
 
 import java.util.Random;
 
@@ -40,6 +42,18 @@ public class ServiceRequestManager {
 
         public void cancel() {
             NeuralApplication.getNetworkTaskQueue().query(new C04111());
+        }
+    }
+
+    class TenorThread extends TaskRunnable {
+        final String query;
+
+        TenorThread(String query){
+            this.query = query;
+        }
+
+        public BaseQuerySearchTask getTask() {
+            return new TenorQuerySearchTask(query);
         }
     }
 
@@ -101,7 +115,10 @@ public class ServiceRequestManager {
                 RServiceItem service = RServiceItem.serviceItemHashMap.get(slash);
                 if (service != null)
                     isLocationAware = service.isLocation_aware();
-                this.request = new C04101(slash, query, action, isLocationAware, useCache);
+                if(!slash.equals("giphy"))
+                    this.request = new C04101(slash, query, action, isLocationAware, useCache);
+                else
+                    this.request = new TenorThread(query);
             }
             this.handler.postDelayed(this.request, 0);
             if (shouldShowLoading) {

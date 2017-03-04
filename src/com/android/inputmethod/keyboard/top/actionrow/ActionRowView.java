@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.inputmethod.keyboard.emojifast.EmojiView;
 import com.android.inputmethod.keyboard.emojifast.RecentEmojiPageModel;
 
 import java.util.ArrayList;
@@ -212,21 +213,21 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
     }
 
     private void init() {
-        currentPage=0;
         setBackgroundColor(Color.parseColor("#eceff1"));
         layoutToShow = ActionRowSettingsActivity.DEFAULT_LAYOUTS.split("\\s*,\\s*");
         adapter = new ActionRowAdapter();
         setAdapter(adapter);
+        //setCurrentItem(1, false);
         ColorManager.addObserverAndCall(this);
         setupLayouts();
     }
 
     private void setupLayouts(){
         layouts = new HashMap<>();
-        layouts.put(ActionRowSettingsActivity.NUMBER_ID, addNumbers());
-        layouts.put(ActionRowSettingsActivity.CLIP_ID, addButtons());
-        layouts.put(ActionRowSettingsActivity.EMOJI_ID, addEmojis()); //TODO update this on change
+        //layouts.put(ActionRowSettingsActivity.NUMBER_ID, addNumbers());
         layouts.put(ActionRowSettingsActivity.SERVCICE_ID, addServices());
+        layouts.put(ActionRowSettingsActivity.EMOJI_ID, addEmojis()); //TODO update this on change
+        layouts.put(ActionRowSettingsActivity.CLIP_ID, addButtons());
     }
 
     private View addEmptyView() {
@@ -316,24 +317,26 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
     }
 
     class AnonymousClass11 implements OnClickListener {
-        final TextView val$view;
+        final EmojiView val$view;
 
-        AnonymousClass11(TextView  emojiconTextView) {
+        AnonymousClass11(EmojiView  emojiconTextView) {
             this.val$view = emojiconTextView;
         }
 
         public void onClick(View tview) {
             AudioAndHapticFeedbackManager.getInstance().performHapticAndAudioFeedback(-15, ActionRowView.this);
-            mListener.onEmojiClicked(this.val$view.getText().toString(), false);
+            mListener.onEmojiClicked(this.val$view.getEmoji(), false);
         }
     }
 
     private View addSingleEmoji(String emoji){
-        TextView view = new TextView(getContext());
+        /*TextView view = new TextView(getContext());
         view.setTypeface(FontUtils.getTypeface("emoji"));
         view.setText(emoji);
         view.setGravity(17);
-        view.setTextSize(1, 22.0f * 1.f);
+        view.setTextSize(1, 22.0f * 1.f);*/
+        EmojiView view = new EmojiView(getContext(), true);
+        view.setEmoji(emoji);
         view.setSoundEffectsEnabled(false);
         view.setAlpha(1.f);
         view.setOnClickListener(new AnonymousClass11(view));

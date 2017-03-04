@@ -27,6 +27,15 @@ public class RSearchItem {
     private String title;
     private String uid;
     private String uri;
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setImage(RImage image) {
+        this.image = image;
+    }
+
     private String url;
     private CharSequence previewUrl;
     private String correctService;
@@ -106,5 +115,9 @@ public class RSearchItem {
 
     public void setPreviewUrl(String previewUrl) {
         this.previewUrl = previewUrl;
+    }
+
+    public void setDetail(RDetail detail) {
+        this.detail = detail;
     }
 }

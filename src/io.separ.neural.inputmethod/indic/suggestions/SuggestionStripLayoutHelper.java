@@ -54,6 +54,7 @@ import java.util.ArrayList;
 import io.separ.neural.inputmethod.Utils.FontUtils;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 import io.separ.neural.inputmethod.annotations.UsedForTesting;
+import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.indic.PunctuationSuggestions;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.indic.SuggestedWords;
@@ -81,10 +82,10 @@ final class SuggestionStripLayoutHelper {
     private final ArrayList<View> mDividerViews;
     private final ArrayList<TextView> mDebugInfoViews;
 
-    private final int mColorValidTypedWord;
-    private final int mColorTypedWord;
-    private final int mColorAutoCorrect;
-    private final int mColorSuggested;
+    private int mColorValidTypedWord;
+    private int mColorTypedWord;
+    private int mColorAutoCorrect;
+    private int mColorSuggested;
     private final float mAlphaObsoleted;
     private final float mCenterSuggestionWeight;
     private final int mCenterPositionInStrip;
@@ -534,7 +535,7 @@ final class SuggestionStripLayoutHelper {
 
     public void layoutImportantNotice(final View importantNoticeStrip,
             final String importantNoticeTitle) {
-        final TextView titleView = (TextView)importantNoticeStrip.findViewById(
+        /*final TextView titleView = (TextView)importantNoticeStrip.findViewById(
                 R.id.important_notice_title);
         final int width = titleView.getWidth() - titleView.getPaddingLeft()
                 - titleView.getPaddingRight();
@@ -542,7 +543,7 @@ final class SuggestionStripLayoutHelper {
         titleView.setText(importantNoticeTitle);
         titleView.setTextScaleX(1.0f); // Reset textScaleX.
         final float titleScaleX = getTextScaleX(importantNoticeTitle, width, titleView.getPaint());
-        titleView.setTextScaleX(titleScaleX);
+        titleView.setTextScaleX(titleScaleX);*/
     }
 
     static void setLayoutWeight(final View v, final float weight, final int height) {
@@ -633,5 +634,12 @@ final class SuggestionStripLayoutHelper {
         }
         // TODO: BOLD_ITALIC, ITALIC case?
         return Typeface.DEFAULT;
+    }
+
+    public void updateColor(ColorProfile colorProfile) {
+        mColorValidTypedWord = colorProfile.getTextColor();
+        mColorTypedWord = colorProfile.getTextColor();
+        mColorAutoCorrect = colorProfile.getTextColor();
+        mColorSuggested = colorProfile.getTextColor();
     }
 }

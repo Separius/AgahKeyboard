@@ -18,14 +18,14 @@ public class FontUtils {
     private static boolean isEmoji;
 
     public static void initialize(@NonNull final Context newContext){
-        mTypefaces.put("emoji", Typeface.createFromAsset(newContext.getResources().getAssets(), "fonts/emojione-android.ttf"));
+        //mTypefaces.put("emoji", Typeface.createFromAsset(newContext.getResources().getAssets(), "fonts/emojione-android.ttf"));
         mTypefaces.put("fa", Typeface.createFromAsset(newContext.getResources().getAssets(), "fonts/Samim.ttf"));
     }
 
     public static Typeface getTypeface(String locale){
-        if(isEmoji)
+        /*if(isEmoji)
             return mTypefaces.get("emoji");
-        else
+        else*/
             return mTypefaces.get(locale);
     }
 

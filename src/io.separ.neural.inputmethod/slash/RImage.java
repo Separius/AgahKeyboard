@@ -30,4 +30,8 @@ public class RImage {
     public String getHeight() {
         return height;
     }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }

@@ -29,7 +29,7 @@
         <include
             android:id="@+id/other_keyboard_frame"
             layout="@layout/other_keyboard_frame" />
-    <include
+    <!--<include
         android:id="@+id/settings_pager_view"
-        layout="@layout/settings_pager_view" />
+        layout="@layout/settings_pager_view" />-->
 </io.separ.neural.inputmethod.indic.InputView>

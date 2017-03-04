@@ -16,8 +16,14 @@ import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
 public class EmojiView extends View implements Drawable.Callback {
     private String   emoji;
     private Drawable drawable;
+    private boolean scaleDown=false;
 
     private final Paint paint      = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+
+    public EmojiView(Context context, boolean scaleDown) {
+        this(context, null);
+        this.scaleDown = scaleDown;
+    }
 
     public EmojiView(Context context) {
         this(context, null);
@@ -44,10 +50,13 @@ public class EmojiView extends View implements Drawable.Callback {
 
     @Override protected void onDraw(Canvas canvas) {
         if (drawable != null) {
-            drawable.setBounds(getPaddingLeft(),
+            if(!scaleDown)
+                drawable.setBounds(getPaddingLeft(),
                     getPaddingTop(),
                     getWidth() - getPaddingRight(),
                     getHeight() - getPaddingBottom());
+            else
+                drawable.setBounds(getWidth()*15/100, getHeight()*15/100, getWidth()*7/10, getHeight()*7/10);
             drawable.setCallback(this);
             drawable.draw(canvas);
         } else {

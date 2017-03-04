@@ -216,9 +216,9 @@ public final class KeyboardLayoutSet {
             Log.d(TAG, "keyboard cache size=" + sKeyboardCache.size() + ": "
                     + ((ref == null) ? "LOAD" : "GCed") + " id=" + id);
         }
-        if((id.mElementId >= KeyboardId.ELEMENT_EMOJI_RECENTS) && (id.mElementId <= KeyboardId.ELEMENT_EMOJI_CATEGORY16))
+        /*if((id.mElementId >= KeyboardId.ELEMENT_EMOJI_RECENTS) && (id.mElementId <= KeyboardId.ELEMENT_EMOJI_CATEGORY16))
             keyboard.mTypeface = FontUtils.getTypeface("emoji");
-        else
+        else*/
             keyboard.mTypeface = FontUtils.getTypeface();
         return keyboard;
     }

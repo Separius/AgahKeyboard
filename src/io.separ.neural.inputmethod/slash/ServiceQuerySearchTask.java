@@ -27,7 +27,7 @@ public class ServiceQuerySearchTask extends BaseQuerySearchTask {
         SearchResult result;
         Location location = null;
         if (this.mIsLocationAware) {
-            location = SmartLocation.with(context).location().getLastLocation();
+            location = SmartLocation.with(context).location().getLastLocation();//TODO is this library call cheap?
             if (LatLngUtils.isEmpty(location))
                 SmartLocation.with(context).location().oneFix().start(null);
         }

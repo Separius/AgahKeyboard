@@ -228,12 +228,12 @@ public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItem
             case RESULT_TYPE_IMAGE /*1*/:
             case RESULT_TYPE_IMAGE_NO_BORDER /*2*/:
                 vh.imageView.setVisibility(View.VISIBLE);
-                float itemWidth = this.mImageHeight * item.getImage().getAspectRatio();
+                /*float itemWidth = this.mImageHeight * item.getImage().getAspectRatio();
                 ViewGroup.LayoutParams layoutParams = vh.imageView.getLayoutParams();
                 layoutParams.width = Math.round(itemWidth);
                 layoutParams.height = (int) this.mImageHeight;
                 vh.imageView.setLayoutParams(layoutParams);
-                vh.imageView.requestLayout();
+                vh.imageView.requestLayout();*/
                 ImageUtils.showSearchItemImage(vh.imageView, item);
                 break;
             case RESULT_TYPE_GENERIC_MESSAGE /*6*/:

@@ -11,7 +11,7 @@ public class SearchResult {
     @SerializedName("meta")
     private Meta meta;
     @SerializedName("results")
-    private ArrayList<RSearchItem> results;
+    public ArrayList<RSearchItem> results;
 
     public class Meta {
         public String status;
@@ -26,5 +26,11 @@ public class SearchResult {
             return this.meta.status;
         }
         return null;
+    }
+    public SearchResult(){}
+    public SearchResult(boolean x){
+        meta = new Meta();
+        meta.status = null;
+        this.results = new ArrayList<>();
     }
 }

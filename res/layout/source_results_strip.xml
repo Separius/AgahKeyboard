@@ -20,7 +20,7 @@
         card_view:contentPaddingLeft="10dp" card_view:contentPaddingRight="10dp">
         <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@+id/search_container" android:layout_width="match_parent"
             android:layout_height="@dimen/search_bar_height">
-            <ImageView android:id="@+id/search_placeholder" android:layout_width="16dp" android:layout_height="16dp" android:layout_marginRight="6dp"
+            <ImageView android:id="@+id/search_placeholder" android:layout_width="@dimen/service_icon_height" android:layout_height="@dimen/service_icon_height" android:layout_marginRight="6dp"
                 android:src="@drawable/services_search_icon" />
             <TextView android:id="@+id/slash_search_mirror" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.0"/>
             <com.facebook.drawee.view.SimpleDraweeView android:id="@+id/source_image" android:layout_width="@dimen/service_icon_height"

@@ -79,6 +79,6 @@ public class MonkeyApiManager extends BaseApiManager {
     }
 
     private static RestAdapter getRestAdapter(OkClient client) {
-        return new RestAdapter.Builder().setEndpoint("https://platform.tapslash.com/api").setErrorHandler(BaseApiManager.getErrorHandler()).setLogLevel(RestAdapter.LogLevel.FULL).setLog(new AndroidLog("SEPAR_HTTP!")).setClient((Client) client).setConverter(new GsonConverter(new GsonBuilder().create())).setRequestInterceptor(new C04212()).build();
+        return new RestAdapter.Builder().setEndpoint("https://platform.tapslash.com/api").setErrorHandler(BaseApiManager.getErrorHandler()).setLogLevel(RestAdapter.LogLevel.NONE).setClient(client).setConverter(new GsonConverter(new GsonBuilder().create())).setRequestInterceptor(new C04212()).build();
     }
 }

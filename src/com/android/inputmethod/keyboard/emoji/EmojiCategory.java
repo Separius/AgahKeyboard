@@ -185,8 +185,8 @@ final class EmojiCategory {
         } else {
             mCurrentCategoryId =
                     Settings.readLastShownEmojiCategoryId(mPrefs, EmojiCategory.ID_EMOTICONS);
+            addShownCategoryId(EmojiCategory.ID_EMOTICONS);
         }
-        addShownCategoryId(EmojiCategory.ID_EMOTICONS);
 
         DynamicGridKeyboard recentsKbd =
                 getKeyboard(EmojiCategory.ID_RECENTS, 0 /* categoryPageId */);

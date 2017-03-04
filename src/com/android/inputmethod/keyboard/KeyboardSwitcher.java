@@ -63,7 +63,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
     private MainKeyboardView mKeyboardView;
     private EmojiPalettesView mEmojiPalettesView;
     private MediaBottomBar mMediaBottomBar;
-    private LinearLayout mSettingsViewPager;
+    //private LinearLayout mSettingsViewPager;
     private LatinIME mLatinIME;
     private boolean mIsHardwareAcceleratedDrawingEnabled;
     private ActionRowView mActionRowView;
@@ -260,7 +260,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mEmojiPalettesView.setVisibility(View.GONE);
         mMediaBottomBar.setVisibility(View.GONE);
         mEmojiPalettesView.stopEmojiPalettes();
-        mSettingsViewPager.setVisibility(View.GONE);
+        //mSettingsViewPager.setVisibility(View.GONE);
     }
 
     // Implements {@link KeyboardState.SwitchActions}.
@@ -273,10 +273,10 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mMediaBottomBar.setVisibility(View.VISIBLE);
         mMediaBottomBar.startMediaBottomBar(mKeyboardTextsSet.getText(KeyboardTextsSet.SWITCH_TO_ALPHA_KEY_LABEL),
                 mKeyboardView.getKeyVisualAttribute(), keyboard.mIconsSet);
-        mSettingsViewPager.setVisibility(View.GONE);
+        //mSettingsViewPager.setVisibility(View.GONE);
     }
 
-    public void onToggleSettingsKeyboard() {
+    /*public void onToggleSettingsKeyboard() {
         if(mSettingsViewPager.getVisibility() == View.VISIBLE){
             mSettingsViewPager.setVisibility(View.GONE);
             mMainKeyboardFrame.setVisibility(View.VISIBLE);
@@ -288,7 +288,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
             mEmojiPalettesView.setVisibility(View.GONE);
             mMediaBottomBar.setVisibility(View.GONE);
         }
-    }
+    }*/
 
     public void onToggleEmojiKeyboard() {
         if (mKeyboardLayoutSet == null || !isShowingEmojiPalettes()) {
@@ -387,17 +387,17 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mEmojiPalettesView = (EmojiPalettesView)mCurrentInputView.findViewById(
                 R.id.emoji_palettes_view);
         mMediaBottomBar = (MediaBottomBar) mCurrentInputView.findViewById(R.id.media_bottom_bar);
-        mSettingsViewPager = (LinearLayout) mCurrentInputView.findViewById(R.id.settings_pager_view);
-        ((ViewPager)mCurrentInputView.findViewById(R.id.settings_pager_tabs)).setAdapter(
-                new InlineSettingsAdaptor(mLatinIME));
-        Button mBackFromSettingsKey = (Button) mCurrentInputView.findViewById(R.id.backFromSettingsKey);
+        //mSettingsViewPager = (LinearLayout) mCurrentInputView.findViewById(R.id.settings_pager_view);
+        /*((ViewPager)mCurrentInputView.findViewById(R.id.settings_pager_tabs)).setAdapter(
+                new InlineSettingsAdaptor(mLatinIME));*/
+        /*Button mBackFromSettingsKey = (Button) mCurrentInputView.findViewById(R.id.backFromSettingsKey);
         mBackFromSettingsKey.setEnabled(true);
         mBackFromSettingsKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onToggleSettingsKeyboard();
             }
-        });
+        });*/
 
         mKeyboardView = (MainKeyboardView) mCurrentInputView.findViewById(R.id.keyboard_view);
         mKeyboardView.setHardwareAcceleratedDrawingEnabled(isHardwareAcceleratedDrawingEnabled);
@@ -409,7 +409,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         ColorManager.addObserver(mMediaBottomBar);
         mActionRowView = (ActionRowView) mCurrentInputView.findViewById(R.id.action_row);
         mActionRowView.setListener(this.mLatinIME);
-        mActionRowView.setCircleIndicator((CircleIndicator) mCurrentInputView.findViewById(R.id.actionrow_page_indicator));
+        //mActionRowView.setCircleIndicator((CircleIndicator) mCurrentInputView.findViewById(R.id.actionrow_page_indicator));
         return mCurrentInputView;
     }
 

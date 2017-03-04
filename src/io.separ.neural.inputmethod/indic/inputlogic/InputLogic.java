@@ -2026,7 +2026,7 @@ public final class InputLogic {
             keyboardSwitcher.requestUpdatingShiftState(getCurrentAutoCapsState(settingsValues),
                     getCurrentRecapitalizeState());
         }else{
-            mSearchText.append(batchInputText);
+            mSearchText.append(batchInputText+" ");
             shouldReSearch = true;//TODO must tell latinime to do this
         }
     }

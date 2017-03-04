@@ -2,6 +2,7 @@ package com.android.inputmethod.keyboard.top.services;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import java.util.List;
 
 import io.separ.neural.inputmethod.Utils.ColorUtils;
+import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.slash.EventBusExt;
 import io.separ.neural.inputmethod.slash.NeuralApplication;
@@ -194,6 +196,7 @@ public class ServiceResultsView extends LinearLayout {
         this.mCategoriesList.getAdapter().setOnCategoryClickListener(new C04643());
         this.mSearchContainer = findViewById(R.id.search_container);
         this.mSearchPlaceholder = (ImageView) findViewById(R.id.search_placeholder);
+        mSearchPlaceholder.setColorFilter(Color.BLACK);
         //this.mSearchPlaceholder.setColorFilter(ColorUtils.colorProfile.getPrimary());
         this.mSearchMirror = (TextView) findViewById(R.id.slash_search_mirror);
         setVisualState(TaskQueueHelper.hasTasksOfType(NeuralApplication.getNetworkTaskQueue(), ServiceQuerySearchTask.class, ServiceQueryContactsTask.class) ? VisualSate.Loading : VisualSate.Hide);
@@ -218,6 +221,7 @@ public class ServiceResultsView extends LinearLayout {
 
     public void startSearch(String slash, String context){
         setVisibility(VISIBLE);
+        mSearchPlaceholder.setVisibility(VISIBLE);
         setService(slash);
         currentSlash = slash;
         currentContext = context;
@@ -266,6 +270,7 @@ public class ServiceResultsView extends LinearLayout {
             setSearchMirror(searchString);
         }
         updateCategoryVisibility();
+        //TODO anyone who calls this must change?
         ServiceRequestManager.getInstance().cancelLastRequest();
         ServiceRequestManager.getInstance().postRequest(currentSlash, searchString, action, useCaching);
     }

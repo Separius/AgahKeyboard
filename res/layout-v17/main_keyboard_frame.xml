@@ -30,22 +30,22 @@
             android:orientation="vertical"
             android:id="@id/suggestion_source_results" android:layout_width="match_parent"
             android:layout_height="wrap_content" style="?attr/suggestionStripViewStyle" />
-        <RelativeLayout
+        <!--<RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/action_row_container">
+            android:id="@+id/action_row_container">-->
             <com.android.inputmethod.keyboard.top.actionrow.ActionRowView
                 android:id="@+id/action_row"
                 android:layoutDirection="ltr" android:gravity="center_vertical"
                 android:background="@color/white" android:visibility="visible" android:scrollbars="none"
                 android:clickable="true" android:longClickable="false" android:layout_width="match_parent"
                 android:layout_height="@dimen/config_suggestions_strip_height" android:overScrollMode="never"/>
-            <me.relex.circleindicator.CircleIndicator
+            <!--<me.relex.circleindicator.CircleIndicator
                 android:id="@+id/actionrow_page_indicator"
                 android:layout_width="match_parent"
                 android:layout_height="12dp"
-                android:layout_alignBottom="@id/action_row"/><!--TODO change this(12dp)-->
-        </RelativeLayout>
+                android:layout_alignBottom="@id/action_row"/>--><!--TODO change this(12dp)-->
+        <!--</RelativeLayout>-->
         <FrameLayout android:id="@id/suggestion_strip_hacky_container" android:layout_width="match_parent" android:layout_height="wrap_content">
             <io.separ.neural.inputmethod.indic.suggestions.SuggestionStripView
                 android:id="@+id/suggestion_strip_view"

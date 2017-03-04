@@ -11,5 +11,5 @@
     card_view:cardCornerRadius="@dimen/card_search_item_radius"
     card_view:cardElevation="2dp"
     card_view:cardPreventCornerOverlap="false">
-    <com.facebook.drawee.view.SimpleDraweeView android:id="@id/item_image" android:layout_width="0dp" android:layout_height="@dimen/icon_height" android:layout_centerVertical="true"/>
+    <com.facebook.drawee.view.SimpleDraweeView android:id="@id/item_image" android:layout_width="@dimen/icon_width" android:layout_height="@dimen/icon_height" android:layout_centerVertical="true" card_view:actualImageScaleType="6" card_view:roundedCornerRadius="@dimen/card_search_item_radius" card_view:roundTopRight="false" card_view:roundBottomRight="false" />
 </android.support.v7.widget.CardView>

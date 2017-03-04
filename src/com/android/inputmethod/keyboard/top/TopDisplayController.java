@@ -29,7 +29,7 @@ public class TopDisplayController {
     private final View mSuggestionsStripHackyContainer;
     private final SuggestionStripView mSuggestionsStripView;
     private final ServiceResultsView mServiceResultsView;
-    private final View mActionRowContainer;
+    //private final View mActionRowContainer;
 
     public int getHeight() {
         return holderLayout.getHeight();
@@ -45,7 +45,7 @@ public class TopDisplayController {
 
     public void setSearchItems(String slash, List<RSearchItem> items, String authorizedStatus) {
         setVisualState(ServiceResultsView.VisualSate.Results);
-        this.mActionRowContainer.setVisibility(GONE);
+        this.mActionRowView.setVisibility(GONE);
         this.mServiceResultsView.setSearchItems(slash, items, authorizedStatus);
     }
 
@@ -54,7 +54,7 @@ public class TopDisplayController {
     }
 
     public void runSearch(String serviceId, String context) {
-        this.mActionRowContainer.setVisibility(GONE);
+        this.mActionRowView.setVisibility(GONE);
         this.mServiceResultsView.startSearch(serviceId, context);
         if (this.mSuggestionsStripHackyContainer.getVisibility() != GONE) {
             this.mSuggestionsStripHackyContainer.setVisibility(GONE);
@@ -65,13 +65,13 @@ public class TopDisplayController {
         C04611() {
         }
         public void run() {
-            mActionRowContainer.setVisibility(View.VISIBLE);
+            mActionRowView.setVisibility(View.VISIBLE);
             mSuggestionsStripHackyContainer.setVisibility(GONE);
         }
     }
 
     public void updateBarVisibility() {
-        mActionRowContainer.setVisibility(View.VISIBLE);
+        mActionRowView.setVisibility(View.VISIBLE);
         mSuggestionsStripHackyContainer.setVisibility(GONE);
     }
 
@@ -87,7 +87,7 @@ public class TopDisplayController {
 
     public TopDisplayController(View parent){
         hideSuggestionAfter = new C04611();
-        mActionRowContainer = parent.findViewById(R.id.action_row_container);
+        //mActionRowContainer = parent.findViewById(R.id.action_row_container);
         holderLayout = (LinearLayout) parent.findViewById(R.id.keyboard_top_area);
         mActionRowView = (ActionRowView) parent.findViewById(R.id.action_row);
         mSuggestionsStripView = (SuggestionStripView) parent.findViewById(R.id.suggestion_strip_view);
@@ -103,10 +103,10 @@ public class TopDisplayController {
                 this.mSuggestionsStripHackyContainer.setVisibility(GONE);
                 return;
             }
-            mActionRowContainer.removeCallbacks(this.hideSuggestionAfter);
-            mActionRowContainer.setVisibility(GONE);
+            mActionRowView.removeCallbacks(this.hideSuggestionAfter);
+            mActionRowView.setVisibility(GONE);
             this.mSuggestionsStripHackyContainer.setVisibility(View.VISIBLE);
-            mActionRowContainer.postDelayed(this.hideSuggestionAfter, 2000);
+            mActionRowView.postDelayed(this.hideSuggestionAfter, 2000);
         }
     }
 }

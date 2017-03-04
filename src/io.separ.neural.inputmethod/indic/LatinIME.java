@@ -125,6 +125,7 @@ import io.separ.neural.inputmethod.slash.SearchResultsEvent;
 import io.separ.neural.inputmethod.slash.SearchRetryErrorEvent;
 import io.separ.neural.inputmethod.slash.ServiceRequestEvent;
 
+import static com.android.inputmethod.keyboard.KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED;
 import static io.separ.neural.inputmethod.indic.Constants.ImeOption.FORCE_ASCII;
 import static io.separ.neural.inputmethod.indic.Constants.ImeOption.NO_MICROPHONE;
 import static io.separ.neural.inputmethod.indic.Constants.ImeOption.NO_MICROPHONE_COMPAT;
@@ -666,7 +667,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     }
 
     public void finishCalculatingProfile() {
-        mSuggestionStripView.setBackgroundColor(ColorUtils.colorProfile.getPrimary());
+        mSuggestionStripView.updateColor(ColorUtils.colorProfile);
         this.colorManager.setDarkFactor(0.4f);
     }
 
@@ -1493,7 +1494,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
         }
         if (Constants.CODE_INLINESETTINGS == codePoint) {
-            mKeyboardSwitcher.onToggleSettingsKeyboard();
+            //mKeyboardSwitcher.onToggleSettingsKeyboard();
         }
         final Event event = createSoftwareKeypressEvent(codeToSend, keyX, keyY, isKeyRepeat);
         final InputTransaction completeInputTransaction =
@@ -1536,19 +1537,19 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     public void SendRichContentSample(int id){
             final File imagesDir = new File(getFilesDir(), "images");
             imagesDir.mkdirs();
-            int resId;
+            int resId = 0;
             String type;
             String name;
             if (id == 0) {
-                resId = R.raw.setup_welcome_image;
+                //resId = R.raw.setup_welcome_image;
                 type = RichInputConnection.MIME_TYPE_PNG;
                 name = "image.png";
             } else if (id == 1) {
-                resId = R.raw.animated_gif;
+                //resId = R.raw.animated_gif;
                 type = RichInputConnection.MIME_TYPE_GIF;
                 name = "image.gif";
             } else {
-                resId = R.raw.animated_webp;
+                //resId = R.raw.animated_webp;
                 type = RichInputConnection.MIME_TYPE_WEBP;
                 name = "image.webp";
             }
@@ -1655,18 +1656,18 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             return;
         }
 
-        final boolean shouldShowImportantNotice =
-                ImportantNoticeUtils.shouldShowImportantNotice(this);
+        //final boolean shouldShowImportantNotice = ImportantNoticeUtils.shouldShowImportantNotice(this);
         final boolean shouldShowSuggestionCandidates =
                 currentSettingsValues.mInputAttributes.mShouldShowSuggestions
                 && currentSettingsValues.isSuggestionsEnabledPerUserSettings();
-        final boolean shouldShowSuggestionsStripUnlessPassword = shouldShowImportantNotice
-                /*|| currentSettingsValues.mShowsVoiceInputKey*/
-                || shouldShowSuggestionCandidates
+        final boolean shouldShowSuggestionsStripUnlessPassword = /*shouldShowImportantNotice
+                || currentSettingsValues.mShowsVoiceInputKey
+                ||*/ shouldShowSuggestionCandidates
                 || currentSettingsValues.isApplicationSpecifiedCompletionsOn();
         final boolean shouldShowSuggestionsStrip = shouldShowSuggestionsStripUnlessPassword
                 && !currentSettingsValues.mInputAttributes.mIsPasswordField
                 && !mKeyboardSwitcher.isShowingEmojiPalettes();
+                //&& mKeyboardSwitcher.getKeyboard().mId.mElementId<=ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED;
         mSuggestionStripView.updateVisibility(shouldShowSuggestionsStrip, isFullscreenMode());
         if (!shouldShowSuggestionsStrip) {
             return;
@@ -1680,13 +1681,13 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 || isEmptyApplicationSpecifiedCompletions;
         final boolean isBeginningOfSentencePrediction = (suggestedWords.mInputStyle
                 == SuggestedWords.INPUT_STYLE_BEGINNING_OF_SENTENCE_PREDICTION);
-        final boolean noSuggestionsToOverrideImportantNotice = noSuggestionsFromDictionaries
+        /*final boolean noSuggestionsToOverrideImportantNotice = noSuggestionsFromDictionaries
                 || isBeginningOfSentencePrediction;
         if (shouldShowImportantNotice && noSuggestionsToOverrideImportantNotice) {
             if (mSuggestionStripView.maybeShowImportantNoticeTitle()) {
                 return;
             }
-        }
+        }*/
 
         if (currentSettingsValues.isSuggestionsEnabledPerUserSettings()
                 || currentSettingsValues.isApplicationSpecifiedCompletionsOn()

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import io.separ.neural.inputmethod.Utils.ColorUtils;
+import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.slash.RCategory;
@@ -50,10 +51,11 @@ public class CategoriesArrayAdapter extends ArrayAdapter<RCategory, CategoriesAr
         public void update(RCategory item, int position) {
             this.mPosition = position;
             this.name.setText(item.getName());
-            this.name.setTextColor(ColorUtils.colorProfile.getTextColor());
+            //this.name.setTextColor(ColorManager.getLastProfile().getIcon());
+            this.name.setTextColor(2131689636);
             if (CategoriesArrayAdapter.this.mSelectedItem == position) {
-                //this.name.setBackgroundResource(ColorUtils.colorProfile.getPrimary());
-                this.name.setBackgroundColor(0);
+                //this.name.setBackgroundColor(ColorManager.getLastProfile().getPrimary());
+                this.name.setBackgroundResource(R.drawable.m_dark_category_bg);
             } else {
                 this.name.setBackgroundColor(0);
             }
