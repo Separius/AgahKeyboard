@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.inputmethod.keyboard.sticker.StickerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:orientation="vertical"
+    style="?attr/emojiPalettesViewStyle"
+    >
+    <LinearLayout
+        android:id="@+id/sticker_top_bar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/config_suggestions_strip_height"
+        style="?attr/suggestionStripViewStyle"
+        >
+        <TabHost
+            android:id="@+id/sticker_category_tabhost"
+            android:layout_width="0dip"
+            android:layout_weight="87.5"
+            android:layout_height="match_parent"
+            >
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null" />
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="0dip"
+                android:layout_height="0dip"
+                >
+                <View
+                    android:id="@+id/sticker_keyboard_dummy"
+                    android:layout_width="0dip"
+                    android:layout_height="0dip"
+                    android:visibility="gone" />
+            </FrameLayout>
+        </TabHost>
+    </LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/sticker_keyboard_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</com.android.inputmethod.keyboard.sticker.StickerView>

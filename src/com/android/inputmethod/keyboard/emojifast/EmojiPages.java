@@ -53,7 +53,7 @@ public class EmojiPages {
                     "\ud83d\udc5c", "\ud83d\udc5d", "\ud83d\udecd", "\ud83c\udf92", "\ud83d\udc5e", "\ud83d\udc5f",
                     "\ud83d\udc60", "\ud83d\udc61", "\ud83d\udc62", "\ud83d\udc51", "\ud83d\udc52", "\ud83c\udfa9",
                     "\ud83c\udf93", "\ud83d\udcff", "\ud83d\udc84", "\ud83d\udc8d", "\ud83d\udc8e",
-            }, "emoji_faces.png"),
+            }, "emojis/emoji_faces.png"),
             new StaticEmojiPageModel(R.attr.iconEmojiCategory2Tab, new String[] {
                     "\ud83d\udd30", "\u231a",       "\ud83d\udcbc", "\ud83d\udcb0", "\ud83d\udcb3", "\ud83d\udcb2",
                     "\ud83d\udcb5", "\ud83d\udcb4", "\ud83d\udcb6", "\ud83d\udcb7", "\ud83d\udcb8", "\ud83d\udcb1",
@@ -94,7 +94,7 @@ public class EmojiPages {
                     "\ud83d\udd27", "\ud83d\udd29", "\u2699",       "\ud83d\udddc", "\u2697",       "\u2696",
                     "\ud83d\udd17", "\u26d3",       "\ud83d\udde1", "\u2694",       "\ud83d\udee1", "\ud83c\udff9",
                     "\u26b0", "\u26b1", "\ud83d\uddff", "\ud83d\udee2",
-            }, "emoji_objects.png"),
+            }, "emojis/emoji_objects.png"),
             new StaticEmojiPageModel(R.attr.iconEmojiCategory3Tab, new String[] {
                     "\ud83d\udc15", "\ud83d\udc36", "\ud83d\udc29", "\ud83d\udc08", "\ud83d\udc31", "\ud83d\udc00",
                     "\ud83d\udc01", "\ud83d\udc2d", "\ud83d\udc39", "\ud83d\udc22", "\ud83d\udc07", "\ud83d\udc30",
@@ -131,7 +131,7 @@ public class EmojiPages {
                     "\ud83e\udd88", "\ud83e\udd89", "\ud83e\udd8a", "\ud83e\udd8b", "\ud83e\udd8c", "\ud83e\udd8d",
                     "\ud83e\udd8e", "\ud83e\udd8f", "\ud83e\udd90", "\ud83e\udd91", "\ud83d\udc90", "\ud83d\udcae",
                     "\ud83c\udff5", "\u2618",
-            }, "emoji_nature.png"),
+            }, "emojis/emoji_nature.png"),
             new StaticEmojiPageModel(R.attr.iconEmojiCategory4Tab, new String[] {
                     "\ud83c\udfe0", "\ud83c\udfe1", "\ud83c\udfe2", "\ud83c\udfe3", "\ud83c\udfe4", "\ud83c\udfe5",
                     "\ud83c\udfe6", "\ud83c\udfe8", "\ud83c\udfe9", "\ud83c\udfea", "\ud83c\udfeb", "\u26ea",
@@ -154,7 +154,7 @@ public class EmojiPages {
                     "\ud83d\udd70", "\ud83c\udf21", "\u26c8",       "\ud83c\udf24", "\ud83c\udf25", "\ud83c\udf26",
                     "\ud83c\udf27", "\ud83c\udf28", "\ud83c\udf29", "\ud83c\udf2a", "\ud83c\udf2b", "\ud83c\udf2c",
                     "\u2602",       "\u26f1",       "\u2603",       "\u2604",
-            }, "emoji_places.png"),
+            }, "emojis/emoji_places.png"),
             new StaticEmojiPageModel(R.attr.iconEmojiCategory5Tab, new String[] {
                     "\ud83d\udd1d", "\ud83d\udd19", "\ud83d\udd1b", "\ud83d\udd1c", "\ud83d\udd1a", "\u23f3",
                     "\u231b",       "\u23f0",       "\u2648",       "\u2649",       "\u264a",       "\u264b",
@@ -202,7 +202,7 @@ public class EmojiPages {
                     "\ud83c\udfc5", "\ud83c\udfc6", "\ud83c\udfcf", "\ud83c\udfd0", "\ud83c\udfd1", "\ud83c\udfd2",
                     "\ud83c\udfd3", "\ud83c\udff8", "\ud83d\udd79", "\ud83e\udd38", "\ud83e\udd39", "\ud83e\udd3a",
                     "\ud83e\udd3c", "\ud83e\udd3d", "\ud83e\udd3e",
-            }, "emoji_symbols.png"),
+            }, "emojis/emoji_symbols.png"),
             new StaticEmojiPageModel(R.attr.iconEmojiCategory6Tab, new String[] {
                     "\ud83c\udde6\ud83c\udde9", "\ud83c\udde6\ud83c\uddea", "\ud83c\udde6\ud83c\uddeb",
                     "\ud83c\udde6\ud83c\uddec", "\ud83c\udde6\ud83c\uddee", "\ud83c\udde6\ud83c\uddf1",
@@ -282,7 +282,7 @@ public class EmojiPages {
                     "\ud83c\uddff\ud83c\udde6", "\ud83c\uddff\ud83c\uddf2", "\ud83c\uddff\ud83c\uddfc",
                     "\ud83c\udde6\ud83c\udde8", "\ud83c\udde6\ud83c\uddf6", "\ud83c\udde7\ud83c\uddfb",
                     "\ud83c\uddee\ud83c\udde8", "\ud83c\uddf8\ud83c\udded", "\ud83c\uddf9\ud83c\udde6",
-            }, "emoji_flags.png"),
+            }, "emojis/emoji_flags.png")/*,
             new StaticEmojiPageModel(R.attr.iconEmojiCategory7Tab, new String[] {
                     ":-)",          ";-)",          "(-:",          ":->",          ":-D",          "\\o/",
                     ":-P",          "B-)",          ":-$",          ":-*",          "O:-)",         "=-O",
@@ -298,5 +298,5 @@ public class EmojiPages {
                     "(^._.^)\uff89",                                "\u0e05^\u2022\ufecc\u2022^\u0e05",
                     "(\u2022_\u2022)",                              " \u25a0-\u25a0\u00ac <(\u2022_\u2022) ",
                     "(\u25a0_\u25a0\u00ac)"
-            }, null));
+            }, null)*/);
 }

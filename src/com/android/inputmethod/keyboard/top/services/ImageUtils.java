@@ -99,7 +99,7 @@ public class ImageUtils {
         return sThemeId;
     }
 
-    private static int getDrawableId(String resName) {
+    public static int getDrawableId(String resName) {
         return NeuralApplication.getInstance().getResources().getIdentifier(resName, "drawable", NeuralApplication.getInstance().getPackageName());
     }
 }

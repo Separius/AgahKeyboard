@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.inputmethod.keyboard.ChangeRichModeListener;
 import com.android.inputmethod.keyboard.KeyboardActionListener;
 import com.android.inputmethod.keyboard.internal.KeyDrawParams;
 import com.android.inputmethod.keyboard.internal.KeyVisualAttributes;
@@ -27,6 +28,7 @@ import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.indic.Constants;
 import io.separ.neural.inputmethod.indic.R;
 
+import static com.android.inputmethod.keyboard.top.services.ImageUtils.getDrawableId;
 import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
 import static io.separ.neural.inputmethod.indic.Constants.NOT_A_COORDINATE;
 
@@ -36,11 +38,15 @@ import static io.separ.neural.inputmethod.indic.Constants.NOT_A_COORDINATE;
 
 public class MediaBottomBar extends LinearLayout implements View.OnTouchListener, ColorManager.OnColorChange, View.OnClickListener {
     private final DeleteKeyOnTouchListener mDeleteKeyOnTouchListener;
+    private final ModeSwitchOnTouchListenet mModeSwitchOnTouchListener;
     private ImageButton mDeleteKey;
+    private ImageButton mStickerSwitch;
+    private ImageButton mEmojiSwitch;
     private TextView mAlphabetKeyLeft;
     private KeyboardActionListener mKeyboardActionListener = KeyboardActionListener.EMPTY_LISTENER;
     private EmojiLayoutParams mEmojiLayoutParams;
     private final int mFunctionalKeyBackgroundId;
+    private ChangeRichModeListener mModeSwitchListener;
 
     public MediaBottomBar(final Context context, final AttributeSet attrs) {
         this(context, attrs, R.attr.emojiPalettesViewStyle);
@@ -58,6 +64,7 @@ public class MediaBottomBar extends LinearLayout implements View.OnTouchListener
         final Resources res = context.getResources();
         mEmojiLayoutParams = new EmojiLayoutParams(res);
         mDeleteKeyOnTouchListener = new DeleteKeyOnTouchListener(context);
+        mModeSwitchOnTouchListener = new ModeSwitchOnTouchListenet();
     }
 
     @Override
@@ -82,6 +89,14 @@ public class MediaBottomBar extends LinearLayout implements View.OnTouchListener
         mAlphabetKeyLeft.setTag(Constants.CODE_ALPHA_FROM_EMOJI);
         mAlphabetKeyLeft.setOnTouchListener(this);
         mAlphabetKeyLeft.setOnClickListener(this);
+        mEmojiSwitch = (ImageButton)findViewById(R.id.switch_to_emoji);
+        mEmojiSwitch.setBackgroundResource(mFunctionalKeyBackgroundId);
+        mEmojiSwitch.setOnTouchListener(mModeSwitchOnTouchListener);
+        mEmojiSwitch.setTag("rich_emoji_mode");
+        mStickerSwitch = (ImageButton)findViewById(R.id.switch_to_sticker);
+        mStickerSwitch.setBackgroundResource(mFunctionalKeyBackgroundId);
+        mStickerSwitch.setOnTouchListener(mModeSwitchOnTouchListener);
+        mStickerSwitch.setTag("rich_sticker_mode");
     }
 
     public void onColorChange(ColorProfile newProfile){
@@ -96,6 +111,15 @@ public class MediaBottomBar extends LinearLayout implements View.OnTouchListener
             mAlphabetKeyLeft.setBackgroundColor(darkBackground);
             mAlphabetKeyLeft.setTextColor(iconColor);
             mAlphabetKeyLeft.setText(mAlphabetKeyLeft.getText());
+        }
+        if(mEmojiSwitch != null){
+            mEmojiSwitch.setBackgroundColor(darkBackground);
+            mEmojiSwitch.setActivated(true);
+            //mEmojiSwitch.setColorFilter(iconColor);
+        }
+        if(mStickerSwitch != null){
+            mStickerSwitch.setBackgroundColor(darkBackground);
+            //mStickerSwitch.setColorFilter(iconColor);
         }
     }
 
@@ -279,6 +303,23 @@ public class MediaBottomBar extends LinearLayout implements View.OnTouchListener
                     handleKeyUp();
                     break;
             }
+        }
+    }
+
+    public void setSwitchActionListener(ChangeRichModeListener listener){
+        mModeSwitchListener = listener;
+    }
+
+    private class ModeSwitchOnTouchListenet implements OnTouchListener {
+        @Override
+        public boolean onTouch(final View v, final MotionEvent event) {
+            if(mModeSwitchListener != null) {
+                final Object tag = v.getTag();
+                if (!(tag instanceof String))
+                    return false;
+                mModeSwitchListener.change((String)tag);
+            }
+            return true;
         }
     }
 }

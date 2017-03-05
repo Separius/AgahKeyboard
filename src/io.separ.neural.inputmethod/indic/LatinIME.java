@@ -664,6 +664,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         this.navManager = new NavManager(this);
         //SpeechUtils.initialize(this);
         this.mEventHandler = new EventBusHandler();
+        Log.e("SEPAR_Collection", "onCreate");
     }
 
     public void finishCalculatingProfile() {
@@ -780,6 +781,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         unregisterReceiver(mDictionaryDumpBroadcastReceiver);
         StatsUtils.onDestroy();
         this.navManager.killService();
+        Log.e("SEPAR_Collection", "onDestroy");
         super.onDestroy();
     }
 
@@ -823,6 +825,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     @Override
     public View onCreateInputView() {
+        Log.e("SEPAR_Collection", "onCreateInputView");
         return mKeyboardSwitcher.onCreateInputView(mIsHardwareAcceleratedDrawingEnabled);
     }
 
@@ -836,6 +839,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             mSuggestionStripView.setListener(this, view);
         }
         mInputLogic.setTextDecoratorUi(new TextDecoratorUi(this, view));
+        Log.e("SEPAR_Collection", "setInputView");
     }
 
     @Override
@@ -904,6 +908,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         if (this.mTopDisplayController != null) {
             this.mTopDisplayController.updateBarVisibility();
         }
+        Log.e("SEPAR_Collection", "onStartInputView");
     }
 
     @Override
@@ -932,6 +937,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     private void onStartInputInternal(final EditorInfo editorInfo, final boolean restarting) {
         super.onStartInput(editorInfo, restarting);
+        Log.e("SEPAR_Collection", "onStartInputInternal");
     }
 
     private ColorManager colorManager;
@@ -1143,11 +1149,13 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         if (mainKeyboardView != null) {
             mainKeyboardView.closing();
         }
+        Log.e("SEPAR_Collection", "onFinishInputInternal");
     }
 
     private void onFinishInputViewInternal(final boolean finishingInput) {
         super.onFinishInputView(finishingInput);
         cleanupInternalStateForFinishInput();
+        Log.e("SEPAR_Collection", "onFinishInputViewInternal");
     }
 
     private void cleanupInternalStateForFinishInput() {
@@ -1368,6 +1376,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
         super.updateFullscreenMode();
         mInputLogic.onUpdateFullscreenMode(isFullscreenMode());
+        Log.e("SEPAR_Collection", "updateFullscreenMode");
     }
 
     private int getCurrentAutoCapsState() {

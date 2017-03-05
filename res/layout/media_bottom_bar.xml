@@ -13,6 +13,24 @@
         android:hapticFeedbackEnabled="false"
         android:soundEffectsEnabled="false"/>
     <ImageButton
+        android:id="@+id/switch_to_emoji"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="0.125"
+        android:gravity="center"
+        android:hapticFeedbackEnabled="false"
+        android:soundEffectsEnabled="false"
+        android:src="@drawable/ic_emoji_smile"/>
+    <ImageButton
+        android:id="@+id/switch_to_sticker"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="0.125"
+        android:gravity="center"
+        android:hapticFeedbackEnabled="false"
+        android:soundEffectsEnabled="false"
+        android:src="@drawable/ic_sticker"/>
+    <ImageButton
         android:id="@+id/emoji_keyboard_delete"
         android:layout_width="0dip"
         android:layout_weight="0.125"

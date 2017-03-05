@@ -27,7 +27,7 @@
             android:id="@+id/main_keyboard_frame"
             layout="@layout/main_keyboard_frame" />
         <include
-            android:id="@+id/other_keyboard_frame"
+            android:id="@+id/rich_media_view"
             layout="@layout/other_keyboard_frame" />
     <!--<include
         android:id="@+id/settings_pager_view"
