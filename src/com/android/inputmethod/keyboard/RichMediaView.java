@@ -1,6 +1,7 @@
 package com.android.inputmethod.keyboard;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -10,6 +11,7 @@ import com.android.inputmethod.keyboard.emoji.MediaBottomBar;
 import com.android.inputmethod.keyboard.sticker.StickerView;
 import com.android.inputmethod.keyboard.internal.KeyVisualAttributes;
 import com.android.inputmethod.keyboard.internal.KeyboardIconsSet;
+import com.android.inputmethod.latin.utils.ResourceUtils;
 
 import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.indic.R;
@@ -77,20 +79,38 @@ public class RichMediaView extends LinearLayout implements ChangeRichModeListene
         ColorManager.addObserver(mEmojiPalettesView);
         ColorManager.addObserver(mMediaBottomBar);
         mStickerView = (StickerView) this.findViewById(R.id.sticker_view);
-        emojiIsActive = false;
+        emojiIsActive = true;
         ColorManager.addObserver(mStickerView);
     }
 
     @Override
-    public void change(String to){
+    public int change(String to){
         if(to == null)
-            return;
-        if(to.equals("rich_emoji_mode"))
+            return 0;
+        if(to.equals("rich_emoji_mode")) {
             emojiIsActive = true;
-        else if(to.equals("rich_sticker_mode"))
+            changeLayout();
+            return 1;
+        }
+        else if(to.equals("rich_sticker_mode")) {
             emojiIsActive = false;
+            changeLayout();
+            return 2;
+        }
         else
-            return;
-        changeLayout();
+            return 0;
     }
+
+    /*@Override
+    protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        final Resources res = getContext().getResources();
+        // The main keyboard expands to the entire this {@link KeyboardView}.
+        final int width = ResourceUtils.getDefaultKeyboardWidth(res)
+                + getPaddingLeft() + getPaddingRight();
+        final int height = ResourceUtils.getDefaultKeyboardHeight(res)
+                //- res.getDimensionPixelSize(R.dimen.config_suggestions_strip_height)
+                + getPaddingTop() + getPaddingBottom();
+        setMeasuredDimension(width, height);
+    }*/
 }

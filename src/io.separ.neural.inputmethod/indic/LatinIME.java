@@ -25,6 +25,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.inputmethodservice.InputMethodService;
@@ -60,6 +61,7 @@ import com.android.inputmethod.keyboard.KeyboardId;
 import com.android.inputmethod.keyboard.KeyboardSwitcher;
 import com.android.inputmethod.keyboard.MainKeyboardView;
 import com.android.inputmethod.keyboard.TextDecoratorUi;
+import com.android.inputmethod.keyboard.sticker.InsertPngEvent;
 import com.android.inputmethod.keyboard.top.TopDisplayController;
 import com.android.inputmethod.keyboard.top.actionrow.ActionRowView;
 import com.android.inputmethod.keyboard.top.actionrow.FrequentEmojiHandler;
@@ -77,6 +79,7 @@ import com.android.inputmethod.latin.utils.LeakGuardHandlerWrapper;
 import com.android.inputmethod.latin.utils.StatsUtils;
 import com.android.inputmethod.latin.utils.SubtypeLocaleUtils;
 import com.android.inputmethod.latin.utils.ViewLayoutUtils;
+import com.crashlytics.android.Crashlytics;
 import com.squareup.leakcanary.LeakCanary;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -84,14 +87,20 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import io.fabric.sdk.android.Fabric;
 import io.separ.neural.inputmethod.Utils.ColorUtils;
 import io.separ.neural.inputmethod.Utils.FontUtils;
+import io.separ.neural.inputmethod.Utils.ShareUtils;
 import io.separ.neural.inputmethod.Utils.SwipeUtils;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 import io.separ.neural.inputmethod.annotations.UsedForTesting;
@@ -256,8 +265,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     @Override
     public void onServiceClicked(String serviceId){
         //change the state of input connection
-        if(serviceId.equals("customization"))
+        if(serviceId.equals("customization")) {
+            launchSettings();
             return;
+        }
         this.mTopDisplayController.runSearch(serviceId, mInputLogic.mConnection.getmComposingText().toString());
         this.mInputLogic.startSearchingResults();
     }
@@ -612,6 +623,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     }
     @Override
     public void onCreate() {
+        Fabric.with(this, new Crashlytics());
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
         }
@@ -905,9 +917,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         mHandler.onStartInputView(editorInfo, restarting);
         mInputLogic.stopSearchingResults();
         this.mEventHandler.register();
-        if (this.mTopDisplayController != null) {
-            this.mTopDisplayController.updateBarVisibility();
-        }
+        if (this.mTopDisplayController != null)
+            this.mTopDisplayController.hideAll();
         Log.e("SEPAR_Collection", "onStartInputView");
     }
 
@@ -1283,9 +1294,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         super.onComputeInsets(outInsets);
         final SettingsValues settingsValues = mSettings.getCurrent();
         final View visibleKeyboardView = mKeyboardSwitcher.getVisibleKeyboardView();
-        if (visibleKeyboardView == null || !hasSuggestionStripView()) {
+        if (visibleKeyboardView == null)//|| !hasSuggestionStripView()) {
             return;
-        }
 
         final int inputHeight = mInputView.getHeight();
         final boolean hasHardwareKeyboard = settingsValues.mHasHardwareKeyboard;
@@ -1296,9 +1306,11 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             outInsets.visibleTopInsets = inputHeight;
             return;
         }
-        //SEPAR TODO::this is for the action row
-        final int suggestionsHeight = (!mKeyboardSwitcher.isShowingEmojiPalettes()) ?
-                mTopDisplayController.getHeight() : mSuggestionStripView.getHeight();//bottom bar
+        //SEPAR TODO::this is for the action row (if emoji => set to buttombar size + rich keyboard)
+        /*final int suggestionsHeight = (!mKeyboardSwitcher.isShowingEmojiPalettes()) ?
+                mTopDisplayController.getHeight() : mSuggestionStripView.getHeight();*/
+        final int suggestionsHeight = mTopDisplayController.getHeight();
+                Log.e("SEPAR", "onComputeInsets: "+suggestionsHeight);
         final int visibleTopY = inputHeight - visibleKeyboardView.getHeight() - suggestionsHeight;
         // Need to set touchable region only if a keyboard view is being shown.
         if (visibleKeyboardView.isShown()) {
@@ -2215,30 +2227,56 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
 
         @Subscribe(threadMode = ThreadMode.MAIN)
+        public void onEventMainThread(InsertPngEvent event){
+            try {
+                if(event.isSticker) {
+                    AssetFileDescriptor fileDescriptor = getAssets().openFd("stickers/"+event.base+'/'+event.name);
+                    FileInputStream stream = fileDescriptor.createInputStream();
+                    final File imagesDir = new File(getFilesDir(), "images");
+                    imagesDir.mkdirs();
+                    final File mPngFile = new File(imagesDir, event.name);
+                    mPngFile.delete();
+                    OutputStream outputStream = new FileOutputStream(mPngFile);
+                    int read;
+                    byte[] bytes = new byte[1024];
+                    while ((read = stream.read(bytes)) != -1)
+                        outputStream.write(bytes, 0, read);
+                    Intent resInt = mInputLogic.mConnection.doCommitContent("Sticker from The Neural Keyboard", RichInputConnection.MIME_TYPE_PNG, mPngFile);
+                    if (resInt != null) {
+                        resInt.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(resInt);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEventMainThread(SearchItemSelectedEvent event) {
             LatinIME.this.mInputLogic.stopSearchingResults();
             mTopDisplayController.hideAll();
-            /*if (ShareUtils.shareMediaThroughIntent(LatinIME.this, event.getItem(), LatinIME.this.mHostPackageName))
-                return;*/
+            if(event.getItem().getService().equals("giphy")) {
+                File fromFile = ShareUtils.getCachedImageOnDisk(LatinIME.this, Uri.parse(event.getItem().getImage().getUrl()));
+                File toFile = new File(new File(getFilesDir(), "images"), System.currentTimeMillis() + ".gif");
+                if (fromFile == null)
+                    return;
+                ShareUtils.copyFile(fromFile, toFile);
+                Intent resInt = mInputLogic.mConnection.doCommitContent("GIF from The Neural Keyboard", RichInputConnection.MIME_TYPE_GIF, toFile);
+                if (resInt != null) {
+                    resInt.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(resInt);
+                }
+                return;
+            }
             shareItemThroughText(event);
         }
 
         private void shareItemThroughText(SearchItemSelectedEvent event) {
             String output = event.getItem().getOutput();
-            Log.e("Item Click Text", output);
-            /*if (TextUtils.isEmpty(output)) {
-                output = event.getItem().getSlashShort();
-            }
-            *//*if (LatinIME.this.mSettings.getCurrent().mCopySearchOutputEnabled) {
-                ((ClipboardManager) LatinIME.this.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText(event.getItem().getTitle(), output));
-            }*//*
-            NeuralApplication.getInstance();
-            String stringToReplace = event.getItem().getAnyOutput();
-            if (stringToReplace == null) {
-                stringToReplace = "";
-            }*/
-            //LatinIME.this.mInputLogic.replaceCommandForOutput("", stringToReplace, false);
-            //LatinIME.this.mKeyboardSwitcher.setAlphabetKeyboardExternal(LatinIME.this.getCurrentAutoCapsState(), LatinIME.this.getCurrentRecapitalizeState());
+            if (TextUtils.isEmpty(output))
+                return;
+            LatinIME.this.mInputLogic.mConnection.commitText(output, LatinIME.this.mInputLogic.mConnection.getExpectedSelectionEnd());
         }
 
         @Subscribe(threadMode = ThreadMode.MAIN)

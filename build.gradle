@@ -1,4 +1,18 @@
 project.ext.set("archivesBaseName", "IndicKeyboard");
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        // These docs use an open ended version so that our plugin
+        // can be updated quickly in response to Android tooling updates
+
+        // We recommend changing it to the latest version from our changelog:
+        // https://docs.fabric.io/android/changelog.html#fabric-gradle-plugin
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 
 buildscript {
     repositories {
@@ -13,7 +27,9 @@ repositories {
     mavenCentral()
     jcenter()
     maven { url "https://jitpack.io" }
+    maven { url 'https://maven.fabric.io/public' }
 }
+apply plugin: 'io.fabric'
 
 dependencies {
     compile 'com.android.support:support-v4:25.0.1'
@@ -39,6 +55,9 @@ dependencies {
     compile 'io.nlopez.smartlocation:library:3.2.11'
     compile 'com.github.ybq:Android-SpinKit:1.1.0'
     compile 'com.hannesdorfmann.smoothprogressbar:library:1.0.0'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+        transitive = true;
+    }
 }
 
 android {
@@ -47,6 +66,10 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 25
+        multiDexEnabled true
+        ndk {
+            abiFilters "armeabi-v7a"//, "armeabi" TODO, if i could disable all the native calls, this would work
+        }
     }
     sourceSets {
         main {
@@ -66,7 +89,7 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('/home/sepehr/Desktop/Keyboard/apps/mine/key.keystore')
+            storeFile file('/home/sepehr/workspace/Keyboard/key.keystore')
             storePassword '123456'
             keyAlias 'alias'
             keyPassword '123456'

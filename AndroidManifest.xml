@@ -58,6 +58,10 @@
             </intent-filter>
         </receiver>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="968dbb1e44a4a010d0f540b22b4edbbd77101835" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="io.separ.neural.inputmethod.inputcontent"

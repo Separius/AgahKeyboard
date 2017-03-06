@@ -21,5 +21,5 @@ public final class JniLibName {
         // This class is not publicly instantiable.
     }
 
-    public static final String JNI_LIB_NAME = "jni_latinime";
+    public static final String JNI_LIB_NAME = "jni_neural_key";
 }

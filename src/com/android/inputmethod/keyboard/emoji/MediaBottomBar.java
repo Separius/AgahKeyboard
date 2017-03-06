@@ -97,6 +97,9 @@ public class MediaBottomBar extends LinearLayout implements View.OnTouchListener
         mStickerSwitch.setBackgroundResource(mFunctionalKeyBackgroundId);
         mStickerSwitch.setOnTouchListener(mModeSwitchOnTouchListener);
         mStickerSwitch.setTag("rich_sticker_mode");
+        mModeSwitchOnTouchListener.setChilds(mEmojiSwitch, mStickerSwitch);
+        mEmojiSwitch.setAlpha(1.f);
+        mStickerSwitch.setAlpha(0.5f);
     }
 
     public void onColorChange(ColorProfile newProfile){
@@ -114,12 +117,11 @@ public class MediaBottomBar extends LinearLayout implements View.OnTouchListener
         }
         if(mEmojiSwitch != null){
             mEmojiSwitch.setBackgroundColor(darkBackground);
-            mEmojiSwitch.setActivated(true);
-            //mEmojiSwitch.setColorFilter(iconColor);
+            mEmojiSwitch.setColorFilter(iconColor);
         }
         if(mStickerSwitch != null){
             mStickerSwitch.setBackgroundColor(darkBackground);
-            //mStickerSwitch.setColorFilter(iconColor);
+            mStickerSwitch.setColorFilter(iconColor);
         }
     }
 
@@ -135,7 +137,7 @@ public class MediaBottomBar extends LinearLayout implements View.OnTouchListener
                                          final KeyDrawParams params) {
         alphabetKey.setText(label);
         alphabetKey.setTextColor(params.mFunctionalTextColor);
-        alphabetKey.setTextSize(TypedValue.COMPLEX_UNIT_PX, params.mLabelSize);
+        //alphabetKey.setTextSize(TypedValue.COMPLEX_UNIT_PX, params.mLabelSize);
         alphabetKey.setTypeface(FontUtils.getLocaleTypeface());
     }
 
@@ -311,15 +313,30 @@ public class MediaBottomBar extends LinearLayout implements View.OnTouchListener
     }
 
     private class ModeSwitchOnTouchListenet implements OnTouchListener {
+        View v1, v2;
+
         @Override
         public boolean onTouch(final View v, final MotionEvent event) {
             if(mModeSwitchListener != null) {
                 final Object tag = v.getTag();
                 if (!(tag instanceof String))
                     return false;
-                mModeSwitchListener.change((String)tag);
+                final int res = mModeSwitchListener.change((String)tag);
+                if(res == 1){
+                    v1.setAlpha(1.0f);
+                    v2.setAlpha(0.5f);
+                }
+                else if(res == 2){
+                    v1.setAlpha(0.5f);
+                    v2.setAlpha(1.0f);
+                }
             }
             return true;
+        }
+
+        public void setChilds(View mEmojiSwitch, View mStickerSwitch) {
+            v1 = mEmojiSwitch;
+            v2 = mStickerSwitch;
         }
     }
 }

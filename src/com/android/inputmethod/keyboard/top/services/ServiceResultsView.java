@@ -351,8 +351,11 @@ public class ServiceResultsView extends LinearLayout {
 
     private void onItemClicked(int position) {
         RSearchItem searchItem = this.mRecycler.getAdapter().getItem(position);
-        if (!RSearchItem.LOADING_TYPE.equals(searchItem.getDisplayType()) && !RSearchItem.CONNECT_TO_USE_TYPE.equals(searchItem.getDisplayType()) && !RSearchItem.GENERIC_MESSAGE_TYPE.equals(searchItem.getDisplayType()) && !RSearchItem.PERMISSION_REQUIRED_TYPE.equals(searchItem.getDisplayType()))
+        if (!RSearchItem.LOADING_TYPE.equals(searchItem.getDisplayType()) && !RSearchItem.CONNECT_TO_USE_TYPE.equals(searchItem.getDisplayType()) && !RSearchItem.GENERIC_MESSAGE_TYPE.equals(searchItem.getDisplayType()) && !RSearchItem.PERMISSION_REQUIRED_TYPE.equals(searchItem.getDisplayType())) {
+            Log.e("SEPAR", "gif hunt: 1");
             onNormalItemClick(searchItem, position);
+        }else
+            Log.e("SEPAR", "gif hunt: 2");
     }
 
     private void onNormalItemClick(RSearchItem searchItem, int position) {

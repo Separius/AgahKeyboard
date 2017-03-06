@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 import io.separ.neural.inputmethod.indic.setup.IntroActivity;
 
@@ -22,6 +24,8 @@ public class StartActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
+        //Fabric.with(this, new Crashlytics());
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (Settings.readWizardCompleted(prefs)) {
             startActivity(new Intent(this, SettingsActivity.class));
@@ -29,7 +33,6 @@ public class StartActivity extends AppCompatActivity {
         }
         prefs.edit().clear().apply();
         startActivity(new Intent(this, IntroActivity.class));
-        Log.e("SEPAR", "onDonePressed2");
     }
 
     protected String getActivityName() {

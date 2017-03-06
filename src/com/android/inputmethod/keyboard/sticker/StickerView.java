@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -17,6 +18,7 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 
 import com.android.inputmethod.latin.utils.ResourceUtils;
+import com.bumptech.glide.Glide;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -47,28 +49,33 @@ public class StickerView extends LinearLayout implements ColorManager.OnColorCha
             new StickerPageModel("halloween", R.attr.iconEmojiCategory2Tab, new String[] {"004.png", "015.png", "001.png", "003.png", "006.png", "008.png", "013.png", "012.png", "011.png", "009.png", "005.png", "002.png", "014.png", "010.png", "007.png"})
     );
 
-    private void addTab(final TabHost host, final StickerPageModel currentPage) {
+    /*private void addTab(final TabHost host, final StickerPageModel currentPage) {
         final TabHost.TabSpec tspec = host.newTabSpec(currentPage.getName());
         tspec.setContent(R.id.sticker_keyboard_dummy);
         final ImageView iconView = (ImageView) LayoutInflater.from(getContext()).inflate(
-                R.layout.emoji_keyboard_tab_icon, null);
-        iconView.setBackgroundColor(mCategoryPageIndicatorBackground);
+                R.layout.sticker_keyboard_tab_icon, null);
+        //iconView.setBackgroundColor(mCategoryPageIndicatorBackground);
+        Glide.with(getContext())
+                .load(Uri.parse("file:///android_asset/stickers/"+currentPage.getName()+"/"+currentPage.getPack()[0]))
+                .override(50, 50)
+                .fitCenter()
+                .into(iconView);
         //iconView.setImageResource(getDrawableId(currentPage.getName()));//TODO
         tspec.setIndicator(iconView);
         host.addTab(tspec);
-    }
+    }*/
 
     @Override
     protected void onFinishInflate() {
-        mStickerTopBar = (LinearLayout)findViewById(R.id.sticker_top_bar);
+        /*mStickerTopBar = (LinearLayout)findViewById(R.id.sticker_top_bar);
         mTabHost = (TabHost)findViewById(R.id.sticker_category_tabhost);
         mTabHost.setup();
         for (StickerPageModel i : PAGES)
             addTab(mTabHost, i);
-        //mTabHost.setOnTabChangedListener(this);//TODO
+        mTabHost.setOnTabChangedListener(this);//TODO
         final TabWidget tabWidget = mTabHost.getTabWidget();
         tabWidget.setStripEnabled(true);
-        tabWidget.setBackgroundResource(mCategoryIndicatorDrawableResId);
+        tabWidget.setBackgroundResource(mCategoryIndicatorDrawableResId);*/
 //        tabWidget.setLeftStripDrawable(mCategoryIndicatorBackgroundResId); //TODO
 //        tabWidget.setRightStripDrawable(mCategoryIndicatorBackgroundResId);
 

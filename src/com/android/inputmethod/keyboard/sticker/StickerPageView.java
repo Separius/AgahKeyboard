@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import io.separ.neural.inputmethod.indic.R;
+import io.separ.neural.inputmethod.slash.EventBusExt;
 
 import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
 
@@ -48,7 +49,7 @@ public class StickerPageView extends FrameLayout {
         grid = (GridView) view.findViewById(R.id.sticker_grid);
         //TODO change these numbers and also in grid_layout
         grid.setColumnWidth(getResources().getDimensionPixelSize(R.dimen.emoji_drawer_size)*2 + 2 * getResources().getDimensionPixelSize(R.dimen.emoji_drawer_item_padding));
-        grid.setBackgroundColor(colorProfile.getPrimary());
+        //grid.setBackgroundColor(colorProfile.getPrimary());
     }
 
     public void setModel(StickerPageModel model) {
@@ -85,8 +86,7 @@ public class StickerPageView extends FrameLayout {
 
         @Override
         public long getItemId(int position) {
-            /*if(listener != null)
-                listener.onEmojiSelected(modelEmojis[position]);*/
+            EventBusExt.getDefault().post(new InsertPngEvent(true, baseAddress, modelStickers[position]));
             return position;
         }
 
@@ -96,7 +96,6 @@ public class StickerPageView extends FrameLayout {
             if (convertView == null) {
                 imageView = new ImageView(context);
                 imageView.setLayoutParams(new GridView.LayoutParams(emojiSize+2*5, emojiSize+2*5));
-                //imageView.setScaleType(ImageView.ScaleType.CENTER);
                 imageView.setPadding(5, 5, 5, 5);
             } else {
                 imageView = (ImageView) convertView;
