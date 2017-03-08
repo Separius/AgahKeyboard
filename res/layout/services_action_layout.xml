@@ -8,5 +8,5 @@
     <ImageView android:gravity="center" android:id="@+id/google_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/cache_google_bar" android:layout_weight="1.0" />
     <ImageView android:gravity="center" android:id="@+id/contacts_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/cache_contacts_bar" android:layout_weight="1.0" />
     <ImageView android:gravity="center" android:id="@+id/foursquare_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/cache_foursquare_bar" android:layout_weight="1.0" />
-    <ImageView android:gravity="center" android:id="@+id/customization_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/sym_keyboard_settings_lxx_light" android:layout_weight="1.0" />
+    <ImageView android:gravity="center" android:id="@+id/customization_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/ic_color_lens_black_24dp" android:layout_weight="1.0" />
 </LinearLayout>

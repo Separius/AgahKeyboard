@@ -148,4 +148,8 @@ public class ColorProfile {
     public int hashCode() {
         return (((this.primary * 31) + this.primaryDark) * 31) + this.accent;
     }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
+    }
 }

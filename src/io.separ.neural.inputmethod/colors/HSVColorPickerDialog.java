@@ -42,7 +42,7 @@ public class HSVColorPickerDialog extends AlertDialog {
          * possible if {@link HSVColorPickerDialog#setNoColorButton(int) setNoColorButton()}
          * has been called on the dialog before showing it
          */
-        public void colorSelected( Integer color );
+        void colorSelected( Integer color );
     }
 
     public HSVColorPickerDialog(Context context, int initialColor, final OnColorSelectedListener listener) {
@@ -72,7 +72,6 @@ public class HSVColorPickerDialog extends AlertDialog {
         FrameLayout valueSliderBorder = new FrameLayout( context );
         valueSliderBorder.setBackgroundColor( BORDER_COLOR );
         valueSliderBorder.setPadding( borderSize, borderSize, borderSize, borderSize );
-        //valueSliderBorder.setId( 2 );
         lp = new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT, selectedColorHeight + 2 * borderSize );
         lp.bottomMargin = (int) (context.getResources().getDisplayMetrics().density * CONTROL_SPACING_DP);
         lp.addRule( RelativeLayout.BELOW, R.id.hsv_color_picker );
@@ -83,21 +82,9 @@ public class HSVColorPickerDialog extends AlertDialog {
             @Override
             public void colorSelected(Integer color) {
                 selectedColor = color;
-                //selectedColorView.setBackgroundColor( color );
             }
         });
         valueSliderBorder.addView( valueSlider );
-
-        /*FrameLayout selectedColorborder = new FrameLayout( context );
-        selectedColorborder.setBackgroundColor( BORDER_COLOR );
-        lp = new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT, selectedColorHeight + 2 * borderSize );
-        selectedColorborder.setPadding( borderSize, borderSize, borderSize, borderSize );
-        lp.addRule( RelativeLayout.BELOW, 2 );
-        layout.addView( selectedColorborder, lp );
-
-        selectedColorView = new View( context );
-        selectedColorView.setBackgroundColor( selectedColor );
-        selectedColorborder.addView( selectedColorView );*/
 
         setButton( BUTTON_NEGATIVE, context.getString( android.R.string.cancel ), clickListener );
         setButton( BUTTON_POSITIVE, context.getString( android.R.string.ok ), clickListener );
@@ -124,8 +111,6 @@ public class HSVColorPickerDialog extends AlertDialog {
 
     private HSVColorWheel colorWheel;
     private HSVValueSlider valueSlider;
-
-    //private View selectedColorView;
 
     /**
      * Adds a button to the dialog that allows a user to select "No color",
@@ -245,7 +230,7 @@ public class HSVColorPickerDialog extends AlertDialog {
             int h = rect.height();
 
             float[] hsv = new float[] { 0f, 0f, 1f };
-            int alpha = 255;
+            int alpha;
 
             int x = (int) -scaledFullCircleRadius, y = (int) -scaledFullCircleRadius;
             for ( int i = 0; i < scaledPixels.length; i++ ) {

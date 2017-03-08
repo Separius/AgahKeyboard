@@ -216,10 +216,26 @@ public class ColorDatabase extends SQLiteOpenHelper {
                 createSQL = append.append(String.format(Locale.ENGLISH, ", %s%d", objArr2)).toString();
             }
             db.execSQL(createSQL + ")");
+            db.insert(TABLE_NAME, null, PrepopulateThemes("black_theme_primary", -15592684));
+            db.insert(TABLE_NAME, null, PrepopulateThemes("black_theme_secondary", -14756000));
+            db.insert(TABLE_NAME, null, PrepopulateThemes("blue_theme_primary", -15108398));
+            db.insert(TABLE_NAME, null, PrepopulateThemes("blue_theme_secondary", -7688192));
         }
         if (!getTablesName(db).contains(EH_TABLE_NAME)) {
             db.execSQL(String.format("CREATE TABLE %s (_ID INTEGER PRIMARY KEY, %s TEXT, %s TEXT, %s TEXT)", new Object[]{EH_TABLE_NAME, PACKAGE_COLUMN, TITLE_COLUMN, COLOR_COLUMN}));
         }
+    }
+
+    private static ContentValues PrepopulateThemes(String name, int color){
+        ContentValues values = new ContentValues();
+        values.put(PACKAGE_COLUMN, name);
+        for (int i = 0; i < 1; i++) {
+            Object[] objArr2 = new Object[DB_VERSION];
+            objArr2[0] = COLOR_COLUMN;
+            objArr2[1] = Integer.valueOf(i);
+            values.put(String.format(Locale.ENGLISH, "%s%d", objArr2), String.format("#%06X", color));
+        }
+        return values;
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

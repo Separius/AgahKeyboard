@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -20,6 +21,7 @@ import io.separ.neural.inputmethod.colors.WindowChangeDetectingService;
 
 import static android.graphics.Color.parseColor;
 import static io.separ.neural.inputmethod.colors.ColorUtils.NO_COLOR;
+import static io.separ.neural.inputmethod.colors.ColorUtils.getTextColor;
 import static io.separ.neural.inputmethod.colors.ColorUtils.setProfileFromApp;
 
 /**
@@ -36,30 +38,37 @@ public class ColorUtils {
         return Build.VERSION.SDK_INT >= 21 && ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).isPowerSaveMode();
     }
 
-    public static ColorProfile getColor(@NonNull Context context, String packageName, boolean skipDataBase){
+    public static ColorProfile getColor(@NonNull Context context, String packageName){
         if (isBatterySaverOn(context)) {
             colorProfile.setProfile(parseColor(BATTERY_COLOR), darkerColor(parseColor(BATTERY_COLOR)), -1);
             return colorProfile;
         }
         String[] strArr;
         Integer color;
-        if (skipDataBase || !ColorDatabase.existPackage(context, packageName) || SpecialRules.overrideStandardColor(packageName)) {
+        if (!ColorDatabase.existPackage(context, packageName) || SpecialRules.overrideStandardColor(packageName)) {
             strArr = new String[1];
             strArr[0] = WindowChangeDetectingService.getWindowTitle();
-            color = SpecialRules.getColor(packageName, context);
-            if (color == null) {
-                colorProfile = setProfileFromApp(context, packageName);
-            } else {
-                colorProfile.setPrimary(color);
+            //if the mode is adaptive(read from sharedPrefrences){
+            String theme = PreferenceManager.getDefaultSharedPreferences(context).getString("KeyboardTheme", "adaptive_theme");
+            if(theme.equals("adaptive_theme")) {
+                color = SpecialRules.getColor(packageName, context);
+                if (color == null) {
+                    colorProfile = setProfileFromApp(context, packageName);
+                    Log.e("catch_spotify", packageName+"::getPrimColor: "+ colorProfile.getPrimary());
+                    Log.e("catch_spotify", packageName+"::getTextColor: "+ getTextColor(colorProfile));
+                } else {
+                    colorProfile.setPrimary(color);
+                }
+                return colorProfile;
+            }else{ //black or blue _theme
+                colorProfile.setPrimary(parseColor(ColorDatabase.getColors(context, theme+"_primary")[0]));
+                colorProfile.setIcon(parseColor(ColorDatabase.getColors(context, theme+"_secondary")[0]));
+                return colorProfile;
             }
-            return colorProfile;
+            //}else{read from currentTheme}
         }
         colorProfile.setPrimary(parseColor(ColorDatabase.getColors(context, packageName)[0]));
         return colorProfile;
-    }
-
-    public static ColorProfile getColor(@NonNull Context context, String packageName){
-        return getColor(context, packageName, false);
     }
 
     static int darkerColor(int color) {

@@ -148,14 +148,18 @@ public class ColorUtils {
 
         public static int getTextColor() {
             ColorProfile lastProfile = ColorManager.getLastProfile();
-            if (getColorDistance(lastProfile.getPrimary(), lastProfile.getAccent()) >= 70.0d) {
-                return lastProfile.getAccent();
-            }
-            if (isColorDark(lastProfile.getPrimary())) {
-                return lightColor(lastProfile.getAccent(), 0.4f);
-            }
-            return darkerColor(lastProfile.getAccent(), 0.4f);
+            return getTextColor(lastProfile);
         }
+
+    public static int getTextColor(ColorProfile lastProfile){
+        if (getColorDistance(lastProfile.getPrimary(), lastProfile.getAccent()) >= 70.0d) {
+            return lastProfile.getAccent();
+        }
+        if (isColorDark(lastProfile.getPrimary())) {
+            return lightColor(lastProfile.getAccent(), 0.4f);
+        }
+        return darkerColor(lastProfile.getAccent(), 0.4f);
+    }
 
         static double getColorDistance(int color1, int color2) {
             float[] yuv1 = getYUV(Color.red(color1), Color.green(color1), Color.blue(color1));

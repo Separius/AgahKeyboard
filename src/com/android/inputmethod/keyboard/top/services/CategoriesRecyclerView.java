@@ -48,9 +48,9 @@ public class CategoriesRecyclerView extends RecyclerView {
         if (!this.mCurrentSlash.equals(slash)) {
             getAdapter().setSelectedItem(0);
             this.mCurrentSlash = slash;
-            if(slash.equals("giphy") || slash.equals("foursquare"))
+            /*if(slash.equals("giphy") || slash.equals("foursquare"))
                 this.mCategoriesResults = RCategory.categoriesHashMap.get(slash);
-            else
+            else*/
                 this.mCategoriesResults = new ArrayList<>();
             getAdapter().setItems(this.mCategoriesResults);
         }

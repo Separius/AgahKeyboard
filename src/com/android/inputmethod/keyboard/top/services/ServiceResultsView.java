@@ -63,13 +63,10 @@ public class ServiceResultsView extends LinearLayout {
 
         public void onClick(boolean parentClicked, boolean previewClicked, boolean connectClicked, int position) {
             if (ServiceResultsView.this.mRecycler.getAdapter().getItemCount() > position) {
-                Log.e("SEPAR", "onClick: 1");
                 if (parentClicked) {
-                    Log.e("SEPAR", "onClick: 2");
                     ServiceResultsView.this.onItemClicked(position);
                 }
                 if (previewClicked) {
-                    Log.e("SEPAR", "onClick: 3");
                     ServiceResultsView.this.onPreviewClicked(position);
                 }
             }
@@ -259,7 +256,8 @@ public class ServiceResultsView extends LinearLayout {
                 if(TextUtils.isEmpty(currentContext)) {
                     action = "prepopulate";
                     useCaching = true;
-                    this.mCategoriesList.getAdapter().setSelectedItem(0);
+                    //this.mCategoriesList.getAdapter().setSelectedItem(0);
+                    this.mCategoriesList.getAdapter().setSelectedItem(-1);
                 }else{
                     searchString = currentContext;
                     this.mCategoriesList.getAdapter().setSelectedItem(-1);

@@ -276,15 +276,15 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                         @Override
                         public void colorSelected(Integer color) {
                             if(color == -1){
-                                colorManager.calculateProfile(LatinIME.this, currentPackageName, true);
+                                ColorDatabase.deletePackage(LatinIME.this, currentPackageName);
                             }else{
                                 ColorDatabase.addColors(LatinIME.this, currentPackageName, new String[]{convertColor(color)});
-                                colorManager.calculateProfile(LatinIME.this, currentPackageName);
                             }
+                            colorManager.calculateProfile(LatinIME.this, currentPackageName);
                         }
                     });
             cpd.setTitle( "Pick a color" );
-            cpd.setNoColorButton( R.string.reset_to_adaptive );
+            cpd.setNoColorButton( R.string.default_coloring );
             showOptionDialog(cpd);
             return;
         }

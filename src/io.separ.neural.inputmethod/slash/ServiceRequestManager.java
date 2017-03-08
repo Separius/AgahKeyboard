@@ -100,7 +100,6 @@ public class ServiceRequestManager {
     }
 
     public synchronized void postRequest(String slash, String query, String action, boolean useCache) {
-        Log.e("SEPAR", "postRequest: "+slash+" "+query+" "+action+" "+useCache);
         boolean isLocationAware = false;
         synchronized (this) {
             cancelLastRequest();

@@ -63,14 +63,9 @@ public class ColorManager {
     }
 
     public void calculateProfile(Context context, String packageName) {
-        calculateProfile(context, packageName, false);
-    }
-
-    public void calculateProfile(Context context, String packageName, boolean skipDataBase) {
-        ColorProfile colorProfile = getColor(context, packageName, skipDataBase);
+        ColorProfile colorProfile = getColor(context, packageName);
         if (!lastProfile.equals(colorProfile)) {
             lastProfile.setProfile(colorProfile);
-            Log.e("SEPAR", "notifyObservers called");
             notifyObservers();
         }
         this.masterObserver.finishCalculatingProfile();

@@ -27,7 +27,7 @@ public class ServiceQuerySearchTask extends BaseQuerySearchTask {
         SearchResult result;
         Location location = null;
         if (this.mIsLocationAware) {
-            location = SmartLocation.with(context).location().getLastLocation();//TODO is this library call cheap?
+            location = SmartLocation.with(context).location().getLastLocation();
             if (LatLngUtils.isEmpty(location))
                 SmartLocation.with(context).location().oneFix().start(null);
         }
@@ -39,7 +39,8 @@ public class ServiceQuerySearchTask extends BaseQuerySearchTask {
                 result = MonkeyApiManager.getInstance(this.mUseCache).getSearchResultsWithQuery(header, getService(), getQuery(), location.getLatitude(), location.getLongitude());
             }
         } else if (!this.mIsLocationAware || LatLngUtils.isEmpty(location)) {
-            result = MonkeyApiManager.getInstance(this.mUseCache).getSearchResultsWithAction(header, getService(), this.mAction);
+            //result = MonkeyApiManager.getInstance(this.mUseCache).getSearchResultsWithAction(header, getService(), this.mAction);
+            result = MonkeyApiManager.getInstance(this.mUseCache).getSearchResultsWithQuery(header, getService(), "tehran");
         } else {
             result = MonkeyApiManager.getInstance(this.mUseCache).getSearchResultsWithAction(header, getService(), this.mAction, location.getLatitude(), location.getLongitude());
         }
