@@ -20,14 +20,15 @@
 
 <merge
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--<ImageButton
-        android:id="@+id/suggestions_strip_settings_key"
+    <ImageButton
+        android:id="@+id/suggestions_strip_services_key"
         android:layout_width="@dimen/config_suggestions_strip_edge_key_width"
         android:layout_height="fill_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        style="?attr/suggestionWordStyle" />-->
+        android:src="@drawable/ic_apps_black_24dp"
+        style="?attr/suggestionWordStyle" />
     <!-- Provide audio and haptic feedback by ourselves based on the keyboard settings.
          We just need to ignore the system's audio and haptic feedback settings. -->
     <LinearLayout

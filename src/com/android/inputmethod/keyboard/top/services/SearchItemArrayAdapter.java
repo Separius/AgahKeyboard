@@ -119,14 +119,11 @@ public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItem
         public void updatePosition(RSearchItem item, int position) {
             this.mPosition = position;
             if (this.preview == null) {
-                Log.e("SEPAR", "updatePosition: 1");
                 return;
             }
             if (TextUtils.isEmpty(item.getPreviewUrl())) {
-                Log.e("SEPAR", "updatePosition: 2");
                 this.preview.setVisibility(View.GONE);
             } else {
-                Log.e("SEPAR", "updatePosition: 3");
                 this.preview.setVisibility(View.VISIBLE);
             }
         }

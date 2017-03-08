@@ -62,10 +62,13 @@ import com.android.inputmethod.keyboard.KeyboardSwitcher;
 import com.android.inputmethod.keyboard.MainKeyboardView;
 import com.android.inputmethod.keyboard.TextDecoratorUi;
 import com.android.inputmethod.keyboard.sticker.InsertPngEvent;
+import com.android.inputmethod.keyboard.top.ShowActionRowEvent;
+import com.android.inputmethod.keyboard.top.ShowSuggestionsEvent;
 import com.android.inputmethod.keyboard.top.TopDisplayController;
 import com.android.inputmethod.keyboard.top.actionrow.ActionRowView;
 import com.android.inputmethod.keyboard.top.actionrow.FrequentEmojiHandler;
 import com.android.inputmethod.keyboard.top.services.SearchItemSelectedEvent;
+import com.android.inputmethod.keyboard.top.services.ServiceExitEvent;
 import com.android.inputmethod.latin.utils.ApplicationUtils;
 import com.android.inputmethod.latin.utils.CapsModeUtils;
 import com.android.inputmethod.latin.utils.CoordinateUtils;
@@ -286,6 +289,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             cpd.setTitle( "Pick a color" );
             cpd.setNoColorButton( R.string.default_coloring );
             showOptionDialog(cpd);
+            return;
+        }
+        if(serviceId.equals("emoji")){
+            this.mKeyboardSwitcher.setEmojiKeyboard();
             return;
         }
         this.mTopDisplayController.runSearch(serviceId, mInputLogic.mConnection.getmComposingText().toString());
@@ -1534,6 +1541,9 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         if (Constants.CODE_INLINESETTINGS == codePoint) {
             //mKeyboardSwitcher.onToggleSettingsKeyboard();
         }
+        if(Constants.CODE_LANGUAGE_SWITCH == codePoint){
+            switchToNextSubtype();
+        }
         final Event event = createSoftwareKeypressEvent(codeToSend, keyX, keyY, isKeyRepeat);
         final InputTransaction completeInputTransaction =
                 mInputLogic.onCodeInput(mSettings.getCurrent(), event,
@@ -2315,6 +2325,24 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         public void onEventMainThread(SearchResultsEvent event) {
             if(mInputLogic.isSearchingResults())
                 LatinIME.this.mTopDisplayController.setSearchItems(event.getSource(), event.getItems(), event.getAuthorizedStatus());
+        }
+
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void onEventMainThread(ServiceExitEvent event){
+            if(mInputLogic.isSearchingResults()){
+                LatinIME.this.mInputLogic.stopSearchingResults();
+                mTopDisplayController.hideAll();
+            }
+        }
+
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void onEventMainThread(ShowActionRowEvent event){
+            mTopDisplayController.showActionRow();
+        }
+
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void onEventMainThread(ShowSuggestionsEvent event){
+            mTopDisplayController.showSuggestions();
         }
     }
 }

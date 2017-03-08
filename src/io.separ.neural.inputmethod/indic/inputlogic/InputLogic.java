@@ -35,6 +35,7 @@ import com.android.inputmethod.keyboard.KeyboardSwitcher;
 import com.android.inputmethod.keyboard.ProximityInfo;
 import com.android.inputmethod.keyboard.TextDecorator;
 import com.android.inputmethod.keyboard.TextDecoratorUiOperator;
+import com.android.inputmethod.keyboard.top.ShowSuggestionsEvent;
 import com.android.inputmethod.latin.PrevWordsInfo;
 import com.android.inputmethod.latin.utils.AsyncResultHolder;
 import com.android.inputmethod.latin.utils.InputTypeUtils;
@@ -69,6 +70,7 @@ import io.separ.neural.inputmethod.indic.settings.SettingsValues;
 import io.separ.neural.inputmethod.indic.settings.SettingsValuesForSuggestion;
 import io.separ.neural.inputmethod.indic.settings.SpacingAndPunctuations;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripViewAccessor;
+import io.separ.neural.inputmethod.slash.EventBusExt;
 import io.separ.neural.inputmethod.slash.RServiceItem;
 
 import static io.separ.neural.inputmethod.event.InputTransaction.SHIFT_UPDATE_NOW;
@@ -439,6 +441,7 @@ public final class InputLogic {
                 true /* shouldDelay */);
         // Stop the last recapitalization, if started.
         mRecapitalizeStatus.stop();
+        EventBusExt.getDefault().post(new ShowSuggestionsEvent());
         return true;
     }
 
@@ -502,6 +505,11 @@ public final class InputLogic {
             }
             mConnection.endBatchEdit();
         }else if (event.mCodePoint != -1) {
+            if(SwipeUtils.changedLanguage) {
+                SwipeUtils.changedLanguage = false;
+                if(Character.isWhitespace(event.mCodePoint))
+                    return inputTransaction;
+            }
             this.mSearchText.appendCodePoint(Character.toLowerCase(event.mCodePoint));
             this.shouldReSearch = true;
         } else if (event.mKeyCode == -5 && this.mSearchText.length() > 0) {
@@ -1184,7 +1192,7 @@ public final class InputLogic {
      * Handle a press on the language switch key (the "globe key")
      */
     private void handleLanguageSwitchKey() {
-        mLatinIME.switchToNextSubtype();
+        //mLatinIME.switchToNextSubtype();
     }
 
     /**

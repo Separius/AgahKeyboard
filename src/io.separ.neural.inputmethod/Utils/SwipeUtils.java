@@ -19,7 +19,6 @@ import io.separ.neural.inputmethod.indic.settings.Settings;
 public class SwipeUtils {
     private static final String TAG;
     private static Context context;
-    private static SharedPreferences preferences;
     private static SelectionChanger selectionChanger;
     private static SwipeType selectionDirection;
     private static boolean didAct;
@@ -215,7 +214,6 @@ public class SwipeUtils {
     public static void init(SelectionChanger s, Context c) {
         selectionChanger = s;
         context = c.getApplicationContext();
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public static boolean spaceBarSelection() {

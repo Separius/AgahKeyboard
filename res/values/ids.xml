@@ -14,5 +14,6 @@
     <item type="id" name="suggestion_strip_hacky_container">false</item>
     <item type="id" name="suggestion_source_results">false</item>
     <item type="id" name="services_bar">false</item>
+    <item type="id" name="header">false</item>
     <item type="id" name="hsv_color_picker">false</item>
 </resources>

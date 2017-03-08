@@ -41,6 +41,7 @@ import android.widget.TextView;
 import com.android.inputmethod.keyboard.Keyboard;
 import com.android.inputmethod.keyboard.MainKeyboardView;
 import com.android.inputmethod.keyboard.MoreKeysPanel;
+import com.android.inputmethod.keyboard.top.ShowActionRowEvent;
 import com.android.inputmethod.latin.utils.ImportantNoticeUtils;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ import io.separ.neural.inputmethod.indic.SuggestedWords.SuggestedWordInfo;
 import io.separ.neural.inputmethod.indic.define.DebugFlags;
 import io.separ.neural.inputmethod.indic.settings.Settings;
 import io.separ.neural.inputmethod.indic.settings.SettingsValues;
+import io.separ.neural.inputmethod.slash.EventBusExt;
 
 public final class SuggestionStripView extends RelativeLayout implements OnClickListener,
         OnLongClickListener, ColorManager.OnColorChange {
@@ -64,6 +66,7 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
         setBackgroundColor(colorProfile.getPrimary());
         mVoiceKey.setColorFilter(colorProfile.getTextColor());
         mLayoutHelper.updateColor(colorProfile);
+        mServicesKey.setColorFilter(colorProfile.getTextColor());
     }
 
     public interface Listener {
@@ -78,7 +81,7 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
 
     private final ViewGroup mSuggestionsStrip;
     private final ImageButton mVoiceKey;
-    //private final ImageButton mSettingsKey;
+    private final ImageButton mServicesKey;
     private final ViewGroup mAddToDictionaryStrip;
     //private final View mImportantNoticeStrip;
     MainKeyboardView mMainKeyboardView;
@@ -157,7 +160,7 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
 
         mSuggestionsStrip = (ViewGroup)findViewById(R.id.suggestions_strip);
         mVoiceKey = (ImageButton)findViewById(R.id.suggestions_strip_voice_key);
-        //mSettingsKey = (ImageButton)findViewById(R.id.suggestions_strip_settings_key);
+        mServicesKey = (ImageButton)findViewById(R.id.suggestions_strip_services_key);
         mAddToDictionaryStrip = (ViewGroup)findViewById(R.id.add_to_dictionary_strip);
         //mImportantNoticeStrip = findViewById(R.id.important_notice_strip);
         mStripVisibilityGroup = new StripVisibilityGroup(this, mSuggestionsStrip,
@@ -188,7 +191,7 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
         mVoiceKey.setImageDrawable(iconVoice);
         mVoiceKey.setOnClickListener(this);
         //mSettingsKey.setImageDrawable(iconSettings);
-        //mSettingsKey.setOnClickListener(this);
+        mServicesKey.setOnClickListener(this);
     }
 
     /**
@@ -205,7 +208,7 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
         setVisibility(visibility);
         final SettingsValues currentSettingsValues = Settings.getInstance().getCurrent();
         mVoiceKey.setVisibility(shouldBeVisible ? (currentSettingsValues.mShowsVoiceInputKey ? VISIBLE : INVISIBLE) : INVISIBLE);
-        //mSettingsKey.setVisibility(shouldBeVisible ? VISIBLE : INVISIBLE);
+        mServicesKey.setVisibility(shouldBeVisible ? VISIBLE : INVISIBLE);
     }
 
     public void setSuggestions(final SuggestedWords suggestedWords, final boolean isRtlLanguage) {
@@ -309,12 +312,10 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
                     false /* isKeyRepeat */);
             return;
         }
-        /*if (view == mSettingsKey) {
-            mListener.onCodeInput(Constants.CODE_INLINESETTINGS,
-                    Constants.SUGGESTION_STRIP_COORDINATE, Constants.SUGGESTION_STRIP_COORDINATE,
-                    false *//* isKeyRepeat *//*);
+        if (view == mServicesKey) {
+            EventBusExt.getDefault().post(new ShowActionRowEvent());
             return;
-        }*/
+        }
         final Object tag = view.getTag();
         // {@link String} tag is set at {@link #showAddToDictionaryHint(String,CharSequence)}.
         if (tag instanceof String) {

@@ -571,5 +571,4 @@
         <attr name="number" format="integer" />
         <attr name="buttonText" format="string" />
     </declare-styleable>
-
 </resources>

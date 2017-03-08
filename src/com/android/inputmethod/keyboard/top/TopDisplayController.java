@@ -30,6 +30,7 @@ public class TopDisplayController {
     private final View mSuggestionsStripHackyContainer;
     private final SuggestionStripView mSuggestionsStripView;
     private final ServiceResultsView mServiceResultsView;
+    private final View mDimOtherView;
     //private final View mActionRowContainer;
 
     public int getHeight() {
@@ -56,6 +57,7 @@ public class TopDisplayController {
 
     public void runSearch(String serviceId, String context) {
         this.mActionRowView.setVisibility(GONE);
+        mDimOtherView.setVisibility(View.VISIBLE);
         this.mServiceResultsView.startSearch(serviceId, context);
         if (this.mSuggestionsStripHackyContainer.getVisibility() != GONE) {
             this.mSuggestionsStripHackyContainer.setVisibility(GONE);
@@ -81,6 +83,7 @@ public class TopDisplayController {
     }
 
     public void hideAll() {
+        mDimOtherView.setVisibility(View.GONE);
         mServiceResultsView.setVisibility(GONE);
         updateBarVisibility();
         mServiceResultsView.reset();
@@ -97,6 +100,7 @@ public class TopDisplayController {
         mSuggestionsStripHackyContainer.setVisibility(GONE);
         mServiceResultsView = (ServiceResultsView) parent.findViewById(R.id.suggestion_source_results);
         mServiceResultsView.setVisibility(GONE);
+        mDimOtherView = (View)parent.findViewById(R.id.dim_other_view);
     }
 
     public void showSuggestions() {
@@ -108,7 +112,14 @@ public class TopDisplayController {
             mActionRowView.removeCallbacks(this.hideSuggestionAfter);
             mActionRowView.setVisibility(GONE);
             this.mSuggestionsStripHackyContainer.setVisibility(View.VISIBLE);
-            mActionRowView.postDelayed(this.hideSuggestionAfter, 2000);
+            mActionRowView.postDelayed(this.hideSuggestionAfter, 10000);
         }
+    }
+
+    public void showActionRow(){
+        mActionRowView.setVisibility(View.VISIBLE);
+        mSuggestionsStripHackyContainer.setVisibility(GONE);
+        mActionRowView.removeCallbacks(this.hideSuggestionAfter);
+        mActionRowView.postDelayed(this.hideSuggestionAfter, 20000);
     }
 }

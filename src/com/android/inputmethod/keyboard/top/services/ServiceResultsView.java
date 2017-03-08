@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -18,8 +19,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
-import io.separ.neural.inputmethod.Utils.ColorUtils;
 import io.separ.neural.inputmethod.colors.ColorManager;
+import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.slash.EventBusExt;
 import io.separ.neural.inputmethod.slash.NeuralApplication;
@@ -35,7 +36,7 @@ import io.separ.neural.inputmethod.slash.TaskQueueHelper;
  * Created by sepehr on 3/2/17.
  */
 
-public class ServiceResultsView extends LinearLayout {
+public class ServiceResultsView extends LinearLayout implements ColorManager.OnColorChange{
     private CategoriesRecyclerView mCategoriesList;
     private VisualSate mPreviousState;
     private ResultsRecyclerView mRecycler;
@@ -47,6 +48,11 @@ public class ServiceResultsView extends LinearLayout {
     private ProgressBar mSourceProgress;
     private String currentSlash;
     private String currentContext;
+
+    @Override
+    public void onColorChange(ColorProfile colorProfile) {
+        setBackgroundColor(colorProfile.getPrimary());
+    }
 
     /*class C04621 implements OnClickListener {
         C04621() {
@@ -86,7 +92,7 @@ public class ServiceResultsView extends LinearLayout {
     }
 
     class C04654 implements Runnable {
-        final /* synthetic */ String val$slash;
+        final String val$slash;
 
         C04654(String str) {
             this.val$slash = str;
@@ -178,10 +184,10 @@ public class ServiceResultsView extends LinearLayout {
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         LayoutInflater.from(context).inflate(R.layout.source_results_strip, this);
-        animate().setDuration(75);
+        animate().setDuration(300);
         this.mSourceImageView = (SimpleDraweeView) findViewById(R.id.source_image);
         this.mSourceImageView.setCameraDistance(5000.0f);
-        this.mSourceImageView.animate().setInterpolator(new LinearInterpolator()).setDuration(150);
+        this.mSourceImageView.animate().setInterpolator(new LinearInterpolator()).setDuration(300);
         this.mSourceError = (TextView) findViewById(R.id.source_error);
         this.mSourceError.setOnClickListener(new C04621());
         this.mSourceError.setClickable(false);
@@ -194,11 +200,17 @@ public class ServiceResultsView extends LinearLayout {
         this.mSearchContainer = findViewById(R.id.search_container);
         this.mSearchPlaceholder = (ImageView) findViewById(R.id.search_placeholder);
         mSearchPlaceholder.setColorFilter(Color.BLACK);
-        //this.mSearchPlaceholder.setColorFilter(ColorUtils.colorProfile.getPrimary());
+        mSearchPlaceholder.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EventBusExt.getDefault().post(new ServiceExitEvent());
+            }
+        });
         this.mSearchMirror = (TextView) findViewById(R.id.slash_search_mirror);
         setVisualState(TaskQueueHelper.hasTasksOfType(NeuralApplication.getNetworkTaskQueue(), ServiceQuerySearchTask.class, ServiceQueryContactsTask.class) ? VisualSate.Loading : VisualSate.Hide);
         currentContext = new String();
         currentSlash = new String();
+        ColorManager.addObserver(this);
     }
 
     public void drop() {
@@ -305,9 +317,9 @@ public class ServiceResultsView extends LinearLayout {
 
     public void setService(String slash) {
         boolean serviceChanged = this.mRecycler.setService(slash);
+        setServiceImageWithAnimation(slash);
         this.mCategoriesList.setService(slash);
         if (serviceChanged) {
-            setServiceImageWithAnimation(slash);
             setSearchMirrorHint(slash);
             this.mSearchContainer.setVisibility(VISIBLE);
             updateCategoryVisibility();
@@ -350,10 +362,8 @@ public class ServiceResultsView extends LinearLayout {
     private void onItemClicked(int position) {
         RSearchItem searchItem = this.mRecycler.getAdapter().getItem(position);
         if (!RSearchItem.LOADING_TYPE.equals(searchItem.getDisplayType()) && !RSearchItem.CONNECT_TO_USE_TYPE.equals(searchItem.getDisplayType()) && !RSearchItem.GENERIC_MESSAGE_TYPE.equals(searchItem.getDisplayType()) && !RSearchItem.PERMISSION_REQUIRED_TYPE.equals(searchItem.getDisplayType())) {
-            Log.e("SEPAR", "gif hunt: 1");
             onNormalItemClick(searchItem, position);
-        }else
-            Log.e("SEPAR", "gif hunt: 2");
+        }
     }
 
     private void onNormalItemClick(RSearchItem searchItem, int position) {
