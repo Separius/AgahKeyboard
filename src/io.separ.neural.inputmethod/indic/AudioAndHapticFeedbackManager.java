@@ -83,9 +83,9 @@ public final class AudioAndHapticFeedbackManager {
         if (mAudioManager == null) {
             return;
         }
-        if (!mSoundOn) {
+        /*if (!mSoundOn) {
             return;
-        }
+        }*/
         final int sound;
         switch (code) {
         case Constants.CODE_DELETE:

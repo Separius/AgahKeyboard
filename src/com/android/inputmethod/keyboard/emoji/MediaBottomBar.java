@@ -28,8 +28,6 @@ import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.indic.Constants;
 import io.separ.neural.inputmethod.indic.R;
 
-import static com.android.inputmethod.keyboard.top.services.ImageUtils.getDrawableId;
-import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
 import static io.separ.neural.inputmethod.indic.Constants.NOT_A_COORDINATE;
 
 /**
@@ -103,24 +101,24 @@ public class MediaBottomBar extends LinearLayout implements View.OnTouchListener
     }
 
     public void onColorChange(ColorProfile newProfile){
-        int darkBackground = colorProfile.getPrimaryDark();
-        int iconColor = colorProfile.getIcon();
-        setBackgroundColor(darkBackground);
+        int primary = newProfile.getPrimary();
+        int iconColor = newProfile.getIcon();
+        setBackgroundColor(primary);
         if(mDeleteKey != null) {
-            mDeleteKey.setBackgroundColor(darkBackground);
+            mDeleteKey.setBackgroundColor(primary);
             mDeleteKey.setColorFilter(iconColor);
         }
         if(mAlphabetKeyLeft != null) {
-            mAlphabetKeyLeft.setBackgroundColor(darkBackground);
+            mAlphabetKeyLeft.setBackgroundColor(primary);
             mAlphabetKeyLeft.setTextColor(iconColor);
             mAlphabetKeyLeft.setText(mAlphabetKeyLeft.getText());
         }
         if(mEmojiSwitch != null){
-            mEmojiSwitch.setBackgroundColor(darkBackground);
+            mEmojiSwitch.setBackgroundColor(primary);
             mEmojiSwitch.setColorFilter(iconColor);
         }
         if(mStickerSwitch != null){
-            mStickerSwitch.setBackgroundColor(darkBackground);
+            mStickerSwitch.setBackgroundColor(primary);
             mStickerSwitch.setColorFilter(iconColor);
         }
     }

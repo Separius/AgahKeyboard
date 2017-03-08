@@ -5,6 +5,8 @@ package io.separ.neural.inputmethod.colors;
  */
 
 import android.content.Context;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,18 +30,13 @@ public class ColorManager {
         lastProfile = new ColorProfile();
     }
 
-    public void notifyListeners() {
-        notifyObservers();
-    }
-
     public ColorManager(OnFinishCalculateProfile masterObserver) {
         this.masterObserver = masterObserver;
     }
 
     public static void addObserver(OnColorChange observer) {
-        if (observers.contains(observer)) {
+        if (observers.contains(observer))
             observers.remove(observer);
-        }
         observers.add(observer);
     }
 
@@ -66,9 +63,14 @@ public class ColorManager {
     }
 
     public void calculateProfile(Context context, String packageName) {
-        ColorProfile colorProfile = getColor(context, packageName);
+        calculateProfile(context, packageName, false);
+    }
+
+    public void calculateProfile(Context context, String packageName, boolean skipDataBase) {
+        ColorProfile colorProfile = getColor(context, packageName, skipDataBase);
         if (!lastProfile.equals(colorProfile)) {
             lastProfile.setProfile(colorProfile);
+            Log.e("SEPAR", "notifyObservers called");
             notifyObservers();
         }
         this.masterObserver.finishCalculatingProfile();

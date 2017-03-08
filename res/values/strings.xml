@@ -598,4 +598,5 @@ Tip: You can download and remove dictionaries by going to &lt;b>Languages&#160;&
     <string name="service_result_empty">No results found!</string>
     <string name="service_result_network_problem">\"Cannot connect to the internet! You must be connected to access results. Tap here to try again!\"</string>
     <string name="service_result_problem">\"We ran into a problem! Tap here to try again!\"</string>
+    <string name="reset_to_adaptive">adaptive</string>
 </resources>

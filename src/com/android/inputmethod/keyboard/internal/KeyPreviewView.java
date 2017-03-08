@@ -17,6 +17,7 @@
 package com.android.inputmethod.keyboard.internal;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
@@ -30,7 +31,10 @@ import com.android.inputmethod.keyboard.Key;
 
 import java.util.HashSet;
 
+import io.separ.neural.inputmethod.colors.ColorUtils;
 import io.separ.neural.inputmethod.indic.R;
+
+import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
 
 /**
  * The pop up key preview view.
@@ -63,7 +67,8 @@ public class KeyPreviewView extends TextView {
         }
 
         setCompoundDrawables(null, null, null, null);
-        setTextColor(drawParams.mPreviewTextColor);
+        //setTextColor(drawParams.mPreviewTextColor);
+        setTextColor(colorProfile.getText());
         setTextSize(TypedValue.COMPLEX_UNIT_PX, key.selectPreviewTextSize(drawParams));
         setTypeface(key.selectPreviewTypeface(drawParams));
         // TODO Should take care of temporaryShiftLabel here.
@@ -73,15 +78,14 @@ public class KeyPreviewView extends TextView {
     private void setTextAndScaleX(final String text) {
         setTextScaleX(1.0f);
         setText(text);
-        if (sNoScaleXTextSet.contains(text)) {
-            return;
-        }
-        // TODO: Override {@link #setBackground(Drawable)} that is supported from API 16 and
-        // calculate maximum text width.
         final Drawable background = getBackground();
-        if (background == null) {
+        if (background == null)
             return;
-        }
+        //background.setColorFilter(ColorUtils.lightColor(colorProfile.getPrimary()), PorterDuff.Mode.MULTIPLY);
+        background.setColorFilter(colorProfile.getPrimaryDark(), PorterDuff.Mode.MULTIPLY);
+        if (sNoScaleXTextSet.contains(text))
+            return;
+        // calculate maximum text width.
         background.getPadding(mBackgroundPadding);
         final int maxWidth = background.getIntrinsicWidth() - mBackgroundPadding.left
                 - mBackgroundPadding.right;

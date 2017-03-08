@@ -46,6 +46,7 @@ import com.android.inputmethod.latin.utils.ImportantNoticeUtils;
 import java.util.ArrayList;
 
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
+import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.indic.AudioAndHapticFeedbackManager;
 import io.separ.neural.inputmethod.indic.Constants;
@@ -57,9 +58,9 @@ import io.separ.neural.inputmethod.indic.settings.Settings;
 import io.separ.neural.inputmethod.indic.settings.SettingsValues;
 
 public final class SuggestionStripView extends RelativeLayout implements OnClickListener,
-        OnLongClickListener {
+        OnLongClickListener, ColorManager.OnColorChange {
 
-    public void updateColor(ColorProfile colorProfile) {
+    public void onColorChange(ColorProfile colorProfile) {
         setBackgroundColor(colorProfile.getPrimary());
         mVoiceKey.setColorFilter(colorProfile.getTextColor());
         mLayoutHelper.updateColor(colorProfile);

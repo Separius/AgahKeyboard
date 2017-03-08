@@ -44,18 +44,6 @@ public class ColorProfile {
         return this.primary == 1000 || ColorUtils.isDefaultColor(this.primary);
     }
 
-    public boolean isValid() {
-        return (isInvalid() || this.primaryDark == 1000 || ColorUtils.isDefaultColor(this.primaryDark)) ? false : true;
-    }
-
-    public boolean isPerfect() {
-        return (!isValid() || this.accent == 1000 || ColorUtils.isDefaultColor(this.accent)) ? false : true;
-    }
-
-    public boolean isPrimaryDark() {
-        return ColorUtils.isColorDark(this.primary);
-    }
-
     public void setDarkFactor(float darkness) {
         this.darkFactor = darkness;
     }
@@ -86,12 +74,6 @@ public class ColorProfile {
             this.text = Color.WHITE;
         else
             this.text = Color.BLACK;
-        /*float[] hsv = new float[3];
-        Color.RGBToHSV(Color.red(primary), Color.green(primary), Color.blue(primary), hsv);
-        hsv[0] = ((int)hsv[0]+180)%360;
-        hsv[1] = 1.f - hsv[1];
-        hsv[1] = 1.f - hsv[2];
-        this.icon = Color.HSVToColor(Color.alpha(primary), hsv);*/
         this.icon = Color.rgb(Color.red(primary) ^ 0x80, Color.green(primary) ^ 0x80, Color.blue(primary) ^ 0x80);
     }
 
@@ -114,13 +96,6 @@ public class ColorProfile {
 
     public int getPrimary() {
         return this.primary;
-        /*if (isInvertDark()) {
-            return getPrimaryDarkIgnore();
-        }
-        if (this.primary != 1000) {
-            return ColorUtils.darkerColor(this.primary, this.darkFactor);
-        }
-        return Color.parseColor(ColorUtils.MATERIAL_LIGHT);*/
     }
 
     public int getPrimaryIgnore() {
@@ -128,13 +103,6 @@ public class ColorProfile {
             return ColorUtils.darkerColor(this.primary, this.darkFactor);
         }
         return Color.parseColor(ColorUtils.MATERIAL_LIGHT);
-    }
-
-    public int getPrimaryDarkIgnore() {
-        if (this.primaryDark != 1000) {
-            return ColorUtils.darkerColor(this.primaryDark, this.darkFactor);
-        }
-        return ColorUtils.darkerColor(getPrimaryIgnore());
     }
 
     public void setPrimary(int primary) {
@@ -151,16 +119,9 @@ public class ColorProfile {
         return ColorUtils.darkerColor(getPrimaryIgnore());
     }
 
-    public int getPrimaryDarker(float factor) {
-        return ColorUtils.darkerColor(this.primaryDark, factor);
-    }
-
     public int getTextColor() {
-        return ColorUtils.getTextColor(getPrimaryIgnore());
-    }
-
-    public int getTextColorForcingColor(int hoverColor) {
-        return ColorUtils.getTextColor(hoverColor);
+        return icon;
+        //return ColorUtils.getTextColor();
     }
 
     public int getAccent() {

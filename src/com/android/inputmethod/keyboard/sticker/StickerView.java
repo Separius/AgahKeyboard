@@ -3,13 +3,10 @@ package com.android.inputmethod.keyboard.sticker;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,18 +15,13 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 
 import com.android.inputmethod.latin.utils.ResourceUtils;
-import com.bumptech.glide.Glide;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.indic.R;
-
-import static com.android.inputmethod.keyboard.top.services.ImageUtils.getDrawableId;
-import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
 
 /**
  * Created by sepehr on 3/5/17.
@@ -134,7 +126,7 @@ public class StickerView extends LinearLayout implements ColorManager.OnColorCha
 
         @Override
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
-            StickerPageView current = (StickerPageView) object;
+            //StickerPageView current = (StickerPageView) object;
             //current.onSelected();
             super.setPrimaryItem(container, position, object);
         }
@@ -150,21 +142,21 @@ public class StickerView extends LinearLayout implements ColorManager.OnColorCha
     }
 
     public void onColorChange(ColorProfile newProfile){
-        int darkBackground = colorProfile.getPrimaryDark();
-        int iconColor = colorProfile.getIcon();
+        int primary = newProfile.getPrimary();
+        int iconColor = newProfile.getIcon();
         if(mTabHost != null){
             TabWidget tabWidget = mTabHost.getTabWidget();
             for(int i=0; i<tabWidget.getChildCount(); ++i) {
                 ImageView currentTab = (ImageView)tabWidget.getChildTabViewAt(i);
-                currentTab.setBackgroundColor(darkBackground);
+                currentTab.setBackgroundColor(primary);
                 currentTab.setColorFilter(iconColor);
             }
-            tabWidget.setBackgroundColor(darkBackground);
+            tabWidget.setBackgroundColor(primary);
         }
         if(mStickerTopBar != null)
-            mStickerTopBar.setBackgroundColor(darkBackground);
-        mStickerPager.setBackgroundColor(colorProfile.getPrimary());
-        mStickerPalettesAdapter.updateColor(colorProfile.getPrimary());
+            mStickerTopBar.setBackgroundColor(primary);
+        mStickerPager.setBackgroundColor(primary);
+        mStickerPalettesAdapter.updateColor(primary);
     }
 
     public StickerView(final Context context, final AttributeSet attrs) {

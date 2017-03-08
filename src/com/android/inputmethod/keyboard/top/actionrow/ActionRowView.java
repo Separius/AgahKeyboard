@@ -190,8 +190,6 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
 
     public void setAdapter(ActionRowAdapter adapter) {
         super.setAdapter(adapter);
-        //setCurrentItem(currentPage, false);
-        //mIndicator.setViewPager(this);
     }
 
     protected void onPageScrolled(int position, float offset, int offsetPixels) {
@@ -201,10 +199,10 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
     public void onColorChange(ColorProfile newProfile) {
         this.colorProfile = newProfile;
         setBackgroundColor(newProfile.getPrimary());
+        setupLayouts();
         adapter = new ActionRowAdapter();
         setAdapter(adapter);
         invalidate();
-        setupLayouts();
     }
 
     protected void onAttachedToWindow() {
@@ -215,16 +213,11 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
     private void init() {
         setBackgroundColor(Color.parseColor("#eceff1"));
         layoutToShow = ActionRowSettingsActivity.DEFAULT_LAYOUTS.split("\\s*,\\s*");
-        adapter = new ActionRowAdapter();
-        setAdapter(adapter);
-        //setCurrentItem(1, false);
         ColorManager.addObserverAndCall(this);
-        setupLayouts();
     }
 
     private void setupLayouts(){
         layouts = new HashMap<>();
-        //layouts.put(ActionRowSettingsActivity.NUMBER_ID, addNumbers());
         layouts.put(ActionRowSettingsActivity.SERVCICE_ID, addServices());
         layouts.put(ActionRowSettingsActivity.EMOJI_ID, addEmojis()); //TODO update this on change
         layouts.put(ActionRowSettingsActivity.CLIP_ID, addButtons());
@@ -238,37 +231,26 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         mListener = listener;
     }
 
-    public View createViewFromID(String identifier) {
-        if (identifier.equals(ActionRowSettingsActivity.NUMBER_ID))
-            return addNumbers();
-        if (identifier.equals(ActionRowSettingsActivity.CLIP_ID))
-            return addButtons();
-        if (identifier.equals(ActionRowSettingsActivity.EMOJI_ID))
-            return addEmojis();
-        if (identifier.equals(ActionRowSettingsActivity.SERVCICE_ID))
-            return addServices();
-        return addEmptyView();
-    }
-
     private LinearLayout addButtons() {
+        int textColor = ColorManager.getLastProfile().getTextColor();
         LinearLayout layout = (LinearLayout) View.inflate(getContext(), R.layout.clipboard_action_layout, null);
         ImageView selectAll = (ImageView) layout.findViewById(R.id.select);
-        selectAll.setColorFilter(this.colorProfile.getTextColor());
+        selectAll.setColorFilter(textColor);
         selectAll.setSoundEffectsEnabled(false);
         selectAll.setOnClickListener(new C02297());
         selectAll.setBackgroundResource(R.drawable.action_row_bg);
         ImageView cut = (ImageView) layout.findViewById(R.id.cut);
-        cut.setColorFilter(this.colorProfile.getTextColor());
+        cut.setColorFilter(textColor);
         cut.setSoundEffectsEnabled(false);
         cut.setOnClickListener(new C02308());
         cut.setBackgroundResource(R.drawable.action_row_bg);
         ImageView copy = (ImageView) layout.findViewById(R.id.copy);
-        copy.setColorFilter(this.colorProfile.getTextColor());
+        copy.setColorFilter(textColor);
         copy.setSoundEffectsEnabled(false);
         copy.setOnClickListener(new C02319());
         copy.setBackgroundResource(R.drawable.action_row_bg);
         ImageView paste = (ImageView) layout.findViewById(R.id.paste);
-        paste.setColorFilter(this.colorProfile.getTextColor());
+        paste.setColorFilter(textColor);
         paste.setSoundEffectsEnabled(false);
         paste.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -285,7 +267,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         int i=0;
         for(int currentServiceViewId : SERVICE_IMAGE_IDS) {
             ImageView imageView = (ImageView) layout.findViewById(currentServiceViewId);
-            imageView.setColorFilter(this.colorProfile.getTextColor());
+            imageView.setColorFilter(ColorManager.getLastProfile().getTextColor());
             imageView.setSoundEffectsEnabled(false);
             imageView.setOnClickListener(new serviceClickListener(i));
             imageView.setBackgroundResource(R.drawable.action_row_bg);

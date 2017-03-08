@@ -16,8 +16,6 @@ import android.widget.GridView;
 
 import io.separ.neural.inputmethod.indic.R;
 
-import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
-
 public class EmojiPageView extends FrameLayout {
     private static final String TAG = EmojiPageView.class.getSimpleName();
 
@@ -36,7 +34,6 @@ public class EmojiPageView extends FrameLayout {
         final View view = LayoutInflater.from(getContext()).inflate(R.layout.emoji_grid_layout, this, true);
         grid = (GridView) view.findViewById(R.id.emoji);
         grid.setColumnWidth(getResources().getDimensionPixelSize(R.dimen.emoji_drawer_size) + 2 * getResources().getDimensionPixelSize(R.dimen.emoji_drawer_item_padding));
-        grid.setBackgroundColor(colorProfile.getPrimary());
     }
 
     public void onSelected() {

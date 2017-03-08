@@ -58,6 +58,7 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
         transitive = true;
     }
+    compile 'com.github.yukuku:ambilwarna:2.0.1'
 }
 
 android {

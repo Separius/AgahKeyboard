@@ -10,6 +10,7 @@ import com.android.inputmethod.keyboard.top.services.ServiceResultsView;
 import java.util.List;
 import java.util.Random;
 
+import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripView;
 import io.separ.neural.inputmethod.slash.RSearchItem;
@@ -91,6 +92,7 @@ public class TopDisplayController {
         holderLayout = (LinearLayout) parent.findViewById(R.id.keyboard_top_area);
         mActionRowView = (ActionRowView) parent.findViewById(R.id.action_row);
         mSuggestionsStripView = (SuggestionStripView) parent.findViewById(R.id.suggestion_strip_view);
+        ColorManager.addObserverAndCall(mSuggestionsStripView);
         mSuggestionsStripHackyContainer = parent.findViewById(R.id.suggestion_strip_hacky_container);
         mSuggestionsStripHackyContainer.setVisibility(GONE);
         mServiceResultsView = (ServiceResultsView) parent.findViewById(R.id.suggestion_source_results);

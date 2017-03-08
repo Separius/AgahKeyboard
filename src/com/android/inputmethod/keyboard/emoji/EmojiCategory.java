@@ -173,19 +173,14 @@ final class EmojiCategory {
         }
 
         addShownCategoryId(EmojiCategory.ID_RECENTS);
-        int defaultCategoryId = EmojiCategory.ID_SYMBOLS;
+        int defaultCategoryId = EmojiCategory.ID_EIGHT_SMILEY_PEOPLE;
+        addShownCategoryId(defaultCategoryId);
         if (BuildCompatUtils.EFFECTIVE_SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            defaultCategoryId = EmojiCategory.ID_EIGHT_SMILEY_PEOPLE;
-            addShownCategoryId(EmojiCategory.ID_EIGHT_SMILEY_PEOPLE);
             addShownCategoryId(EmojiCategory.ID_EIGHT_FOOD_DRINK);
             addShownCategoryId(EmojiCategory.ID_EIGHT_ANIMALS_NATURE);
             addShownCategoryId(EmojiCategory.ID_EIGHT_TRAVEL_PLACES);
             addShownCategoryId(EmojiCategory.ID_EIGHT_SYMBOLS);
             addShownCategoryId(EmojiCategory.ID_EIGHT_FLAGS);
-        } else {
-            mCurrentCategoryId =
-                    Settings.readLastShownEmojiCategoryId(mPrefs, EmojiCategory.ID_EMOTICONS);
-            addShownCategoryId(EmojiCategory.ID_EMOTICONS);
         }
 
         DynamicGridKeyboard recentsKbd =

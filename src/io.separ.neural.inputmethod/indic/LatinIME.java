@@ -72,7 +72,6 @@ import com.android.inputmethod.latin.utils.CoordinateUtils;
 import com.android.inputmethod.latin.utils.CursorAnchorInfoUtils;
 import com.android.inputmethod.latin.utils.DialogUtils;
 import com.android.inputmethod.latin.utils.DistracterFilterCheckingExactMatchesAndSuggestions;
-import com.android.inputmethod.latin.utils.ImportantNoticeUtils;
 import com.android.inputmethod.latin.utils.IntentUtils;
 import com.android.inputmethod.latin.utils.JniUtils;
 import com.android.inputmethod.latin.utils.LeakGuardHandlerWrapper;
@@ -104,7 +103,9 @@ import io.separ.neural.inputmethod.Utils.ShareUtils;
 import io.separ.neural.inputmethod.Utils.SwipeUtils;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 import io.separ.neural.inputmethod.annotations.UsedForTesting;
+import io.separ.neural.inputmethod.colors.ColorDatabase;
 import io.separ.neural.inputmethod.colors.ColorManager;
+import io.separ.neural.inputmethod.colors.HSVColorPickerDialog;
 import io.separ.neural.inputmethod.colors.NavManager;
 import io.separ.neural.inputmethod.compat.CursorAnchorInfoCompatWrapper;
 import io.separ.neural.inputmethod.compat.InputMethodServiceCompatUtils;
@@ -133,8 +134,12 @@ import io.separ.neural.inputmethod.slash.NeuralApplication;
 import io.separ.neural.inputmethod.slash.SearchResultsEvent;
 import io.separ.neural.inputmethod.slash.SearchRetryErrorEvent;
 import io.separ.neural.inputmethod.slash.ServiceRequestEvent;
+import yuku.ambilwarna.AmbilWarnaDialog;
 
 import static com.android.inputmethod.keyboard.KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED;
+import static io.separ.neural.inputmethod.colors.ColorManager.addObserver;
+import static io.separ.neural.inputmethod.colors.ColorManager.getLastProfile;
+import static io.separ.neural.inputmethod.colors.ColorUtils.convertColor;
 import static io.separ.neural.inputmethod.indic.Constants.ImeOption.FORCE_ASCII;
 import static io.separ.neural.inputmethod.indic.Constants.ImeOption.NO_MICROPHONE;
 import static io.separ.neural.inputmethod.indic.Constants.ImeOption.NO_MICROPHONE_COMPAT;
@@ -262,11 +267,25 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         this.mInputLogic.mConnection.mIC.performContextMenuAction(16908319);
     }
 
+    //TODO, reset to adaptive is wrong + not everyone is a listener
     @Override
     public void onServiceClicked(String serviceId){
-        //change the state of input connection
         if(serviceId.equals("customization")) {
-            launchSettings();
+            HSVColorPickerDialog cpd = new HSVColorPickerDialog(DialogUtils.getPlatformDialogThemeContext(this), getLastProfile().getPrimary(),
+                    new HSVColorPickerDialog.OnColorSelectedListener() {
+                        @Override
+                        public void colorSelected(Integer color) {
+                            if(color == -1){
+                                colorManager.calculateProfile(LatinIME.this, currentPackageName, true);
+                            }else{
+                                ColorDatabase.addColors(LatinIME.this, currentPackageName, new String[]{convertColor(color)});
+                                colorManager.calculateProfile(LatinIME.this, currentPackageName);
+                            }
+                        }
+                    });
+            cpd.setTitle( "Pick a color" );
+            cpd.setNoColorButton( R.string.reset_to_adaptive );
+            showOptionDialog(cpd);
             return;
         }
         this.mTopDisplayController.runSearch(serviceId, mInputLogic.mConnection.getmComposingText().toString());
@@ -680,8 +699,11 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     }
 
     public void finishCalculatingProfile() {
-        mSuggestionStripView.updateColor(ColorUtils.colorProfile);
-        this.colorManager.setDarkFactor(0.4f);
+        final MainKeyboardView mainKeyboardView = mKeyboardSwitcher.getMainKeyboardView();
+        mainKeyboardView.startDisplayLanguageOnSpacebar(false, 2, true);
+        //mSuggestionStripView.updateColor(ColorUtils.colorProfile);
+        //this.colorManager.setDarkFactor();
+
     }
 
     // Has to be package-visible for unit tests
@@ -849,6 +871,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         this.mTopDisplayController = new TopDisplayController(view);
         if (hasSuggestionStripView()) {
             mSuggestionStripView.setListener(this, view);
+            addObserver(mSuggestionStripView);
         }
         mInputLogic.setTextDecoratorUi(new TextDecoratorUi(this, view));
         Log.e("SEPAR_Collection", "setInputView");
@@ -952,9 +975,11 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     }
 
     private ColorManager colorManager;
+    private String currentPackageName;
 
     private void handleKeyboardColor(EditorInfo editorInfo) {
-        this.colorManager.calculateProfile(this, editorInfo.packageName);
+        currentPackageName = editorInfo.packageName;
+        this.colorManager.calculateProfile(this, currentPackageName);
     }
 
     public void getOverlayPermission(){
@@ -970,13 +995,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         final KeyboardSwitcher switcher = mKeyboardSwitcher;
         switcher.updateKeyboardTheme();
         final MainKeyboardView mainKeyboardView = switcher.getMainKeyboardView();
-        try {
-            ColorUtils.getColor(getApplicationContext(), getCurrentInputBinding().getUid());
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-//        mainKeyboardView.setBackgroundColor(newColor.getPrimary());
-//        mainKeyboardView.setBackgroundColor(Color.parseColor("#FFE0E0E0"));
         // If we are starting input in a different text field from before, we'll have to reload
         // settings, so currentSettingsValues can't be final.
         SettingsValues currentSettingsValues = mSettings.getCurrent();
@@ -1310,7 +1328,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         /*final int suggestionsHeight = (!mKeyboardSwitcher.isShowingEmojiPalettes()) ?
                 mTopDisplayController.getHeight() : mSuggestionStripView.getHeight();*/
         final int suggestionsHeight = mTopDisplayController.getHeight();
-                Log.e("SEPAR", "onComputeInsets: "+suggestionsHeight);
         final int visibleTopY = inputHeight - visibleKeyboardView.getHeight() - suggestionsHeight;
         // Need to set touchable region only if a keyboard view is being shown.
         if (visibleKeyboardView.isShown()) {
@@ -2230,6 +2247,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         public void onEventMainThread(InsertPngEvent event){
             try {
                 if(event.isSticker) {
+                    Log.e("TWO_STICKER", "sending sticker");
                     AssetFileDescriptor fileDescriptor = getAssets().openFd("stickers/"+event.base+'/'+event.name);
                     FileInputStream stream = fileDescriptor.createInputStream();
                     final File imagesDir = new File(getFilesDir(), "images");
@@ -2257,6 +2275,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             LatinIME.this.mInputLogic.stopSearchingResults();
             mTopDisplayController.hideAll();
             if(event.getItem().getService().equals("giphy")) {
+                Log.e("TWO_STICKER", "sending GIF");
                 File fromFile = ShareUtils.getCachedImageOnDisk(LatinIME.this, Uri.parse(event.getItem().getImage().getUrl()));
                 File toFile = new File(new File(getFilesDir(), "images"), System.currentTimeMillis() + ".gif");
                 if (fromFile == null)
@@ -2269,6 +2288,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 }
                 return;
             }
+            Log.e("TWO_STICKER", "sending Text");
             shareItemThroughText(event);
         }
 

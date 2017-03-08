@@ -53,7 +53,6 @@ import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.indic.SubtypeSwitcher;
 
-import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
 import static io.separ.neural.inputmethod.indic.Constants.NOT_A_COORDINATE;
 
 /**
@@ -253,21 +252,21 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
     }
 
     public void onColorChange(ColorProfile newProfile){
-        int darkBackground = colorProfile.getPrimaryDark();
-        int iconColor = colorProfile.getIcon();
+        int primary = newProfile.getPrimary();
+        int iconColor = newProfile.getIcon();
         if(mTabHost != null){
             TabWidget tabWidget = mTabHost.getTabWidget();
             for(int i=0; i<tabWidget.getChildCount(); ++i) {
                 ImageView currentTab = (ImageView)tabWidget.getChildTabViewAt(i);
-                currentTab.setBackgroundColor(darkBackground);
+                currentTab.setBackgroundColor(primary);
                 currentTab.setColorFilter(iconColor);
             }
-            tabWidget.setBackgroundColor(darkBackground);
+            tabWidget.setBackgroundColor(primary);
         }
         if(mEmojiTopBar != null)
-            mEmojiTopBar.setBackgroundColor(darkBackground);
-        mEmojiPager.setBackgroundColor(colorProfile.getPrimary());
-        mEmojiPalettesAdapter.updateColor(colorProfile.getPrimary());
+            mEmojiTopBar.setBackgroundColor(primary);
+        mEmojiPager.setBackgroundColor(primary);
+        mEmojiPalettesAdapter.updateColor(primary);
     }
 
     @Override

@@ -300,7 +300,7 @@ public class KeyboardView extends View {
         if (this instanceof MoreKeysKeyboardView) {
             getBackground().setColorFilter(colorProfile.getPrimary(), PorterDuff.Mode.MULTIPLY);
         } else {
-            ColorUtils.drawBackground(canvas, colorProfile.getPrimary(), ONLY_FLAT);
+            ColorUtils.drawBackground(canvas, colorProfile.getPrimary());
         }
 
         // Calculate clip region and set.

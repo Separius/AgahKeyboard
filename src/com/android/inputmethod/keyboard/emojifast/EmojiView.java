@@ -11,8 +11,6 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 
-import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
-
 public class EmojiView extends View implements Drawable.Callback {
     private String   emoji;
     private Drawable drawable;
@@ -59,21 +57,6 @@ public class EmojiView extends View implements Drawable.Callback {
                 drawable.setBounds(getWidth()*15/100, getHeight()*15/100, getWidth()*7/10, getHeight()*7/10);
             drawable.setCallback(this);
             drawable.draw(canvas);
-        } else {
-            float targetFontSize = 0.75f * getHeight() - getPaddingTop() - getPaddingBottom();
-            paint.setTextSize(targetFontSize);
-            paint.setColor(ResUtil.getColor(getContext(), colorProfile.getText()));
-            paint.setTextAlign(Paint.Align.CENTER);
-            int xPos = (canvas.getWidth() / 2);
-            int yPos = (int) ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2));
-
-            float overflow = paint.measureText(emoji) /
-                    (getWidth() - getPaddingLeft() - getPaddingRight());
-            if (overflow > 1f) {
-                paint.setTextSize(targetFontSize / overflow);
-                yPos = (int) ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2));
-            }
-            canvas.drawText(emoji, xPos, yPos, paint);
         }
     }
 
