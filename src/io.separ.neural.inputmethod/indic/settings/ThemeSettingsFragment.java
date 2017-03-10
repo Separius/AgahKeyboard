@@ -22,6 +22,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
+import android.util.Log;
 
 import com.android.inputmethod.keyboard.KeyboardTheme;
 
@@ -75,7 +76,6 @@ public final class ThemeSettingsFragment extends SubScreenFragment
             pref.setOnRadioButtonClickedListener(this);
         }
         final SharedPreferences prefs = getSharedPreferences();
-        //final KeyboardTheme keyboardTheme = getCurrentTheme(prefs);/*KeyboardTheme.getKeyboardTheme(prefs);*/
         //mSelectedThemeId = String.valueOf(keyboardTheme.mThemeId);
         mSelectedThemeId = String.valueOf(prefs.getString("KeyboardTheme", "adaptive_theme"));
     }

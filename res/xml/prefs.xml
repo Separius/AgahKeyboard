@@ -32,10 +32,10 @@
         android:fragment="io.separ.neural.inputmethod.indic.settings.MultiLingualSettingsFragment"
         android:title="@string/settings_screen_multilingual"
         android:key="screen_multilingual" />-->
-    <PreferenceScreen
+    <!--<PreferenceScreen
         android:fragment="io.separ.neural.inputmethod.indic.settings.GestureSettingsFragment"
         android:title="@string/settings_screen_gesture"
-        android:key="screen_gesture" />
+        android:key="screen_gesture" />-->
     <PreferenceScreen
         android:fragment="io.separ.neural.inputmethod.indic.settings.CorrectionSettingsFragment"
         android:title="@string/settings_screen_correction"

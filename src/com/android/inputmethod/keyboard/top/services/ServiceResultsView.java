@@ -2,14 +2,11 @@ package com.android.inputmethod.keyboard.top.services;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -51,7 +48,7 @@ public class ServiceResultsView extends LinearLayout implements ColorManager.OnC
 
     @Override
     public void onColorChange(ColorProfile colorProfile) {
-        setBackgroundColor(colorProfile.getPrimaryDark());
+        setBackgroundColor(colorProfile.getSecondary());
     }
 
     /*class C04621 implements OnClickListener {

@@ -77,8 +77,24 @@ public class ColorProfile {
         this.icon = Color.rgb(Color.red(primary) ^ 0x80, Color.green(primary) ^ 0x80, Color.blue(primary) ^ 0x80);
     }
 
+    public int getIconOnSecondary(){
+        /*int tmp = getSecondary();
+        return Color.rgb(Color.red(tmp) ^ 0x80, Color.green(tmp) ^ 0x80, Color.blue(tmp) ^ 0x80);*/
+        int tmp = getIcon();
+        if(text == Color.BLACK)
+            return ColorUtils.darkerColor(tmp);
+        else
+            return ColorUtils.lightColor(tmp);
+    }
+
     public int getIcon(){
+        //return ColorUtils.getTextColor();
         return icon;
+    }
+
+    public int getTextColor() {
+        return getIconOnSecondary();
+        //return ColorUtils.getTextColor();
     }
 
     public int getText(){
@@ -110,18 +126,21 @@ public class ColorProfile {
     }
 
     public int getPrimaryDark() {
-        if (isInvertDark()) {
-            return getPrimaryIgnore();
-        }
         if (this.primaryDark != 1000) {
             return ColorUtils.darkerColor(this.primaryDark, this.darkFactor);
         }
         return ColorUtils.darkerColor(getPrimaryIgnore());
     }
 
-    public int getTextColor() {
-        return icon;
-        //return ColorUtils.getTextColor();
+    public int getSecondary() {
+        if(text == Color.BLACK)
+            return getPrimaryDark();
+        else
+            return getPrimaryLight();
+    }
+
+    private int getPrimaryLight() {
+        return ColorUtils.lightColor(this.primary);
     }
 
     public int getAccent() {

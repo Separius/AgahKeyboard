@@ -158,6 +158,11 @@ public class Key implements Comparable<Key> {
     private final KeyVisualAttributes mKeyVisualAttributes;
 
     private final OptionalAttributes mOptionalAttributes;
+    private boolean moreKey = false;
+
+    public boolean isMoreKey() {
+        return moreKey;
+    }
 
     private static final class OptionalAttributes {
         /** Text to output when pressed. This can be multiple characters, like ".com" */
@@ -197,14 +202,11 @@ public class Key implements Comparable<Key> {
     /** Key is enabled and responds on press */
     private boolean mEnabled = true;
 
-    /**
-     * Constructor for a key on <code>MoreKeyKeyboard</code>, on <code>MoreSuggestions</code>,
-     * and in a <GridRows/>.
-     */
     public Key(final String label, final int iconId, final int code, final String outputText,
-            final String hintLabel, final int labelFlags, final int backgroundType, final int x,
-            final int y, final int width, final int height, final int horizontalGap,
-            final int verticalGap) {
+               final String hintLabel, final int labelFlags, final int backgroundType, final int x,
+               final int y, final int width, final int height, final int horizontalGap,
+               final int verticalGap, final boolean isMoreKey) {
+        moreKey = isMoreKey;
         mHeight = height - verticalGap;
         mWidth = width - horizontalGap;
         mHintLabel = hintLabel;
@@ -227,6 +229,20 @@ public class Key implements Comparable<Key> {
         mKeyVisualAttributes = null;
 
         mHashCode = computeHashCode(this);
+    }
+
+    /**
+     * Constructor for a key on <code>MoreKeyKeyboard</code>, on <code>MoreSuggestions</code>,
+     * and in a <GridRows/>.
+     */
+    public Key(final String label, final int iconId, final int code, final String outputText,
+            final String hintLabel, final int labelFlags, final int backgroundType, final int x,
+            final int y, final int width, final int height, final int horizontalGap,
+            final int verticalGap) {
+        this(label, iconId, code, outputText,
+        hintLabel, labelFlags, backgroundType, x,
+        y, width, height, horizontalGap,
+        verticalGap, false);
     }
 
     /**
@@ -407,6 +423,7 @@ public class Key implements Comparable<Key> {
         // Key state.
         mPressed = key.mPressed;
         mEnabled = key.mEnabled;
+        moreKey = key.moreKey;
     }
 
     private static boolean needsToUpperCase(final int labelFlags, final int keyboardElementId) {
@@ -948,6 +965,30 @@ public class Key implements Comparable<Key> {
         ColorUtils.ButtonType type = ColorUtils.getButtonType();
         normalDrawable.setState(KeyBackgroundState.STATES[type != ColorUtils.ButtonType.NONE ? BACKGROUND_TYPE_NORMAL : BACKGROUND_TYPE_ACTION].getState(this.mPressed, type));
         normalDrawable.setColorFilter(mDrawColor, type != ColorUtils.ButtonType.NONE ? PorterDuff.Mode.MULTIPLY : PorterDuff.Mode.SRC_ATOP);
+        return normalDrawable;
+    }
+
+    public Drawable getStickyBackground(Drawable normalDrawable, boolean on, int mDrawColor) {
+        normalDrawable.setState(KeyBackgroundState.STATES[on ? LABEL_FLAGS_ALIGN_ICON_TO_BOTTOM : BACKGROUND_TYPE_STICKY_OFF].getState(this.mPressed, ColorUtils.ButtonType.NONE));
+        normalDrawable.clearColorFilter();
+        normalDrawable.setColorFilter(null);
+        if (on) {
+            normalDrawable.setColorFilter(mDrawColor, PorterDuff.Mode.SRC_ATOP);
+        }
+        return normalDrawable;
+    }
+
+    public Drawable getNormalBackground(Drawable normalDrawable, boolean forceNoPress, int darkColor) {
+        boolean z = true;
+        KeyBackgroundState keyBackgroundState = KeyBackgroundState.STATES[BACKGROUND_TYPE_NORMAL];
+        if (forceNoPress || !this.mPressed) {
+            z = false;
+        }
+        int[] state = keyBackgroundState.getState(z, ColorUtils.ButtonType.NONE);
+            normalDrawable.setColorFilter(darkColor, PorterDuff.Mode.MULTIPLY);
+            /*normalDrawable.clearColorFilter();
+            normalDrawable.setColorFilter(null);*/
+        normalDrawable.setState(state);
         return normalDrawable;
     }
 }

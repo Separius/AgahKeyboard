@@ -31,7 +31,6 @@ import com.android.inputmethod.keyboard.Key;
 
 import java.util.HashSet;
 
-import io.separ.neural.inputmethod.colors.ColorUtils;
 import io.separ.neural.inputmethod.indic.R;
 
 import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
@@ -82,7 +81,7 @@ public class KeyPreviewView extends TextView {
         if (background == null)
             return;
         //background.setColorFilter(ColorUtils.lightColor(colorProfile.getPrimary()), PorterDuff.Mode.MULTIPLY);
-        background.setColorFilter(colorProfile.getPrimaryDark(), PorterDuff.Mode.OVERLAY);
+        background.setColorFilter(colorProfile.getSecondary(), PorterDuff.Mode.MULTIPLY);
         if (sNoScaleXTextSet.contains(text))
             return;
         // calculate maximum text width.

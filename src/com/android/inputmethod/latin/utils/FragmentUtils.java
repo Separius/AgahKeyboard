@@ -46,7 +46,7 @@ public class FragmentUtils {
         sLatinImeFragments.add(ThemeSettingsFragment.class.getName());
         //sLatinImeFragments.add(MultiLingualSettingsFragment.class.getName());
         sLatinImeFragments.add(CustomInputStyleSettingsFragment.class.getName());
-        sLatinImeFragments.add(GestureSettingsFragment.class.getName());
+        //sLatinImeFragments.add(GestureSettingsFragment.class.getName());
         sLatinImeFragments.add(CorrectionSettingsFragment.class.getName());
         sLatinImeFragments.add(AdvancedSettingsFragment.class.getName());
         sLatinImeFragments.add(DebugSettingsFragment.class.getName());

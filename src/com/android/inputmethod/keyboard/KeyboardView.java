@@ -32,6 +32,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.android.inputmethod.keyboard.internal.KeyDrawParams;
@@ -45,14 +46,8 @@ import io.separ.neural.inputmethod.indic.Constants;
 import io.separ.neural.inputmethod.indic.R;
 
 import static com.android.inputmethod.keyboard.Key.BACKGROUND_TYPE_ACTION;
-import static com.android.inputmethod.keyboard.Key.BACKGROUND_TYPE_EMPTY;
-import static com.android.inputmethod.keyboard.Key.BACKGROUND_TYPE_FUNCTIONAL;
-import static com.android.inputmethod.keyboard.Key.BACKGROUND_TYPE_NORMAL;
 import static com.android.inputmethod.keyboard.Key.BACKGROUND_TYPE_SPACEBAR;
-import static com.android.inputmethod.keyboard.Key.BACKGROUND_TYPE_STICKY_OFF;
-import static com.android.inputmethod.keyboard.Key.BACKGROUND_TYPE_STICKY_ON;
 import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
-import static io.separ.neural.inputmethod.colors.ColorUtils.ForceType.ONLY_FLAT;
 
 /**
  * A view that renders a virtual {@link Keyboard}.
@@ -362,17 +357,46 @@ public class KeyboardView extends View {
         params.mAnimAlpha = Constants.Color.ALPHA_OPAQUE;
 
         if (!key.isSpacer()) {
-            boolean z = false;
-            switch (key.getType()) {
-                case BACKGROUND_TYPE_ACTION:
-                    onDrawKeyBackground(key, canvas, key.getActionBackground(this.mKeyBackground, colorProfile.getPrimaryDark()));
+            if(key.isMoreKey()) {
+                Drawable tmp = key.selectBackgroundDrawable(this.mKeyBackground, this.mFunctionalKeyBackground, this.mSpacebarBackground);
+                tmp.setColorFilter(ColorUtils.colorProfile.getPrimary(), PorterDuff.Mode.MULTIPLY);
+                onDrawKeyBackground(key, canvas, tmp);
+                Log.e("SEPAR", "here :(");
+            }else {
+                switch (key.getType()) {
+                    case BACKGROUND_TYPE_ACTION:
+                        onDrawKeyBackground(key, canvas, key.getActionBackground(this.mKeyBackground, colorProfile.getSecondary()));
+                        break;
+                    case BACKGROUND_TYPE_SPACEBAR:
+                        onDrawKeyBackground(key, canvas, key.getSpaceBarBackground(this.mSpacebarBackground, colorProfile.getPrimary(), PorterDuff.Mode.MULTIPLY));
+                        break;
+                    default:
+                        onDrawKeyBackground(key, canvas, new ColorDrawable(ColorUtils.colorProfile.getPrimary()));
+                }
+            }
+            /*switch (key.getType()) {
+                case 1:
+                    Drawable drawable = this.mKeyBackground;
+                    onDrawKeyBackground(key, canvas, key.getNormalBackground(drawable, true, colorProfile.getSecondary()));
                     break;
-                case BACKGROUND_TYPE_SPACEBAR:
+                case 2:
+                    onDrawKeyBackground(key, canvas, key.getNormalBackground(this.mKeyBackground, true, colorProfile.getSecondary()));
+                    break;
+                case 3:
+                    onDrawKeyBackground(key, canvas, key.getNormalBackground(this.mKeyBackground, true, colorProfile.getSecondary()));
+                    onDrawKeyBackground(key, canvas, key.getStickyBackground(this.mKeyBackground, true, colorProfile.getAccent()));
+                    break;
+                case 4:
+                    onDrawKeyBackground(key, canvas, key.getNormalBackground(this.mKeyBackground, true, colorProfile.getSecondary()));
+                    onDrawKeyBackground(key, canvas, key.getStickyBackground(this.mKeyBackground, true, colorProfile.getAccent()));
+                    break;
+                case 5:
+                    onDrawKeyBackground(key, canvas, key.getActionBackground(this.mKeyBackground, colorProfile.getSecondary()));
+                    break;
+                case 6:
                     onDrawKeyBackground(key, canvas, key.getSpaceBarBackground(this.mSpacebarBackground, colorProfile.getPrimary(), PorterDuff.Mode.MULTIPLY));
                     break;
-                default:
-                    onDrawKeyBackground(key, canvas, new ColorDrawable(ColorUtils.colorProfile.getPrimary()));
-            }
+            }*/
         }
         onDrawKeyTopVisuals(key, canvas, paint, params);
         canvas.translate(-keyDrawX, -keyDrawY);

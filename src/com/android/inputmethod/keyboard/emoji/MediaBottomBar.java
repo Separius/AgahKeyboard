@@ -6,7 +6,6 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -101,24 +100,24 @@ public class MediaBottomBar extends LinearLayout implements View.OnTouchListener
     }
 
     public void onColorChange(ColorProfile newProfile){
-        int primary = newProfile.getPrimary();
-        int iconColor = newProfile.getIcon();
-        setBackgroundColor(primary);
+        int secondary = newProfile.getSecondary();
+        int iconColor = newProfile.getIconOnSecondary();
+        setBackgroundColor(secondary);
         if(mDeleteKey != null) {
-            mDeleteKey.setBackgroundColor(primary);
+            mDeleteKey.setBackgroundColor(secondary);
             mDeleteKey.setColorFilter(iconColor);
         }
         if(mAlphabetKeyLeft != null) {
-            mAlphabetKeyLeft.setBackgroundColor(primary);
+            mAlphabetKeyLeft.setBackgroundColor(secondary);
             mAlphabetKeyLeft.setTextColor(iconColor);
-            mAlphabetKeyLeft.setText(mAlphabetKeyLeft.getText());
+            //mAlphabetKeyLeft.setText(mAlphabetKeyLeft.getText());
         }
         if(mEmojiSwitch != null){
-            mEmojiSwitch.setBackgroundColor(primary);
+            mEmojiSwitch.setBackgroundColor(secondary);
             mEmojiSwitch.setColorFilter(iconColor);
         }
         if(mStickerSwitch != null){
-            mStickerSwitch.setBackgroundColor(primary);
+            mStickerSwitch.setBackgroundColor(secondary);
             mStickerSwitch.setColorFilter(iconColor);
         }
     }
@@ -134,7 +133,7 @@ public class MediaBottomBar extends LinearLayout implements View.OnTouchListener
     private static void setupAlphabetKey(final TextView alphabetKey, final String label,
                                          final KeyDrawParams params) {
         alphabetKey.setText(label);
-        alphabetKey.setTextColor(params.mFunctionalTextColor);
+        //alphabetKey.setTextColor(params.mFunctionalTextColor);
         //alphabetKey.setTextSize(TypedValue.COMPLEX_UNIT_PX, params.mLabelSize);
         alphabetKey.setTypeface(FontUtils.getLocaleTypeface());
     }

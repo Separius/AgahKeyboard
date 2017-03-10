@@ -17,17 +17,13 @@
 package io.separ.neural.inputmethod.indic.suggestions;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.ViewCompat;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -38,15 +34,11 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.inputmethod.keyboard.Keyboard;
 import com.android.inputmethod.keyboard.MainKeyboardView;
-import com.android.inputmethod.keyboard.MoreKeysPanel;
 import com.android.inputmethod.keyboard.top.ShowActionRowEvent;
-import com.android.inputmethod.latin.utils.ImportantNoticeUtils;
 
 import java.util.ArrayList;
 
-import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.indic.AudioAndHapticFeedbackManager;
@@ -63,7 +55,7 @@ public final class SuggestionStripView extends RelativeLayout implements OnClick
         OnLongClickListener, ColorManager.OnColorChange {
 
     public void onColorChange(ColorProfile colorProfile) {
-        setBackgroundColor(colorProfile.getPrimary());
+        setBackgroundColor(colorProfile.getSecondary());
         mVoiceKey.setColorFilter(colorProfile.getTextColor());
         mLayoutHelper.updateColor(colorProfile);
         mServicesKey.setColorFilter(colorProfile.getTextColor());

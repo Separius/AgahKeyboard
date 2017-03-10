@@ -604,10 +604,12 @@ Tip: You can download and remove dictionaries by going to &lt;b>Languages&#160;&
     <string name="allow_permission">Allow</string>
     <string name="connect_slash">Connect</string>
     <string name="label_slash_splash">Search anything, Share anywhere</string>
-    <string name="enable_slash">ENABLE SLASH</string>
-    <string name="enable_slash_info">In <font color="black">Language &amp; Input</font> settings, tap the toggle next to <font color="black">“Slash Keyboard”</font>. This will authorize the keyboard to run on your device.</string>
-    <string name="switch_to_slash">SWITCH TO SLASH</string>
-    <string name="switch_to_slash_info">In the <font color="black">Change Keyboard</font> dialog, select <font color="black">“Slash Keyboard”</font> as your active keyboard</string>
-    <string name="use_slash">USE SLASH</string>
-    <string name="use_slash_info">You’re all set! You can now use the keyboard to search within your favorite services, or explore and connect services within the app.</string>
+    <string name="enable_slash">ENABLE AGAH</string>
+    <string name="enable_slash_info">In <font color="black">Language &amp; Input</font> settings, tap the toggle next to <font color="black">“Neural Keyboard”</font>. This will authorize the keyboard to run on your device.</string>
+    <string name="switch_to_slash">SWITCH TO AGAH</string>
+    <string name="switch_to_slash_info">In the <font color="black">Change Keyboard</font> dialog, select <font color="black">“Neural Keyboard”</font> as your active keyboard</string>
+    <string name="use_slash">USE AGAH</string>
+    <string name="use_slash_info">You’re all set! You can now use the keyboard to search within your favorite services with adaptive coloring.</string>
+    <string name="share_app">Share app</string>
+    <string name="rate_app">Rate us</string>
 </resources>

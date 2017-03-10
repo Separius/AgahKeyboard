@@ -20,8 +20,6 @@ import io.separ.neural.inputmethod.colors.SpecialRules;
 import io.separ.neural.inputmethod.colors.WindowChangeDetectingService;
 
 import static android.graphics.Color.parseColor;
-import static io.separ.neural.inputmethod.colors.ColorUtils.NO_COLOR;
-import static io.separ.neural.inputmethod.colors.ColorUtils.getTextColor;
 import static io.separ.neural.inputmethod.colors.ColorUtils.setProfileFromApp;
 
 /**

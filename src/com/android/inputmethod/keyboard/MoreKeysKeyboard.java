@@ -337,7 +337,7 @@ public final class MoreKeysKeyboard extends Keyboard {
                 final int row = n / params.mNumColumns;
                 final int x = params.getX(n, row);
                 final int y = params.getY(row);
-                final Key key = moreKeySpec.buildKey(x, y, moreKeyFlags, params);
+                final Key key = moreKeySpec.buildKey(x, y, moreKeyFlags, params, true);
                 params.markAsEdgeKey(key, row);
                 params.onAddKey(key);
 

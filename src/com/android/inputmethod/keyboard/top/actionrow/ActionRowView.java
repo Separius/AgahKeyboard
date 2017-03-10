@@ -1,13 +1,11 @@
 package com.android.inputmethod.keyboard.top.actionrow;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +66,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
             this.serviceId = serviceId;
         }
         public void onClick(View v) {
+            AudioAndHapticFeedbackManager.getInstance().performHapticAndAudioFeedback(-15, ActionRowView.this);
             mListener.onServiceClicked(DEFAULT_SERVICES[serviceId]);
         }
     }
@@ -198,7 +197,7 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
 
     public void onColorChange(ColorProfile newProfile) {
         this.colorProfile = newProfile;
-        setBackgroundColor(newProfile.getPrimary());
+        setBackgroundColor(newProfile.getSecondary());
         setupLayouts();
         adapter = new ActionRowAdapter();
         setAdapter(adapter);

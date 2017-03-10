@@ -22,6 +22,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.android.inputmethod.keyboard.PointerTracker;
 import com.android.inputmethod.latin.utils.CoordinateUtils;
@@ -73,6 +74,7 @@ public final class SlidingKeyInputDrawingPreview extends AbstractDrawingPreview 
     }
 
     public void dismissSlidingKeyInputPreview() {
+        Log.e("SEPAR", "dismissSlidingKeyInputPreview");
         mShowsSlidingKeyInputPreview = false;
         invalidateDrawingView();
     }
@@ -86,7 +88,7 @@ public final class SlidingKeyInputDrawingPreview extends AbstractDrawingPreview 
         if (!isPreviewEnabled() || !mShowsSlidingKeyInputPreview) {
             return;
         }
-
+        Log.e("SEPAR", "showSlidingKeyInputPreview");
         // TODO: Finalize the rubber band preview implementation.
         final float radius = mPreviewBodyRadius;
         final Path path = mRoundedLine.makePath(

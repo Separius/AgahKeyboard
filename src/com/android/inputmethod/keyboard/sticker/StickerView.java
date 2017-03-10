@@ -143,18 +143,19 @@ public class StickerView extends LinearLayout implements ColorManager.OnColorCha
 
     public void onColorChange(ColorProfile newProfile){
         int primary = newProfile.getPrimary();
-        int iconColor = newProfile.getIcon();
+        int secondary = newProfile.getSecondary();
+        int iconColor = newProfile.getIconOnSecondary();
         if(mTabHost != null){
             TabWidget tabWidget = mTabHost.getTabWidget();
             for(int i=0; i<tabWidget.getChildCount(); ++i) {
                 ImageView currentTab = (ImageView)tabWidget.getChildTabViewAt(i);
-                currentTab.setBackgroundColor(primary);
+                currentTab.setBackgroundColor(secondary);
                 currentTab.setColorFilter(iconColor);
             }
-            tabWidget.setBackgroundColor(primary);
+            tabWidget.setBackgroundColor(secondary);
         }
         if(mStickerTopBar != null)
-            mStickerTopBar.setBackgroundColor(primary);
+            mStickerTopBar.setBackgroundColor(secondary);
         mStickerPager.setBackgroundColor(primary);
         mStickerPalettesAdapter.updateColor(primary);
     }

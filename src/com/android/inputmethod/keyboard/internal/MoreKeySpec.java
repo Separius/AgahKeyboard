@@ -70,10 +70,15 @@ public final class MoreKeySpec {
     }
 
     public Key buildKey(final int x, final int y, final int labelFlags,
-            final KeyboardParams params) {
+                        final KeyboardParams params, final boolean isMoreKey) {
         return new Key(mLabel, mIconId, mCode, mOutputText, null /* hintLabel */, labelFlags,
                 Key.BACKGROUND_TYPE_NORMAL, x, y, params.mDefaultKeyWidth, params.mDefaultRowHeight,
-                params.mHorizontalGap, params.mVerticalGap);
+                params.mHorizontalGap, params.mVerticalGap, isMoreKey);
+    }
+
+    public Key buildKey(final int x, final int y, final int labelFlags,
+            final KeyboardParams params) {
+        return buildKey(x, y, labelFlags, params, false);
     }
 
     @Override

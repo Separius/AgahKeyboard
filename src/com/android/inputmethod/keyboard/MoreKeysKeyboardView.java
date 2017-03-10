@@ -22,6 +22,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -168,7 +169,8 @@ public class MoreKeysKeyboardView extends KeyboardView implements MoreKeysPanel 
             return;
         }
         final boolean hasOldKey = (mCurrentKey != null);
-        mCurrentKey = detectKey(x, y);
+        final Key newKey = detectKey(x, y);
+        mCurrentKey = newKey;
         if (hasOldKey && mCurrentKey == null) {
             // A more keys keyboard is canceled when detecting no key.
             mController.onCancelMoreKeysPanel();
@@ -225,6 +227,7 @@ public class MoreKeysKeyboardView extends KeyboardView implements MoreKeysPanel 
         return newKey;
     }
 
+    //TODO handle these
     private void updateReleaseKeyGraphics(final Key key) {
         key.onReleased();
         invalidateKey(key);

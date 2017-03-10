@@ -16,7 +16,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.hardware.display.DisplayManager;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.Build.VERSION;
 import android.os.IBinder;
@@ -159,7 +158,7 @@ public class NavService extends Service implements ColorManager.OnColorChange, O
 
     public void onColorChange(ColorProfile newProfile) {
         if (this.barColor != null) {
-            this.barColor.setBackgroundColor(newProfile.getPrimaryDark());
+            this.barColor.setBackgroundColor(newProfile.getSecondary());
         }
     }
 

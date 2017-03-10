@@ -141,6 +141,7 @@ import io.separ.neural.inputmethod.slash.SearchRetryErrorEvent;
 import io.separ.neural.inputmethod.slash.ServiceRequestEvent;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
+import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 import static com.android.inputmethod.keyboard.KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED;
 import static io.separ.neural.inputmethod.colors.ColorManager.addObserver;
 import static io.separ.neural.inputmethod.colors.ColorManager.getLastProfile;
@@ -1336,7 +1337,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         //SEPAR TODO::this is for the action row (if emoji => set to buttombar size + rich keyboard)
         /*final int suggestionsHeight = (!mKeyboardSwitcher.isShowingEmojiPalettes()) ?
                 mTopDisplayController.getHeight() : mSuggestionStripView.getHeight();*/
-        final int suggestionsHeight = mTopDisplayController.getHeight();
+        final int suggestionsHeight = (mTopDisplayController != null) ? mTopDisplayController.getHeight() : 0;
         final int visibleTopY = inputHeight - visibleKeyboardView.getHeight() - suggestionsHeight;
         // Need to set touchable region only if a keyboard view is being shown.
         if (visibleKeyboardView.isShown()) {
@@ -2357,7 +2358,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 LatinIME.this.mInputLogic.stopSearchingResults();
                 mTopDisplayController.hideAll();
             }
-            launchSettings();
+            Intent permissionIntent = new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()));
+            permissionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(permissionIntent);
+            //launchSettings();
         }
     }
 }

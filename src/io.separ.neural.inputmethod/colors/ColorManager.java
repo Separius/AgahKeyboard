@@ -5,7 +5,11 @@ package io.separ.neural.inputmethod.colors;
  */
 
 import android.content.Context;
+import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.android.inputmethod.keyboard.KeyboardTheme;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +69,8 @@ public class ColorManager {
     public void calculateProfile(Context context, String packageName) {
         ColorProfile colorProfile = getColor(context, packageName);
         if (!lastProfile.equals(colorProfile)) {
+            //TODO, cool!
+            //KeyboardTheme.saveKeyboardThemeId((colorProfile.getText()== Color.BLACK)? "3" : "4", PreferenceManager.getDefaultSharedPreferences(context));
             lastProfile.setProfile(colorProfile);
             notifyObservers();
         }

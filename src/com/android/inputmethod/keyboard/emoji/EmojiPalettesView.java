@@ -252,21 +252,20 @@ public final class EmojiPalettesView extends LinearLayout implements OnTabChange
     }
 
     public void onColorChange(ColorProfile newProfile){
-        int primary = newProfile.getPrimary();
-        int iconColor = newProfile.getIcon();
+        int secondary = newProfile.getSecondary();
         if(mTabHost != null){
             TabWidget tabWidget = mTabHost.getTabWidget();
             for(int i=0; i<tabWidget.getChildCount(); ++i) {
                 ImageView currentTab = (ImageView)tabWidget.getChildTabViewAt(i);
-                currentTab.setBackgroundColor(primary);
-                currentTab.setColorFilter(iconColor);
+                currentTab.setBackgroundColor(secondary);
+                currentTab.setColorFilter(newProfile.getIconOnSecondary());
             }
-            tabWidget.setBackgroundColor(primary);
+            tabWidget.setBackgroundColor(secondary);
         }
         if(mEmojiTopBar != null)
-            mEmojiTopBar.setBackgroundColor(primary);
-        mEmojiPager.setBackgroundColor(primary);
-        mEmojiPalettesAdapter.updateColor(primary);
+            mEmojiTopBar.setBackgroundColor(secondary);
+        mEmojiPager.setBackgroundColor(newProfile.getPrimary());
+        mEmojiPalettesAdapter.updateColor(newProfile.getPrimary());
     }
 
     @Override
