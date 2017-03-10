@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 
 import java.util.ArrayList;
@@ -146,7 +148,7 @@ public class ResultsRecyclerView extends RecyclerView {
         item.setDisplayType(RSearchItem.GENERIC_MESSAGE_TYPE);
         item.setTitle(getResources().getString(R.string.service_result_empty));
         this.mAdapter.add(item);
-        invalidateReactViewHack();
+        //invalidateReactViewHack();
     }
 
     public void setLoadingItems() {
@@ -162,17 +164,20 @@ public class ResultsRecyclerView extends RecyclerView {
         if (requiresPermissionAccess()) {
             setPermissionItem();
             return true;
-        } else if (!requiresUnauthPreview(authorizedStatus, categoryRequiresAuth)) {
+        } else
+            return false;
+        /*else if (!requiresUnauthPreview(authorizedStatus, categoryRequiresAuth)) {
             return false;
         } else {
             setUnauthPreviewItems();
             return true;
-        }
+        }*/
     }
 
     public boolean requiresPermissionAccess() {
+        if (RServiceItem.CONTACTS.equals(mCurrentService.getSlash()) && ContextCompat.checkSelfPermission(getContext(), "android.permission.READ_CONTACTS") != 0)
+            return true;
         return false;
-        //return PermissionsManager.requiresPermissionAccess(getContext(), this.mCurrentService);
     }
 
     private boolean requiresUnauthPreview(String authorizedStatus, boolean categoryRequiresAuth) {
@@ -186,11 +191,11 @@ public class ResultsRecyclerView extends RecyclerView {
         getAdapter().clear();
         RSearchItem connectItem = new RSearchItem();
         connectItem.setDisplayType(RSearchItem.PERMISSION_REQUIRED_TYPE);
-        /*connectItem.setService(PermissionsManager.getPermissionService(this.mCurrentService));
-        connectItem.setOutput(PermissionsManager.getPermissionMessage(getContext(), this.mCurrentService));
-        connectItem.setTitle(PermissionsManager.getPermissionName(getContext(), this.mCurrentService));*/
+        connectItem.setService(mCurrentService.getSlash());
+        connectItem.setOutput(getContext().getString(R.string.contacts_permission));
+        connectItem.setTitle("Contacts");
         this.mAdapter.add(connectItem);
-        invalidateReactViewHack();
+        //invalidateReactViewHack();
     }
 
     private void setUnauthPreviewItems() {
@@ -199,7 +204,7 @@ public class ResultsRecyclerView extends RecyclerView {
         connectItem.setDisplayType(RSearchItem.CONNECT_TO_USE_TYPE);
         connectItem.setService(this.mCurrentSlash);
         this.mAdapter.add(connectItem);
-        invalidateReactViewHack();
+        //invalidateReactViewHack();
     }
 
     public boolean isShowingUnauthPreviewItems() {

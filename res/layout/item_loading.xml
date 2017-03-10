@@ -12,7 +12,7 @@
     app:cardCornerRadius="@dimen/card_search_item_radius"
     app:cardElevation="2dp"
     app:cardPreventCornerOverlap="false">
-    <RelativeLayout android:orientation="vertical" android:id="@+id/title_container" android:paddingLeft="7dp" android:paddingTop="3dp" android:paddingRight="4dp" android:layout_width="@dimen/search_loading_item_width" android:layout_height="@dimen/icon_height" android:layout_toRightOf="@+id/item_image" android:layout_centerVertical="true">
+    <RelativeLayout android:orientation="vertical" android:id="@+id/title_container" android:paddingLeft="7dp" android:paddingTop="3dp" android:paddingRight="4dp" android:layout_width="@dimen/search_loading_item_width" android:layout_height="@dimen/icon_height" android:layout_toRightOf="@id/item_image" android:layout_centerVertical="true">
         <com.github.ybq.android.spinkit.SpinKitView android:id="@+id/service_loading_container" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" app:SpinKit_Color="#2dc5e4" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

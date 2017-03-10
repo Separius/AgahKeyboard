@@ -51,7 +51,7 @@ public class ServiceResultsView extends LinearLayout implements ColorManager.OnC
 
     @Override
     public void onColorChange(ColorProfile colorProfile) {
-        setBackgroundColor(colorProfile.getPrimary());
+        setBackgroundColor(colorProfile.getPrimaryDark());
     }
 
     /*class C04621 implements OnClickListener {
@@ -75,8 +75,25 @@ public class ServiceResultsView extends LinearLayout implements ColorManager.OnC
                 if (previewClicked) {
                     ServiceResultsView.this.onPreviewClicked(position);
                 }
+                if (connectClicked) {
+                    ServiceResultsView.this.onActionClick(position);
+                }
             }
         }
+    }
+
+    private void onActionClick(int position) {
+        RSearchItem searchItem = (RSearchItem) this.mRecycler.getAdapter().getItem(position);
+        if (this.mRecycler.requiresPermissionAccess()) {
+            onPermissionClick(searchItem);
+        } else {
+            //onConnectClick(searchItem);
+        }
+    }
+
+    private void onPermissionClick(RSearchItem searchItem) {
+        EventBusExt.getDefault().post(new LaunchSettingsEvent());
+        //PermissionActivity.startActivity(getContext(), "android.permission.READ_CONTACTS");
     }
 
     class C04643 implements CategoriesArrayAdapter.IOnClickListener {
@@ -198,8 +215,9 @@ public class ServiceResultsView extends LinearLayout implements ColorManager.OnC
         this.mCategoriesList = (CategoriesRecyclerView) findViewById(R.id.categories);
         this.mCategoriesList.getAdapter().setOnCategoryClickListener(new C04643());
         this.mSearchContainer = findViewById(R.id.search_container);
+        //mSearchContainer.setBackgroundColor(Color.WHITE);
         this.mSearchPlaceholder = (ImageView) findViewById(R.id.search_placeholder);
-        mSearchPlaceholder.setColorFilter(Color.BLACK);
+        //mSearchPlaceholder.setColorFilter(Color.BLACK);
         mSearchPlaceholder.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -279,7 +297,12 @@ public class ServiceResultsView extends LinearLayout implements ColorManager.OnC
             }
             setSearchMirror(searchString);
         }
+        boolean skipRequest = mRecycler.trySetUnauthPreviewItems(null, true);
         updateCategoryVisibility();
+        if (skipRequest) {
+            setVisualState(VisualSate.Results);
+            return;
+        }
         //TODO anyone who calls this must change?
         ServiceRequestManager.getInstance().cancelLastRequest();
         ServiceRequestManager.getInstance().postRequest(currentSlash, searchString, action, useCaching);

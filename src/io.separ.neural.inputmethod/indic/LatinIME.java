@@ -67,6 +67,7 @@ import com.android.inputmethod.keyboard.top.ShowSuggestionsEvent;
 import com.android.inputmethod.keyboard.top.TopDisplayController;
 import com.android.inputmethod.keyboard.top.actionrow.ActionRowView;
 import com.android.inputmethod.keyboard.top.actionrow.FrequentEmojiHandler;
+import com.android.inputmethod.keyboard.top.services.LaunchSettingsEvent;
 import com.android.inputmethod.keyboard.top.services.SearchItemSelectedEvent;
 import com.android.inputmethod.keyboard.top.services.ServiceExitEvent;
 import com.android.inputmethod.latin.utils.ApplicationUtils;
@@ -295,8 +296,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             this.mKeyboardSwitcher.setEmojiKeyboard();
             return;
         }
-        this.mTopDisplayController.runSearch(serviceId, mInputLogic.mConnection.getmComposingText().toString());
         this.mInputLogic.startSearchingResults();
+        this.mTopDisplayController.runSearch(serviceId, mInputLogic.mConnection.getmComposingText().toString());
     }
 
     public static final class UIHandler extends LeakGuardHandlerWrapper<LatinIME> {
@@ -2343,6 +2344,15 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         @Subscribe(threadMode = ThreadMode.MAIN)
         public void onEventMainThread(ShowSuggestionsEvent event){
             mTopDisplayController.showSuggestions();
+        }
+
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void onEventMainThread(LaunchSettingsEvent event) {
+            if(mInputLogic.isSearchingResults()){
+                LatinIME.this.mInputLogic.stopSearchingResults();
+                mTopDisplayController.hideAll();
+            }
+            launchSettings();
         }
     }
 }

@@ -29,6 +29,7 @@ import io.separ.neural.inputmethod.slash.RServiceItem;
 import static io.separ.neural.inputmethod.slash.RSearchItem.GENERIC_MESSAGE_TYPE;
 import static io.separ.neural.inputmethod.slash.RSearchItem.LOADING_TYPE;
 import static io.separ.neural.inputmethod.slash.RSearchItem.MEDIA_TYPE;
+import static io.separ.neural.inputmethod.slash.RSearchItem.PERMISSION_REQUIRED_TYPE;
 
 /**
  * Created by sepehr on 3/2/17.
@@ -109,6 +110,10 @@ public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItem
             this.titleContainer = view.findViewById(R.id.title_container);
             this.bottom = (TextView) view.findViewById(R.id.item_bottom);
             this.preview = (ImageButton) view.findViewById(R.id.preview);
+            this.connectButton = (Button) view.findViewById(R.id.connect_button);
+            if (this.connectButton != null) {
+                this.connectButton.setOnClickListener(new C04452());
+            }
             this.loading = (SpinKitView) view.findViewById(R.id.service_loading_container);
             if (this.preview != null) {
                 this.preview.setOnClickListener(new C04441());
@@ -172,6 +177,9 @@ public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItem
                 break;
             case RESULT_TYPE_IMAGE_NO_BORDER /*2*/:
                 layoutId = R.layout.item_search_image_no_border;
+                break;
+            case RESULT_TYPE_PERMISSION_REQUIRED /*7*/:
+                layoutId = R.layout.item_connect;
                 break;
             case RESULT_TYPE_GENERIC_MESSAGE /*6*/:
                 layoutId = R.layout.item_generic_message;
@@ -239,6 +247,10 @@ public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItem
             case RESULT_TYPE_LOADING:
                 vh.loading.setVisibility(View.VISIBLE);
                 vh.titleContainer.setVisibility(View.VISIBLE);
+                break;
+            case RESULT_TYPE_PERMISSION_REQUIRED /*7*/:
+                updateActionRequiredItem(vh, RServiceItem.serviceItemHashMap.get(item.getService()), item.getOutput(), item.getTitle(), getContext().getString(R.string.allow_permission));
+                break;
         }
         if(vh.header != null)
             vh.header.setTextColor(Color.WHITE);
@@ -350,6 +362,8 @@ public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItem
             return RESULT_TYPE_IMAGE;
         else if(displayType.equals(LOADING_TYPE))
             return RESULT_TYPE_LOADING;
+        else if(displayType.equals(PERMISSION_REQUIRED_TYPE))
+            return RESULT_TYPE_PERMISSION_REQUIRED;
         else
             return RESULT_TYPE_DEFAULT;
     }

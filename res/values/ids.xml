@@ -16,4 +16,6 @@
     <item type="id" name="services_bar">false</item>
     <item type="id" name="header">false</item>
     <item type="id" name="hsv_color_picker">false</item>
+    <item type="id" name="connect_button">false</item>
+    <item type="id" name="item_image">false</item>
 </resources>

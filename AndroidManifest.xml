@@ -31,7 +31,6 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!--<uses-permission android:name="android.permission.RECORD_AUDIO" />--> <!--MICROPHONE-->
 
     <application android:label="@string/english_ime_name"
             android:icon="@drawable/ic_launcher_keyboard"
@@ -111,15 +110,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name="io.separ.neural.inputmethod.dictionarypack.DictionarySettingsActivity"
-            android:theme="@style/platformSettingsTheme"
-            android:label="@string/dictionary_settings_title"
-            android:uiOptions="splitActionBarWhenNarrow">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-            </intent-filter>
-        </activity>
-
         <activity android:name="io.separ.neural.inputmethod.dictionarypack.DownloadOverMeteredDialog"
             android:theme="@style/platformActivityTheme"
             android:label="@string/dictionary_install_over_metered_network_prompt">
@@ -137,7 +127,7 @@
 
         <service android:name="io.separ.neural.inputmethod.colors.NavService" android:enabled="true" />
 
-        <activity android:theme="@style/ThemeTransparent" android:name="com.android.inputmethodcommon.PermissionActivity" android:excludeFromRecents="true" />
+        <!--<activity android:theme="@style/ThemeTransparentCompat" android:name="com.android.inputmethodcommon.PermissionActivity" android:excludeFromRecents="true" />-->
 
 
         <!--Not in Chrooma-->
@@ -152,6 +142,10 @@
                     android:resource="@xml/spellchecker" />
         </service>
 
+
+
+
+
         <activity android:theme="@style/ChroomaAppCompat" android:name="io.separ.neural.inputmethod.indic.settings.StartActivity" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -159,7 +153,26 @@
             </intent-filter>
         </activity>
 
-        <activity android:theme="@style/ThemeAppCompatLightNoActionBarFullScreen" android:label="Intro" android:name="io.separ.neural.inputmethod.indic.setup.IntroActivity" android:screenOrientation="portrait" />
+        <activity android:theme="@style/ThemeAppCompatLightNoActionBarFullScreen" android:label="Intro"
+            android:name="io.separ.neural.inputmethod.indic.setup.IntroActivity" android:screenOrientation="portrait" />
+
+        <activity android:name=".settings.SettingsActivity"
+            android:theme="@style/platformSettingsTheme"
+            android:label="@string/english_ime_settings"
+            android:uiOptions="splitActionBarWhenNarrow">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="io.separ.neural.inputmethod.dictionarypack.DictionarySettingsActivity"
+            android:theme="@style/platformSettingsTheme"
+            android:label="@string/dictionary_settings_title"
+            android:uiOptions="splitActionBarWhenNarrow">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
 
         <!--<activity android:name=".setup.SetupActivity"
                 android:theme="@style/platformActivityTheme"
@@ -181,15 +194,6 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>-->
-
-        <activity android:name=".settings.SettingsActivity"
-                android:theme="@style/platformSettingsTheme"
-                android:label="@string/english_ime_settings"
-                android:uiOptions="splitActionBarWhenNarrow">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
 
         <activity android:name=".spellcheck.SpellCheckerSettingsActivity"
                   android:theme="@style/platformSettingsTheme"

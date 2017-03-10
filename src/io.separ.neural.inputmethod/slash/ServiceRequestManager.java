@@ -121,6 +121,7 @@ public class ServiceRequestManager {
             }
             this.handler.postDelayed(this.request, 0);
             if (shouldShowLoading) {
+                Log.e("SEPAR", "postRequest loading");
                 EventBusExt.getDefault().post(new ServiceRequestEvent(ServiceResultsView.VisualSate.Loading.setMessage(slash), slash));
             }
         }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout fresco:gravity="center"
+    fresco:orientation="vertical"
+    fresco:layout_width="wrap_content"
+    fresco:layout_height="@dimen/icon_height"
+    xmlns:fresco="http://schemas.android.com/apk/res/android">
+    <com.facebook.drawee.view.SimpleDraweeView fresco:layout_gravity="center" fresco:id="@id/item_image" fresco:layout_width="@dimen/preview_img_size" fresco:layout_height="@dimen/preview_img_size" fresco:layout_centerVertical="true"/>
+    <TextView fresco:textSize="12sp" fresco:gravity="center" fresco:id="@id/header" fresco:paddingLeft="10dp" fresco:paddingRight="10dp" fresco:layout_width="match_parent" fresco:layout_height="wrap_content" fresco:text="In order to see your history, likes, saves, and more, you must connect Slash with your Foursquare account." fresco:lines="2" fresco:textColor="#ffcccccc"/>
+    <Button fresco:textSize="14sp" fresco:textColor="#ffffffff" fresco:layout_gravity="center_horizontal" fresco:id="@id/connect_button" fresco:background="@drawable/slash_connect_button" fresco:paddingLeft="20dp" fresco:paddingRight="20dp" fresco:layout_width="wrap_content" fresco:layout_height="26dp" fresco:layout_marginTop="6dp" fresco:text="@string/connect_slash" fresco:textAllCaps="false" />
+</LinearLayout>

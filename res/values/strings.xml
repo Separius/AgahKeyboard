@@ -600,4 +600,7 @@ Tip: You can download and remove dictionaries by going to &lt;b>Languages&#160;&
     <string name="service_result_problem">\"We ran into a problem! Tap here to try again!\"</string>
     <string name="default_coloring">default theme</string>
     <string name="result_preview_description">go to the service result</string>
+    <string name="contacts_permission">Agah needs access to your Contacts to share contact info</string>
+    <string name="allow_permission">Allow</string>
+    <string name="connect_slash">Connect</string>
 </resources>
