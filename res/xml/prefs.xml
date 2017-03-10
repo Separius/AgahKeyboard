@@ -20,14 +20,18 @@
         android:fragment="io.separ.neural.inputmethod.indic.settings.PreferencesSettingsFragment"
         android:title="@string/settings_screen_preferences"
         android:key="screen_preferences" />
-    <PreferenceScreen
+    <PreferenceScreen android:fragment="io.separ.neural.inputmethod.indic.settings.ThemeSettingsFragment"
+        android:key="screen_theme"
+        android:title="@string/settings_screen_theme"/>
+        <!--xmlns:android="http://schemas.android.com/apk/res/android" />-->
+    <!--<PreferenceScreen
         android:fragment="io.separ.neural.inputmethod.indic.settings.AppearanceSettingsFragment"
         android:title="@string/settings_screen_appearance"
-        android:key="screen_appearance" />
-    <PreferenceScreen
+        android:key="screen_appearance" />-->
+    <!--<PreferenceScreen
         android:fragment="io.separ.neural.inputmethod.indic.settings.MultiLingualSettingsFragment"
         android:title="@string/settings_screen_multilingual"
-        android:key="screen_multilingual" />
+        android:key="screen_multilingual" />-->
     <PreferenceScreen
         android:fragment="io.separ.neural.inputmethod.indic.settings.GestureSettingsFragment"
         android:title="@string/settings_screen_gesture"

@@ -83,9 +83,9 @@ public final class AudioAndHapticFeedbackManager {
         if (mAudioManager == null) {
             return;
         }
-        /*if (!mSoundOn) {
+        if (!mSoundOn) {
             return;
-        }*/
+        }
         final int sound;
         switch (code) {
         case Constants.CODE_DELETE:
@@ -105,8 +105,7 @@ public final class AudioAndHapticFeedbackManager {
     }
 
     public void performHapticFeedback(final View viewToPerformHapticFeedbackOn) {
-        return;
-        /*if (!mSettingsValues.mVibrateOn) {
+        if (!mSettingsValues.mVibrateOn) {
             return;
         }
         if (mSettingsValues.mKeypressVibrationDuration >= 0) {
@@ -118,7 +117,7 @@ public final class AudioAndHapticFeedbackManager {
             viewToPerformHapticFeedbackOn.performHapticFeedback(
                     HapticFeedbackConstants.KEYBOARD_TAP,
                     HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-        }*/
+        }
     }
 
     public void onSettingsChanged(final SettingsValues settingsValues) {

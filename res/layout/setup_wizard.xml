@@ -17,20 +17,9 @@
 ** limitations under the License.
 */
 -->
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/setup_wizard"
+<RelativeLayout android:id="@+id/setup_wizard"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/setup_background"
-    android:paddingLeft="@dimen/setup_horizontal_padding"
-    android:paddingRight="@dimen/setup_horizontal_padding"
-    android:paddingTop="@dimen/setup_vertical_padding"
-    android:paddingBottom="@dimen/setup_vertical_padding">
-    <include
-        android:id="@+id/setup_welcome_screen"
-        layout="@layout/setup_welcome_screen" />
-    <include
-        android:id="@+id/setup_steps_screen"
-        layout="@layout/setup_steps_screen" />
-</FrameLayout>
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <include layout="@layout/setup_page_item" />
+</RelativeLayout>

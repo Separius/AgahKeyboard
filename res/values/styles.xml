@@ -16,26 +16,14 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
-    <style name="ThemeAppCompatLight" parent="@style/Base.Theme.AppCompat.Light" />
-    <style name="ThemeAppCompatLightNoActionBarFullScreen" parent="@style/ThemeAppCompatLight">
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="Theme.Slash.Setup" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/slash_window_background_setup</item>
+        <item name="colorPrimary">@color/slash_color_primary</item>
+        <item name="colorPrimaryDark">@color/slash_color_primary_dark</item>
+        <item name="colorAccent">@color/slash_color_accent</item>
     </style>
-    <style name="ChroomaAppCompat" parent="@style/ThemeAppCompatLight">
-        <item name="colorPrimary">#fff44336</item>
-        <item name="colorPrimaryDark">#ffd32f2f</item>
-        <item name="colorAccent">#ffffab00</item>
-    </style>
-    <!--<style name="SpinKitView">
-        <item name="android:maxWidth">48.0dip</item>
-        <item name="android:maxHeight">48.0dip</item>
-        <item name="android:indeterminateOnly">true</item>
-        <item name="android:minWidth">48.0dip</item>
-        <item name="android:minHeight">48.0dip</item>
-    </style>
-    <style name="SpinKitView.ThreeBounce" parent="@style/SpinKitView">
-        <item name="SpinKit_Style">ThreeBounce</item>
-    </style>-->
+    <color name="slash_window_background_setup">#ff212121</color>
+    <color name="slash_color_primary">#ff212121</color>
+    <color name="slash_color_primary_dark">#ff000000</color>
+    <color name="slash_color_accent">#ff5dddf3</color>
 </resources>

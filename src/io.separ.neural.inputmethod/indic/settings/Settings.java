@@ -338,8 +338,9 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     private static final String DEFAULT_KEYPRESS_VIBRATION_DURATION = Integer.toString(-1);
 
     public static int readDefaultKeypressVibrationDuration(final Resources res) {
-        return Integer.parseInt(ResourceUtils.getDeviceOverrideValue(res,
-                R.array.keypress_vibration_durations, DEFAULT_KEYPRESS_VIBRATION_DURATION));
+        return 20;
+        /*return Integer.parseInt(ResourceUtils.getDeviceOverrideValue(res,
+                R.array.keypress_vibration_durations, DEFAULT_KEYPRESS_VIBRATION_DURATION));*/
     }
 
     public static float readKeyPreviewAnimationScale(final SharedPreferences prefs,

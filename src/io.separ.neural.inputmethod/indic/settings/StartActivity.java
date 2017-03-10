@@ -5,37 +5,40 @@ package io.separ.neural.inputmethod.indic.settings;
  */
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
 
-import io.separ.neural.inputmethod.indic.setup.IntroActivity;
+import io.separ.neural.inputmethod.indic.R;
+import io.separ.neural.inputmethod.slash.NeuralApplication;
 
 public class StartActivity extends AppCompatActivity {
-    private static final String TAG;
+    class C04931 implements Runnable {
+        final Intent val$intent;
 
-    static {
-        TAG = StartActivity.class.getSimpleName();
+        C04931(Intent intent) {
+            this.val$intent = intent;
+        }
+
+        public void run() {
+            StartActivity.this.startActivity(this.val$intent);
+            if (!StartActivity.this.isFinishing()) {
+                StartActivity.this.finish();
+            }
+            StartActivity.this.overridePendingTransition(R.anim.fade_in, R.anim.nothing);
+        }
     }
 
     protected void onCreate(Bundle savedInstanceState) {
+        Intent intent;
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
-        //Fabric.with(this, new Crashlytics());
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (Settings.readWizardCompleted(prefs)) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return;
+        setContentView((int) R.layout.slash_splash);
+        if (NeuralApplication.isKeyboardEnabledAndSet(this)) {
+            intent = new Intent(this, SettingsActivity.class);
+        } else {
+            intent = new Intent(this, SetupWizardActivity.class);
         }
-        prefs.edit().clear().apply();
-        startActivity(new Intent(this, IntroActivity.class));
-    }
-
-    protected String getActivityName() {
-        return TAG;
+        intent.addFlags(335544320);
+        new Handler().postDelayed(new C04931(intent), 500);
     }
 }

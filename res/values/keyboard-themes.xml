@@ -20,16 +20,25 @@
 <resources>
     <!-- For keyboard color scheme option dialog. -->
     <string-array name="keyboard_theme_names" translatable="false">
-        <item>@string/keyboard_theme_material_light</item>
+        <!--<item>@string/keyboard_theme_material_light</item>
         <item>@string/keyboard_theme_material_dark</item>
         <item>@string/keyboard_theme_holo_white</item>
-        <item>@string/keyboard_theme_holo_blue</item>
+        <item>@string/keyboard_theme_holo_blue</item>-->
+        <item>@string/keyboard_theme_adaptive</item>
+        <item>@string/keyboard_theme_blue</item>
+        <item>@string/keyboard_theme_black</item>
     </string-array>
     <!-- An element must be a keyboard theme id of {@link KeyboardTheme#THEME_ID_*}. -->
     <string-array name="keyboard_theme_ids" translatable="false">
-        <item>3</item>
+        <!--<item>3</item>
         <item>4</item>
         <item>2</item>
-        <item>0</item>
+        <item>0</item>-->
+        <item>adaptive_theme</item>
+        <item>blue_theme</item>
+        <item>black_theme</item>
     </string-array>
+    <string name="keyboard_theme_adaptive">Adaptive</string>
+    <string name="keyboard_theme_blue">Blue</string>
+    <string name="keyboard_theme_black">Black</string>
 </resources>

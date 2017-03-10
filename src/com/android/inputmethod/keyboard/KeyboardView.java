@@ -100,7 +100,7 @@ public class KeyboardView extends View {
     private final float mKeyShiftedLetterHintPadding;
     private final float mKeyTextShadowRadius;
     private final float mVerticalCorrection;
-    private final Drawable mKeyBackground;
+    protected final Drawable mKeyBackground;
     private final Drawable mFunctionalKeyBackground;
     private final Drawable mSpacebarBackground;
     private final float mSpacebarIconWidthRatio;
@@ -306,6 +306,7 @@ public class KeyboardView extends View {
         // Calculate clip region and set.
         final boolean drawAllKeys = mInvalidateAllKeys || mInvalidatedKeys.isEmpty();
         final boolean isHardwareAccelerated = canvas.isHardwareAccelerated();
+        //SEPAR TODO, FARAZ?
         // TODO: Confirm if it's really required to draw all keys when hardware acceleration is on.
         if (drawAllKeys || isHardwareAccelerated) {
             mClipRegion.set(0, 0, width, height);

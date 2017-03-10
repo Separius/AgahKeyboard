@@ -46,9 +46,9 @@ public final class ThemeSettingsFragment extends SubScreenFragment
     }
 
     static void updateKeyboardThemeSummary(final Preference pref) {
-        final Resources res = pref.getContext().getResources();
-        final SharedPreferences prefs = pref.getSharedPreferences();
-        final KeyboardTheme keyboardTheme = KeyboardTheme.getKeyboardTheme(prefs);
+        //final Resources res = pref.getContext().getResources();
+        //final SharedPreferences prefs = pref.getSharedPreferences();
+        /*final KeyboardTheme keyboardTheme = KeyboardTheme.getKeyboardTheme(prefs);
         final String keyboardThemeId = String.valueOf(keyboardTheme.mThemeId);
         final String[] keyboardThemeNames = res.getStringArray(R.array.keyboard_theme_names);
         final String[] keyboardThemeIds = res.getStringArray(R.array.keyboard_theme_ids);
@@ -57,7 +57,7 @@ public final class ThemeSettingsFragment extends SubScreenFragment
                 pref.setSummary(keyboardThemeNames[index]);
                 return;
             }
-        }
+        }*/
     }
 
     @Override
@@ -75,8 +75,9 @@ public final class ThemeSettingsFragment extends SubScreenFragment
             pref.setOnRadioButtonClickedListener(this);
         }
         final SharedPreferences prefs = getSharedPreferences();
-        final KeyboardTheme keyboardTheme = KeyboardTheme.getKeyboardTheme(prefs);
-        mSelectedThemeId = String.valueOf(keyboardTheme.mThemeId);
+        //final KeyboardTheme keyboardTheme = getCurrentTheme(prefs);/*KeyboardTheme.getKeyboardTheme(prefs);*/
+        //mSelectedThemeId = String.valueOf(keyboardTheme.mThemeId);
+        mSelectedThemeId = String.valueOf(prefs.getString("KeyboardTheme", "adaptive_theme"));
     }
 
     @Override
@@ -97,7 +98,8 @@ public final class ThemeSettingsFragment extends SubScreenFragment
     @Override
     public void onPause() {
         super.onPause();
-        KeyboardTheme.saveKeyboardThemeId(mSelectedThemeId, getSharedPreferences());
+        getSharedPreferences().edit().putString("KeyboardTheme", mSelectedThemeId).apply();
+        //KeyboardTheme.saveKeyboardThemeId(mSelectedThemeId, getSharedPreferences());
     }
 
     private void updateSelected() {

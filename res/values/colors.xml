@@ -92,4 +92,5 @@
     <color name="subheader_color">#ff646464</color>
     <color name="item_bottom_color">#ff212121</color>
     <color name="preview_bg">#0106000d</color>
+    <color name="slash_dark_background">#ff212121</color>
 </resources>

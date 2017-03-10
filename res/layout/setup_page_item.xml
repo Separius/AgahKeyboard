@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout fresco:orientation="vertical"
+    fresco:background="#ffffffff"
+    fresco:layout_width="match_parent"
+    fresco:layout_height="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res/android"
+    xmlns:fresco2="http://schemas.android.com/apk/res-auto">
+    <com.facebook.drawee.view.SimpleDraweeView fresco:id="@+id/page_image" fresco:layout_width="match_parent" fresco:layout_height="0dp" fresco:layout_weight="1.0" fresco2:actualImageScaleType="focusCrop" />
+    <FrameLayout fresco:layout_gravity="center_horizontal" fresco:layout_width="wrap_content" fresco:layout_height="wrap_content" fresco:layout_marginTop="-30dp">
+        <TextView fresco:textSize="19sp" fresco:textStyle="bold" fresco:textColor="#ff000000" fresco:layout_gravity="center" fresco:id="@+id/page_number" fresco:layout_width="wrap_content" fresco:layout_height="wrap_content" fresco:text="1" />
+    </FrameLayout>
+    <Button fresco:textSize="14sp" fresco:textColor="#ffffffff" fresco:layout_gravity="center_horizontal" fresco:id="@+id/page_button" fresco:background="@drawable/slash_button" fresco:paddingLeft="20dp" fresco:paddingRight="20dp" fresco:layout_width="wrap_content" fresco:layout_height="40dp" fresco:layout_marginTop="30dp" fresco:text="@string/enable_slash" />
+    <TextView fresco:textSize="14sp" fresco:textColor="#ffa7a7a7" fresco:gravity="center" fresco:layout_gravity="center" fresco:id="@+id/step_info" fresco:paddingLeft="30dp" fresco:paddingRight="30dp" fresco:layout_width="wrap_content" fresco:layout_height="wrap_content" fresco:layout_marginTop="30dp" fresco:layout_marginBottom="30dp" fresco:text="In the Language and Input settings, tap the toggle next to Agah Keyboard. This will authorize the keyboard to run on your device. " fresco:lineSpacingExtra="6dp" />
+</LinearLayout>

@@ -54,8 +54,6 @@ public class ColorUtils {
                 color = SpecialRules.getColor(packageName, context);
                 if (color == null) {
                     colorProfile = setProfileFromApp(context, packageName);
-                    Log.e("catch_spotify", packageName+"::getPrimColor: "+ colorProfile.getPrimary());
-                    Log.e("catch_spotify", packageName+"::getTextColor: "+ getTextColor(colorProfile));
                 } else {
                     colorProfile.setPrimary(color);
                 }

@@ -82,7 +82,7 @@ public class KeyPreviewView extends TextView {
         if (background == null)
             return;
         //background.setColorFilter(ColorUtils.lightColor(colorProfile.getPrimary()), PorterDuff.Mode.MULTIPLY);
-        background.setColorFilter(colorProfile.getPrimaryDark(), PorterDuff.Mode.MULTIPLY);
+        background.setColorFilter(colorProfile.getPrimaryDark(), PorterDuff.Mode.OVERLAY);
         if (sNoScaleXTextSet.contains(text))
             return;
         // calculate maximum text width.

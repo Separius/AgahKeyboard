@@ -14,15 +14,15 @@
      limitations under the License.
 -->
 
-<PreferenceScreen
+<!--<PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="screen_appearance"
-    android:title="@string/settings_screen_appearance">
-    <PreferenceScreen
-        android:fragment="io.separ.neural.inputmethod.indic.settings.ThemeSettingsFragment"
-        android:key="screen_theme"
-        android:title="@string/settings_screen_theme" />
-    <PreferenceScreen
+    android:title="@string/settings_screen_appearance">-->
+<PreferenceScreen android:fragment="io.separ.neural.inputmethod.indic.settings.ThemeSettingsFragment"
+    android:key="screen_theme"
+    android:title="@string/settings_screen_theme"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
+    <!--<PreferenceScreen
         android:fragment="io.separ.neural.inputmethod.indic.settings.CustomInputStyleSettingsFragment"
         android:key="custom_input_styles"
         android:title="@string/custom_input_styles_title" />
@@ -30,5 +30,5 @@
         android:key="pref_split_keyboard"
         android:title="@string/enable_split_keyboard"
         android:persistent="true"
-        android:defaultValue="false" />
-</PreferenceScreen>
+        android:defaultValue="false" />-->
+<!--</PreferenceScreen>-->

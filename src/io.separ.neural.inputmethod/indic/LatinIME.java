@@ -53,6 +53,7 @@ import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.CursorAnchorInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodSubtype;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.inputmethod.keyboard.Keyboard;
@@ -1968,6 +1969,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     };
 
     private void launchSettings() {
+        if(mInputLogic.isSearchingResults()){
+            LatinIME.this.mInputLogic.stopSearchingResults();
+            mTopDisplayController.hideAll();
+        }
         mInputLogic.commitTyped(mSettings.getCurrent(), LastComposedWord.NOT_A_SEPARATOR);
         requestHideSelf(0);
         final MainKeyboardView mainKeyboardView = mKeyboardSwitcher.getMainKeyboardView();

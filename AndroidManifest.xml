@@ -36,7 +36,7 @@
             android:icon="@drawable/ic_launcher_keyboard"
             android:supportsRtl="true"
             android:allowBackup="true"
-            android:theme="@style/ThemeAppCompatLight"
+            android:theme="@style/Theme.AppCompat.Light"
             android:name="io.separ.neural.inputmethod.slash.NeuralApplication">
 
         <service android:name="LatinIME"
@@ -146,15 +146,16 @@
 
 
 
-        <activity android:theme="@style/ChroomaAppCompat" android:name="io.separ.neural.inputmethod.indic.settings.StartActivity" android:noHistory="true">
+        <activity android:theme="@style/Theme.Slash.Setup" android:label="@string/english_ime_name"
+            android:name="io.separ.neural.inputmethod.indic.settings.StartActivity"
+            android:clearTaskOnLaunch="true" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:theme="@style/ThemeAppCompatLightNoActionBarFullScreen" android:label="Intro"
-            android:name="io.separ.neural.inputmethod.indic.setup.IntroActivity" android:screenOrientation="portrait" />
+        <activity android:theme="@style/Theme.Slash.Setup" android:label="@string/english_ime_name"
+            android:name="io.separ.neural.inputmethod.indic.settings.SetupWizardActivity" android:clearTaskOnLaunch="true" />
 
         <activity android:name=".settings.SettingsActivity"
             android:theme="@style/platformSettingsTheme"
