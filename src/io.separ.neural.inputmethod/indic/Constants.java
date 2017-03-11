@@ -315,4 +315,8 @@ public final class Constants {
     private Constants() {
         // This utility class is not publicly instantiable.
     }
+
+    public static final int EVENT_BACKSPACE = 1;
+    public static final int EVENT_REJECTION = 2;
+    public static final int EVENT_REVERT = 3;
 }

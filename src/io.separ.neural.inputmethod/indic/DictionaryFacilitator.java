@@ -20,6 +20,7 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.inputmethod.InputMethodSubtype;
 
 import com.android.inputmethod.keyboard.ProximityInfo;
@@ -30,6 +31,7 @@ import com.android.inputmethod.latin.utils.DistracterFilter;
 import com.android.inputmethod.latin.utils.DistracterFilterCheckingIsInDictionary;
 import com.android.inputmethod.latin.utils.ExecutorUtils;
 import com.android.inputmethod.latin.utils.LanguageModelParam;
+import com.android.inputmethod.latin.utils.StringUtils;
 import com.android.inputmethod.latin.utils.SuggestionResults;
 
 import java.io.File;
@@ -46,8 +48,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Nonnull;
+
 import io.separ.neural.inputmethod.annotations.UsedForTesting;
 import io.separ.neural.inputmethod.indic.SuggestedWords.SuggestedWordInfo;
+import io.separ.neural.inputmethod.indic.inputlogic.NgramContext;
 import io.separ.neural.inputmethod.indic.personalization.ContextualDictionary;
 import io.separ.neural.inputmethod.indic.personalization.PersonalizationDataChunk;
 import io.separ.neural.inputmethod.indic.personalization.PersonalizationDictionary;
@@ -69,6 +74,13 @@ public class DictionaryFacilitator {
     // To synchronize assigning mDictionaries to ensure closing dictionaries.
     private final Object mLock = new Object();
     private final DistracterFilter mDistracterFilter;
+
+    private LruCache<String, Boolean> mValidSpellingWordReadCache;
+    private LruCache<String, Boolean> mValidSpellingWordWriteCache;
+
+    public void setValidSpellingWordReadCache(final LruCache<String, Boolean> cache) {
+        mValidSpellingWordReadCache = cache;
+    }
 
     private static final String[] DICT_TYPES_ORDERED_TO_GET_SUGGESTIONS =
             new String[] {
@@ -98,6 +110,80 @@ public class DictionaryFacilitator {
     private static final String[] SUB_DICT_TYPES =
             Arrays.copyOfRange(DICT_TYPES_ORDERED_TO_GET_SUGGESTIONS, 1 /* start */,
                     DICT_TYPES_ORDERED_TO_GET_SUGGESTIONS.length);
+
+    public void setValidSpellingWordWriteCache(final LruCache<String, Boolean> cache) {
+        mValidSpellingWordWriteCache = cache;
+    }
+
+    public void unlearnFromUserHistory(final String word,
+                                @Nonnull final NgramContext ngramContext, final long timeStampInSeconds,
+                                final int eventType){
+        // TODO: Decide whether or not to remove the word on EVENT_BACKSPACE.
+        if (eventType != Constants.EVENT_BACKSPACE) {
+            removeWord(Dictionary.TYPE_USER_HISTORY, word);
+        }
+
+        // Update the spelling cache after unlearning. Words that are removed from user history
+        // and appear in no other language model are not considered valid.
+        putWordIntoValidSpellingWordCache("unlearnFromUserHistory", word.toLowerCase());
+    }
+
+    public static final String[] ALL_DICTIONARY_TYPES = new String[] {
+            Dictionary.TYPE_MAIN,
+            Dictionary.TYPE_CONTACTS,
+            Dictionary.TYPE_USER_HISTORY,
+            Dictionary.TYPE_USER};
+
+    private boolean isValidWord(final String word, final String[] dictionariesToCheck) {
+        if (TextUtils.isEmpty(word)) {
+            return false;
+        }
+        for (final String dictType : dictionariesToCheck) {
+            final Dictionary dictionary = mDictionaries.getDict(dictType);
+            // Ideally the passed map would come out of a {@link java.util.concurrent.Future} and
+            // would be immutable once it's finished initializing, but concretely a null test is
+            // probably good enough for the time being.
+            if (null == dictionary) continue;
+            if (dictionary.isValidWord(word)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isValidSpellingWord(final String word) {
+        if (mValidSpellingWordReadCache != null) {
+            final Boolean cachedValue = mValidSpellingWordReadCache.get(word);
+            if (cachedValue != null) {
+                return cachedValue;
+            }
+        }
+
+        return isValidWord(word, ALL_DICTIONARY_TYPES);
+    }
+
+    private void putWordIntoValidSpellingWordCache(
+            @Nonnull final String caller,
+            @Nonnull final String originalWord) {
+        if (mValidSpellingWordWriteCache == null) {
+            return;
+        }
+
+        final String lowerCaseWord = originalWord.toLowerCase(getLocale());
+        final boolean lowerCaseValid = isValidSpellingWord(lowerCaseWord);
+        mValidSpellingWordWriteCache.put(lowerCaseWord, lowerCaseValid);
+
+        final String capitalWord =
+                StringUtils.capitalizeFirstAndDowncaseRest(originalWord, getLocale());
+        final boolean capitalValid;
+        if (lowerCaseValid) {
+            // The lower case form of the word is valid, so the upper case must be valid.
+            capitalValid = true;
+        } else {
+            capitalValid = isValidSpellingWord(capitalWord);
+        }
+        mValidSpellingWordWriteCache.put(capitalWord, capitalValid);
+    }
 
     /**
      * Class contains dictionaries for a locale.
@@ -291,6 +377,9 @@ public class DictionaryFacilitator {
             }
         }
         oldDictionaries.mSubDictMap.clear();
+        if (mValidSpellingWordWriteCache != null) {
+            mValidSpellingWordWriteCache.evictAll();
+        }
     }
 
     private void asyncReloadMainDictionary(final Context context, final Locale locale,
@@ -413,6 +502,7 @@ public class DictionaryFacilitator {
     public void addToUserHistory(final String suggestion, final boolean wasAutoCapitalized,
             final PrevWordsInfo prevWordsInfo, final int timeStampInSeconds,
             final boolean blockPotentiallyOffensive) {
+        putWordIntoValidSpellingWordCache("addToUserHistory", suggestion);
         final Dictionaries dictionaries = mDictionaries;
         final String[] words = suggestion.split(Constants.WORD_SEPARATOR);
         PrevWordsInfo prevWordsInfoForCurrentWord = prevWordsInfo;

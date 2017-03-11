@@ -49,6 +49,9 @@ public class ColorUtils {
             //if the mode is adaptive(read from sharedPrefrences){
             String theme = PreferenceManager.getDefaultSharedPreferences(context).getString("KeyboardTheme", "adaptive_theme");
             if(theme.equals("adaptive_theme")) {
+                /*strArr = new String[1];
+                strArr[0] = WindowChangeDetectingService.getWindowTitle();
+                color = SpecialRules.getColor(packageName, context, strArr);*/
                 color = SpecialRules.getColor(packageName, context);
                 if (color == null) {
                     colorProfile = setProfileFromApp(context, packageName);

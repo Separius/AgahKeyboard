@@ -25,6 +25,7 @@ import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
 import android.net.Uri;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RawRes;
@@ -50,6 +51,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.android.inputmethod.latin.PrevWordsInfo;
 import com.android.inputmethod.latin.utils.CapsModeUtils;
 import com.android.inputmethod.latin.utils.DebugLogUtils;
+import com.android.inputmethod.latin.utils.NgramContextUtils;
 import com.android.inputmethod.latin.utils.PrevWordsInfoUtils;
 import com.android.inputmethod.latin.utils.ScriptUtils;
 import com.android.inputmethod.latin.utils.SpannableStringUtils;
@@ -62,10 +64,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 import io.separ.neural.inputmethod.compat.InputConnectionCompatUtils;
+import io.separ.neural.inputmethod.indic.inputlogic.NgramContext;
 import io.separ.neural.inputmethod.indic.settings.SpacingAndPunctuations;
 
 import static io.separ.neural.inputmethod.Utils.SwipeUtils.changedLanguage;
@@ -88,6 +94,7 @@ public final class RichInputConnection {
             * (Constants.MAX_PREV_WORD_COUNT_FOR_N_GRAM + 1) /* words */
             + Constants.MAX_PREV_WORD_COUNT_FOR_N_GRAM /* separators */;
     private static final int INVALID_CURSOR_POSITION = -1;
+    private static final int NUM_CHARS_TO_GET_BEFORE_CURSOR = 40;
 
     /**
      * This variable contains an expected value for the selection start position. This is where the
@@ -464,13 +471,57 @@ public final class RichInputConnection {
             }
             return s;
         }
-        mIC = mParent.getCurrentInputConnection();
-        return (null == mIC) ? null : mIC.getTextBeforeCursor(n, flags);
+        return getTextBeforeCursorAndDetectLaggyConnection(
+                OPERATION_GET_TEXT_BEFORE_CURSOR,
+                SLOW_INPUT_CONNECTION_ON_PARTIAL_RELOAD_MS,
+                n, flags);
     }
 
-    public CharSequence getTextAfterCursor(final int n, final int flags) {
+    private CharSequence getTextBeforeCursorAndDetectLaggyConnection(
+            final int operation, final long timeout, final int n, final int flags) {
         mIC = mParent.getCurrentInputConnection();
-        return (null == mIC) ? null : mIC.getTextAfterCursor(n, flags);
+        if (!isConnected()) {
+            return null;
+        }
+        final long startTime = SystemClock.uptimeMillis();
+        final CharSequence result = mIC.getTextBeforeCursor(n, flags);
+        detectLaggyConnection(operation, timeout, startTime);
+        return result;
+    }
+
+    private CharSequence getTextAfterCursorAndDetectLaggyConnection(
+            final int operation, final long timeout, final int n, final int flags) {
+        mIC = mParent.getCurrentInputConnection();
+        if (!isConnected()) {
+            return null;
+        }
+        final long startTime = SystemClock.uptimeMillis();
+        final CharSequence result = mIC.getTextAfterCursor(n, flags);
+        detectLaggyConnection(operation, timeout, startTime);
+        return result;
+    }
+
+    /**
+     * The amount of time a {@link #reloadTextCache} call needs to take for the keyboard to enter
+     * the {@link #hasSlowInputConnection} state.
+     */
+    private static final long SLOW_INPUT_CONNECTION_ON_FULL_RELOAD_MS = 1000;
+    /**
+     * The amount of time a {@link #getTextBeforeCursor} or {@link #getTextAfterCursor} call needs
+     * to take for the keyboard to enter the {@link #hasSlowInputConnection} state.
+     */
+    private static final long SLOW_INPUT_CONNECTION_ON_PARTIAL_RELOAD_MS = 200;
+
+    private static final int OPERATION_GET_TEXT_BEFORE_CURSOR = 0;
+    private static final int OPERATION_GET_TEXT_AFTER_CURSOR = 1;
+    private static final int OPERATION_GET_WORD_RANGE_AT_CURSOR = 2;
+    private static final int OPERATION_RELOAD_TEXT_CACHE = 3;
+
+    public CharSequence getTextAfterCursor(final int n, final int flags) {
+        return getTextAfterCursorAndDetectLaggyConnection(
+                OPERATION_GET_TEXT_AFTER_CURSOR,
+                SLOW_INPUT_CONNECTION_ON_PARTIAL_RELOAD_MS,
+                n, flags);
     }
 
     public void deleteSurroundingText(final int beforeLength, final int afterLength) {
@@ -905,6 +956,22 @@ public final class RichInputConnection {
         return StringUtils.isInsideDoubleQuoteOrAfterDigit(mCommittedTextBeforeComposingText);
     }
 
+    private static final String[] OPERATION_NAMES = new String[] {
+            "GET_TEXT_BEFORE_CURSOR",
+            "GET_TEXT_AFTER_CURSOR",
+            "GET_WORD_RANGE_AT_CURSOR",
+            "RELOAD_TEXT_CACHE"};
+
+    private void detectLaggyConnection(final int operation, final long timeout, final long startTime) {
+        final long duration = SystemClock.uptimeMillis() - startTime;
+        if (duration >= timeout) {
+            final String operationName = OPERATION_NAMES[operation];
+            Log.w(TAG, "Slow InputConnection: " + operationName + " took " + duration + " ms.");
+            //StatsUtils.onInputConnectionLaggy(operation, duration);
+            mLastSlowInputConnectionTime = SystemClock.uptimeMillis();
+        }
+    }
+
     /**
      * Try to get the text from the editor to expose lies the framework may have been
      * telling us. Concretely, when the device rotates, the frameworks tells us about where the
@@ -1186,5 +1253,82 @@ public final class RichInputConnection {
                 mParent.getCurrentInputConnection(), mParent.getCurrentInputEditorInfo(), inputContentInfoCompat,
                 flag, null);
         return null;
+    }
+
+    public boolean isConnected() {
+        return mIC != null;
+    }
+
+    @Nonnull
+    public NgramContext getNgramContextFromNthPreviousWord(
+            final SpacingAndPunctuations spacingAndPunctuations, final int n) {
+        mIC = mParent.getCurrentInputConnection();
+        if (!isConnected()) {
+            return NgramContext.EMPTY_PREV_WORDS_INFO;
+        }
+        final CharSequence prev = getTextBeforeCursor(NUM_CHARS_TO_GET_BEFORE_CURSOR, 0);
+        if (DEBUG_PREVIOUS_TEXT && null != prev) {
+            final int checkLength = NUM_CHARS_TO_GET_BEFORE_CURSOR - 1;
+            final String reference = prev.length() <= checkLength ? prev.toString()
+                    : prev.subSequence(prev.length() - checkLength, prev.length()).toString();
+            // TODO: right now the following works because mComposingText holds the part of the
+            // composing text that is before the cursor, but this is very confusing. We should
+            // fix it.
+            final StringBuilder internal = new StringBuilder()
+                    .append(mCommittedTextBeforeComposingText).append(mComposingText);
+            if (internal.length() > checkLength) {
+                internal.delete(0, internal.length() - checkLength);
+                if (!(reference.equals(internal.toString()))) {
+                    final String context =
+                            "Expected text = " + internal + "\nActual text = " + reference;
+                    ((LatinIME)mParent).debugDumpStateAndCrashWithException(context);
+                }
+            }
+        }
+        return NgramContextUtils.getNgramContextFromNthPreviousWord(
+                prev, spacingAndPunctuations, n);
+    }
+
+    /**
+     * The amount of time the keyboard will persist in the {@link #hasSlowInputConnection} state
+     * after observing a slow InputConnection event.
+     */
+    private static final long SLOW_INPUTCONNECTION_PERSIST_MS = TimeUnit.MINUTES.toMillis(10);
+
+    private long mLastSlowInputConnectionTime = -SLOW_INPUTCONNECTION_PERSIST_MS;
+
+    public boolean hasSlowInputConnection() {
+        return (SystemClock.uptimeMillis() - mLastSlowInputConnectionTime)
+                <= SLOW_INPUTCONNECTION_PERSIST_MS;
+    }
+
+    public void deleteTextBeforeCursor(final int beforeLength) {
+        if (DEBUG_BATCH_NESTING) checkBatchEdit();
+        // TODO: the following is incorrect if the cursor is not immediately after the composition.
+        // Right now we never come here in this case because we reset the composing state before we
+        // come here in this case, but we need to fix this.
+        final int remainingChars = mComposingText.length() - beforeLength;
+        if (remainingChars >= 0) {
+            mComposingText.setLength(remainingChars);
+        } else {
+            mComposingText.setLength(0);
+            // Never cut under 0
+            final int len = Math.max(mCommittedTextBeforeComposingText.length()
+                    + remainingChars, 0);
+            mCommittedTextBeforeComposingText.setLength(len);
+        }
+        if (mExpectedSelStart > beforeLength) {
+            mExpectedSelStart -= beforeLength;
+            mExpectedSelEnd -= beforeLength;
+        } else {
+            // There are fewer characters before the cursor in the buffer than we are being asked to
+            // delete. Only delete what is there, and update the end with the amount deleted.
+            mExpectedSelEnd -= mExpectedSelStart;
+            mExpectedSelStart = 0;
+        }
+        if (isConnected()) {
+            mIC.deleteSurroundingText(beforeLength, 0);
+        }
+        if (DEBUG_PREVIOUS_TEXT) checkConsistencyForDebug();
     }
 }

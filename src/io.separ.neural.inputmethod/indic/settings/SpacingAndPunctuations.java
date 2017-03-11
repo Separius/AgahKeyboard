@@ -35,6 +35,7 @@ public final class SpacingAndPunctuations {
     private final int[] mSortedSymbolsClusteringTogether;
     private final int[] mSortedWordConnectors;
     public final int[] mSortedWordSeparators;
+    private final int[] mSortedSentenceTerminators;
     public final PunctuationSuggestions mSuggestPuncList;
     private final int mSentenceSeparator;
     public final String mSentenceSeparatorAndSpace;
@@ -68,6 +69,8 @@ public final class SpacingAndPunctuations {
         final String[] suggestPuncsSpec = MoreKeySpec.splitKeySpecs(
                 res.getString(R.string.suggested_punctuations));
         mSuggestPuncList = PunctuationSuggestions.newPunctuationSuggestions(suggestPuncsSpec);
+        mSortedSentenceTerminators = StringUtils.toSortedCodePointArray(
+                res.getString(R.string.symbols_sentence_terminators));
     }
 
     @UsedForTesting
@@ -84,6 +87,7 @@ public final class SpacingAndPunctuations {
         mCurrentLanguageHasSpaces = model.mCurrentLanguageHasSpaces;
         mUsesAmericanTypography = model.mUsesAmericanTypography;
         mUsesGermanRules = model.mUsesGermanRules;
+        mSortedSentenceTerminators = model.mSortedSentenceTerminators;
     }
 
     public boolean isWordSeparator(final int code) {
@@ -135,5 +139,9 @@ public final class SpacingAndPunctuations {
                 "" + mUsesAmericanTypography +
                 "\n   mUsesGermanRules = " +
                 "" + mUsesGermanRules;
+    }
+
+    public boolean isSentenceTerminator(final int code) {
+        return Arrays.binarySearch(mSortedSentenceTerminators, code) >= 0;
     }
 }

@@ -53,7 +53,6 @@ import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.CursorAnchorInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodSubtype;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.inputmethod.keyboard.Keyboard;
@@ -80,7 +79,6 @@ import com.android.inputmethod.latin.utils.DistracterFilterCheckingExactMatchesA
 import com.android.inputmethod.latin.utils.IntentUtils;
 import com.android.inputmethod.latin.utils.JniUtils;
 import com.android.inputmethod.latin.utils.LeakGuardHandlerWrapper;
-import com.android.inputmethod.latin.utils.StatsUtils;
 import com.android.inputmethod.latin.utils.SubtypeLocaleUtils;
 import com.android.inputmethod.latin.utils.ViewLayoutUtils;
 import com.crashlytics.android.Crashlytics;
@@ -102,9 +100,9 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.fabric.sdk.android.Fabric;
-import io.separ.neural.inputmethod.Utils.ColorUtils;
 import io.separ.neural.inputmethod.Utils.FontUtils;
 import io.separ.neural.inputmethod.Utils.ShareUtils;
+import io.separ.neural.inputmethod.Utils.StatsUtils;
 import io.separ.neural.inputmethod.Utils.SwipeUtils;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 import io.separ.neural.inputmethod.annotations.UsedForTesting;
@@ -135,11 +133,9 @@ import io.separ.neural.inputmethod.indic.settings.SettingsValues;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripView;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripViewAccessor;
 import io.separ.neural.inputmethod.slash.EventBusExt;
-import io.separ.neural.inputmethod.slash.NeuralApplication;
 import io.separ.neural.inputmethod.slash.SearchResultsEvent;
 import io.separ.neural.inputmethod.slash.SearchRetryErrorEvent;
 import io.separ.neural.inputmethod.slash.ServiceRequestEvent;
-import yuku.ambilwarna.AmbilWarnaDialog;
 
 import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 import static com.android.inputmethod.keyboard.KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED;
@@ -175,8 +171,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
      * replacement or removal.
      */
     private static final String SCHEME_PACKAGE = "package";
-
-    private static final String ACTION_ROW_PAGE_STATE = "ACTION_ROW_PAGE_STATE";
 
     private final Settings mSettings;
     private final DictionaryFacilitator mDictionaryFacilitator =
@@ -273,7 +267,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         this.mInputLogic.mConnection.mIC.performContextMenuAction(16908319);
     }
 
-    //TODO, reset to adaptive is wrong + not everyone is a listener
     @Override
     public void onServiceClicked(String serviceId){
         if(serviceId.equals("customization")) {
@@ -666,7 +659,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         KeyboardSwitcher.init(this);
         AudioAndHapticFeedbackManager.init(this);
         AccessibilityUtils.init(this);
-        StatsUtils.init(this);
         super.onCreate();
         mHandler.onCreate();
         DEBUG = DebugFlags.DEBUG_ENABLED;
@@ -698,21 +690,18 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
         DictionaryDecayBroadcastReciever.setUpIntervalAlarmForDictionaryDecaying(this);
 
-        StatsUtils.onCreate(mSettings.getCurrent());
+        StatsUtils.onCreate(mSettings.getCurrent(), mRichImm);
         FontUtils.initialize(this);
         SwipeUtils.init(this, this);
         this.colorManager = new ColorManager(this);
         this.navManager = new NavManager(this);
         //SpeechUtils.initialize(this);
         this.mEventHandler = new EventBusHandler();
-        Log.e("SEPAR_Collection", "onCreate");
     }
 
     public void finishCalculatingProfile() {
         final MainKeyboardView mainKeyboardView = mKeyboardSwitcher.getMainKeyboardView();
         mainKeyboardView.startDisplayLanguageOnSpacebar(false, 2, true);
-        //mSuggestionStripView.updateColor(ColorUtils.colorProfile);
-        //this.colorManager.setDarkFactor();
 
     }
 
@@ -735,7 +724,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         mDictionaryFacilitator.updateEnabledSubtypes(mRichImm.getMyEnabledInputMethodSubtypeList(
                 true /* allowsImplicitlySelectedSubtypes */));
         refreshPersonalizationDictionarySession(currentSettingsValues);
-        StatsUtils.onLoadSettings(currentSettingsValues);
+        //StatsUtils.onLoadSettings(currentSettingsValues);
     }
 
     private void refreshPersonalizationDictionarySession(
@@ -825,7 +814,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         unregisterReceiver(mDictionaryDumpBroadcastReceiver);
         StatsUtils.onDestroy();
         this.navManager.killService();
-        Log.e("SEPAR_Collection", "onDestroy");
         super.onDestroy();
     }
 
@@ -869,7 +857,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     @Override
     public View onCreateInputView() {
-        Log.e("SEPAR_Collection", "onCreateInputView");
+        StatsUtils.onCreateInputView();
         return mKeyboardSwitcher.onCreateInputView(mIsHardwareAcceleratedDrawingEnabled);
     }
 
@@ -884,7 +872,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             addObserver(mSuggestionStripView);
         }
         mInputLogic.setTextDecoratorUi(new TextDecoratorUi(this, view));
-        Log.e("SEPAR_Collection", "setInputView");
     }
 
     @Override
@@ -952,7 +939,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         this.mEventHandler.register();
         if (this.mTopDisplayController != null)
             this.mTopDisplayController.hideAll();
-        Log.e("SEPAR_Collection", "onStartInputView");
     }
 
     @Override
@@ -973,6 +959,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     public void onCurrentInputMethodSubtypeChanged(final InputMethodSubtype subtype) {
         // Note that the calling sequence of onCreate() and onCurrentInputMethodSubtypeChanged()
         // is not guaranteed. It may even be called at the same time on a different thread.
+        StatsUtils.onSubtypeChanged(subtype);
         mSubtypeSwitcher.onSubtypeChanged(subtype);
         mInputLogic.onSubtypeChanged(SubtypeLocaleUtils.getCombiningRulesExtraValue(subtype),
                 mSettings.getCurrent());
@@ -981,7 +968,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     private void onStartInputInternal(final EditorInfo editorInfo, final boolean restarting) {
         super.onStartInput(editorInfo, restarting);
-        Log.e("SEPAR_Collection", "onStartInputInternal");
     }
 
     private ColorManager colorManager;
@@ -989,6 +975,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     private void handleKeyboardColor(EditorInfo editorInfo) {
         currentPackageName = editorInfo.packageName;
+        StatsUtils.updatePackageName(currentPackageName);
         this.colorManager.calculateProfile(this, currentPackageName);
     }
 
@@ -1055,6 +1042,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         if (isDifferentTextField) {
             mSubtypeSwitcher.updateParametersOnStartInputView();
         }
+
+        StatsUtils.onStartInputView(editorInfo.inputType,
+                Settings.getInstance().getCurrent().mDisplayOrientation,
+                !isDifferentTextField);
 
         // The EditorInfo might have a flag that affects fullscreen mode.
         // Note: This call should be done by InputMethodService?
@@ -1188,13 +1179,11 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         if (mainKeyboardView != null) {
             mainKeyboardView.closing();
         }
-        Log.e("SEPAR_Collection", "onFinishInputInternal");
     }
 
     private void onFinishInputViewInternal(final boolean finishingInput) {
         super.onFinishInputView(finishingInput);
         cleanupInternalStateForFinishInput();
-        Log.e("SEPAR_Collection", "onFinishInputViewInternal");
     }
 
     private void cleanupInternalStateForFinishInput() {
@@ -1415,7 +1404,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
         super.updateFullscreenMode();
         mInputLogic.onUpdateFullscreenMode(isFullscreenMode());
-        Log.e("SEPAR_Collection", "updateFullscreenMode");
     }
 
     private int getCurrentAutoCapsState() {

@@ -66,12 +66,12 @@ public class SpecialRules {
     public static Rule getSpecialRule(String packageName) {
         int obj = -1;
         switch (packageName.hashCode()) {
-            case -1430093937:
+            /*case -1430093937:
                 if (packageName.equals("com.google.android.apps.messaging")) {
                     obj = 1;
                     break;
                 }
-                break;
+                break;*/
             case -1221330953:
                 if (packageName.equals("com.chrome.beta")) {
                     obj = 6;

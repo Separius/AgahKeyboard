@@ -25,7 +25,7 @@ public class StartActivity extends AppCompatActivity {
             if (!StartActivity.this.isFinishing()) {
                 StartActivity.this.finish();
             }
-            StartActivity.this.overridePendingTransition(R.anim.fade_in, R.anim.nothing);
+            //StartActivity.this.overridePendingTransition(R.anim.fade_in, R.anim.nothing);
         }
     }
 
@@ -39,6 +39,6 @@ public class StartActivity extends AppCompatActivity {
             intent = new Intent(this, SetupWizardActivity.class);
         }
         intent.addFlags(335544320);
-        new Handler().postDelayed(new C04931(intent), 500);
+        new Handler().postDelayed(new C04931(intent), 0);
     }
 }
