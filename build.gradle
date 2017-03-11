@@ -55,10 +55,12 @@ dependencies {
     compile 'io.nlopez.smartlocation:library:3.2.11'
     compile 'com.github.ybq:Android-SpinKit:1.1.0'
     compile 'com.hannesdorfmann.smoothprogressbar:library:1.0.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
         transitive = true;
     }
     compile 'com.github.yukuku:ambilwarna:2.0.1'
+    compile 'com.evernote:android-job:1.1.7'
+    compile 'com.rarepebble:colorpicker:2.1.0'
 }
 
 android {

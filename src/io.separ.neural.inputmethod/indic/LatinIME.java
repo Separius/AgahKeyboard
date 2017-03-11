@@ -53,6 +53,8 @@ import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.CursorAnchorInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodSubtype;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.inputmethod.keyboard.Keyboard;
@@ -82,6 +84,8 @@ import com.android.inputmethod.latin.utils.LeakGuardHandlerWrapper;
 import com.android.inputmethod.latin.utils.SubtypeLocaleUtils;
 import com.android.inputmethod.latin.utils.ViewLayoutUtils;
 import com.crashlytics.android.Crashlytics;
+import com.evernote.android.job.JobManager;
+import com.rarepebble.colorpicker.ColorPickerView;
 import com.squareup.leakcanary.LeakCanary;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -102,6 +106,7 @@ import java.util.concurrent.TimeUnit;
 import io.fabric.sdk.android.Fabric;
 import io.separ.neural.inputmethod.Utils.FontUtils;
 import io.separ.neural.inputmethod.Utils.ShareUtils;
+import io.separ.neural.inputmethod.Utils.StatsJobCreator;
 import io.separ.neural.inputmethod.Utils.StatsUtils;
 import io.separ.neural.inputmethod.Utils.SwipeUtils;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
@@ -270,21 +275,36 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     @Override
     public void onServiceClicked(String serviceId){
         if(serviceId.equals("customization")) {
-            HSVColorPickerDialog cpd = new HSVColorPickerDialog(DialogUtils.getPlatformDialogThemeContext(this), getLastProfile().getPrimary(),
-                    new HSVColorPickerDialog.OnColorSelectedListener() {
-                        @Override
-                        public void colorSelected(Integer color) {
-                            if(color == -1){
-                                ColorDatabase.deletePackage(LatinIME.this, currentPackageName);
-                            }else{
-                                ColorDatabase.addColors(LatinIME.this, currentPackageName, new String[]{convertColor(color)});
-                            }
-                            colorManager.calculateProfile(LatinIME.this, currentPackageName);
-                        }
-                    });
-            cpd.setTitle( "Pick a color" );
-            cpd.setNoColorButton( R.string.default_coloring );
-            showOptionDialog(cpd);
+            Context context = DialogUtils.getPlatformDialogThemeContext(this);
+            LinearLayout linearLayout = new LinearLayout(context);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+            final ColorPickerView colorPickerView = new ColorPickerView(context);
+            colorPickerView.showAlpha(false);
+            colorPickerView.showHex(false);
+            colorPickerView.setOriginalColor(getLastProfile().getPrimary());
+            colorPickerView.setCurrentColor(getLastProfile().getPrimary());
+            linearLayout.addView(colorPickerView);
+            final CheckBox checkBox = new CheckBox(context);
+            checkBox.setText(R.string.set_as_default_theme);
+            linearLayout.addView(checkBox);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setView(linearLayout).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int id){
+                    ColorDatabase.addColors(LatinIME.this, currentPackageName, new String[]{convertColor(colorPickerView.getColor())});
+                    colorManager.calculateProfile(LatinIME.this, currentPackageName);
+                }
+            }).setNegativeButton(android.R.string.cancel, null).setNeutralButton(R.string.default_coloring, new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int id){
+                    ColorDatabase.deletePackage(LatinIME.this, currentPackageName);
+                    colorManager.calculateProfile(LatinIME.this, currentPackageName);
+                }
+            });
+            final AlertDialog dialog = builder.create();
+            dialog.setCancelable(true /* cancelable */);
+            dialog.setCanceledOnTouchOutside(true /* cancelable */);
+            showOptionDialog(dialog);
             return;
         }
         if(serviceId.equals("emoji")){
@@ -690,13 +710,14 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
         DictionaryDecayBroadcastReciever.setUpIntervalAlarmForDictionaryDecaying(this);
 
-        StatsUtils.onCreate(mSettings.getCurrent(), mRichImm);
+        StatsUtils.onCreate(this);
         FontUtils.initialize(this);
         SwipeUtils.init(this, this);
         this.colorManager = new ColorManager(this);
         this.navManager = new NavManager(this);
         //SpeechUtils.initialize(this);
         this.mEventHandler = new EventBusHandler();
+        JobManager.create(this).addJobCreator(new StatsJobCreator());
     }
 
     public void finishCalculatingProfile() {

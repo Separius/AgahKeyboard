@@ -74,7 +74,6 @@ public final class SlidingKeyInputDrawingPreview extends AbstractDrawingPreview 
     }
 
     public void dismissSlidingKeyInputPreview() {
-        Log.e("SEPAR", "dismissSlidingKeyInputPreview");
         mShowsSlidingKeyInputPreview = false;
         invalidateDrawingView();
     }
@@ -88,7 +87,6 @@ public final class SlidingKeyInputDrawingPreview extends AbstractDrawingPreview 
         if (!isPreviewEnabled() || !mShowsSlidingKeyInputPreview) {
             return;
         }
-        Log.e("SEPAR", "showSlidingKeyInputPreview");
         // TODO: Finalize the rubber band preview implementation.
         final float radius = mPreviewBodyRadius;
         final Path path = mRoundedLine.makePath(

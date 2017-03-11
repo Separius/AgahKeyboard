@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.slash.NeuralApplication;
 
@@ -32,6 +34,7 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent;
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView((int) R.layout.slash_splash);
         if (NeuralApplication.isKeyboardEnabledAndSet(this)) {
             intent = new Intent(this, SettingsActivity.class);

@@ -612,4 +612,5 @@ Tip: You can download and remove dictionaries by going to &lt;b>Languages&#160;&
     <string name="use_slash_info">You’re all set! You can now use the keyboard to search within your favorite services with adaptive coloring.</string>
     <string name="share_app">Share app</string>
     <string name="rate_app">Rate us</string>
+    <string name="set_as_default_theme">set as default theme</string>
 </resources>
