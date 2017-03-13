@@ -1505,7 +1505,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 mRichImm.getInputMethodManager().showInputMethodPicker();
                 return true;
             }
-            return false;
         }
         return false;
     }
@@ -1553,9 +1552,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         if (Constants.CODE_INLINESETTINGS == codePoint) {
             //mKeyboardSwitcher.onToggleSettingsKeyboard();
         }
-        if(Constants.CODE_LANGUAGE_SWITCH == codePoint){
+        if(Constants.CODE_LANGUAGE_SWITCH == codePoint)
             switchToNextSubtype();
-        }
         final Event event = createSoftwareKeypressEvent(codeToSend, keyX, keyY, isKeyRepeat);
         final InputTransaction completeInputTransaction =
                 mInputLogic.onCodeInput(mSettings.getCurrent(), event,

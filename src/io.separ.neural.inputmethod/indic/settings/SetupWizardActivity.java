@@ -129,7 +129,7 @@ public final class SetupWizardActivity extends Activity {
         }
 
         public StepManager(Context context) {
-            this.imageIds = new int[]{R.drawable.unbundled_key_02, R.drawable.setup_img_2, R.drawable.unbundled_key_02};
+            this.imageIds = new int[]{R.drawable.ic_launcher_keyboard, R.drawable.ic_launcher_keyboard, R.drawable.ic_launcher_keyboard};
             Runnable[] runnableArr = new Runnable[SetupWizardActivity.STEP_3];
             runnableArr[0] = new C04891();
             runnableArr[SetupWizardActivity.STEP_1] = new C04902();

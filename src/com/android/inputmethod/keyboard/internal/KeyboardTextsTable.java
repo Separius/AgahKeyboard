@@ -454,11 +454,11 @@ public final class KeyboardTextsTable {
     /* Locale fa: Farsi */
     private static final String[] TEXTS_fa = {
         "ا‌ب‌پ","1","2","3","4","5","6","7","8","9","0,\u066b,\u066c","۱","۲","۳","۴","۵","۶","۷","۸","۹",
-            "۰","۳۲۱؟",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
-            null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
-            null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
-            null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
-            null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
+            "۰","۳۲۱؟",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,//next is 40
+            null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,//next is 60
+            null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,//next is 80
+            null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,//next is 100
+            null,null,null,null,null,null,"(",")",null,null,null,null,null,null,null,null,null,null,null,null,
             "،",null,null,null,null,"\u064b","!fixedColumnOrder!7, \u0655|\u0655, \u0652|\u0652, \u0651|\u0651, \u064c|\u064c, \u064d|\u064d, \u064b|\u064b, \u0654|\u0654, \u0656|\u0656, \u0670|\u0670, \u0653|\u0653, \u064f|\u064f, \u0650|\u0650, \u064e|\u064e,\u0640\u0640\u0640|\u0640",null,null,null,
             "؟","؛",
     };

@@ -28,13 +28,13 @@
             <!-- U+066C: "٬" ARABIC THOUSANDS SEPARATOR
                  U+066B: "٫" ARABIC DECIMAL SEPARATOR -->
             <Key
-                latin:keySpec="&#x066C;"
-                latin:keyHintLabel="\@"
-                latin:moreKeys="\@" />
+                latin:keySpec="\@"
+                latin:keyHintLabel="&#x066C;"
+                latin:moreKeys="&#x066C;" />
             <Key
-                latin:keySpec="&#x066B;"
-                latin:keyHintLabel="\#"
-                latin:moreKeys="\#" />
+                latin:keySpec="\#"
+                latin:keyHintLabel="&#x066B;"
+                latin:moreKeys="&#x066B;" />
         </case>
         <default>
             <Key

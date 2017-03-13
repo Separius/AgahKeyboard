@@ -37,8 +37,7 @@ public class StickerView extends LinearLayout implements ColorManager.OnColorCha
     private final int mCategoryPageIndicatorBackground;
 
     public static final List<StickerPageModel> PAGES = Arrays.asList(
-            new StickerPageModel("gopher", R.attr.iconEmojiCategory1Tab, new String[] {"angry.png", "ok.png", "sigh.png", "no.png", "hot.png", "ninja.png", "good_morning.png", "balloon.png", "thank_you.png", "work.png", "run_away.png", "hot_spring.png", "scare.png", "beer.png", "tehepero.png", "hide_away.png", "awake.png", "hungry.png", "baseball.png", "hide.png", "cry.png", "hi.png", "lovely.png", "cook.png", "cold.png", "cheer.png", "faint.png", "sleepy.png", "sorry.png", "spring.png", "embarrass.png", "bye.png", "question.png", "autumn.png", "surprise.png", "sleeping.png"}),
-            new StickerPageModel("halloween", R.attr.iconEmojiCategory2Tab, new String[] {"004.png", "015.png", "001.png", "003.png", "006.png", "008.png", "013.png", "012.png", "011.png", "009.png", "005.png", "002.png", "014.png", "010.png", "007.png"})
+            new StickerPageModel("gopher", R.attr.iconEmojiCategory1Tab, new String[] {"angry.png", "ok.png", "sigh.png", "no.png", "hot.png", "ninja.png", "good_morning.png", "balloon.png", "thank_you.png", "work.png", "run_away.png", "hot_spring.png", "scare.png", "beer.png", "tehepero.png", "hide_away.png", "awake.png", "hungry.png", "baseball.png", "hide.png", "cry.png", "hi.png", "lovely.png", "cook.png", "cold.png", "cheer.png", "faint.png", "sleepy.png", "sorry.png", "spring.png", "embarrass.png", "bye.png", "question.png", "autumn.png", "surprise.png", "sleeping.png"})
     );
 
     /*private void addTab(final TabHost host, final StickerPageModel currentPage) {

@@ -18,6 +18,7 @@ package com.android.inputmethod.keyboard.internal;
 
 import android.os.Message;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.ViewConfiguration;
 
 import com.android.inputmethod.keyboard.Key;
@@ -70,7 +71,8 @@ public final class TimerHandler extends LeakGuardHandlerWrapper<Callbacks> imple
         case MSG_LONGPRESS_KEY:
         case MSG_LONGPRESS_SHIFT_KEY:
             cancelLongPressTimers();
-            callbacks.onLongPress(tracker);
+            if(!tracker.longClickOnMaybeLangChange())
+                callbacks.onLongPress(tracker);
             break;
         case MSG_UPDATE_BATCH_INPUT:
             tracker.updateBatchInputByTimer(SystemClock.uptimeMillis());

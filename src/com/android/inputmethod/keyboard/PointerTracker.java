@@ -1097,6 +1097,20 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         sPointerTrackerQueue.remove(this);
     }
 
+    public boolean longClickOnMaybeLangChange(){
+        final Key key = getKey();
+        if (key == null)
+            return false;
+        final int code = key.getCode();
+        if (code == Constants.CODE_LANGUAGE_SWITCH) {
+            onLongPressed();
+            // Long pressing the space key invokes IME switcher dialog.
+            sListener.onCustomRequest(Constants.CUSTOM_CODE_SHOW_INPUT_METHOD_PICKER);
+            return true;
+        }
+        return false;
+    }
+
     private void onCancelEvent(final int x, final int y, final long eventTime) {
         if (DEBUG_EVENT) {
             printTouchEvent("onCancelEvt:", x, y, eventTime);

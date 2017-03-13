@@ -53,8 +53,14 @@ public class EmojiView extends View implements Drawable.Callback {
                     getPaddingTop(),
                     getWidth() - getPaddingRight(),
                     getHeight() - getPaddingBottom());
-            else
-                drawable.setBounds(getWidth()*15/100, getHeight()*15/100, getWidth()*7/10, getHeight()*7/10);
+            else {
+                final int width = getWidth();
+                final int height = getHeight();
+                if(width > height)
+                    drawable.setBounds((width-height)/2 + height * 15 / 100, height * 15 / 100, (width-height)/2 + height * 85 / 100, height * 85 / 100);
+                else
+                    drawable.setBounds(width * 15 / 100, (height-width)/2 + width * 15 / 100, width * 85 / 100, (height-width)/2 + width * 85 / 100);
+            }
             drawable.setCallback(this);
             drawable.draw(canvas);
         }
