@@ -61,7 +61,7 @@ public class ColorUtils {
                 return colorProfile;
             }else{ //black or blue _theme
                 colorProfile.setPrimary(parseColor(ColorDatabase.getColors(context, theme+"_primary")[0]));
-                colorProfile.setIcon(parseColor(ColorDatabase.getColors(context, theme+"_secondary")[0]));
+                colorProfile.setAccent(parseColor(ColorDatabase.getColors(context, theme+"_secondary")[0]));
                 return colorProfile;
             }
             //}else{read from currentTheme}

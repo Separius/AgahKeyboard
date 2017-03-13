@@ -35,7 +35,7 @@ public class StartActivity extends AppCompatActivity {
         Intent intent;
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
-        setContentView((int) R.layout.slash_splash);
+        //setContentView((int) R.layout.slash_splash);
         if (NeuralApplication.isKeyboardEnabledAndSet(this)) {
             intent = new Intent(this, SettingsActivity.class);
         } else {

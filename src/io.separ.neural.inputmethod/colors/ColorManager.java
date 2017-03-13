@@ -57,11 +57,6 @@ public class ColorManager {
         }
     }
 
-    public void setDarkFactor(float factor) {
-        lastProfile.setDarkFactor(factor);
-        notifyObservers();
-    }
-
     public static ColorProfile getLastProfile() {
         return lastProfile;
     }

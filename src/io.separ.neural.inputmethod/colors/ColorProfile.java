@@ -6,46 +6,28 @@ package io.separ.neural.inputmethod.colors;
 
 import android.graphics.Color;
 
+import static io.separ.neural.inputmethod.colors.ColorUtils.darkerColor;
+import static io.separ.neural.inputmethod.colors.ColorUtils.getColorDistance;
+import static io.separ.neural.inputmethod.colors.ColorUtils.isColorDark;
+import static io.separ.neural.inputmethod.colors.ColorUtils.lightColor;
+
 public class ColorProfile {
     private int accent;
-    private float darkFactor;
     private int primary;
     private int primaryDark;
     private int text;
     private int icon;
 
     public ColorProfile() {
-        this.primary = 1000;
-        this.primaryDark = 1000;
-        this.accent = 1000;
-        this.darkFactor = 1.f;
-        this.primary = 1000;
-        this.primaryDark = 1000;
-        this.accent = 1000;
-        this.text = 1000;
-        this.icon = 1000;
-    }
-
-    private boolean isInvertDark() {
-        return ColorUtils.getButtonType() == ColorUtils.ButtonType.FLAT;
+        resetProfile();
     }
 
     public ColorProfile(int primary, int primaryDark, int accent) {
-        this.primary = 1000;
-        this.primaryDark = 1000;
-        this.accent = 1000;
-        this.darkFactor = 1.f;
-        this.text = 1000;
-        this.icon = 1000;
         setProfile(primary, primaryDark, accent);
     }
 
     public boolean isInvalid() {
         return this.primary == 1000 || ColorUtils.isDefaultColor(this.primary);
-    }
-
-    public void setDarkFactor(float darkness) {
-        this.darkFactor = darkness;
     }
 
     public void resetProfile() {
@@ -59,36 +41,47 @@ public class ColorProfile {
     public void setProfile(int primary, int primaryDark, int accent) {
         resetProfile();
         this.primary = primary;
-        if (primaryDark == 1000 || ((!ColorUtils.isGrey(primary) && ColorUtils.isGrey(primaryDark)) || ColorUtils.getColorDistance(primary, primaryDark) >= 80.0d)) {
-            this.primaryDark = ColorUtils.darkerColor(primary);
+        if (primaryDark == 1000 || ((!ColorUtils.isGrey(primary) && ColorUtils.isGrey(primaryDark)) || getColorDistance(primary, primaryDark) >= 80.0d)) {
+            this.primaryDark = darkerColor(primary);
         } else {
             this.primaryDark = primaryDark;
         }
-        if (accent == 1000 || ColorUtils.getColorDistance(primary, accent) <= 30.0d) {
+        if (accent == 1000 || getColorDistance(primary, accent) <= 30.0d) {
             this.accent = ColorUtils.getAccent(primary);
         } else {
             this.accent = accent;
         }
-        double luminance = Color.red(primary)/255.0*0.2126 + Color.green(primary)/255.0*0.7152+Color.blue(primary)/255.0*0.0722;
-        if(luminance < 0.5)
+        double luminance = Color.red(primary) / 255.0 * 0.2126 + Color.green(primary) / 255.0 * 0.7152 + Color.blue(primary) / 255.0 * 0.0722;
+        if (luminance < 0.5)
             this.text = Color.WHITE;
         else
             this.text = Color.BLACK;
-        this.icon = Color.rgb(Color.red(primary) ^ 0x80, Color.green(primary) ^ 0x80, Color.blue(primary) ^ 0x80);
+        this.icon = getIcon(primary);
     }
 
-    public int getIconOnSecondary(){
+    public static int getIcon(int primary){
+        return Color.rgb(Color.red(primary) ^ 0x80, Color.green(primary) ^ 0x80, Color.blue(primary) ^ 0x80);
+    }
+
+    public int getIconOnSecondary() {
         /*int tmp = getSecondary();
         return Color.rgb(Color.red(tmp) ^ 0x80, Color.green(tmp) ^ 0x80, Color.blue(tmp) ^ 0x80);*/
         int tmp = getIcon();
-        if(text == Color.BLACK)
-            return ColorUtils.darkerColor(tmp);
+        if (text == Color.BLACK)
+            return darkerColor(tmp);
         else
-            return ColorUtils.lightColor(tmp);
+            return lightColor(tmp);
     }
 
-    public int getIcon(){
-        //return ColorUtils.getTextColor();
+    public int getIcon() {
+        if (this.accent != 1000) {
+            if (getColorDistance(getPrimary(), getAccent()) >= 70.0d)
+                return getAccent();
+        }
+            /*if (isColorDark(getPrimary()))
+                return lightColor(getAccent(), 0.4f);
+            return darkerColor(getAccent(), 0.4f);
+        } else*/
         return icon;
     }
 
@@ -97,7 +90,7 @@ public class ColorProfile {
         //return ColorUtils.getTextColor();
     }
 
-    public int getText(){
+    public int getText() {
         return text;
     }
 
@@ -116,7 +109,7 @@ public class ColorProfile {
 
     public int getPrimaryIgnore() {
         if (this.primary != 1000) {
-            return ColorUtils.darkerColor(this.primary, this.darkFactor);
+            return primary;
         }
         return Color.parseColor(ColorUtils.MATERIAL_LIGHT);
     }
@@ -127,27 +120,27 @@ public class ColorProfile {
 
     public int getPrimaryDark() {
         if (this.primaryDark != 1000) {
-            return ColorUtils.darkerColor(this.primaryDark, this.darkFactor);
+            return primaryDark;
         }
-        return ColorUtils.darkerColor(getPrimaryIgnore());
+        return darkerColor(getPrimaryIgnore());
     }
 
     public int getSecondary() {
-        if(text == Color.BLACK)
+        if (text == Color.BLACK)
             return getPrimaryDark();
         else
             return getPrimaryLight();
     }
 
     private int getPrimaryLight() {
-        return ColorUtils.lightColor(this.primary);
+        return lightColor(this.primary);
     }
 
     public int getAccent() {
         if (this.accent != 1000) {
             return this.accent;
         }
-        return ColorUtils.lightColor(this.primary);
+        return lightColor(this.primary);
     }
 
     public boolean equals(Object o) {
@@ -170,5 +163,9 @@ public class ColorProfile {
 
     public void setIcon(int icon) {
         this.icon = icon;
+    }
+
+    public void setAccent(int accent) {
+        this.accent = accent;
     }
 }

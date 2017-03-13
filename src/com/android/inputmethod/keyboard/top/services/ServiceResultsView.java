@@ -4,9 +4,11 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -38,7 +40,7 @@ public class ServiceResultsView extends LinearLayout implements ColorManager.OnC
     private VisualSate mPreviousState;
     private ResultsRecyclerView mRecycler;
     private View mSearchContainer;
-    private TextView mSearchMirror;
+    private EditText mSearchMirror;
     private ImageView mSearchPlaceholder;
     private TextView mSourceError;
     private SimpleDraweeView mSourceImageView;
@@ -222,7 +224,16 @@ public class ServiceResultsView extends LinearLayout implements ColorManager.OnC
                 EventBusExt.getDefault().post(new ServiceExitEvent());
             }
         });
-        this.mSearchMirror = (TextView) findViewById(R.id.slash_search_mirror);
+        this.mSearchMirror = (EditText) findViewById(R.id.slash_search_mirror);
+        mSearchMirror.setCursorVisible(true);
+        mSearchMirror.requestFocus();
+        mSearchMirror.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSearchMirror.setSelection(mSearchMirror.getText().length());
+                mSearchMirror.requestFocus();
+            }
+        });
         setVisualState(TaskQueueHelper.hasTasksOfType(NeuralApplication.getNetworkTaskQueue(), ServiceQuerySearchTask.class, ServiceQueryContactsTask.class) ? VisualSate.Loading : VisualSate.Hide);
         currentContext = new String();
         currentSlash = new String();
@@ -293,7 +304,9 @@ public class ServiceResultsView extends LinearLayout implements ColorManager.OnC
     }
 
     public void setSearchMirror(String s) {
-        this.mSearchMirror.setText(s);
+        mSearchMirror.setText(s);
+        mSearchMirror.setSelection(s.length());
+        mSearchMirror.requestFocus();
     }
 
     public void setSearchMirrorHint(String slash) {

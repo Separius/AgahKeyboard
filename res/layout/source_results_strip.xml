@@ -22,7 +22,8 @@
             android:layout_height="@dimen/config_suggestions_strip_height" android:background="@color/white">
             <ImageView android:id="@+id/search_placeholder" android:layout_width="@dimen/service_icon_height" android:layout_height="@dimen/service_icon_height" android:layout_marginRight="6dp"
                 android:src="@drawable/ic_cancel_black_24dp" android:tint="@color/black"/>
-            <TextView android:id="@+id/slash_search_mirror" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.0" />
+            <EditText android:id="@+id/slash_search_mirror" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.0"
+                android:maxLines="1" android:background="@drawable/service_search_background" android:inputType="text"/>
             <com.facebook.drawee.view.SimpleDraweeView android:id="@+id/source_image" android:layout_width="@dimen/service_icon_height"
                 android:layout_height="@dimen/service_icon_height" />
         </LinearLayout>

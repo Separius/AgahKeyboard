@@ -8,7 +8,6 @@ import com.android.inputmethod.keyboard.top.actionrow.ActionRowView;
 import com.android.inputmethod.keyboard.top.services.ServiceResultsView;
 
 import java.util.List;
-import java.util.Random;
 
 import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.indic.R;

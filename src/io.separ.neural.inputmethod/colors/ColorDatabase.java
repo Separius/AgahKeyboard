@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static io.separ.neural.inputmethod.colors.ColorProfile.getIcon;
+
 /**
  * Created by sepehr on 3/8/17.
  */
@@ -202,6 +204,17 @@ public class ColorDatabase extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
+    public static synchronized void addTheme(Context context, int color) {
+        synchronized (ColorDatabase.class) {
+            SQLiteDatabase db = getWritableDatabase(context);
+            db.delete(TABLE_NAME, String.format("%s = ?", new Object[]{PACKAGE_COLUMN}), new String[]{"my_theme_primary"});
+            db.delete(TABLE_NAME, String.format("%s = ?", new Object[]{PACKAGE_COLUMN}), new String[]{"my_theme_secondary"});
+            db.insert(TABLE_NAME, null, PrepopulateThemes("my_theme_primary", color));
+            db.insert(TABLE_NAME, null, PrepopulateThemes("my_theme_secondary", getIcon(color)));
+            db.close();
+        }
+    }
+
     public void onCreate(SQLiteDatabase db) {
         if (!getTablesName(db).contains(TABLE_NAME)) {
             Object[] objArr = new Object[DB_VERSION];
@@ -218,8 +231,8 @@ public class ColorDatabase extends SQLiteOpenHelper {
             db.execSQL(createSQL + ")");
             db.insert(TABLE_NAME, null, PrepopulateThemes("black_theme_primary", -15592684));
             db.insert(TABLE_NAME, null, PrepopulateThemes("black_theme_secondary", -14756000));
-            db.insert(TABLE_NAME, null, PrepopulateThemes("blue_theme_primary", -15108398));
-            db.insert(TABLE_NAME, null, PrepopulateThemes("blue_theme_secondary", -7688192));
+            db.insert(TABLE_NAME, null, PrepopulateThemes("my_theme_primary", -15592684));
+            db.insert(TABLE_NAME, null, PrepopulateThemes("my_theme_secondary", -14756000));
         }
         if (!getTablesName(db).contains(EH_TABLE_NAME)) {
             db.execSQL(String.format("CREATE TABLE %s (_ID INTEGER PRIMARY KEY, %s TEXT, %s TEXT, %s TEXT)", new Object[]{EH_TABLE_NAME, PACKAGE_COLUMN, TITLE_COLUMN, COLOR_COLUMN}));

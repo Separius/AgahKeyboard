@@ -33,12 +33,6 @@ public class ColorUtils {
         BIG
     }
 
-    public enum ForceType {
-        NONE,
-        ONLY_FLAT,
-        NOT_GRADIENT
-    }
-
     static {
         DEFAULT_COLORS = new int[]{NO_COLOR, -1644826, -4342339, -657931};
     }
@@ -99,89 +93,89 @@ public class ColorUtils {
         }
         return profile;
     }
-            static boolean isGrey(int color) {
-                return Color.red(color) == Color.blue(color) && Color.blue(color) == Color.green(color);
-            }
 
-        static boolean isDefaultColor(int color) {
-            boolean z = false;
-            int[] iArr = DEFAULT_COLORS;
-            int length = iArr.length;
-            for (int i = 0; i < length; i += NUM_COLORS) {
-                if (iArr[i] == color) {
-                    return true;
-                }
-            }
-            if (isGrey(color) || color == Color.parseColor(MATERIAL_LIGHT)) {
-                z = true;
-            }
-            return z;
-        }
-
-        public static boolean isColorDark(int color) {
-            return 1.0d - ((((0.299d * ((double) Color.red(color))) + (0.587d * ((double) Color.green(color)))) + (0.114d * ((double) Color.blue(color)))) / 255.0d) >= 0.2d;
-        }
-
-        static int darkerColor(int color, float darkness) {
-            if (color == NO_COLOR) {
-                return color;
-            }
-            float[] hsv = new float[3];
-            Color.colorToHSV(color, hsv);
-            hsv[2] = hsv[2] * darkness;
-            return Color.HSVToColor(hsv);
-        }
-
-        static int darkerColor(int color) {
-            float[] hsv = new float[3];
-            Color.colorToHSV(color, hsv);
-            hsv[2] = hsv[2] * 0.75f;
-            return Color.HSVToColor(hsv);
-        }
-
-        public static int lightColor(int color) {
-            float[] hsv = new float[3];
-            Color.colorToHSV(color, hsv);
-            hsv[2] = hsv[2] / 0.75f;
-            return Color.HSVToColor(hsv);
-        }
-
-        public static int getTextColor() {
-            ColorProfile lastProfile = ColorManager.getLastProfile();
-            return getTextColor(lastProfile);
-        }
-
-    public static int getTextColor(ColorProfile lastProfile){
-        if (getColorDistance(lastProfile.getPrimary(), lastProfile.getAccent()) >= 70.0d) {
-            return lastProfile.getAccent();
-        }
-        if (isColorDark(lastProfile.getPrimary())) {
-            return lightColor(lastProfile.getAccent(), 0.4f);
-        }
-        return darkerColor(lastProfile.getAccent(), 0.4f);
+    static boolean isGrey(int color) {
+        return Color.red(color) == Color.blue(color) && Color.blue(color) == Color.green(color);
     }
 
-        static double getColorDistance(int color1, int color2) {
-            float[] yuv1 = getYUV(Color.red(color1), Color.green(color1), Color.blue(color1));
-            float[] yuv2 = getYUV(Color.red(color2), Color.green(color2), Color.blue(color2));
-            return Math.sqrt((Math.pow((double) (yuv1[0] - yuv2[0]), 2.0d) + Math.pow((double) (yuv1[NUM_COLORS] - yuv2[NUM_COLORS]), 2.0d)) + Math.pow((double) (yuv1[2] - yuv2[2]), 2.0d));
+    static boolean isDefaultColor(int color) {
+        boolean z = false;
+        int[] iArr = DEFAULT_COLORS;
+        int length = iArr.length;
+        for (int i = 0; i < length; i += NUM_COLORS) {
+            if (iArr[i] == color) {
+                return true;
+            }
         }
+        if (isGrey(color) || color == Color.parseColor(MATERIAL_LIGHT)) {
+            z = true;
+        }
+        return z;
+    }
 
-        private static float[] getYUV(int red, int green, int blue) {
-            float[][] m = new float[][]{new float[]{0.299f, 0.578f, 0.114f}, new float[]{-0.14713f, -0.28886f, 0.436f}, new float[]{0.615f, -0.51499f, -0.10001f}};
-            return new float[]{((m[0][0] * ((float) red)) + (m[0][NUM_COLORS] * ((float) green))) + (m[0][2] * ((float) blue)), ((m[NUM_COLORS][0] * ((float) red)) + (m[NUM_COLORS][NUM_COLORS] * ((float) green))) + (m[NUM_COLORS][2] * ((float) blue)), ((m[2][0] * ((float) red)) + (m[2][NUM_COLORS] * ((float) green))) + (m[2][2] * ((float) blue))};
-        }
+    public static boolean isColorDark(int color) {
+        return 1.0d - ((((0.299d * ((double) Color.red(color))) + (0.587d * ((double) Color.green(color)))) + (0.114d * ((double) Color.blue(color)))) / 255.0d) >= 0.2d;
+    }
 
-        private static int lightColor(int color, float deep) {
-            float[] hsv = new float[3];
-            Color.colorToHSV(color, hsv);
-            hsv[2] = hsv[2] / deep;
-            return Color.HSVToColor(hsv);
+    static int darkerColor(int color, float darkness) {
+        if (color == NO_COLOR) {
+            return color;
         }
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] = hsv[2] * darkness;
+        return Color.HSVToColor(hsv);
+    }
+
+    static int darkerColor(int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] = hsv[2] * 0.75f;
+        return Color.HSVToColor(hsv);
+    }
+
+    public static int lightColor(int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] = hsv[2] / 0.75f;
+        return Color.HSVToColor(hsv);
+    }
+
+    public static int getTextColor() {
+        ColorProfile lastProfile = ColorManager.getLastProfile();
+        return getTextColor(lastProfile);
+    }
+
+    public static int getTextColor(ColorProfile lastProfile) {
+        if (getColorDistance(lastProfile.getPrimary(), lastProfile.getAccent()) >= 70.0d)
+            return lastProfile.getAccent();
+        if (isColorDark(lastProfile.getPrimary()))
+            return lightColor(lastProfile.getAccent(), 0.4f);
+        else
+            return darkerColor(lastProfile.getAccent(), 0.4f);
+    }
+
+    static double getColorDistance(int color1, int color2) {
+        float[] yuv1 = getYUV(Color.red(color1), Color.green(color1), Color.blue(color1));
+        float[] yuv2 = getYUV(Color.red(color2), Color.green(color2), Color.blue(color2));
+        return Math.sqrt((Math.pow((double) (yuv1[0] - yuv2[0]), 2.0d) + Math.pow((double) (yuv1[NUM_COLORS] - yuv2[NUM_COLORS]), 2.0d)) + Math.pow((double) (yuv1[2] - yuv2[2]), 2.0d));
+    }
+
+    private static float[] getYUV(int red, int green, int blue) {
+        float[][] m = new float[][]{new float[]{0.299f, 0.578f, 0.114f}, new float[]{-0.14713f, -0.28886f, 0.436f}, new float[]{0.615f, -0.51499f, -0.10001f}};
+        return new float[]{((m[0][0] * ((float) red)) + (m[0][NUM_COLORS] * ((float) green))) + (m[0][2] * ((float) blue)), ((m[NUM_COLORS][0] * ((float) red)) + (m[NUM_COLORS][NUM_COLORS] * ((float) green))) + (m[NUM_COLORS][2] * ((float) blue)), ((m[2][0] * ((float) red)) + (m[2][NUM_COLORS] * ((float) green))) + (m[2][2] * ((float) blue))};
+    }
+
+    public static int lightColor(int color, float deep) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] = hsv[2] / deep;
+        return Color.HSVToColor(hsv);
+    }
 
     static int getAccent(int color) {
-            return isColorDark(color) ? lightColor(color) : darkerColor(color);
-        }
-
-
+        return isColorDark(color) ? lightColor(color) : darkerColor(color);
     }
+
+
+}

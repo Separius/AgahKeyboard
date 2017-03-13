@@ -297,6 +297,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 @Override
                 public void onClick(DialogInterface dialog, int id){
                     ColorDatabase.addColors(LatinIME.this, currentPackageName, new String[]{convertColor(colorPickerView.getColor())});
+                    if(checkBox.isChecked()) {
+                        ColorDatabase.addTheme(LatinIME.this, colorPickerView.getColor());
+                        PreferenceManager.getDefaultSharedPreferences(LatinIME.this).edit().putString("KeyboardTheme", "my_theme").apply();
+                    }
                     colorManager.calculateProfile(LatinIME.this, currentPackageName);
                 }
             }).setNegativeButton(android.R.string.cancel, null).setNeutralButton(R.string.default_coloring, new DialogInterface.OnClickListener(){
