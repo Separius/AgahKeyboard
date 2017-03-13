@@ -47,23 +47,38 @@ public final class R {
         public static final int emoji_eight_travel_places=0x7f0d0011;
         public static final int emoji_emoticons=0x7f0d0003;
         /**  <item>1f450</item> 
+ HEAVY BLACK HEART 
          */
         public static final int emoji_faces=0x7f0d0004;
         public static final int emoji_flags=0x7f0d0012;
         /**  <item>1f30d</item> 
  <item>1f310</item> 
+ SNOWFLAKE 
          */
         public static final int emoji_nature=0x7f0d0005;
+        /**  BEAMED SIXTEENTH NOTES 
+         */
         public static final int emoji_objects=0x7f0d0006;
         /**  TODO: fix support min sdk version (99) 
+ HOT SPRINGS 
          */
         public static final int emoji_places=0x7f0d0007;
         public static final int emoji_recents=0x7f0d0016;
+        /**  RIGHTWARDS ARROW WITH HOOK 
+         */
         public static final int emoji_symbols=0x7f0d0008;
+        /**  empty 
+         */
         public static final int important_notice_contents_array=0x7f0d0017;
+        /**  empty 
+         */
         public static final int important_notice_title_array=0x7f0d0018;
         public static final int keyboard_heights=0x7f0d0000;
+        /**  KeyEvent.KEYCODE_ALT_LEFT , KeyEvent.META_ALT_LEFT_ON 
+         */
         public static final int keyboard_switcher_emoji=0x7f0d0019;
+        /**  KeyEvent.KEYCODE_ALT_RIGHT , KeyEvent.META_ALT_RIGHT_ON 
+         */
         public static final int keyboard_switcher_symbols_shifted=0x7f0d001a;
         public static final int keyboard_theme_ids=0x7f0d001b;
         public static final int keyboard_theme_names=0x7f0d001c;
@@ -78,6 +93,11 @@ public final class R {
         public static final int subtype_locale_exception_keys=0x7f0d0025;
         public static final int text_decorator_add_to_dictionary_indicator_path=0x7f0d0026;
         /**  The default touch position data (See com.android.inputmethod.keyboard.ProximityInfo)
+             correctionX = 0.0f
+             correctionY = 0.0f
+             correctionR = DEFAULT_TOUCH_POSITION_CORRECTION_RADIUS
+        
+ The default touch position data (See com.android.inputmethod.keyboard.ProximityInfo)
              correctionX = 0.0f
              correctionY = 0.0f
              correctionR = DEFAULT_TOUCH_POSITION_CORRECTION_RADIUS

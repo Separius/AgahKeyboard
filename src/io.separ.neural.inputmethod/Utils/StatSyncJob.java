@@ -44,7 +44,8 @@ public class StatSyncJob extends Job {
 
         try {
             Response response = client.newCall(request).execute();
-            if (response.isSuccessful());
+            if (response.isSuccessful())
+                Log.i(TAG, "success");;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,9 +54,9 @@ public class StatSyncJob extends Job {
     }
 
     public static void scheduleJob(){
-        new JobRequest.Builder(StatSyncJob.TAG).setRequiresDeviceIdle(true)
+        new JobRequest.Builder(StatSyncJob.TAG)
                 .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED).setRequirementsEnforced(true)
-                .setPeriodic(TimeUnit.MINUTES.toMillis(15), TimeUnit.MINUTES.toMillis(1)).build().schedule();
+                .setPeriodic(TimeUnit.MINUTES.toMillis(15), 300000).build().schedule();
                 //.setPeriodic(TimeUnit.HOURS.toMillis(8), TimeUnit.MINUTES.toMillis(30)).build().schedule();
     }
 }

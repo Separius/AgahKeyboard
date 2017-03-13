@@ -106,6 +106,7 @@ import java.util.concurrent.TimeUnit;
 import io.fabric.sdk.android.Fabric;
 import io.separ.neural.inputmethod.Utils.FontUtils;
 import io.separ.neural.inputmethod.Utils.ShareUtils;
+import io.separ.neural.inputmethod.Utils.StatSyncJob;
 import io.separ.neural.inputmethod.Utils.StatsJobCreator;
 import io.separ.neural.inputmethod.Utils.StatsUtils;
 import io.separ.neural.inputmethod.Utils.SwipeUtils;
@@ -318,6 +319,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
         if(serviceId.equals("emoji")){
             this.mKeyboardSwitcher.setEmojiKeyboard();
+            return;
+        }
+        if(serviceId.equals("translate")){
+
             return;
         }
         this.mInputLogic.startSearchingResults();
@@ -727,6 +732,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         //SpeechUtils.initialize(this);
         this.mEventHandler = new EventBusHandler();
         JobManager.create(this).addJobCreator(new StatsJobCreator());
+        //StatSyncJob.scheduleJob();
     }
 
     public void finishCalculatingProfile() {
