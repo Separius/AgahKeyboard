@@ -22,6 +22,8 @@ import io.separ.neural.inputmethod.slash.RSearchItem;
 import io.separ.neural.inputmethod.slash.RServiceItem;
 import io.separ.neural.inputmethod.slash.TaskQueue;
 
+import static io.separ.neural.inputmethod.colors.ColorManager.addObserver;
+
 /**
  * Created by sepehr on 3/2/17.
  */

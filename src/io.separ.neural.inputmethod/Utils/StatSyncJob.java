@@ -26,13 +26,15 @@ public class StatSyncJob extends Job {
     @NonNull
     protected Result onRunJob(Params params){
         Log.i(TAG, "onRunJobCalled");
+        if(StatsUtils.hasInstance() == false)
+            return Result.SUCCESS;
         final OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new MultipartBuilder()
                 .type(MultipartBuilder.FORM)
                 .addFormDataPart("v", "0")
-                .addFormDataPart("ime", Settings.Secure.getString(StatsUtils.latin.getContentResolver(), Settings.Secure.ANDROID_ID))
+                .addFormDataPart("ime", Settings.Secure.getString(StatsUtils.getInstance().latin.getContentResolver(), Settings.Secure.ANDROID_ID))
                 .addFormDataPart("hash", "computed?")
-                .addFormDataPart("file", "data.txt", RequestBody.create(MEDIA_TYPE_TXT, StatsUtils.collectionFile))
+                .addFormDataPart("file", "data.txt", RequestBody.create(MEDIA_TYPE_TXT, StatsUtils.getInstance().collectionFile))
                 .build();
 
         Request request = new Request.Builder()
@@ -46,7 +48,7 @@ public class StatSyncJob extends Job {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        StatsUtils.newFile();
+        StatsUtils.getInstance().newFile();
         return Result.SUCCESS;
     }
 

@@ -21,11 +21,15 @@ import com.fasterxml.jackson.core.util.MinimalPrettyPrinter;
 import com.github.ybq.android.spinkit.SpinKitView;
 
 import io.separ.neural.inputmethod.Utils.ColorUtils;
+import io.separ.neural.inputmethod.colors.ColorManager;
+import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.slash.RDetail;
 import io.separ.neural.inputmethod.slash.RSearchItem;
 import io.separ.neural.inputmethod.slash.RServiceItem;
 
+import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
+import static io.separ.neural.inputmethod.colors.ColorManager.addObserver;
 import static io.separ.neural.inputmethod.slash.RSearchItem.GENERIC_MESSAGE_TYPE;
 import static io.separ.neural.inputmethod.slash.RSearchItem.LOADING_TYPE;
 import static io.separ.neural.inputmethod.slash.RSearchItem.MEDIA_TYPE;
@@ -35,7 +39,7 @@ import static io.separ.neural.inputmethod.slash.RSearchItem.PERMISSION_REQUIRED_
  * Created by sepehr on 3/2/17.
  */
 
-public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItemArrayAdapter.SearchItemViewHolder> {
+public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItemArrayAdapter.SearchItemViewHolder>{
     public static final int RESULT_TYPE_CONNECT_TO_USE = 5;
     public static final int RESULT_TYPE_DEFAULT = 0;
     public static final int RESULT_TYPE_GENERIC_MESSAGE = 6;
@@ -253,11 +257,15 @@ public class SearchItemArrayAdapter extends ArrayAdapter<RSearchItem, SearchItem
                 break;
         }
         if(vh.header != null)
-            vh.header.setTextColor(Color.WHITE);
+            vh.header.setTextColor(colorProfile.getText());
         if(vh.subheader != null)
-            vh.subheader.setTextColor(Color.WHITE);
+            vh.subheader.setTextColor(colorProfile.getText());
         if(vh.bottom != null)
-            vh.bottom.setTextColor(Color.WHITE);
+            vh.bottom.setTextColor(colorProfile.getText());
+        if(vh.titleContainer != null)
+            vh.titleContainer.setBackgroundColor(colorProfile.getPrimary());
+        if(vh.preview != null)
+            vh.preview.setColorFilter(colorProfile.getIcon());
         if (pos > getItemCount() - 2 && this.mLoadNextPage != null) {
             this.mLoadNextPage.run();
         }

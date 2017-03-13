@@ -163,7 +163,7 @@ public final class InputLogic {
             // For messaging apps that offer send button, the IME does not get the opportunity
             // to capture the last word. This block should capture those uncommitted words.
             // The timestamp at which it is captured is not accurate but close enough.
-            StatsUtils.onWordCommitUserTyped(
+            StatsUtils.getInstance().onWordCommitUserTyped(
                     mWordComposer.getTypedWord(), mWordComposer.isBatchMode());
         }
         mEnteredText = null;
@@ -227,7 +227,7 @@ public final class InputLogic {
     public void finishInput() {
         if (mWordComposer.isComposingWord()) {
             mConnection.finishComposingText();
-            StatsUtils.onWordCommitUserTyped(
+            StatsUtils.getInstance().onWordCommitUserTyped(
                     mWordComposer.getTypedWord(), mWordComposer.isBatchMode());
         }
         resetComposingState(true /* alsoResetLastComposedWord */);
@@ -275,7 +275,7 @@ public final class InputLogic {
             promotePhantomSpace(settingsValues);
         }
         mConnection.commitText(text, 1);
-        StatsUtils.onWordCommitUserTyped(mEnteredText, mWordComposer.isBatchMode());
+        StatsUtils.getInstance().onWordCommitUserTyped(mEnteredText, mWordComposer.isBatchMode());
         mConnection.endBatchEdit();
         // Space state must be updated before calling updateShiftState
         mSpaceState = SpaceState.NONE;
@@ -317,7 +317,7 @@ public final class InputLogic {
         final String suggestion = suggestionInfo.mWord;
         // If this is a punctuation picked from the suggestion strip, pass it to onCodeInput
         if (suggestion.length() == 1 && suggestedWords.isPunctuationSuggestions()) {
-            StatsUtils.onPickSuggestionManually(
+            StatsUtils.getInstance().onPickSuggestionManually(
                     mSuggestedWords, suggestionInfo, mDictionaryFacilitator);
             // Word separators are suggested before the user inputs something.
             // Rely on onCodeInput to do the complicated swapping/stripping logic consistently.
@@ -376,9 +376,9 @@ public final class InputLogic {
             handler.postUpdateSuggestionStrip(SuggestedWords.INPUT_STYLE_NONE);
         }
 
-        StatsUtils.onPickSuggestionManually(
+        StatsUtils.getInstance().onPickSuggestionManually(
                 mSuggestedWords, suggestionInfo, mDictionaryFacilitator);
-        StatsUtils.onWordCommitSuggestionPickedManually(
+        StatsUtils.getInstance().onWordCommitSuggestionPickedManually(
                 suggestionInfo.mWord, mWordComposer.isBatchMode());
 
         return inputTransaction;
@@ -1115,10 +1115,10 @@ public final class InputLogic {
                             Constants.EVENT_REJECTION);
                     //mDictionaryFacilitator.removeWordFromPersonalizedDicts(rejectedSuggestion);
                 }
-                StatsUtils.onBackspaceWordDelete(rejectedSuggestion.length());
+                StatsUtils.getInstance().onBackspaceWordDelete(rejectedSuggestion.length());
             } else {
                 mWordComposer.applyProcessedEvent(event);
-                StatsUtils.onBackspacePressed(1);
+                StatsUtils.getInstance().onBackspacePressed(1);
             }
             if (mWordComposer.isComposingWord()) {
                 setComposingTextInternal(getTextWithUnderline(mWordComposer.getTypedWord()), 1);
@@ -1130,8 +1130,8 @@ public final class InputLogic {
             if (mLastComposedWord.canRevertCommit()) {
                 final String lastComposedWord = mLastComposedWord.mTypedWord;
                 revertCommit(inputTransaction, inputTransaction.mSettingsValues);
-                StatsUtils.onRevertAutoCorrect();
-                StatsUtils.onWordCommitUserTyped(lastComposedWord, mWordComposer.isBatchMode());
+                StatsUtils.getInstance().onRevertAutoCorrect();
+                StatsUtils.getInstance().onWordCommitUserTyped(lastComposedWord, mWordComposer.isBatchMode());
                 // Restart suggestions when backspacing into a reverted word. This is required for
                 // the final corrected word to be learned, as learning only occurs when suggestions
                 // are active.
@@ -1153,7 +1153,7 @@ public final class InputLogic {
                 // This is triggered on backspace after a key that inputs multiple characters,
                 // like the smiley key or the .com key.
                 mConnection.deleteSurroundingText(mEnteredText.length(), 0);
-                StatsUtils.onDeleteMultiCharInput(mEnteredText.length());
+                StatsUtils.getInstance().onDeleteMultiCharInput(mEnteredText.length());
                 mEnteredText = null;
                 // If we have mEnteredText, then we know that mHasUncommittedTypedChars == false.
                 // In addition we know that spaceState is false, and that we should not be
@@ -1172,7 +1172,7 @@ public final class InputLogic {
                 }
             } else if (SpaceState.SWAP_PUNCTUATION == inputTransaction.mSpaceState) {
                 if (mConnection.revertSwapPunctuation()) {
-                    StatsUtils.onRevertSwapPunctuation();
+                    StatsUtils.getInstance().onRevertSwapPunctuation();
                     // Likewise
                     return;
                 }
@@ -1196,7 +1196,7 @@ public final class InputLogic {
                 mConnection.setSelection(mConnection.getExpectedSelectionEnd(),
                         mConnection.getExpectedSelectionEnd());
                 mConnection.deleteTextBeforeCursor(numCharsDeleted);
-                StatsUtils.onBackspaceSelectedText(numCharsDeleted);
+                StatsUtils.getInstance().onBackspaceSelectedText(numCharsDeleted);
             } else {
                 // There is no selection, just delete one character.
                 if (inputTransaction.mSettingsValues.isBeforeJellyBean()
@@ -1225,7 +1225,7 @@ public final class InputLogic {
                         sendDownUpKeyEvent(KeyEvent.KEYCODE_DEL);
                         totalDeletedLength++;
                     }
-                    StatsUtils.onBackspacePressed(totalDeletedLength);
+                    StatsUtils.getInstance().onBackspacePressed(totalDeletedLength);
                 } else {
                     final int codePointBeforeCursor = mConnection.getCodePointBeforeCursor();
                     if (codePointBeforeCursor == Constants.NOT_A_CODE) {
@@ -1258,7 +1258,7 @@ public final class InputLogic {
                             totalDeletedLength += lengthToDeleteAgain;
                         }
                     }
-                    StatsUtils.onBackspacePressed(totalDeletedLength);
+                    StatsUtils.getInstance().onBackspacePressed(totalDeletedLength);
                 }
             }
             if (!hasUnlearnedWordBeingDeleted) {
@@ -2258,7 +2258,7 @@ public final class InputLogic {
         if (typedWord.length() > 0) {
             commitChosenWord(settingsValues, typedWord,
                     LastComposedWord.COMMIT_TYPE_USER_TYPED_WORD, separatorString);
-            StatsUtils.onWordCommitUserTyped(typedWord, mWordComposer.isBatchMode());
+            StatsUtils.getInstance().onWordCommitUserTyped(typedWord, mWordComposer.isBatchMode());
         }
     }
 
@@ -2319,11 +2319,11 @@ public final class InputLogic {
                         typedWord, autoCorrection));
                 String prevWordsContext = (typedAutoCorrection != null)
                         ? typedAutoCorrection : "";
-                StatsUtils.onAutoCorrection(typedWord, autoCorrection, isBatchMode,
+                StatsUtils.getInstance().onAutoCorrection(typedWord, autoCorrection, isBatchMode,
                         mDictionaryFacilitator, prevWordsContext);
-                StatsUtils.onWordCommitAutoCorrect(autoCorrection, isBatchMode);
+                StatsUtils.getInstance().onWordCommitAutoCorrect(autoCorrection, isBatchMode);
             }else{
-                StatsUtils.onWordCommitUserTyped(autoCorrection, isBatchMode);
+                StatsUtils.getInstance().onWordCommitUserTyped(autoCorrection, isBatchMode);
             }
         }
     }

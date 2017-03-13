@@ -20,6 +20,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.google.gms:google-services:3.0.0'
     }
 }
 apply plugin: 'com.android.application'
@@ -32,35 +33,37 @@ repositories {
 apply plugin: 'io.fabric'
 
 dependencies {
-    compile 'com.android.support:support-v4:25.0.1'
-    compile 'com.android.support:recyclerview-v7:25.0.1'
+    compile fileTree(include: '*.jar', dir: 'libs')
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.6'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
+        transitive = true;
+    }
+    compile 'com.android.support:support-v4:25.1.0'
+    compile 'com.android.support:recyclerview-v7:25.1.0'
     compile 'com.android.support:palette-v7:25.1.0'
-    compile 'com.android.support:support-v13:25.0.1'
-    compile 'com.android.support:cardview-v7:25.0.1'
+    compile 'com.android.support:support-v13:25.1.0'
+    compile 'com.android.support:cardview-v7:25.1.0'
     compile 'me.relex:circleindicator:1.2.2@aar'
     compile 'com.google.code.findbugs:jsr305:3.0.0'
     compile 'com.github.paolorotolo:appintro:4.1.0'
-    compile fileTree(include: '*.jar', dir: 'libs')
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.6'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.facebook.fresco:fresco:1.1.0'
     compile 'com.facebook.fresco:animated-gif:1.1.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.7.5'
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'io.nlopez.smartlocation:library:3.2.11'
+    compile 'io.nlopez.smartlocation:library:3.3.1'
     compile 'com.github.ybq:Android-SpinKit:1.1.0'
     compile 'com.hannesdorfmann.smoothprogressbar:library:1.0.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
-        transitive = true;
-    }
     compile 'com.github.yukuku:ambilwarna:2.0.1'
     compile 'com.evernote:android-job:1.1.7'
     compile 'com.rarepebble:colorpicker:2.1.0'
+    compile 'com.google.firebase:firebase-crash:10.2.0'
+    compile 'com.google.firebase:firebase-core:10.2.0'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }
 
 android {
@@ -71,7 +74,7 @@ android {
         targetSdkVersion 25
         multiDexEnabled true
         ndk {
-            abiFilters "armeabi-v7a"//, "armeabi" TODO, if i could disable all the native calls, this would work
+            abiFilters "armeabi-v7a" //, "armeabi" TODO, if i could disable all the native calls, this would work
         }
     }
     sourceSets {
@@ -115,8 +118,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
         sourceCompatibility JavaVersion.VERSION_1_7
     }
-    packagingOptions{
+    packagingOptions {
         pickFirst 'META-INF/license.txt'
         pickFirst 'META-INF/LICENSE'
     }
 }
+
+apply plugin: 'com.google.gms.google-services'

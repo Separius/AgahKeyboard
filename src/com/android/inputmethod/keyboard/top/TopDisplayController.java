@@ -14,6 +14,7 @@ import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripView;
 import io.separ.neural.inputmethod.slash.RSearchItem;
+import io.separ.neural.inputmethod.slash.ServiceRequestManager;
 
 import static android.view.View.GONE;
 
@@ -52,10 +53,11 @@ public class TopDisplayController {
     }
 
     public void runSearch(String query){
-        mServiceResultsView.runSearch(query, null);
+        mServiceResultsView.runSearch(query, false);
     }
 
     public void runSearch(String serviceId, String context) {
+        mActionRowView.removeCallbacks(this.hideSuggestionAfter);
         this.mActionRowView.setVisibility(GONE);
         mDimOtherView.setVisibility(View.VISIBLE);
         this.mServiceResultsView.startSearch(serviceId, context);
@@ -83,6 +85,7 @@ public class TopDisplayController {
     }
 
     public void hideAll() {
+        ServiceRequestManager.getInstance().cancelLastRequest();
         mDimOtherView.setVisibility(View.GONE);
         mServiceResultsView.setVisibility(GONE);
         updateBarVisibility();

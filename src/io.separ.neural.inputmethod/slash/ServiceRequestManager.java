@@ -96,10 +96,10 @@ public class ServiceRequestManager {
     }
 
     public synchronized void postRequest(String slash, String query, boolean useCache) {
-        postRequest(slash, query, "prepopulate", useCache);
+        postRequest(slash, query, "prepopulate", useCache, false);
     }
 
-    public synchronized void postRequest(String slash, String query, String action, boolean useCache) {
+    public synchronized void postRequest(String slash, String query, String action, boolean useCache, boolean isInstant) {
         boolean isLocationAware = false;
         synchronized (this) {
             cancelLastRequest();
@@ -118,10 +118,10 @@ public class ServiceRequestManager {
                     this.request = new C04101(slash, query, action, isLocationAware, useCache);
                 else
                     this.request = new TenorThread(query);
-            }
-            this.handler.postDelayed(this.request, 0);
+                this.handler.postDelayed(this.request, isInstant ? 0 : 2000);
+            }else
+                this.handler.postDelayed(this.request, 0);
             if (shouldShowLoading) {
-                Log.e("SEPAR", "postRequest loading");
                 EventBusExt.getDefault().post(new ServiceRequestEvent(ServiceResultsView.VisualSate.Loading.setMessage(slash), slash));
             }
         }

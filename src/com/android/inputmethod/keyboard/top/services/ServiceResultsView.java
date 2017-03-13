@@ -49,6 +49,7 @@ public class ServiceResultsView extends LinearLayout implements ColorManager.OnC
     @Override
     public void onColorChange(ColorProfile colorProfile) {
         setBackgroundColor(colorProfile.getSecondary());
+        mSourceError.setTextColor(colorProfile.getIconOnSecondary());
     }
 
     /*class C04621 implements OnClickListener {
@@ -100,7 +101,7 @@ public class ServiceResultsView extends LinearLayout implements ColorManager.OnC
         public void onClick(int position) {
             if (position < ServiceResultsView.this.mCategoriesList.getAdapter().getItemCount()) {
                 RCategory category = ServiceResultsView.this.mCategoriesList.getAdapter().getItem(position);
-                ServiceResultsView.this.runSearch(category.getAction(), category.getType());
+                ServiceResultsView.this.runSearch(category.getAction(), true);
             }
         }
     }
@@ -249,51 +250,21 @@ public class ServiceResultsView extends LinearLayout implements ColorManager.OnC
         setService(slash);
         currentSlash = slash;
         currentContext = context;
-        runSearch(currentContext, null);
+        runSearch(currentContext, true);
     }
 
-    public void runSearch(String searchString, String type) {
+    public void runSearch(String searchString, boolean instant) {
         String action = null;
-        int categoryIndex = this.mCategoriesList.getAdapter().getSelectedCategoryIndex();
         boolean useCaching = false;
-        if ("act".equals(type)) {
-            if (categoryIndex == 0) {
+        this.mCategoriesList.getAdapter().setSelectedItem(-1);
+        if (TextUtils.isEmpty(searchString)) {
+            if(TextUtils.isEmpty(currentContext)) {
                 action = "prepopulate";
                 useCaching = true;
-            } else {
-                action = this.mCategoriesList.getAdapter().getSelectedCategoryAction();
-            }
-            setSearchMirror("");
-        } else if ("aac".equals(type)) {
-            if (categoryIndex == 0) {
-                action = "prepopulate";
-                useCaching = true;
-            } else {
-                action = this.mCategoriesList.getAdapter().getSelectedCategoryAction();
-            }
-            setSearchMirror("");
-        } else if ("sug".equals(type)) {
-            if (categoryIndex == 0) {
-                action = "prepopulate";
-                useCaching = true;
-            }
-            setSearchMirror("");
-        } else {
-            if (TextUtils.isEmpty(searchString)) {
-                if(TextUtils.isEmpty(currentContext)) {
-                    action = "prepopulate";
-                    useCaching = true;
-                    //this.mCategoriesList.getAdapter().setSelectedItem(0);
-                    this.mCategoriesList.getAdapter().setSelectedItem(-1);
-                }else{
-                    searchString = currentContext;
-                    this.mCategoriesList.getAdapter().setSelectedItem(-1);
-                }
-            } else {
-                this.mCategoriesList.getAdapter().setSelectedItem(-1);
-            }
-            setSearchMirror(searchString);
+            }else
+                searchString = currentContext;
         }
+        setSearchMirror(searchString);
         boolean skipRequest = mRecycler.trySetUnauthPreviewItems(null, true);
         updateCategoryVisibility();
         if (skipRequest) {
@@ -302,7 +273,7 @@ public class ServiceResultsView extends LinearLayout implements ColorManager.OnC
         }
         //TODO anyone who calls this must change?
         ServiceRequestManager.getInstance().cancelLastRequest();
-        ServiceRequestManager.getInstance().postRequest(currentSlash, searchString, action, useCaching);
+        ServiceRequestManager.getInstance().postRequest(currentSlash, searchString, action, useCaching, instant);
     }
 
     public void clear() {

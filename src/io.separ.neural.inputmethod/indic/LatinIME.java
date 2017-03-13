@@ -235,12 +235,14 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     @Override
     public void onCopy() {
         ((ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText(JniLibName.JNI_LIB_NAME, this.mInputLogic.mConnection.getSelectedText(0)));
+        StatsUtils.getInstance().onSnippetToolSelected();
     }
 
     @Override
     public void onCut() {
         ((ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText(JniLibName.JNI_LIB_NAME, this.mInputLogic.mConnection.getSelectedText(0)));
         this.mInputLogic.mConnection.mIC.performContextMenuAction(16908320);
+        StatsUtils.getInstance().onSnippetToolSelected();
     }
 
     @Override
@@ -248,6 +250,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         FrequentEmojiHandler.getInstance(this).onEmojiClicked(emoji);
         updateStateAfterInputTransaction(this.mInputLogic.onTextInput(this.mSettings.getCurrent(), Event.createSoftwareTextEvent(emoji, 1), this.mKeyboardSwitcher.getKeyboardShiftMode(), this.mHandler), false);
         this.mKeyboardSwitcher.onCodeInput(-4, getCurrentAutoCapsState(), getCurrentRecapitalizeState());
+        StatsUtils.getInstance().onTopEmojiSelected();
     }
 
     @Override
@@ -265,11 +268,13 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             if (text != null)
                 this.mInputLogic.mConnection.commitText(text, this.mInputLogic.mConnection.getExpectedSelectionEnd());
         }
+        StatsUtils.getInstance().onSnippetToolSelected();
     }
 
     @Override
     public void onSelectAll() {
         this.mInputLogic.mConnection.mIC.performContextMenuAction(16908319);
+        StatsUtils.getInstance().onSnippetToolSelected();
     }
 
     @Override
@@ -710,7 +715,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
         DictionaryDecayBroadcastReciever.setUpIntervalAlarmForDictionaryDecaying(this);
 
-        StatsUtils.onCreate(this);
+        StatsUtils.getInstance().onCreate(this);
         FontUtils.initialize(this);
         SwipeUtils.init(this, this);
         this.colorManager = new ColorManager(this);
@@ -833,7 +838,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         unregisterReceiver(mConnectivityAndRingerModeChangeReceiver);
         unregisterReceiver(mDictionaryPackInstallReceiver);
         unregisterReceiver(mDictionaryDumpBroadcastReceiver);
-        StatsUtils.onDestroy();
+        StatsUtils.getInstance().onDestroy();
         this.navManager.killService();
         super.onDestroy();
     }
@@ -878,7 +883,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     @Override
     public View onCreateInputView() {
-        StatsUtils.onCreateInputView();
+        StatsUtils.getInstance().onCreateInputView();
         return mKeyboardSwitcher.onCreateInputView(mIsHardwareAcceleratedDrawingEnabled);
     }
 
@@ -980,7 +985,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     public void onCurrentInputMethodSubtypeChanged(final InputMethodSubtype subtype) {
         // Note that the calling sequence of onCreate() and onCurrentInputMethodSubtypeChanged()
         // is not guaranteed. It may even be called at the same time on a different thread.
-        StatsUtils.onSubtypeChanged(subtype);
+        StatsUtils.getInstance().onSubtypeChanged(subtype);
         mSubtypeSwitcher.onSubtypeChanged(subtype);
         mInputLogic.onSubtypeChanged(SubtypeLocaleUtils.getCombiningRulesExtraValue(subtype),
                 mSettings.getCurrent());
@@ -996,7 +1001,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     private void handleKeyboardColor(EditorInfo editorInfo) {
         currentPackageName = editorInfo.packageName;
-        StatsUtils.updatePackageName(currentPackageName);
+        StatsUtils.getInstance().updatePackageName(currentPackageName);
         this.colorManager.calculateProfile(this, currentPackageName);
     }
 
@@ -1064,7 +1069,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             mSubtypeSwitcher.updateParametersOnStartInputView();
         }
 
-        StatsUtils.onStartInputView(editorInfo.inputType,
+        StatsUtils.getInstance().onStartInputView(editorInfo.inputType,
                 Settings.getInstance().getCurrent().mDisplayOrientation,
                 !isDifferentTextField);
 
@@ -1623,6 +1628,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     public void onEmojiInput(final String rawText) {
         FrequentEmojiHandler.getInstance(this).onEmojiClicked(rawText);
         onTextInput(rawText);
+        StatsUtils.getInstance().onRichEmojiSelected();
     }
 
     // Called from PointerTracker through the KeyboardActionListener interface
