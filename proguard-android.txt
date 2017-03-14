@@ -1,0 +1,11 @@
+-dontnote retrofit2.Platform
+-dontwarn retrofit2.Platform$Java8
+-keepattributes Signature
+-keepattributes Exceptions
+-keepattributes *Annotation*,EnclosingMethod,Signature
+-keepnames class com.fasterxml.jackson.** { *;  }
+-dontwarn com.fasterxml.jackson.databind.**
+-keep class org.codehaus.** { *;  }
+-keepclassmembers public final enum org.codehaus.jackson.annotate.JsonAutoDetect$Visibility { public static final org.codehaus.jackson.annotate.JsonAutoDetect$Visibility *; }
+-keep public class com.android.inputmethod.keyboard.top.services.tenor.** { public void set*(***); public *** get*(); }
+-keep public class io.separ.neural.inputmethod.slash.** { public void set*(***); public *** get*(); }

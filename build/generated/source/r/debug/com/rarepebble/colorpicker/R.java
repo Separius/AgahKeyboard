@@ -8,47 +8,47 @@ package com.rarepebble.colorpicker;
 
 public final class R {
 	public static final class attr {
-		public static final int colorpicker_noneSelectedSummaryText = 0x7f0100b4;
-		public static final int colorpicker_selectNoneButtonText = 0x7f0100b3;
-		public static final int colorpicker_showAlpha = 0x7f0100b5;
-		public static final int colorpicker_showHex = 0x7f0100b6;
-		public static final int radialMargin = 0x7f0101f5;
+		public static final int colorpicker_noneSelectedSummaryText = 0x7f0100a3;
+		public static final int colorpicker_selectNoneButtonText = 0x7f0100a2;
+		public static final int colorpicker_showAlpha = 0x7f0100a4;
+		public static final int colorpicker_showHex = 0x7f0100a5;
+		public static final int radialMargin = 0x7f0101e2;
 	}
 	public static final class color {
 		public static final int disabled_gray = 0x7f0f0026;
 		public static final int gray600 = 0x7f0f0031;
 	}
 	public static final class dimen {
-		public static final int hexFieldWidth = 0x7f0a009b;
-		public static final int margin = 0x7f0a00a5;
-		public static final int preference_thumbnail_size = 0x7f0a00a9;
-		public static final int sliderWidth = 0x7f0a00b1;
+		public static final int hexFieldWidth = 0x7f0a008d;
+		public static final int margin = 0x7f0a0097;
+		public static final int preference_thumbnail_size = 0x7f0a009b;
+		public static final int sliderWidth = 0x7f0a00a3;
 	}
 	public static final class drawable {
-		public static final int checker_background = 0x7f0200a8;
-		public static final int thumbnail_border = 0x7f0201b1;
+		public static final int checker_background = 0x7f0200a0;
+		public static final int thumbnail_border = 0x7f0201a1;
 	}
 	public static final class id {
-		public static final int alphaView = 0x7f100144;
-		public static final int colorPreview = 0x7f1000fb;
-		public static final int hexEdit = 0x7f100145;
-		public static final int hueSatView = 0x7f100142;
-		public static final int swatchView = 0x7f100141;
-		public static final int thumbnail = 0x7f1000fa;
-		public static final int valueView = 0x7f100143;
+		public static final int alphaView = 0x7f10012a;
+		public static final int colorPreview = 0x7f1000eb;
+		public static final int hexEdit = 0x7f10012b;
+		public static final int hueSatView = 0x7f100128;
+		public static final int swatchView = 0x7f100127;
+		public static final int thumbnail = 0x7f1000ea;
+		public static final int valueView = 0x7f100129;
 	}
 	public static final class layout {
-		public static final int color_preference_thumbnail = 0x7f03001e;
-		public static final int color_preference_thumbnail_disabled = 0x7f03001f;
-		public static final int picker = 0x7f03004d;
+		public static final int color_preference_thumbnail = 0x7f03001d;
+		public static final int color_preference_thumbnail_disabled = 0x7f03001e;
+		public static final int picker = 0x7f030046;
 	}
 	public static final class styleable {
-		public static final int[] ColorPicker = { 0x7f0100b3, 0x7f0100b4, 0x7f0100b5, 0x7f0100b6 };
+		public static final int[] ColorPicker = { 0x7f0100a2, 0x7f0100a3, 0x7f0100a4, 0x7f0100a5 };
 		public static final int ColorPicker_colorpicker_noneSelectedSummaryText = 1;
 		public static final int ColorPicker_colorpicker_selectNoneButtonText = 0;
 		public static final int ColorPicker_colorpicker_showAlpha = 2;
 		public static final int ColorPicker_colorpicker_showHex = 3;
-		public static final int[] SwatchView = { 0x7f0101f5 };
+		public static final int[] SwatchView = { 0x7f0101e2 };
 		public static final int SwatchView_radialMargin = 0;
 	}
 }

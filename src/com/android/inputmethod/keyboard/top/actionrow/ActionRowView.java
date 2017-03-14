@@ -24,7 +24,6 @@ import io.separ.neural.inputmethod.colors.ColorManager;
 import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.indic.AudioAndHapticFeedbackManager;
 import io.separ.neural.inputmethod.indic.R;
-import me.relex.circleindicator.CircleIndicator;
 
 /**
  * Created by sepehr on 2/24/17.
@@ -39,8 +38,6 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
     private String[] layoutToShow;
     private Listener mListener;
     private HashMap<String, LinearLayout> layouts;
-    private CircleIndicator mIndicator;
-    private int currentPage;
     private static final String[] DEFAULT_SERVICES;
 
     public boolean onTouch(View v, MotionEvent event) {
@@ -157,7 +154,6 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         }
 
         public View getView(int position) {
-            currentPage = position;
             return (View) this.views.get(position);
         }
     }
@@ -168,11 +164,6 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         SERVICE_IMAGE_IDS = new int[] {R.id.gif_service_action_button, R.id.maps_service_action_button, R.id.google_service_action_button,
                 R.id.contacts_service_action_button, R.id.foursquare_service_action_button, R.id.customization_service_action_button, R.id.go_to_emoji};
         DEFAULT_SERVICES = new String[] {"giphy","maps","google","contacts","foursquare","customization","emoji"};
-    }
-
-    public void setCircleIndicator(CircleIndicator ci){
-        mIndicator = ci;
-        mIndicator.setViewPager(this);
     }
 
     public ActionRowView(Context context) {

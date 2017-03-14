@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+**
+** Copyright 2013, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+
+<!-- Note: This emoji code point list is valid prior to JB-MR2 (API < 18).
+     There is another emoji code point list for JB-MR2 and KLP and later under
+     res/xml/values-v1[89].-->
+<resources>
+    <!-- Dummy codeArrays for recents emoji keyboard.
+         Do not remove these keys, because they are used as a template. -->
+    <array
+        name="emoji_recents"
+        format="string"
+    >
+        <!-- These code point should be aligned with {@link RecentsKeyboard#TEMPLATE_KEY_CODE_*. -->
+        <item>30</item>
+        <item>31</item>
+    </array>
+    <array
+        name="emoji_nature"
+        format="string"
+    >
+        <item>2744</item> <!-- SNOWFLAKE -->
+    </array>
+    <array
+        name="emoji_symbols"
+        format="string"
+    >
+        <item>2460</item> <!-- CIRCLED DIGIT ONE -->
+        <item>2461</item> <!-- CIRCLED DIGIT TWO -->
+        <item>2462</item> <!-- CIRCLED DIGIT THREE -->
+        <item>2463</item> <!-- CIRCLED DIGIT FOUR -->
+        <item>2464</item> <!-- CIRCLED DIGIT FIVE -->
+        <item>2465</item> <!-- CIRCLED DIGIT SIX -->
+        <item>2466</item> <!-- CIRCLED DIGIT SEVEN -->
+        <item>2467</item> <!-- CIRCLED DIGIT EIGHT -->
+        <item>2468</item> <!-- CIRCLED DIGIT NINE -->
+        <item>2469</item> <!-- CIRCLED DIGIT TEN -->
+        <item>00ae</item> <!-- REGISTERED SIGN -->
+        <item>00a9</item> <!-- COPYRIGHT SIGN -->
+        <item>2122</item> <!-- TRADE MARK SIGN -->
+        <item>2734</item> <!-- EIGHT POINTED BLACK STAR -->
+        <item>2733</item> <!-- EIGHT POINTED PINWHEEL STAR -->
+        <item>2716</item> <!-- HEAVY MULTIPLICATION MARK -->
+        <item>2195</item> <!-- UP DOWN ARROW -->
+        <item>2197</item> <!-- NORTH EAST ARROW -->
+        <item>27a1</item> <!-- BLACK RIGHTWARDS ARROW -->
+        <item>2198</item> <!-- SOUTH EAST ARROW -->
+        <item>2199</item> <!-- SOUTH WEST ARROW -->
+        <item>2196</item> <!-- NORTH EAST ARROW -->
+        <item>2194</item> <!-- LEFT RIGHT ARROW -->
+        <item>25c0</item> <!-- BLACK LEFT-POINTING TRIANGLE -->
+        <item>25b6</item> <!-- BLACK ROGHT-POINTING TRIANGLE -->
+        <item>2747</item> <!-- SPARKLE -->
+        <item>25aa</item> <!-- BLACK SMALL SQUARE -->
+        <item>203c</item> <!-- DOUBLE EXCLAMATION MARK -->
+        <item>2660</item> <!-- BLACK SPADE SUIT -->
+        <item>2665</item> <!-- BLACK HEART SUIT -->
+        <item>2663</item> <!-- BLACK CLUB SUIT -->
+        <item>2666</item> <!-- BLACK DIAMOND SUIT -->
+        <item>21a9</item> <!-- LEFTWARDS ARROW WITH HOOK -->
+        <item>21aa</item> <!-- RIGHTWARDS ARROW WITH HOOK -->
+    </array>
+    <array
+        name="emoji_faces"
+        format="string"
+    >
+        <item>270C</item> <!-- VICTORY HAND -->
+        <item>2764</item> <!-- HEAVY BLACK HEART -->
+    </array>
+    <array
+        name="emoji_objects"
+        format="string"
+    >
+        <item>260e</item> <!-- BLACK TELEPHONE -->
+        <item>2709</item> <!-- ENVELOPE -->
+        <item>2712</item> <!-- BLACK NIB -->
+        <item>270f</item> <!-- PENCIL -->
+        <item>2702</item> <!-- BLACK SCISSORS -->
+        <item>2669</item> <!-- QUARTER NOTE -->
+        <item>266a</item> <!-- EIGHTH NOTE -->
+        <item>266c</item> <!-- BEAMED SIXTEENTH NOTES -->
+    </array>
+    <array
+        name="emoji_places"
+        format="string"
+    >
+        <item>2708</item> <!-- AIRPLANE -->
+        <item>2668</item> <!-- HOT SPRINGS -->
+    </array>
+    <array
+        name="emoji_emoticons"
+        format="string"
+    >
+        <item>=-O</item>
+        <item>:-P</item>
+        <item>;-)</item>
+        <item>:-(</item>
+        <item>:-)</item>
+        <item>:-!</item>
+        <item>:-$</item>
+        <item>B-)</item>
+        <item>:O</item>
+        <item>:-*</item>
+        <item>:-D</item>
+        <item>:\'(</item>
+        <item>:-\\</item>
+        <item>O:-)</item>
+        <item>:-[</item>
+        <item>^^</item>
+        <item>-_-</item>
+    </array>
+    <array
+        name="emoji_eight_smiley_people"
+        format="string"
+        >
+        <item>1f600</item>
+        <item>1f601</item>
+        <item>1f602</item>
+        <item>1f603</item>
+        <item>1f604</item>
+        <item>1f605</item>
+        <item>1f606</item>
+        <item>1f609</item>
+        <item>1f60a</item>
+        <item>1f60b</item>
+        <item>1f60e</item>
+        <item>1f60d</item>
+        <item>1f618</item>
+        <item>1f617</item>
+        <item>1f619</item>
+        <item>1f61a</item>
+        <item>263a</item>
+        <item>1f642</item>
+        <item>1f917</item>
+        <item>1f607</item>
+        <item>1f914</item>
+        <item>1f610</item>
+        <item>1f611</item>
+        <item>1f636</item>
+        <item>1f644</item>
+        <item>1f60f</item>
+        <item>1f623</item>
+        <item>1f625</item>
+        <item>1f62e</item>
+        <item>1f910</item>
+        <item>1f62f</item>
+        <item>1f62a</item>
+        <item>1f62b</item>
+        <item>1f634</item>
+        <item>1f60c</item>
+        <item>1f913</item>
+        <item>1f61b</item>
+        <item>1f61c</item>
+        <item>1f61d</item>
+        <!-- Removed for lack of color glyph support.  <item>2639</item>  -->
+        <item>1f641</item>
+        <item>1f612</item>
+        <item>1f613</item>
+        <item>1f614</item>
+        <item>1f615</item>
+        <item>1f616</item>
+        <item>1f643</item>
+        <item>1f637</item>
+        <item>1f912</item>
+        <item>1f915</item>
+        <item>1f911</item>
+        <item>1f632</item>
+        <item>1f61e</item>
+        <item>1f61f</item>
+        <item>1f624</item>
+        <item>1f622</item>
+        <item>1f62d</item>
+        <item>1f626</item>
+        <item>1f627</item>
+        <item>1f628</item>
+        <item>1f629</item>
+        <item>1f62c</item>
+        <item>1f630</item>
+        <item>1f631</item>
+        <item>1f633</item>
+        <item>1f635</item>
+        <item>1f621</item>
+        <item>1f620</item>
+        <item>1f608</item>
+        <item>1f47f</item>
+        <item>1f479</item>
+        <item>1f47a</item>
+        <item>1f480</item>
+        <!-- Removed for lack of color glyph support.  <item>2620</item>  -->
+        <item>1f47b</item>
+        <item>1f47d</item>
+        <item>1f47e</item>
+        <item>1f916</item>
+        <item>1f4a9</item>
+        <item>1f63a</item>
+        <item>1f638</item>
+        <item>1f639</item>
+        <item>1f63b</item>
+        <item>1f63c</item>
+        <item>1f63d</item>
+        <item>1f640</item>
+        <item>1f63f</item>
+        <item>1f63e</item>
+        <item>1f648</item>
+        <item>1f649</item>
+        <item>1f64a</item>
+        <item>1f466</item>
+        <item>1f467</item>
+        <item>1f468</item>
+        <item>1f469</item>
+        <item>1f474</item>
+        <item>1f475</item>
+        <item>1f476</item>
+        <item>1f471</item>
+        <item>1f46e</item>
+        <item>1f472</item>
+        <item>1f473</item>
+        <item>1f477</item>
+        <!-- Removed for lack of color glyph support.  <item>26d1</item>  -->
+        <item>1f478</item>
+        <item>1f482</item>
+        <item>1f575</item>
+        <item>1f385</item>
+        <item>1f47c</item>
+        <item>1f46f</item>
+        <item>1f486</item>
+        <item>1f487</item>
+        <item>1f470</item>
+        <item>1f64d</item>
+        <item>1f64e</item>
+        <item>1f645</item>
+        <item>1f646</item>
+        <item>1f481</item>
+        <item>1f64b</item>
+        <item>1f647</item>
+        <item>1f64c</item>
+        <item>1f64f</item>
+        <item>1f5e3</item>
+        <item>1f464</item>
+        <item>1f465</item>
+        <item>1f6b6</item>
+        <item>1f3c3</item>
+        <item>1f483</item>
+        <item>1f574</item>
+        <item>1f46b</item>
+        <item>1f46c</item>
+        <item>1f46d</item>
+        <item>1f48f</item>
+        <item>1f468,200d,2764,fe0f,200d,1f48b,200d,1f468</item>
+        <item>1f469,200d,2764,fe0f,200d,1f48b,200d,1f469</item>
+        <item>1f491</item>
+        <item>1f468,200d,2764,fe0f,200d,1f468</item>
+        <item>1f469,200d,2764,fe0f,200d,1f469</item>
+        <item>1f46a</item>
+        <item>1f468,200d,1f468,200d,1f466</item>
+        <item>1f468,200d,1f468,200d,1f466,200d,1f466</item>
+        <item>1f468,200d,1f468,200d,1f467</item>
+        <item>1f468,200d,1f468,200d,1f467,200d,1f466</item>
+        <item>1f468,200d,1f468,200d,1f467,200d,1f467</item>
+        <item>1f468,200d,1f469,200d,1f466</item>
+        <item>1f468,200d,1f469,200d,1f466,200d,1f466</item>
+        <item>1f468,200d,1f469,200d,1f467</item>
+        <item>1f468,200d,1f469,200d,1f467,200d,1f466</item>
+        <item>1f468,200d,1f469,200d,1f467,200d,1f467</item>
+        <item>1f469,200d,1f469,200d,1f466</item>
+        <item>1f469,200d,1f469,200d,1f466,200d,1f466</item>
+        <item>1f469,200d,1f469,200d,1f467</item>
+        <item>1f469,200d,1f469,200d,1f467,200d,1f466</item>
+        <item>1f469,200d,1f469,200d,1f467,200d,1f467</item>
+        <!-- Removed for lack of color glyph support.  <item>1f3fb</item>  -->
+        <!-- Removed for lack of color glyph support.  <item>1f3fc</item>  -->
+        <!-- Removed for lack of color glyph support.  <item>1f3fd</item>  -->
+        <!-- Removed for lack of color glyph support.  <item>1f3fe</item>  -->
+        <!-- Removed for lack of color glyph support.  <item>1f3ff</item>  -->
+        <item>1f4aa</item>
+        <item>1f448</item>
+        <item>1f449</item>
+        <item>261d</item>
+        <item>1f446</item>
+        <item>1f595</item>
+        <item>1f447</item>
+        <item>270c</item>
+        <item>1f596</item>
+        <item>1f918</item>
+        <item>1f590</item>
+        <item>270a</item>
+        <item>270b</item>
+        <item>1f44a</item>
+        <item>1f44c</item>
+        <item>1f44d</item>
+        <item>1f44e</item>
+        <item>1f44b</item>
+        <item>1f44f</item>
+        <item>1f450</item>
+        <!-- Removed for lack of color glyph support.  <item>270d</item>  -->
+        <item>1f485</item>
+        <item>1f442</item>
+        <item>1f443</item>
+        <item>1f463</item>
+        <item>1f440</item>
+        <item>1f441</item>
+        <item>1f445</item>
+        <item>1f444</item>
+        <item>1f48b</item>
+        <item>1f498</item>
+        <item>2764</item>
+        <item>1f493</item>
+        <item>1f494</item>
+        <item>1f495</item>
+        <item>1f496</item>
+        <item>1f497</item>
+        <item>1f499</item>
+        <item>1f49a</item>
+        <item>1f49b</item>
+        <item>1f49c</item>
+        <item>1f49d</item>
+        <item>1f49e</item>
+        <item>1f49f</item>
+        <!-- Removed for lack of color glyph support.  <item>2763</item>  -->
+        <item>1f48c</item>
+        <item>1f4a4</item>
+        <item>1f4a2</item>
+        <item>1f4a3</item>
+        <item>1f4a5</item>
+        <item>1f4a6</item>
+        <item>1f4a8</item>
+        <item>1f4ab</item>
+        <item>1f4ac</item>
+        <item>1f5e8</item>
+        <item>1f5ef</item>
+        <item>1f4ad</item>
+        <item>1f441,200d,1f5e8</item>
+        <item>1f573</item>
+        <item>1f453</item>
+        <item>1f576</item>
+        <item>1f454</item>
+        <item>1f455</item>
+        <item>1f456</item>
+        <item>1f457</item>
+        <item>1f458</item>
+        <item>1f459</item>
+        <item>1f45a</item>
+        <item>1f45b</item>
+        <item>1f45c</item>
+        <item>1f45d</item>
+        <item>1f6cd</item>
+        <item>1f392</item>
+        <item>1f45e</item>
+        <item>1f45f</item>
+        <item>1f460</item>
+        <item>1f461</item>
+        <item>1f462</item>
+        <item>1f451</item>
+        <item>1f452</item>
+        <item>1f3a9</item>
+        <item>1f393</item>
+        <item>1f4ff</item>
+        <item>1f484</item>
+        <item>1f48d</item>
+        <item>1f48e</item>
+    </array>
+</resources>

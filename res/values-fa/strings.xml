@@ -157,7 +157,6 @@
     <string name="setup_finish_action" msgid="276559243409465389">"تمام شد"</string>
     <string name="show_setup_wizard_icon" msgid="5008028590593710830">"نمایش نماد برنامه"</string>
     <string name="show_setup_wizard_icon_summary" msgid="4119998322536880213">"نمایش نماد برنامه در راه‌انداز"</string>
-    <string name="app_name" msgid="6320102637491234792">"ارائه‌دهنده واژه‌نامه"</string>
     <string name="dictionary_provider_name" msgid="3027315045397363079">"ارائه‌دهنده واژه‌نامه"</string>
     <string name="dictionary_service_name" msgid="6237472350693511448">"خدمات واژه‌نامه"</string>
     <string name="download_description" msgid="6014835283119198591">"اطلاعات به‌روزرسانی واژه‌نامه"</string>
@@ -230,4 +229,5 @@
     <string name="use_slash">برو بریم!</string>
     <string name="use_slash_info">راهاندازی تمام شد، حالا میتوانید با آگاه در هر برنامه‌ای جستجوی رنگ و با رنگ داشته باشید!</string>
     <string name="enable_layout">فعال سازی صفحه کلید</string>
+    <string name="app_name">صفحه کلید آگاه</string>
 </resources>
