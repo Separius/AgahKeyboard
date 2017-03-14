@@ -16,8 +16,6 @@
 
 package com.android.inputmethod.keyboard.internal;
 
-import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
-
 public final class GestureEnabler {
     private boolean mMainDictionaryAvailable;
     private boolean mGestureHandlingEnabledByInputField;

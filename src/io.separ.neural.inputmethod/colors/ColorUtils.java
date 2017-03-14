@@ -5,14 +5,7 @@ package io.separ.neural.inputmethod.colors;
  */
 
 import android.content.Context;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
-import android.os.PowerManager;
 import android.support.v4.view.ViewCompat;
 
 public class ColorUtils {

@@ -23,8 +23,10 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.TwoStatePreference;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
+import io.separ.neural.inputmethod.Utils.StatsUtils;
 import io.separ.neural.inputmethod.indic.AudioAndHapticFeedbackManager;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.indic.define.ProductionFlags;
@@ -97,6 +99,7 @@ public final class AdvancedSettingsFragment extends SubScreenFragment {
                 final String enableMetricsLoggingTitle = res.getString(
                         R.string.enable_metrics_logging, applicationName);
                 enableMetricsLogging.setTitle(enableMetricsLoggingTitle);
+                enableMetricsLogging.setOnPreferenceClickListener(new MyOnPreferenceClickListener(context));
             }
         } else {
             removePreference(Settings.PREF_ENABLE_METRICS_LOGGING);
@@ -142,40 +145,7 @@ public final class AdvancedSettingsFragment extends SubScreenFragment {
         }
         final SharedPreferences prefs = getSharedPreferences();
         final Resources res = getResources();
-        pref.setInterface(new SeekBarDialogPreference.ValueProxy() {
-            @Override
-            public void writeValue(final int value, final String key) {
-                prefs.edit().putInt(key, value).apply();
-            }
-
-            @Override
-            public void writeDefaultValue(final String key) {
-                prefs.edit().remove(key).apply();
-            }
-
-            @Override
-            public int readValue(final String key) {
-                return Settings.readKeypressVibrationDuration(prefs, res);
-            }
-
-            @Override
-            public int readDefaultValue(final String key) {
-                return Settings.readDefaultKeypressVibrationDuration(res);
-            }
-
-            @Override
-            public void feedbackValue(final int value) {
-                AudioAndHapticFeedbackManager.getInstance().vibrate(value);
-            }
-
-            @Override
-            public String getValueText(final int value) {
-                if (value < 0) {
-                    return res.getString(R.string.settings_system_default);
-                }
-                return res.getString(R.string.abbreviation_unit_milliseconds, value);
-            }
-        });
+        pref.setInterface(new MyValueProxy(prefs, res));
     }
 
     private void setupKeypressSoundVolumeSettings() {
@@ -187,50 +157,120 @@ public final class AdvancedSettingsFragment extends SubScreenFragment {
         final SharedPreferences prefs = getSharedPreferences();
         final Resources res = getResources();
         final AudioManager am = (AudioManager)getActivity().getSystemService(Context.AUDIO_SERVICE);
-        pref.setInterface(new SeekBarDialogPreference.ValueProxy() {
-            private static final float PERCENTAGE_FLOAT = 100.0f;
+        pref.setInterface(new MyValueProxy2(prefs, res, am));
+    }
 
-            private float getValueFromPercentage(final int percentage) {
-                return percentage / PERCENTAGE_FLOAT;
-            }
+    private static class MyOnPreferenceClickListener implements Preference.OnPreferenceClickListener {
+        private final Context context;
 
-            private int getPercentageFromValue(final float floatValue) {
-                return (int)(floatValue * PERCENTAGE_FLOAT);
-            }
+        public MyOnPreferenceClickListener(Context context) {
+            this.context = context;
+        }
 
-            @Override
-            public void writeValue(final int value, final String key) {
-                prefs.edit().putFloat(key, getValueFromPercentage(value)).apply();
-            }
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(Settings.PREF_ENABLE_METRICS_LOGGING, preference.isEnabled()).apply();
+            if(StatsUtils.hasInstance())
+                StatsUtils.getInstance().updateLogging();
+            return false;
+        }
+    }
 
-            @Override
-            public void writeDefaultValue(final String key) {
-                prefs.edit().remove(key).apply();
-            }
+    private static class MyValueProxy implements SeekBarDialogPreference.ValueProxy {
+        private final SharedPreferences prefs;
+        private final Resources res;
 
-            @Override
-            public int readValue(final String key) {
-                return getPercentageFromValue(Settings.readKeypressSoundVolume(prefs, res));
-            }
+        public MyValueProxy(SharedPreferences prefs, Resources res) {
+            this.prefs = prefs;
+            this.res = res;
+        }
 
-            @Override
-            public int readDefaultValue(final String key) {
-                return getPercentageFromValue(Settings.readDefaultKeypressSoundVolume(res));
-            }
+        @Override
+        public void writeValue(final int value, final String key) {
+            prefs.edit().putInt(key, value).apply();
+        }
 
-            @Override
-            public String getValueText(final int value) {
-                if (value < 0) {
-                    return res.getString(R.string.settings_system_default);
-                }
-                return Integer.toString(value);
-            }
+        @Override
+        public void writeDefaultValue(final String key) {
+            prefs.edit().remove(key).apply();
+        }
 
-            @Override
-            public void feedbackValue(final int value) {
-                am.playSoundEffect(
-                        AudioManager.FX_KEYPRESS_STANDARD, getValueFromPercentage(value));
+        @Override
+        public int readValue(final String key) {
+            return Settings.readKeypressVibrationDuration(prefs, res);
+        }
+
+        @Override
+        public int readDefaultValue(final String key) {
+            return Settings.readDefaultKeypressVibrationDuration(res);
+        }
+
+        @Override
+        public void feedbackValue(final int value) {
+            AudioAndHapticFeedbackManager.getInstance().vibrate(value);
+        }
+
+        @Override
+        public String getValueText(final int value) {
+            if (value < 0) {
+                return res.getString(R.string.settings_system_default);
             }
-        });
+            return res.getString(R.string.abbreviation_unit_milliseconds, value);
+        }
+    }
+
+    private static class MyValueProxy2 implements SeekBarDialogPreference.ValueProxy {
+        private static final float PERCENTAGE_FLOAT = 100.0f;
+        private final SharedPreferences prefs;
+        private final Resources res;
+        private final AudioManager am;
+
+        public MyValueProxy2(SharedPreferences prefs, Resources res, AudioManager am) {
+            this.prefs = prefs;
+            this.res = res;
+            this.am = am;
+        }
+
+        private float getValueFromPercentage(final int percentage) {
+            return percentage / PERCENTAGE_FLOAT;
+        }
+
+        private int getPercentageFromValue(final float floatValue) {
+            return (int)(floatValue * PERCENTAGE_FLOAT);
+        }
+
+        @Override
+        public void writeValue(final int value, final String key) {
+            prefs.edit().putFloat(key, getValueFromPercentage(value)).apply();
+        }
+
+        @Override
+        public void writeDefaultValue(final String key) {
+            prefs.edit().remove(key).apply();
+        }
+
+        @Override
+        public int readValue(final String key) {
+            return getPercentageFromValue(Settings.readKeypressSoundVolume(prefs, res));
+        }
+
+        @Override
+        public int readDefaultValue(final String key) {
+            return getPercentageFromValue(Settings.readDefaultKeypressSoundVolume(res));
+        }
+
+        @Override
+        public String getValueText(final int value) {
+            if (value < 0) {
+                return res.getString(R.string.settings_system_default);
+            }
+            return Integer.toString(value);
+        }
+
+        @Override
+        public void feedbackValue(final int value) {
+            am.playSoundEffect(
+                    AudioManager.FX_KEYPRESS_STANDARD, getValueFromPercentage(value));
+        }
     }
 }

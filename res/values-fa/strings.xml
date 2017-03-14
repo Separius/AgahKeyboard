@@ -139,7 +139,7 @@
     <string name="prefs_enable_emoji_alt_physical_key" msgid="5963640002335470112">"اموجی برای صفحه‌کلید فیزیکی"</string>
     <string name="prefs_enable_emoji_alt_physical_key_summary" msgid="5259484820941627827">"‏کلید Alt صفحه‌کلید فیزیکی، پالت اموجی را نشان می‌دهد"</string>
     <string name="button_default" msgid="3988017840431881491">"پیش‌فرض"</string>
-    <string name="setup_welcome_title" msgid="6112821709832031715">"به NeuralKey خوش آمدید"</string>
+    <string name="setup_welcome_title" msgid="6112821709832031715">"به کیبورد آگاه خوش آمدید"</string>
     <string name="setup_welcome_additional_description" msgid="8150252008545768953">"با ورودی اشاره‌ای"</string>
     <string name="setup_start_action" msgid="8936036460897347708">"شروع به کار"</string>
     <string name="setup_next_action" msgid="371821437915144603">"مرحله بعد"</string>
@@ -211,4 +211,23 @@
     <string name="pemission_message">"بعضی از قابلیت‌ها بدون این اجازه‌ها کار نخواهند کرد"</string>
     <string name="select_your_languages">"زبان‌های خود را انتخاب کنید"</string>
     <string name="languages">\"زبان‌ها\"</string>
+    <string name="allow_permission">\"اجازه دهید\"</string>
+    <string name="contacts_permission">آگاه نیاز به دسترسی به مخاطبان شما برای اشتراک گذاری دارد</string>
+    <string name="enable_slash">\"فعال سازی آگاه\"</string>
+    <string name="enable_slash_info">در تنظیمات <font color="black">زبان و صفحه کلید</font> گزینه کنار کیبورد آگاه را انتخاب کنید</string>
+    <string name="keyboard_theme_adaptive">تغییر کننده با برنامه</string>
+    <string name="keyboard_theme_black">سیاه</string>
+    <string name="keyboard_theme_my">مال من</string>
+    <string name="rate_app">امتیاز دهی</string>
+    <string name="select">hkjohf</string>
+    <string name="service_result_empty">جوابی یافت نشد</string>
+    <string name="service_result_network_problem">نتوانستم به اینترنت وصل شوم، برای تلاش مجدد بر من کلیک کنید</string>
+    <string name="service_result_problem">به مشکل خوردیم، برای تلاش مجدد بر من کلیک کنید</string>
+    <string name="set_as_default_theme">به عنوان حالت پیش‌فرض</string>
+    <string name="share_app">اشتراک گذاری</string>
+    <string name="switch_to_slash">تغییر به آگاه</string>
+    <string name="switch_to_slash_info">در پنجره <font color="black"> تغییر صفحه کلید </font> صفحه کلید آگاه را به عنوان صفحه کلید فعال خود انتخاب کنید</string>
+    <string name="use_slash">برو بریم!</string>
+    <string name="use_slash_info">راهاندازی تمام شد، حالا میتوانید با آگاه در هر برنامه‌ای جستجوی رنگ و با رنگ داشته باشید!</string>
+    <string name="enable_layout">فعال سازی صفحه کلید</string>
 </resources>

@@ -5,8 +5,6 @@ import com.google.gson.GsonBuilder;
 import io.separ.neural.inputmethod.Utils.DeviceUuidFactory;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
-import retrofit.android.AndroidLog;
-import retrofit.client.Client;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 

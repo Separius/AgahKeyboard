@@ -19,7 +19,6 @@ package com.android.inputmethod.keyboard.internal;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 

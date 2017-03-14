@@ -2,7 +2,6 @@ package com.android.inputmethod.keyboard.top;
 
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.android.inputmethod.keyboard.top.actionrow.ActionRowView;
 import com.android.inputmethod.keyboard.top.services.ServiceResultsView;

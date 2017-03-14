@@ -15,7 +15,7 @@ public class EventBusExt {
     public static class ErrorListener {
 
         /* renamed from: co.touchlab.android.threading.eventbus.EventBusExt.ErrorListener.1 */
-        class C03411 extends Thread {
+        static class C03411 extends Thread {
             final /* synthetic */ Throwable val$throwable;
 
             C03411(Throwable th) {

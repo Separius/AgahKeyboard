@@ -10,8 +10,8 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.crashlytics.android.Crashlytics;
+
 import io.fabric.sdk.android.Fabric;
-import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.slash.NeuralApplication;
 
 public class StartActivity extends AppCompatActivity {

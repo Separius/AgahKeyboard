@@ -18,7 +18,6 @@ package io.separ.neural.inputmethod.indic.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -179,12 +178,7 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         mContext = context;
         try {
             final SharedPreferences prefs = mPrefs;
-            final RunInLocale<SettingsValues> job = new RunInLocale<SettingsValues>() {
-                @Override
-                protected SettingsValues job(final Resources res) {
-                    return new SettingsValues(context, prefs, res, inputAttributes);
-                }
-            };
+            final RunInLocale<SettingsValues> job = new SettingsValuesRunInLocale(context, prefs, inputAttributes);
             mSettingsValues = job.runInLocale(mRes, locale);
         } finally {
             mSettingsValuesLock.unlock();
@@ -439,5 +433,22 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     public static int readLastShownEmojiCategoryId(
             final SharedPreferences prefs, final int defValue) {
         return prefs.getInt(PREF_LAST_SHOWN_EMOJI_CATEGORY_ID, defValue);
+    }
+
+    private static class SettingsValuesRunInLocale extends RunInLocale<SettingsValues> {
+        private final Context context;
+        private final SharedPreferences prefs;
+        private final InputAttributes inputAttributes;
+
+        public SettingsValuesRunInLocale(Context context, SharedPreferences prefs, InputAttributes inputAttributes) {
+            this.context = context;
+            this.prefs = prefs;
+            this.inputAttributes = inputAttributes;
+        }
+
+        @Override
+        protected SettingsValues job(final Resources res) {
+            return new SettingsValues(context, prefs, res, inputAttributes);
+        }
     }
 }

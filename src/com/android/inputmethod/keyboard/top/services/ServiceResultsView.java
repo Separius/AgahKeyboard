@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -52,6 +51,13 @@ public class ServiceResultsView extends LinearLayout implements ColorManager.OnC
     public void onColorChange(ColorProfile colorProfile) {
         setBackgroundColor(colorProfile.getSecondary());
         mSourceError.setTextColor(colorProfile.getIconOnSecondary());
+    }
+
+    private static class MyOnClickListener implements OnClickListener {
+        @Override
+        public void onClick(View view) {
+            EventBusExt.getDefault().post(new ServiceExitEvent());
+        }
     }
 
     /*class C04621 implements OnClickListener {
@@ -190,7 +196,7 @@ public class ServiceResultsView extends LinearLayout implements ColorManager.OnC
         init(context, attrs, defStyleAttr);
     }
 
-    class C04621 implements OnClickListener {
+    static class C04621 implements OnClickListener {
         C04621() {
         }
 
@@ -218,12 +224,7 @@ public class ServiceResultsView extends LinearLayout implements ColorManager.OnC
         //mSearchContainer.setBackgroundColor(Color.WHITE);
         this.mSearchPlaceholder = (ImageView) findViewById(R.id.search_placeholder);
         //mSearchPlaceholder.setColorFilter(Color.BLACK);
-        mSearchPlaceholder.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EventBusExt.getDefault().post(new ServiceExitEvent());
-            }
-        });
+        mSearchPlaceholder.setOnClickListener(new MyOnClickListener());
         this.mSearchMirror = (EditText) findViewById(R.id.slash_search_mirror);
         mSearchMirror.setCursorVisible(true);
         mSearchMirror.requestFocus();

@@ -72,7 +72,6 @@ import io.separ.neural.inputmethod.indic.settings.SettingsValuesForSuggestion;
 import io.separ.neural.inputmethod.indic.settings.SpacingAndPunctuations;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripViewAccessor;
 import io.separ.neural.inputmethod.slash.EventBusExt;
-import io.separ.neural.inputmethod.slash.RServiceItem;
 
 import static io.separ.neural.inputmethod.event.InputTransaction.SHIFT_UPDATE_NOW;
 

@@ -42,9 +42,6 @@ import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.indic.define.DebugFlags;
 import io.separ.neural.inputmethod.indic.settings.Settings;
 
-import static io.separ.neural.inputmethod.indic.Constants.CODE_SPACE;
-import static java.lang.Math.abs;
-
 public final class PointerTracker implements PointerTrackerQueue.Element,
         BatchInputArbiterListener {
     private static final String TAG = PointerTracker.class.getSimpleName();

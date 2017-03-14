@@ -2,7 +2,6 @@ package io.separ.neural.inputmethod.slash;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;

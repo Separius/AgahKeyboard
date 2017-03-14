@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import io.separ.neural.inputmethod.slash.RImage;
 import io.separ.neural.inputmethod.slash.RSearchItem;
 
-import static io.separ.neural.inputmethod.slash.RSearchItem.DEFAULT_TYPE;
-import static io.separ.neural.inputmethod.slash.RSearchItem.GENERIC_MESSAGE_TYPE;
 import static io.separ.neural.inputmethod.slash.RSearchItem.MEDIA_TYPE;
 
 /**

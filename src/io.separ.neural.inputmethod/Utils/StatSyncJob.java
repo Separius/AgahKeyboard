@@ -2,7 +2,6 @@ package io.separ.neural.inputmethod.Utils;
 
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
@@ -32,13 +31,10 @@ public class StatSyncJob extends Job {
     }
 
     public static Result doSend(){
-        Log.i("SEPAR_COLLECT", "onRunJobCalled");
-        if(StatsUtils.hasInstance() == false) {
-            Log.i("SEPAR_COLLECT", "!hasInstance");
+        if(StatsUtils.hasInstance() == false)
             return Result.SUCCESS;
-        }else{
-            Log.i("SEPAR_COLLECT", "hasInstance");
-        }
+        if(!StatsUtils.getInstance().isMetricEnable)
+            return Result.SUCCESS;
         final OkHttpClient client = new OkHttpClient();
         List<Protocol> protocolList = new ArrayList<>();
         protocolList.add(Protocol.HTTP_1_1);
@@ -60,10 +56,6 @@ public class StatSyncJob extends Job {
         //Request request = new Request.Builder().url("https://agahkey.ir/collection").method("POST", RequestBody.create(null, new byte[0])).post(requestBody).build();
         try {
             Response response = client.newCall(request).execute();
-            if (response.isSuccessful())
-                Log.i("SEPAR_COLLECT", "success");
-            else
-                Log.i("SEPAR_COLLECT", "failed");
             response.body().close();
         } catch (IOException e) {
             e.printStackTrace();

@@ -18,11 +18,9 @@ package com.android.inputmethod.keyboard.internal;
 
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.android.inputmethod.keyboard.PointerTracker;
 import com.android.inputmethod.latin.utils.CoordinateUtils;

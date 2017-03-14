@@ -176,12 +176,7 @@ public final class TextDecoratorUi implements TextDecoratorUiOperator {
 
     @Override
     public void setOnClickListener(final Runnable listener) {
-        mTouchEventWindowClickListenerView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(final View arg0) {
-                listener.run();
-            }
-        });
+        mTouchEventWindowClickListenerView.setOnClickListener(new MyOnClickListener(listener));
     }
 
     private static class IndicatorView extends View {
@@ -257,6 +252,19 @@ public final class TextDecoratorUi implements TextDecoratorUiOperator {
                     R.integer.text_decorator_add_to_dictionary_indicator_path_size,
                     R.color.text_decorator_add_to_dictionary_indicator_background_color,
                     R.color.text_decorator_add_to_dictionary_indicator_foreground_color);
+        }
+    }
+
+    private static class MyOnClickListener implements OnClickListener {
+        private final Runnable listener;
+
+        public MyOnClickListener(Runnable listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void onClick(final View arg0) {
+            listener.run();
         }
     }
 }

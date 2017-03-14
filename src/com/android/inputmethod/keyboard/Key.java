@@ -46,7 +46,6 @@ import static com.android.inputmethod.keyboard.internal.KeyboardIconsSet.ICON_UN
 import static io.separ.neural.inputmethod.indic.Constants.CODE_DELETE;
 import static io.separ.neural.inputmethod.indic.Constants.CODE_OUTPUT_TEXT;
 import static io.separ.neural.inputmethod.indic.Constants.CODE_SHIFT;
-import static io.separ.neural.inputmethod.indic.Constants.CODE_SPACE;
 import static io.separ.neural.inputmethod.indic.Constants.CODE_SWITCH_ALPHA_SYMBOL;
 import static io.separ.neural.inputmethod.indic.Constants.CODE_UNSPECIFIED;
 

@@ -17,7 +17,7 @@ public class SmartKeyboardFragment extends AnimatedBackgroundGradientFragment {
     private AppCompatCheckBox checkBox;
 
     /* renamed from: org.smc.inputmethod.indic.appintro.SmartKeyboardFragment.1 */
-    class C06081 implements OnCheckedChangeListener {
+    static class C06081 implements OnCheckedChangeListener {
         final /* synthetic */ WebView val$webView;
 
         C06081(WebView webView) {

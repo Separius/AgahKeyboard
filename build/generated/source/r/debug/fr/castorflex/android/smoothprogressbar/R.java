@@ -48,17 +48,17 @@ public final class R {
 		public static final int spb_default_sections_count = 0x7f0b003b;
 	}
 	public static final class string {
-		public static final int define_smoothprogressbar = 0x7f08055a;
-		public static final int library_smoothprogressbar_author = 0x7f08057c;
-		public static final int library_smoothprogressbar_authorWebsite = 0x7f08057d;
-		public static final int library_smoothprogressbar_isOpenSource = 0x7f08057e;
-		public static final int library_smoothprogressbar_libraryDescription = 0x7f08057f;
-		public static final int library_smoothprogressbar_libraryName = 0x7f080580;
-		public static final int library_smoothprogressbar_libraryVersion = 0x7f080581;
-		public static final int library_smoothprogressbar_libraryWebsite = 0x7f080582;
-		public static final int library_smoothprogressbar_licenseId = 0x7f080583;
-		public static final int library_smoothprogressbar_repositoryLink = 0x7f080584;
-		public static final int spb_default_speed = 0x7f0805a9;
+		public static final int define_smoothprogressbar = 0x7f08056b;
+		public static final int library_smoothprogressbar_author = 0x7f080588;
+		public static final int library_smoothprogressbar_authorWebsite = 0x7f080589;
+		public static final int library_smoothprogressbar_isOpenSource = 0x7f08058a;
+		public static final int library_smoothprogressbar_libraryDescription = 0x7f08058b;
+		public static final int library_smoothprogressbar_libraryName = 0x7f08058c;
+		public static final int library_smoothprogressbar_libraryVersion = 0x7f08058d;
+		public static final int library_smoothprogressbar_libraryWebsite = 0x7f08058e;
+		public static final int library_smoothprogressbar_licenseId = 0x7f08058f;
+		public static final int library_smoothprogressbar_repositoryLink = 0x7f080590;
+		public static final int spb_default_speed = 0x7f0805af;
 	}
 	public static final class style {
 		public static final int SmoothProgressBar = 0x7f0c001e;

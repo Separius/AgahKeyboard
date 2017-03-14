@@ -5,11 +5,6 @@ package io.separ.neural.inputmethod.colors;
  */
 
 import android.content.Context;
-import android.graphics.Color;
-import android.preference.PreferenceManager;
-import android.util.Log;
-
-import com.android.inputmethod.keyboard.KeyboardTheme;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,13 +1,8 @@
 package io.separ.neural.inputmethod.slash;
 
 import android.os.Handler;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.inputmethod.keyboard.top.services.ServiceResultsView;
-import com.android.inputmethod.keyboard.top.services.tenor.TenorApiManager;
-
-import java.util.Random;
 
 /**
  * Created by sepehr on 3/2/17.
@@ -19,7 +14,7 @@ public class ServiceRequestManager {
     private Handler handler;
     private TaskRunnable request;
 
-    public abstract class TaskRunnable implements Runnable {
+    public abstract static class TaskRunnable implements Runnable {
 
         /* renamed from: co.touchlab.inputmethod.latin.monkey.ServiceRequestManager.TaskRunnable.1 */
         class C04111 implements BaseTaskQueue.QueueQuery {

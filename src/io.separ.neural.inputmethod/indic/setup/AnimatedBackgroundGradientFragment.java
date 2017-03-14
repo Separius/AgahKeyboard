@@ -3,8 +3,10 @@ package io.separ.neural.inputmethod.indic.setup;
 /**
  * Created by sepehr on 1/27/17.
  */
+
 import android.graphics.drawable.TransitionDrawable;
 import android.support.v4.app.Fragment;
+
 import java.util.Timer;
 import java.util.TimerTask;
 

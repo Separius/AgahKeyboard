@@ -3,6 +3,7 @@ package io.separ.neural.inputmethod.indic.setup;
 /**
  * Created by sepehr on 1/27/17.
  */
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,6 +12,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import io.separ.neural.inputmethod.indic.R;
 
 import static io.separ.neural.inputmethod.Utils.SizeUtils.pxFromDp;

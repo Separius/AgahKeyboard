@@ -204,13 +204,7 @@ public final class SubtypeSwitcher {
             return;
         }
         final InputMethodManager imm = mRichImm.getInputMethodManager();
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                imm.setInputMethodAndSubtype(token, imiId, subtype);
-                return null;
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new VoidVoidVoidAsyncTask(imm, token, imiId, subtype).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public boolean isShortcutImeEnabled() {
@@ -323,5 +317,25 @@ public final class SubtypeSwitcher {
 
     public String getCombiningRulesExtraValueOfCurrentSubtype() {
         return SubtypeLocaleUtils.getCombiningRulesExtraValue(getCurrentSubtype());
+    }
+
+    private static class VoidVoidVoidAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final InputMethodManager imm;
+        private final IBinder token;
+        private final String imiId;
+        private final InputMethodSubtype subtype;
+
+        public VoidVoidVoidAsyncTask(InputMethodManager imm, IBinder token, String imiId, InputMethodSubtype subtype) {
+            this.imm = imm;
+            this.token = token;
+            this.imiId = imiId;
+            this.subtype = subtype;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            imm.setInputMethodAndSubtype(token, imiId, subtype);
+            return null;
+        }
     }
 }

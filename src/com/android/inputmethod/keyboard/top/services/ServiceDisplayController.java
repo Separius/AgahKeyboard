@@ -4,10 +4,6 @@ package com.android.inputmethod.keyboard.top.services;
  * Created by sepehr on 3/2/17.
  */
 
-import android.view.View;
-
-import io.separ.neural.inputmethod.indic.R;
-
 public class ServiceDisplayController {
     /*private final ServiceResultsView mServiceResultsView;
 

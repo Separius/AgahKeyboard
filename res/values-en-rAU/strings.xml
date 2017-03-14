@@ -139,7 +139,7 @@
     <string name="prefs_enable_emoji_alt_physical_key" msgid="5963640002335470112">"Emoji for physical keyboard"</string>
     <string name="prefs_enable_emoji_alt_physical_key_summary" msgid="5259484820941627827">"Physical Alt key shows the emoji palette"</string>
     <string name="button_default" msgid="3988017840431881491">"Default"</string>
-    <string name="setup_welcome_title" msgid="6112821709832031715">"Welcome to <xliff:g id="APPLICATION_NAME">%s</xliff:g>"</string>
+    <string name="setup_welcome_title" msgid="6112821709832031715">"Welcome to Agah Keyboard"</string>
     <string name="setup_welcome_additional_description" msgid="8150252008545768953">"with Gesture Typing"</string>
     <string name="setup_start_action" msgid="8936036460897347708">"Get started"</string>
     <string name="setup_next_action" msgid="371821437915144603">"Next step"</string>
@@ -152,7 +152,6 @@
     <string name="setup_step2_instruction" msgid="9141481964870023336">"Next, select \"<xliff:g id="APPLICATION_NAME">%s</xliff:g>\" as your active text-input method."</string>
     <string name="setup_step2_action" msgid="1660330307159824337">"Switch input methods"</string>
     <string name="setup_step3_title" msgid="3154757183631490281">"Congratulations, you\'re all set!"</string>
-    <string name="setup_step3_instruction" msgid="8025981829605426000">"Now you can type in all your favourite apps with <xliff:g id="APPLICATION_NAME">%s</xliff:g>."</string>
     <string name="setup_step3_action" msgid="600879797256942259">"Configure additional languages"</string>
     <string name="setup_finish_action" msgid="276559243409465389">"Finished"</string>
     <string name="show_setup_wizard_icon" msgid="5008028590593710830">"Show app icon"</string>

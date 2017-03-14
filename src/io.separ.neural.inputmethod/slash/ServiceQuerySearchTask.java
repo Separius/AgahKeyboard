@@ -3,7 +3,6 @@ package io.separ.neural.inputmethod.slash;
 import android.content.Context;
 import android.location.Location;
 import android.text.TextUtils;
-import android.util.Log;
 
 import io.nlopez.smartlocation.SmartLocation;
 

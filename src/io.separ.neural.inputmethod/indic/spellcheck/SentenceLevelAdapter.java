@@ -78,12 +78,7 @@ public class SentenceLevelAdapter {
         private final SpacingAndPunctuations mSpacingAndPunctuations;
         public WordIterator(final Resources res, final Locale locale) {
             final RunInLocale<SpacingAndPunctuations> job
-                    = new RunInLocale<SpacingAndPunctuations>() {
-                @Override
-                protected SpacingAndPunctuations job(final Resources res) {
-                    return new SpacingAndPunctuations(res);
-                }
-            };
+                    = new SpacingAndPunctuationsRunInLocale();
             mSpacingAndPunctuations = job.runInLocale(res, locale);
         }
 
@@ -126,6 +121,13 @@ public class SentenceLevelAdapter {
                 index += Character.charCount(codePoint);
             }
             return -1;
+        }
+
+        private static class SpacingAndPunctuationsRunInLocale extends RunInLocale<SpacingAndPunctuations> {
+            @Override
+            protected SpacingAndPunctuations job(final Resources res) {
+                return new SpacingAndPunctuations(res);
+            }
         }
     }
 

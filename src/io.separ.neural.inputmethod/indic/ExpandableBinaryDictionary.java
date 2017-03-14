@@ -179,27 +179,7 @@ abstract public class ExpandableBinaryDictionary extends Dictionary {
     // Execute task with lock when the result of preCheckTask is true or preCheckTask is null.
     private void asyncPreCheckAndExecuteTaskWithLock(final Lock lock,
             final Callable<Boolean> preCheckTask, final Runnable task) {
-        ExecutorUtils.getExecutor(mDictName).execute(new Runnable() {
-            @Override
-            public void run() {
-                if (preCheckTask != null) {
-                    try {
-                        if (!preCheckTask.call()) {
-                            return;
-                        }
-                    } catch (final Exception e) {
-                        Log.e(TAG, "The pre check task throws an exception.", e);
-                        return;
-                    }
-                }
-                lock.lock();
-                try {
-                    task.run();
-                } finally {
-                    lock.unlock();
-                }
-            }
-        });
+        ExecutorUtils.getExecutor(mDictName).execute(new MyRunnable(preCheckTask, lock, task));
     }
 
     /**
@@ -645,12 +625,7 @@ abstract public class ExpandableBinaryDictionary extends Dictionary {
     @UsedForTesting
     public void waitAllTasksForTests() {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
-        ExecutorUtils.getExecutor(mDictName).execute(new Runnable() {
-            @Override
-            public void run() {
-                countDownLatch.countDown();
-            }
-        });
+        ExecutorUtils.getExecutor(mDictName).execute(new MyRunnable2(countDownLatch));
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {
@@ -693,5 +668,50 @@ abstract public class ExpandableBinaryDictionary extends Dictionary {
                 } while (token != 0);
             }
         });
+    }
+
+    private static class MyRunnable implements Runnable {
+        private final Callable<Boolean> preCheckTask;
+        private final Lock lock;
+        private final Runnable task;
+
+        public MyRunnable(Callable<Boolean> preCheckTask, Lock lock, Runnable task) {
+            this.preCheckTask = preCheckTask;
+            this.lock = lock;
+            this.task = task;
+        }
+
+        @Override
+        public void run() {
+            if (preCheckTask != null) {
+                try {
+                    if (!preCheckTask.call()) {
+                        return;
+                    }
+                } catch (final Exception e) {
+                    Log.e(TAG, "The pre check task throws an exception.", e);
+                    return;
+                }
+            }
+            lock.lock();
+            try {
+                task.run();
+            } finally {
+                lock.unlock();
+            }
+        }
+    }
+
+    private static class MyRunnable2 implements Runnable {
+        private final CountDownLatch countDownLatch;
+
+        public MyRunnable2(CountDownLatch countDownLatch) {
+            this.countDownLatch = countDownLatch;
+        }
+
+        @Override
+        public void run() {
+            countDownLatch.countDown();
+        }
     }
 }

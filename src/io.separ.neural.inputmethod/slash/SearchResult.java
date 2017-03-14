@@ -13,7 +13,7 @@ public class SearchResult {
     @SerializedName("results")
     public ArrayList<RSearchItem> results;
 
-    public class Meta {
+    public static class Meta {
         public String status;
     }
 

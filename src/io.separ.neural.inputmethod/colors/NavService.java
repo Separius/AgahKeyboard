@@ -28,6 +28,7 @@ import android.view.View.OnAttachStateChangeListener;
 import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+
 import com.android.inputmethod.keyboard.KeyboardSwitcher;
 
 public class NavService extends Service implements ColorManager.OnColorChange, OnAttachStateChangeListener {

@@ -39,5 +39,5 @@ public final class ProductionFlags {
     /**
      * When false, the metrics logging is not yet ready to be enabled.
      */
-    public static final boolean IS_METRICS_LOGGING_SUPPORTED = false;
+    public static final boolean IS_METRICS_LOGGING_SUPPORTED = true;
 }

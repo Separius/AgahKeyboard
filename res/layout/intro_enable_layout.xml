@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:neural="http://schemas.android.com/apk/res-auto">
-    <TextView android:textSize="30sp" android:textColor="@color/white" android:padding="20dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Enable the
-keyboard" android:textAllCaps="true" android:fontFamily="sans-serif-light" android:textAlignment="4" />
+    <TextView android:textSize="30sp" android:textColor="@color/white" android:padding="20dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/enable_layout" android:textAllCaps="true" android:fontFamily="sans-serif-light" android:textAlignment="4" />
     <LinearLayout android:orientation="vertical" android:padding="20dp" android:layout_width="match_parent" android:layout_height="wrap_content">
         <!--<ImageView android:padding="10dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:src="@drawable/arrow_down" />-->
         <io.separ.neural.inputmethod.indic.setup.EnableButtonLayout android:id="@id/auth" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_margin="10dp" neural:number="1" neural:buttonText="@string/authorization" />

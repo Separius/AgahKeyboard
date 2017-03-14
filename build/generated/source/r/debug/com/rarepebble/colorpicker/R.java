@@ -25,22 +25,22 @@ public final class R {
 		public static final int sliderWidth = 0x7f0a00b1;
 	}
 	public static final class drawable {
-		public static final int checker_background = 0x7f0200ad;
-		public static final int thumbnail_border = 0x7f0201ba;
+		public static final int checker_background = 0x7f0200a8;
+		public static final int thumbnail_border = 0x7f0201b1;
 	}
 	public static final class id {
-		public static final int alphaView = 0x7f100145;
+		public static final int alphaView = 0x7f100144;
 		public static final int colorPreview = 0x7f1000fb;
-		public static final int hexEdit = 0x7f100146;
-		public static final int hueSatView = 0x7f100143;
-		public static final int swatchView = 0x7f100142;
+		public static final int hexEdit = 0x7f100145;
+		public static final int hueSatView = 0x7f100142;
+		public static final int swatchView = 0x7f100141;
 		public static final int thumbnail = 0x7f1000fa;
-		public static final int valueView = 0x7f100144;
+		public static final int valueView = 0x7f100143;
 	}
 	public static final class layout {
 		public static final int color_preference_thumbnail = 0x7f03001e;
 		public static final int color_preference_thumbnail_disabled = 0x7f03001f;
-		public static final int picker = 0x7f03004e;
+		public static final int picker = 0x7f03004d;
 	}
 	public static final class styleable {
 		public static final int[] ColorPicker = { 0x7f0100b3, 0x7f0100b4, 0x7f0100b5, 0x7f0100b6 };

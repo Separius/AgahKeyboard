@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     android:layout_weight="10.0"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <LinearLayout android:gravity="center" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
-        <TextView android:textSize="30sp" android:textColor="@color/white" android:padding="30dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/setup_welcome_title" android:fontFamily="sans-serif-light" android:textAlignment="4" />
-        <ImageView android:layout_width="150dp" android:layout_height="150dp" android:layout_margin="10dp" android:src="@drawable/ic_launcher_keyboard" />
-    </LinearLayout>
+    <TextView android:textSize="30sp" android:textColor="@color/white" android:padding="30dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/setup_welcome_title" android:fontFamily="sans-serif-light" android:textAlignment="4" />
+    <ImageView android:layout_width="150dp" android:layout_height="150dp" android:layout_margin="10dp" android:src="@drawable/ic_launcher_keyboard" />
 </FrameLayout>

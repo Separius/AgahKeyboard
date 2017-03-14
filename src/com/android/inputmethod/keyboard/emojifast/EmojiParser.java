@@ -60,7 +60,7 @@ public class EmojiParser {
         return best;
     }
 
-    public class Candidate {
+    public static class Candidate {
 
         private final int           startIndex;
         private final int           endIndex;

@@ -10,9 +10,6 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
-
-import java.util.HashMap;
 
 import io.separ.neural.inputmethod.colors.ColorDatabase;
 import io.separ.neural.inputmethod.colors.ColorProfile;

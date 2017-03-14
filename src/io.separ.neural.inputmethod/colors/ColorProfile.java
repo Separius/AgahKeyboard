@@ -8,7 +8,6 @@ import android.graphics.Color;
 
 import static io.separ.neural.inputmethod.colors.ColorUtils.darkerColor;
 import static io.separ.neural.inputmethod.colors.ColorUtils.getColorDistance;
-import static io.separ.neural.inputmethod.colors.ColorUtils.isColorDark;
 import static io.separ.neural.inputmethod.colors.ColorUtils.lightColor;
 
 public class ColorProfile {

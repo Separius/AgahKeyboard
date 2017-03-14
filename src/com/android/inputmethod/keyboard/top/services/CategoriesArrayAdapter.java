@@ -6,9 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import io.separ.neural.inputmethod.Utils.ColorUtils;
-import io.separ.neural.inputmethod.colors.ColorManager;
-import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.slash.RCategory;
 

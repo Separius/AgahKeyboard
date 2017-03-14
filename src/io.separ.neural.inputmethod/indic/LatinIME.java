@@ -16,7 +16,6 @@
 
 package io.separ.neural.inputmethod.indic;
 
-import android.*;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -35,11 +34,9 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Debug;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -121,7 +118,6 @@ import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
 import io.separ.neural.inputmethod.annotations.UsedForTesting;
 import io.separ.neural.inputmethod.colors.ColorDatabase;
 import io.separ.neural.inputmethod.colors.ColorManager;
-import io.separ.neural.inputmethod.colors.HSVColorPickerDialog;
 import io.separ.neural.inputmethod.colors.NavManager;
 import io.separ.neural.inputmethod.compat.CursorAnchorInfoCompatWrapper;
 import io.separ.neural.inputmethod.compat.InputMethodServiceCompatUtils;
@@ -143,7 +139,6 @@ import io.separ.neural.inputmethod.indic.personalization.PersonalizationHelper;
 import io.separ.neural.inputmethod.indic.settings.Settings;
 import io.separ.neural.inputmethod.indic.settings.SettingsActivity;
 import io.separ.neural.inputmethod.indic.settings.SettingsValues;
-import io.separ.neural.inputmethod.indic.settings.StartActivity;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripView;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripViewAccessor;
 import io.separ.neural.inputmethod.slash.EventBusExt;
@@ -151,8 +146,6 @@ import io.separ.neural.inputmethod.slash.SearchResultsEvent;
 import io.separ.neural.inputmethod.slash.SearchRetryErrorEvent;
 import io.separ.neural.inputmethod.slash.ServiceRequestEvent;
 
-import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
-import static com.android.inputmethod.keyboard.KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED;
 import static io.separ.neural.inputmethod.colors.ColorManager.addObserver;
 import static io.separ.neural.inputmethod.colors.ColorManager.getLastProfile;
 import static io.separ.neural.inputmethod.colors.ColorUtils.convertColor;
@@ -288,6 +281,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     @Override
     public void onServiceClicked(String serviceId){
+        StatsUtils.getInstance().onServiceClicked(serviceId);
         if(serviceId.equals("customization")) {
             Context context = DialogUtils.getPlatformDialogThemeContext(this);
             LinearLayout linearLayout = new LinearLayout(context);
@@ -1983,18 +1977,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     // receive ringer mode change and network state change.
     private final BroadcastReceiver mConnectivityAndRingerModeChangeReceiver =
-            new BroadcastReceiver() {
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-            final String action = intent.getAction();
-            //if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-                ////mSubtypeSwitcher.onNetworkStateChanged(intent);
-            //} else if (action.equals(AudioManager.RINGER_MODE_CHANGED_ACTION)) {
-            if (action.equals(AudioManager.RINGER_MODE_CHANGED_ACTION)) {
-                AudioAndHapticFeedbackManager.getInstance().onRingerModeChanged();
-            }
-        }
-    };
+            new MyBroadcastReceiver();
 
     private void launchSettings() {
         if(mInputLogic.isSearchingResults()){
@@ -2274,6 +2257,21 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
     }
 
+    private long lastStickerInsertionTime = 0;
+
+    private static class MyBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final String action = intent.getAction();
+            //if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+                ////mSubtypeSwitcher.onNetworkStateChanged(intent);
+            //} else if (action.equals(AudioManager.RINGER_MODE_CHANGED_ACTION)) {
+            if (action.equals(AudioManager.RINGER_MODE_CHANGED_ACTION)) {
+                AudioAndHapticFeedbackManager.getInstance().onRingerModeChanged();
+            }
+        }
+    }
+
     public class EventBusHandler {
         public void register() {
             if (!EventBusExt.getDefault().isRegistered(this)) {
@@ -2291,6 +2289,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         public void onEventMainThread(InsertPngEvent event){
             try {
                 if(event.isSticker) {
+                    long currentTime=System.currentTimeMillis();
+                    if((lastStickerInsertionTime+3000)>currentTime)
+                        return;
+                    lastStickerInsertionTime = currentTime;
                     Log.e("TWO_STICKER", "sending sticker");
                     AssetFileDescriptor fileDescriptor = getAssets().openFd("stickers/"+event.base+'/'+event.name);
                     FileInputStream stream = fileDescriptor.createInputStream();
@@ -2303,7 +2305,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                     byte[] bytes = new byte[1024];
                     while ((read = stream.read(bytes)) != -1)
                         outputStream.write(bytes, 0, read);
-                    Intent resInt = mInputLogic.mConnection.doCommitContent("Sticker from The Neural Keyboard", RichInputConnection.MIME_TYPE_PNG, mPngFile);
+                    Intent resInt = mInputLogic.mConnection.doCommitContent("Sticker from The Agah Keyboard", RichInputConnection.MIME_TYPE_PNG, mPngFile);
                     if (resInt != null) {
                         resInt.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(resInt);
@@ -2319,20 +2321,18 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             LatinIME.this.mInputLogic.stopSearchingResults();
             mTopDisplayController.hideAll();
             if(event.getItem().getService().equals("giphy")) {
-                Log.e("TWO_STICKER", "sending GIF");
                 File fromFile = ShareUtils.getCachedImageOnDisk(LatinIME.this, Uri.parse(event.getItem().getImage().getUrl()));
                 File toFile = new File(new File(getFilesDir(), "images"), System.currentTimeMillis() + ".gif");
                 if (fromFile == null)
                     return;
                 ShareUtils.copyFile(fromFile, toFile);
-                Intent resInt = mInputLogic.mConnection.doCommitContent("GIF from The Neural Keyboard", RichInputConnection.MIME_TYPE_GIF, toFile);
+                Intent resInt = mInputLogic.mConnection.doCommitContent("GIF from The Agah Keyboard", RichInputConnection.MIME_TYPE_GIF, toFile);
                 if (resInt != null) {
                     resInt.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(resInt);
                 }
                 return;
             }
-            Log.e("TWO_STICKER", "sending Text");
             shareItemThroughText(event);
         }
 

@@ -286,29 +286,7 @@ public class UserDictionarySettings extends ListFragment {
 
         private AlphabetIndexer mIndexer;
 
-        private final ViewBinder mViewBinder = new ViewBinder() {
-
-            @Override
-            public boolean setViewValue(View v, Cursor c, int columnIndex) {
-                if (!IS_SHORTCUT_API_SUPPORTED) {
-                    // just let SimpleCursorAdapter set the view values
-                    return false;
-                }
-                if (columnIndex == INDEX_SHORTCUT) {
-                    final String shortcut = c.getString(INDEX_SHORTCUT);
-                    if (TextUtils.isEmpty(shortcut)) {
-                        v.setVisibility(View.GONE);
-                    } else {
-                        ((TextView)v).setText(shortcut);
-                        v.setVisibility(View.VISIBLE);
-                    }
-                    v.invalidate();
-                    return true;
-                }
-
-                return false;
-            }
-        };
+        private final ViewBinder mViewBinder = new MyViewBinder();
 
         @SuppressWarnings("deprecation")
         public MyAdapter(Context context, int layout, Cursor c, String[] from, int[] to,
@@ -336,6 +314,30 @@ public class UserDictionarySettings extends ListFragment {
         @Override
         public Object[] getSections() {
             return null == mIndexer ? null : mIndexer.getSections();
+        }
+
+        private static class MyViewBinder implements ViewBinder {
+
+            @Override
+            public boolean setViewValue(View v, Cursor c, int columnIndex) {
+                if (!IS_SHORTCUT_API_SUPPORTED) {
+                    // just let SimpleCursorAdapter set the view values
+                    return false;
+                }
+                if (columnIndex == INDEX_SHORTCUT) {
+                    final String shortcut = c.getString(INDEX_SHORTCUT);
+                    if (TextUtils.isEmpty(shortcut)) {
+                        v.setVisibility(View.GONE);
+                    } else {
+                        ((TextView)v).setText(shortcut);
+                        v.setVisibility(View.VISIBLE);
+                    }
+                    v.invalidate();
+                    return true;
+                }
+
+                return false;
+            }
         }
     }
 }

@@ -22,9 +22,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
-import android.util.Log;
-
-import com.android.inputmethod.keyboard.KeyboardTheme;
 
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.indic.settings.RadioButtonPreference.OnRadioButtonClickedListener;

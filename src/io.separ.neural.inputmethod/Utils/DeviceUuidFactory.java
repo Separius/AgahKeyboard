@@ -30,7 +30,7 @@ public class DeviceUuidFactory {
                         uuid = UUID.fromString(id);
                     } else {
                         uuid = UUID.randomUUID();
-                        prefs.edit().putString(PREFS_DEVICE_ID, uuid.toString()).commit();
+                        prefs.edit().putString(PREFS_DEVICE_ID, uuid.toString()).apply();
                     }
                 }
             }

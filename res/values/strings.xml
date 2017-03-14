@@ -593,7 +593,7 @@ Tip: You can download and remove dictionaries by going to &lt;b>Languages&#160;&
     <string name="pemission_message">Some functions may not work without those permissions</string>
     <string name="select_your_languages">Select your languages</string>
     <string name="languages">Languages</string>
-    <string name="authorization">Authorization</string>
+    <string name="authorization" translatable="false">Authorization</string>
     <string name="select">Select</string>
     <string name="service_result_empty">No results found!</string>
     <string name="service_result_network_problem">\"Cannot connect to the internet! You must be connected to access results. Tap here to try again!\"</string>
@@ -613,4 +613,8 @@ Tip: You can download and remove dictionaries by going to &lt;b>Languages&#160;&
     <string name="share_app">Share app</string>
     <string name="rate_app">Rate us</string>
     <string name="set_as_default_theme">set as default theme</string>
+    <string name="prefs_enable_data_collection">enable data collection</string>
+    <string name="keyboard_name_fa">کیبورد آگاه</string>
+    <string name="keyboard_name_en">Agah Keyboard</string>
+    <string name="enable_layout">Enable the keyboard</string>
 </resources>

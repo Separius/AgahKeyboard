@@ -1,20 +1,14 @@
 package com.android.inputmethod.keyboard.top.services;
 
-import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.android.inputmethod.keyboard.KeyboardTheme;
 import com.facebook.common.util.UriUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
@@ -22,7 +16,6 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.io.File;
 
-import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.slash.NeuralApplication;
 import io.separ.neural.inputmethod.slash.RImage;
 import io.separ.neural.inputmethod.slash.RSearchItem;

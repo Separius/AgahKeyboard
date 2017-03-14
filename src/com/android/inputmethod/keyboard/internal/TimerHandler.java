@@ -18,7 +18,6 @@ package com.android.inputmethod.keyboard.internal;
 
 import android.os.Message;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.ViewConfiguration;
 
 import com.android.inputmethod.keyboard.Key;

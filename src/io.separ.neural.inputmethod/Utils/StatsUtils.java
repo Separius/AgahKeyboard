@@ -2,6 +2,7 @@ package io.separ.neural.inputmethod.Utils;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.inputmethod.InputMethodSubtype;
@@ -18,6 +19,7 @@ import java.util.Calendar;
 
 import io.separ.neural.inputmethod.indic.DictionaryFacilitator;
 import io.separ.neural.inputmethod.indic.SuggestedWords;
+import io.separ.neural.inputmethod.indic.settings.Settings;
 
 import static com.google.firebase.analytics.FirebaseAnalytics.Event.SELECT_CONTENT;
 import static com.google.firebase.analytics.FirebaseAnalytics.Param.ITEM_ID;
@@ -33,6 +35,8 @@ public final class StatsUtils {
             backspaceDeleteCount, wordUserTypedBatchCount, autoCorrectTypedBacthCount,
             pickSuggestionBatchCount, subtypeChangeCount, topEmojiSelectedCount,
             richEmojiSelectedCount, snippetToolSelectedCount;
+
+    public boolean isMetricEnable = true;
 
     private static String TAG = "Agah_Collection";
 
@@ -91,10 +95,14 @@ public final class StatsUtils {
     }
 
     public void onCreate(final Context givenLatin) {
-        Log.i("SEPAR_COLLECT", "onStatsCreateCalled");
         latin = givenLatin;
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(latin);
         newFile();
+        isMetricEnable = PreferenceManager.getDefaultSharedPreferences(latin).getBoolean(Settings.PREF_ENABLE_METRICS_LOGGING, true);
+    }
+
+    public void updateLogging(){
+        isMetricEnable = PreferenceManager.getDefaultSharedPreferences(latin).getBoolean(Settings.PREF_ENABLE_METRICS_LOGGING, true);
     }
 
     public void onPickSuggestionManually(final SuggestedWords suggestedWords,
@@ -221,5 +229,11 @@ public final class StatsUtils {
 
     public static boolean hasInstance() {
         return (instance!=null);
+    }
+
+    public void onServiceClicked(String serviceId) {
+        Bundle bundle = new Bundle();
+        bundle.putString(ITEM_ID, serviceId);
+        mFirebaseAnalytics.logEvent(SELECT_CONTENT, bundle);
     }
 }

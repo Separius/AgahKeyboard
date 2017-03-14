@@ -16,7 +16,6 @@
 
 package io.separ.neural.inputmethod.indic;
 
-import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.ContentObserver;
@@ -128,7 +127,8 @@ public class ContactsBinaryDictionary extends ExpandableBinaryDictionary {
     }
 
     private void loadDeviceAccountsEmailAddressesLocked() {
-        final List<String> accountVocabulary =
+        return;
+        /*final List<String> accountVocabulary =
                 AccountUtils.getDeviceAccountsEmailAddresses(mContext);
         if (accountVocabulary == null || accountVocabulary.isEmpty()) {
             return;
@@ -137,11 +137,11 @@ public class ContactsBinaryDictionary extends ExpandableBinaryDictionary {
             if (DEBUG) {
                 Log.d(TAG, "loadAccountVocabulary: " + word);
             }
-            runGCIfRequiredLocked(true /* mindsBlockByGC */);
-            addUnigramLocked(word, FREQUENCY_FOR_CONTACTS, null /* shortcut */,
-                    0 /* shortcutFreq */, false /* isNotAWord */, false /* isBlacklisted */,
+            runGCIfRequiredLocked(true *//* mindsBlockByGC *//*);
+            addUnigramLocked(word, FREQUENCY_FOR_CONTACTS, null *//* shortcut *//*,
+                    0 *//* shortcutFreq *//*, false *//* isNotAWord *//*, false *//* isBlacklisted *//*,
                     BinaryDictionary.NOT_A_VALID_TIMESTAMP);
-        }
+        }*/
     }
 
     private void loadDictionaryForUriLocked(final Uri uri) {

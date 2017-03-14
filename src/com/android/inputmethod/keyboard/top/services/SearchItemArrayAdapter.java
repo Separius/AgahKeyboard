@@ -1,15 +1,11 @@
 package com.android.inputmethod.keyboard.top.services;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,19 +13,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.fasterxml.jackson.core.util.MinimalPrettyPrinter;
 import com.github.ybq.android.spinkit.SpinKitView;
 
-import io.separ.neural.inputmethod.Utils.ColorUtils;
-import io.separ.neural.inputmethod.colors.ColorManager;
-import io.separ.neural.inputmethod.colors.ColorProfile;
 import io.separ.neural.inputmethod.indic.R;
 import io.separ.neural.inputmethod.slash.RDetail;
 import io.separ.neural.inputmethod.slash.RSearchItem;
 import io.separ.neural.inputmethod.slash.RServiceItem;
 
 import static io.separ.neural.inputmethod.Utils.ColorUtils.colorProfile;
-import static io.separ.neural.inputmethod.colors.ColorManager.addObserver;
 import static io.separ.neural.inputmethod.slash.RSearchItem.GENERIC_MESSAGE_TYPE;
 import static io.separ.neural.inputmethod.slash.RSearchItem.LOADING_TYPE;
 import static io.separ.neural.inputmethod.slash.RSearchItem.MEDIA_TYPE;

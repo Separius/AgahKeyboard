@@ -5,16 +5,12 @@ package io.separ.neural.inputmethod.Utils;
  */
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
+
 import com.android.inputmethod.keyboard.Key;
 import com.android.inputmethod.keyboard.PointerTracker;
-
-import io.separ.neural.inputmethod.indic.settings.Settings;
 
 public class SwipeUtils {
     private static final String TAG;

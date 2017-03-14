@@ -8,9 +8,9 @@ package com.squareup.leakcanary;
 
 public final class R {
 	public static final class drawable {
-		public static final int leak_canary_icon = 0x7f02016e;
-		public static final int leak_canary_notification = 0x7f02016f;
-		public static final int leak_canary_toast_background = 0x7f020170;
+		public static final int leak_canary_icon = 0x7f020165;
+		public static final int leak_canary_notification = 0x7f020166;
+		public static final int leak_canary_toast_background = 0x7f020167;
 	}
 	public static final class id {
 		public static final int leak_canary_action = 0x7f100123;

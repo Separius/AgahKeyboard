@@ -97,20 +97,28 @@ class EmojiProvider {
         }
 
         final EmojiDrawable drawable = new EmojiDrawable(drawInfo, decodeScale);
-        drawInfo.getPage().get().addListener(new FutureTaskListener<Bitmap>() {
-            @Override public void onSuccess(final Bitmap result) {
-                Util.runOnMain(new Runnable() {
-                    @Override public void run() {
-                        drawable.setBitmap(result);
-                    }
-                });
-            }
-
-            @Override public void onFailure(Throwable error) {
-                Log.w(TAG, error);
-            }
-        });
+        drawInfo.getPage().get().addListener(new BitmapFutureTaskListener(drawable));
         return drawable;
+    }
+
+    private static class BitmapFutureTaskListener implements FutureTaskListener<Bitmap> {
+        private final EmojiDrawable drawable;
+
+        public BitmapFutureTaskListener(EmojiDrawable drawable) {
+            this.drawable = drawable;
+        }
+
+        @Override public void onSuccess(final Bitmap result) {
+            Util.runOnMain(new Runnable() {
+                @Override public void run() {
+                    drawable.setBitmap(result);
+                }
+            });
+        }
+
+        @Override public void onFailure(Throwable error) {
+            Log.w(TAG, error);
+        }
     }
 
     class EmojiDrawable extends Drawable {
