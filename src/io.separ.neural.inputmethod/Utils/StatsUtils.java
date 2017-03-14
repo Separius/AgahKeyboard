@@ -91,6 +91,7 @@ public final class StatsUtils {
     }
 
     public void onCreate(final Context givenLatin) {
+        Log.i("SEPAR_COLLECT", "onStatsCreateCalled");
         latin = givenLatin;
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(latin);
         newFile();

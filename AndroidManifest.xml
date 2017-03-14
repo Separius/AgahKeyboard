@@ -17,6 +17,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         coreApp="true"
         package="io.separ.neural.inputmethod.indic"
+        xmlns:tools="http://schemas.android.com/tools"
         android:versionCode="25"
         android:versionName="0.0.2">
 
@@ -32,15 +33,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <application android:label="@string/english_ime_name"
+    <application
             android:icon="@drawable/ic_launcher_keyboard"
             android:supportsRtl="true"
             android:allowBackup="true"
             android:theme="@style/Theme.AppCompat.Light"
             android:name="io.separ.neural.inputmethod.slash.NeuralApplication">
+            <!--android:label="@string/latin_ime_name"
+            tools:replace="android:label">-->
 
         <service android:name="LatinIME"
-                android:label="@string/english_ime_name"
+                android:label="@string/latin_ime_name"
                 android:permission="android.permission.BIND_INPUT_METHOD">
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
@@ -146,7 +149,7 @@
 
 
 
-        <activity android:theme="@style/Theme.Slash.Setup" android:label="@string/english_ime_name"
+        <activity android:theme="@style/Theme.Slash.Setup" android:label="@string/latin_ime_name"
             android:name="io.separ.neural.inputmethod.indic.settings.StartActivity"
             android:clearTaskOnLaunch="true" android:screenOrientation="portrait">
             <intent-filter>
@@ -154,7 +157,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:theme="@style/Theme.Slash.Setup" android:label="@string/english_ime_name"
+        <activity android:theme="@style/Theme.Slash.Setup" android:label="@string/latin_ime_name"
             android:name="io.separ.neural.inputmethod.indic.settings.SetupWizardActivity" android:clearTaskOnLaunch="true" />
 
         <activity android:name=".settings.SettingsActivity"
@@ -177,7 +180,7 @@
 
         <!--<activity android:name=".setup.SetupActivity"
                 android:theme="@style/platformActivityTheme"
-                android:label="@string/english_ime_name"
+                android:label="@string/latin_ime_name"
                 android:icon="@drawable/ic_launcher_keyboard"
                 android:launchMode="singleTask"
                 android:noHistory="true">
@@ -189,7 +192,7 @@
 
         <activity android:name=".setup.SetupWizardActivity"
                 android:theme="@style/platformActivityTheme"
-                android:label="@string/english_ime_name"
+                android:label="@string/latin_ime_name"
                 android:clearTaskOnLaunch="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

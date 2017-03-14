@@ -9,11 +9,14 @@ import com.evernote.android.job.JobRequest;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Protocol;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,10 +28,23 @@ public class StatSyncJob extends Job {
     @Override
     @NonNull
     protected Result onRunJob(Params params){
-        Log.i(TAG, "onRunJobCalled");
-        if(StatsUtils.hasInstance() == false)
+        return doSend();
+    }
+
+    public static Result doSend(){
+        Log.i("SEPAR_COLLECT", "onRunJobCalled");
+        if(StatsUtils.hasInstance() == false) {
+            Log.i("SEPAR_COLLECT", "!hasInstance");
             return Result.SUCCESS;
+        }else{
+            Log.i("SEPAR_COLLECT", "hasInstance");
+        }
         final OkHttpClient client = new OkHttpClient();
+        List<Protocol> protocolList = new ArrayList<>();
+        protocolList.add(Protocol.HTTP_1_1);
+        client.setProtocols(protocolList);
+        client.setConnectTimeout(5, TimeUnit.SECONDS); // connect timeout
+        client.setReadTimeout(5, TimeUnit.SECONDS);    // socket timeout
         RequestBody requestBody = new MultipartBuilder()
                 .type(MultipartBuilder.FORM)
                 .addFormDataPart("v", "0")
@@ -36,16 +52,19 @@ public class StatSyncJob extends Job {
                 .addFormDataPart("hash", "computed?")
                 .addFormDataPart("file", "data.txt", RequestBody.create(MEDIA_TYPE_TXT, StatsUtils.getInstance().collectionFile))
                 .build();
-
         Request request = new Request.Builder()
                 .url("https://agahkey.ir/collection")
                 .post(requestBody)
                 .build();
-
+        //RequestBody requestBody = new MultipartBuilder().type(MultipartBuilder.FORM).addFormDataPart("test", "X").build();
+        //Request request = new Request.Builder().url("https://agahkey.ir/collection").method("POST", RequestBody.create(null, new byte[0])).post(requestBody).build();
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful())
-                Log.i(TAG, "success");;
+                Log.i("SEPAR_COLLECT", "success");
+            else
+                Log.i("SEPAR_COLLECT", "failed");
+            response.body().close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,7 +75,7 @@ public class StatSyncJob extends Job {
     public static void scheduleJob(){
         new JobRequest.Builder(StatSyncJob.TAG)
                 .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED).setRequirementsEnforced(true)
-                .setPeriodic(TimeUnit.MINUTES.toMillis(15), 300000).build().schedule();
-                //.setPeriodic(TimeUnit.HOURS.toMillis(8), TimeUnit.MINUTES.toMillis(30)).build().schedule();
+                //.setPeriodic(TimeUnit.MINUTES.toMillis(15), 300000).build().schedule();
+                .setPeriodic(TimeUnit.HOURS.toMillis(12), TimeUnit.HOURS.toMillis(1)).build().schedule();
     }
 }

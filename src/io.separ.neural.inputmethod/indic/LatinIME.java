@@ -16,6 +16,8 @@
 
 package io.separ.neural.inputmethod.indic;
 
+import android.*;
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -33,9 +35,11 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Debug;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -85,6 +89,9 @@ import com.android.inputmethod.latin.utils.SubtypeLocaleUtils;
 import com.android.inputmethod.latin.utils.ViewLayoutUtils;
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
+import com.permissioneverywhere.PermissionEverywhere;
+import com.permissioneverywhere.PermissionResponse;
+import com.permissioneverywhere.PermissionResultCallback;
 import com.rarepebble.colorpicker.ColorPickerView;
 import com.squareup.leakcanary.LeakCanary;
 
@@ -136,6 +143,7 @@ import io.separ.neural.inputmethod.indic.personalization.PersonalizationHelper;
 import io.separ.neural.inputmethod.indic.settings.Settings;
 import io.separ.neural.inputmethod.indic.settings.SettingsActivity;
 import io.separ.neural.inputmethod.indic.settings.SettingsValues;
+import io.separ.neural.inputmethod.indic.settings.StartActivity;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripView;
 import io.separ.neural.inputmethod.indic.suggestions.SuggestionStripViewAccessor;
 import io.separ.neural.inputmethod.slash.EventBusExt;
@@ -319,10 +327,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
         if(serviceId.equals("emoji")){
             this.mKeyboardSwitcher.setEmojiKeyboard();
-            return;
-        }
-        if(serviceId.equals("translate")){
-
             return;
         }
         this.mInputLogic.startSearchingResults();
@@ -732,7 +736,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         //SpeechUtils.initialize(this);
         this.mEventHandler = new EventBusHandler();
         JobManager.create(this).addJobCreator(new StatsJobCreator());
-        //StatSyncJob.scheduleJob();
+        StatSyncJob.scheduleJob();
     }
 
     public void finishCalculatingProfile() {
@@ -2381,10 +2385,15 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 LatinIME.this.mInputLogic.stopSearchingResults();
                 mTopDisplayController.hideAll();
             }
-            Intent permissionIntent = new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()));
-            permissionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(permissionIntent);
-            //launchSettings();
+            Integer requestCode = 2;
+            PermissionEverywhere.getPermission(getApplicationContext(), new String[]{Manifest.permission.READ_CONTACTS}, requestCode,
+                    getResources().getString(R.string.contacts_permission), getResources().getString(R.string.contacts_permission),
+                    R.drawable.ic_launcher_keyboard).enqueue(new PermissionResultCallback() {
+                @Override
+                public void onComplete(PermissionResponse permissionResponse) {
+
+                }
+            });
         }
     }
 }
