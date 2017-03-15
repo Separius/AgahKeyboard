@@ -33,7 +33,7 @@ public class StatSyncJob extends Job {
     public static Result doSend(){
         if(StatsUtils.hasInstance() == false)
             return Result.SUCCESS;
-        if(!StatsUtils.getInstance().isMetricEnable)
+        if(!StatsUtils.getInstance().isMetricEnable())
             return Result.SUCCESS;
         final OkHttpClient client = new OkHttpClient();
         List<Protocol> protocolList = new ArrayList<>();

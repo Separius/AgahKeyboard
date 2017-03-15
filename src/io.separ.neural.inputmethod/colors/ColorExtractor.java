@@ -30,16 +30,6 @@ public class ColorExtractor {
         return new int[]{res.getIdentifier("colorAccent", "attr", packageName), res.getIdentifier("android:colorAccent", "attr", packageName), 16843829};
     }
 
-    protected static ColorProfile getContextProfile(Context context, String packageName) throws NameNotFoundException {
-        Context context1 = context.createPackageContext(packageName, Context.CONTEXT_IGNORE_SECURITY);
-        Resources res = context.getPackageManager().getResourcesForApplication(packageName);
-        if (context1 == null) {
-            return new ColorProfile();
-        }
-        Theme t = context1.getTheme();
-        return new ColorProfile(getContextColor(t, getPrimaryAttrs(res, packageName)), getContextColor(t, getPrimaryDarkAttrs(res, packageName)), getContextColor(t, getAccentAttrs(res, packageName)));
-    }
-
     protected static int getContextColor(Theme theme, int[] attrs) {
         TypedArray a = theme.obtainStyledAttributes(attrs);
         int color = a.getColor(1, a.getColor(0, a.getColor(2, 1000)));

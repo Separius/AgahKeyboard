@@ -27,28 +27,14 @@ public class ColorUtils {
 
     public static ColorProfile colorProfile = new ColorProfile();
 
-    private static final String BATTERY_COLOR = "#f5511e";
-
-    private static boolean isBatterySaverOn(Context context) {
-        return Build.VERSION.SDK_INT >= 21 && ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).isPowerSaveMode();
-    }
-
     public static ColorProfile getColor(@NonNull Context context, String packageName){
-        if (isBatterySaverOn(context)) {
-            colorProfile.setProfile(parseColor(BATTERY_COLOR), darkerColor(parseColor(BATTERY_COLOR)), -1);
-            return colorProfile;
-        }
         String[] strArr;
         Integer color;
         if (!ColorDatabase.existPackage(context, packageName) || SpecialRules.overrideStandardColor(packageName)) {
             strArr = new String[1];
             strArr[0] = WindowChangeDetectingService.getWindowTitle();
-            //if the mode is adaptive(read from sharedPrefrences){
             String theme = PreferenceManager.getDefaultSharedPreferences(context).getString("KeyboardTheme", "adaptive_theme");
             if(theme.equals("adaptive_theme")) {
-                /*strArr = new String[1];
-                strArr[0] = WindowChangeDetectingService.getWindowTitle();
-                color = SpecialRules.getColor(packageName, context, strArr);*/
                 color = SpecialRules.getColor(packageName, context);
                 if (color == null) {
                     colorProfile = setProfileFromApp(context, packageName);
@@ -57,21 +43,12 @@ public class ColorUtils {
                 }
                 return colorProfile;
             }else{ //black or blue _theme
-                colorProfile.setPrimary(parseColor(ColorDatabase.getColors(context, theme+"_primary")[0]));
-                colorProfile.setAccent(parseColor(ColorDatabase.getColors(context, theme+"_secondary")[0]));
+                colorProfile.setProfile(parseColor(ColorDatabase.getColors(context, theme+"_primary")[0]), 1000, parseColor(ColorDatabase.getColors(context, theme+"_secondary")[0]));
                 return colorProfile;
             }
-            //}else{read from currentTheme}
         }
         colorProfile.setPrimary(parseColor(ColorDatabase.getColors(context, packageName)[0]));
         return colorProfile;
-    }
-
-    static int darkerColor(int color) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] = hsv[2] * 0.8f;
-        return Color.HSVToColor(hsv);
     }
 
     public static void drawBackground(Canvas canvas, int mDrawColor) {

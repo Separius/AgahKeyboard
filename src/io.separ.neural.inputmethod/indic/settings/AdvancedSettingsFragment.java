@@ -99,7 +99,7 @@ public final class AdvancedSettingsFragment extends SubScreenFragment {
                 final String enableMetricsLoggingTitle = res.getString(
                         R.string.enable_metrics_logging, applicationName);
                 enableMetricsLogging.setTitle(enableMetricsLoggingTitle);
-                enableMetricsLogging.setOnPreferenceClickListener(new MyOnPreferenceClickListener(context));
+                //enableMetricsLogging.setOnPreferenceClickListener(new MyOnPreferenceClickListener(context));
             }
         } else {
             removePreference(Settings.PREF_ENABLE_METRICS_LOGGING);
@@ -158,22 +158,6 @@ public final class AdvancedSettingsFragment extends SubScreenFragment {
         final Resources res = getResources();
         final AudioManager am = (AudioManager)getActivity().getSystemService(Context.AUDIO_SERVICE);
         pref.setInterface(new MyValueProxy2(prefs, res, am));
-    }
-
-    private static class MyOnPreferenceClickListener implements Preference.OnPreferenceClickListener {
-        private final Context context;
-
-        public MyOnPreferenceClickListener(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public boolean onPreferenceClick(Preference preference) {
-            PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(Settings.PREF_ENABLE_METRICS_LOGGING, preference.isEnabled()).apply();
-            if(StatsUtils.hasInstance())
-                StatsUtils.getInstance().updateLogging();
-            return false;
-        }
     }
 
     private static class MyValueProxy implements SeekBarDialogPreference.ValueProxy {

@@ -730,7 +730,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         //SpeechUtils.initialize(this);
         this.mEventHandler = new EventBusHandler();
         JobManager.create(this).addJobCreator(new StatsJobCreator());
-        StatSyncJob.scheduleJob();
+        //StatSyncJob.scheduleJob();
     }
 
     public void finishCalculatingProfile() {

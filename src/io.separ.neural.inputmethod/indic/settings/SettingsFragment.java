@@ -69,14 +69,14 @@ public final class SettingsFragment extends InputMethodSettingsFragment {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_SUBJECT, "Agah Keyboard");
-            String sAux = "Let me recommend you this application\n"+"https://agahkey.ir";
+            String sAux = "Let me recommend you this application\n"+"https://cafebazaar.ir/app/io.separ.neural.inputmethod.indic/?l=fa";
             intent.putExtra(Intent.EXTRA_TEXT, sAux);
             startActivity(Intent.createChooser(intent, "Choose one"));
             return true;
         }
         if (itemId == MENU_RATE) {
             Intent intent = new Intent(Intent.ACTION_EDIT);
-            intent.setData(Uri.parse("bazaar://details?id=agahkey"));
+            intent.setData(Uri.parse("bazaar://details?id="+"io.separ.neural.inputmethod.indic"));
             intent.setPackage("com.farsitel.bazaar");
             startActivity(intent);
             return true;

@@ -36,7 +36,9 @@ public final class StatsUtils {
             pickSuggestionBatchCount, subtypeChangeCount, topEmojiSelectedCount,
             richEmojiSelectedCount, snippetToolSelectedCount;
 
-    public boolean isMetricEnable = true;
+    public boolean isMetricEnable(){
+        return PreferenceManager.getDefaultSharedPreferences(latin).getBoolean(Settings.PREF_ENABLE_METRICS_LOGGING, true);
+    }
 
     private static String TAG = "Agah_Collection";
 
@@ -81,6 +83,8 @@ public final class StatsUtils {
 
     public void newFile(){
         Log.i(TAG, "newFile");
+        if(latin == null)
+            return;
         final File collectionDir = new File(latin.getFilesDir(), "collection");
         deleteDirectory(collectionDir);
         collectionDir.mkdirs();
@@ -98,11 +102,6 @@ public final class StatsUtils {
         latin = givenLatin;
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(latin);
         newFile();
-        isMetricEnable = PreferenceManager.getDefaultSharedPreferences(latin).getBoolean(Settings.PREF_ENABLE_METRICS_LOGGING, true);
-    }
-
-    public void updateLogging(){
-        isMetricEnable = PreferenceManager.getDefaultSharedPreferences(latin).getBoolean(Settings.PREF_ENABLE_METRICS_LOGGING, true);
     }
 
     public void onPickSuggestionManually(final SuggestedWords suggestedWords,
@@ -141,6 +140,8 @@ public final class StatsUtils {
     }
 
     private int createCountLog(int updated, int threshold, String id){
+        if(mFirebaseAnalytics == null)
+            return 0;
         updated++;
         if(updated >= threshold){
             Bundle bundle = new Bundle();
@@ -170,6 +171,8 @@ public final class StatsUtils {
         if(TextUtils.isEmpty(commitWord))
             return;
         try {
+            if(collectionOutputStream == null)
+                return;
             collectionOutputStream.write((commitWord+' ').getBytes());
             lineIsNotEmpty = true;
         } catch (IOException e) {

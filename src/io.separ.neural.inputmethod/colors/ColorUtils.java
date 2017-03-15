@@ -134,6 +134,16 @@ public class ColorUtils {
         return Color.HSVToColor(hsv);
     }
 
+    public static int flipBrightness(int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        if(hsv[2] < 0.5)
+            hsv[2] = hsv[2] + 0.4f;
+        else
+            hsv[2] = hsv[2] - 0.4f;
+        return Color.HSVToColor(hsv);
+    }
+
     public static int getTextColor() {
         ColorProfile lastProfile = ColorManager.getLastProfile();
         return getTextColor(lastProfile);
@@ -167,7 +177,7 @@ public class ColorUtils {
     }
 
     static int getAccent(int color) {
-        return isColorDark(color) ? lightColor(color) : darkerColor(color);
+        return isColorDark(color) ? lightColor(color, 0.4f) : darkerColor(color, 0.4f);
     }
 
 

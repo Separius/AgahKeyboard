@@ -6,16 +6,20 @@ package io.separ.neural.inputmethod.colors;
 
 import android.graphics.Color;
 
+import com.mattyork.colours.Colour;
+
 import static io.separ.neural.inputmethod.colors.ColorUtils.darkerColor;
+import static io.separ.neural.inputmethod.colors.ColorUtils.flipBrightness;
 import static io.separ.neural.inputmethod.colors.ColorUtils.getColorDistance;
+import static io.separ.neural.inputmethod.colors.ColorUtils.isColorDark;
 import static io.separ.neural.inputmethod.colors.ColorUtils.lightColor;
 
 public class ColorProfile {
     private int accent;
     private int primary;
-    private int primaryDark;
     private int text;
-    private int icon;
+    private int secondary;
+    private int secondaryAccent;
 
     public ColorProfile() {
         resetProfile();
@@ -26,67 +30,57 @@ public class ColorProfile {
     }
 
     public boolean isInvalid() {
-        return this.primary == 1000 || ColorUtils.isDefaultColor(this.primary);
+        return primary == 1000 || ColorUtils.isDefaultColor(primary);
     }
 
     public void resetProfile() {
-        this.primary = 1000;
-        this.primaryDark = 1000;
-        this.accent = 1000;
-        this.text = 1000;
-        this.icon = 1000;
+        primary = 1000;
+        accent = 1000;
+        text = 1000;
+        secondary = 1000;
+        secondaryAccent = 1000;
     }
 
     public void setProfile(int primary, int primaryDark, int accent) {
-        resetProfile();
         this.primary = primary;
-        if (primaryDark == 1000 || ((!ColorUtils.isGrey(primary) && ColorUtils.isGrey(primaryDark)) || getColorDistance(primary, primaryDark) >= 80.0d)) {
-            this.primaryDark = darkerColor(primary);
+        //double luminance = Color.red(primary) / 255.0 * 0.2126 + Color.green(primary) / 255.0 * 0.7152 + Color.blue(primary) / 255.0 * 0.0722;
+        //int[] complementaryColors = Colour.colorSchemeOfType(primary, Colour.ColorScheme.ColorSchemeMonochromatic); //=> returns 4 colours
+        if (isColorDark(primary)){
+            text = Color.WHITE;
+            secondary = lightColor(primary);
         } else {
-            this.primaryDark = primaryDark;
+            text = Color.BLACK;
+            secondary = darkerColor(primary);
         }
-        if (accent == 1000 || getColorDistance(primary, accent) <= 30.0d) {
-            this.accent = ColorUtils.getAccent(primary);
-        } else {
+        //secondary = flipBrightness(primary);
+        //secondary = complementaryColors[1];
+        /*if ((accent != 1000) && (getColorDistance(primary, accent) >= 70.0d)) {
             this.accent = accent;
-        }
-        double luminance = Color.red(primary) / 255.0 * 0.2126 + Color.green(primary) / 255.0 * 0.7152 + Color.blue(primary) / 255.0 * 0.0722;
-        if (luminance < 0.5)
-            this.text = Color.WHITE;
-        else
-            this.text = Color.BLACK;
-        this.icon = getIcon(primary);
+            this.secondaryAccent = accent;
+        }else{*/
+            this.accent = ColorUtils.getAccent(primary);
+            //this.accent = complementaryColors[2];
+            this.secondaryAccent = ColorUtils.getAccent(secondary);
+            //this.secondaryAccent = complementaryColors[0];
+        //}
     }
 
+    //TODO
     public static int getIcon(int primary){
         return Color.rgb(Color.red(primary) ^ 0x80, Color.green(primary) ^ 0x80, Color.blue(primary) ^ 0x80);
     }
 
     public int getIconOnSecondary() {
-        /*int tmp = getSecondary();
-        return Color.rgb(Color.red(tmp) ^ 0x80, Color.green(tmp) ^ 0x80, Color.blue(tmp) ^ 0x80);*/
-        int tmp = getIcon();
-        if (text == Color.BLACK)
-            return darkerColor(tmp);
-        else
-            return lightColor(tmp);
+        return secondaryAccent;
     }
 
     public int getIcon() {
-        if (this.accent != 1000) {
-            if (getColorDistance(getPrimary(), getAccent()) >= 70.0d)
-                return getAccent();
-        }
-            /*if (isColorDark(getPrimary()))
-                return lightColor(getAccent(), 0.4f);
-            return darkerColor(getAccent(), 0.4f);
-        } else*/
-        return icon;
+        return accent;
     }
 
     public int getTextColor() {
-        return getIconOnSecondary();
-        //return ColorUtils.getTextColor();
+        //return primary;
+        return secondaryAccent;
     }
 
     public int getText() {
@@ -94,52 +88,28 @@ public class ColorProfile {
     }
 
     public void setProfile(ColorProfile newProfile) {
-        resetProfile();
-        this.primary = newProfile.primary;
-        this.primaryDark = newProfile.primaryDark;
-        this.accent = newProfile.accent;
-        this.text = newProfile.text;
-        this.icon = newProfile.icon;
+        primary = newProfile.primary;
+        accent = newProfile.accent;
+        text = newProfile.text;
+        secondary = newProfile.secondary;
+        secondaryAccent = newProfile.secondaryAccent;
     }
 
     public int getPrimary() {
-        return this.primary;
-    }
-
-    public int getPrimaryIgnore() {
-        if (this.primary != 1000) {
-            return primary;
-        }
-        return Color.parseColor(ColorUtils.MATERIAL_LIGHT);
+        return primary;
     }
 
     public void setPrimary(int primary) {
         setProfile(primary, 1000, 1000);
     }
 
-    public int getPrimaryDark() {
-        if (this.primaryDark != 1000) {
-            return primaryDark;
-        }
-        return darkerColor(getPrimaryIgnore());
-    }
-
+    //TODO bug when color is complete black or white?
     public int getSecondary() {
-        if (text == Color.BLACK)
-            return getPrimaryDark();
-        else
-            return getPrimaryLight();
-    }
-
-    private int getPrimaryLight() {
-        return lightColor(this.primary);
+        return secondary;
     }
 
     public int getAccent() {
-        if (this.accent != 1000) {
-            return this.accent;
-        }
-        return lightColor(this.primary);
+        return accent;
     }
 
     public boolean equals(Object o) {
@@ -150,21 +120,13 @@ public class ColorProfile {
             return false;
         }
         ColorProfile that = (ColorProfile) o;
-        if (this.primary == that.primary && this.primaryDark == that.primaryDark && this.accent == that.accent) {
+        if (this.primary == that.primary && this.accent == that.accent) {
             return true;
         }
         return false;
     }
 
     public int hashCode() {
-        return (((this.primary * 31) + this.primaryDark) * 31) + this.accent;
-    }
-
-    public void setIcon(int icon) {
-        this.icon = icon;
-    }
-
-    public void setAccent(int accent) {
-        this.accent = accent;
+        return ((this.primary * 31) * 31) + this.accent;
     }
 }

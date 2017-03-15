@@ -31,10 +31,8 @@ import io.separ.neural.inputmethod.indic.R;
 
 public class ActionRowView extends ViewPager implements ColorManager.OnColorChange, View.OnTouchListener {
     public static final String[] DEFAULT_SUGGESTED_EMOJI;
-    private static final String[] NUMBER_ARRAY;
     private static final int[] SERVICE_IMAGE_IDS;
     private ActionRowAdapter adapter;
-    private ColorProfile colorProfile;
     private String[] layoutToShow;
     private Listener mListener;
     private HashMap<String, LinearLayout> layouts;
@@ -42,18 +40,6 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
 
     public boolean onTouch(View v, MotionEvent event) {
         return false;
-    }
-
-    /*on number clicked*/
-    class AnonymousClass12 implements OnClickListener {
-        final TextView val$view;
-        AnonymousClass12(TextView textView) {
-            this.val$view = textView;
-        }
-        public void onClick(View tview) {
-            AudioAndHapticFeedbackManager.getInstance().performHapticAndAudioFeedback(-15, ActionRowView.this);
-            mListener.onNumberClicked(this.val$view.getText().toString());
-        }
     }
 
     /*service click handler*/
@@ -159,7 +145,6 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
     }
 
     static {
-        NUMBER_ARRAY = "1,2,3,4,5,6,7,8,9,0".split("\\s*,\\s*");
         DEFAULT_SUGGESTED_EMOJI = "\u2764,\ud83d\ude15,\ud83d\ude18,\ud83d\ude22,\ud83d\ude3b,\ud83d\ude0a,\ud83d\ude09,\ud83d\ude0d".split("\\s*,\\s*");
         SERVICE_IMAGE_IDS = new int[] {R.id.gif_service_action_button, R.id.maps_service_action_button, R.id.google_service_action_button,
                 R.id.contacts_service_action_button, R.id.foursquare_service_action_button, R.id.customization_service_action_button, R.id.go_to_emoji};
@@ -168,13 +153,11 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
 
     public ActionRowView(Context context) {
         super(context);
-        this.colorProfile = new ColorProfile();
         init();
     }
 
     public ActionRowView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.colorProfile = new ColorProfile();
         init();
     }
 
@@ -187,7 +170,6 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
     }
 
     public void onColorChange(ColorProfile newProfile) {
-        this.colorProfile = newProfile;
         setBackgroundColor(newProfile.getSecondary());
         setupLayouts();
         adapter = new ActionRowAdapter();
@@ -211,10 +193,6 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         layouts.put(ActionRowSettingsActivity.SERVCICE_ID, addServices());
         layouts.put(ActionRowSettingsActivity.EMOJI_ID, addEmojis()); //TODO update this on change
         layouts.put(ActionRowSettingsActivity.CLIP_ID, addButtons());
-    }
-
-    private View addEmptyView() {
-        return new LinearLayout(getContext());
     }
 
     public void setListener(Listener listener) {
@@ -302,11 +280,6 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
     }
 
     private View addSingleEmoji(String emoji){
-        /*TextView view = new TextView(getContext());
-        view.setTypeface(FontUtils.getTypeface("emoji"));
-        view.setText(emoji);
-        view.setGravity(17);
-        view.setTextSize(1, 22.0f * 1.f);*/
         EmojiView view = new EmojiView(getContext(), true);
         view.setEmoji(emoji);
         view.setSoundEffectsEnabled(false);
@@ -316,28 +289,4 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
         view.setBackgroundResource(R.drawable.action_row_bg);
         return view;
     }
-
-    private LinearLayout addNumbers() {
-        LinearLayout layout = new LinearLayout(getContext());
-        layout.setGravity(17);
-        layout.setWeightSum(1.f);
-        String[] numbersArray = NUMBER_ARRAY;
-        for (String number : numbersArray) {
-            TextView view = new TextView(getContext());
-            view.setText(number);
-            view.setGravity(17);
-            view.setTypeface(FontUtils.getCurrentLocaleTypeface());
-            view.setTextColor(this.colorProfile.getTextColor());
-            view.setTextSize(1, 22.0f * 1.f);
-            view.setSoundEffectsEnabled(false);
-            view.setOnClickListener(new AnonymousClass12(view));
-            view.setOnTouchListener(this);
-            view.setLayoutParams(new LinearLayout.LayoutParams(-1, -1, 1.f / ((float) numbersArray.length)));
-            view.setBackgroundResource(R.drawable.action_row_bg);
-            layout.addView(view);
-        }
-        return layout;
-    }
-
-
 }

@@ -17,8 +17,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         coreApp="true"
         package="io.separ.neural.inputmethod.indic"
-        android:versionCode="25"
-        android:versionName="0.0.2">
+        android:versionCode="26"
+        android:versionName="0.0.3">
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -33,13 +33,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-            android:icon="@drawable/ic_launcher_keyboard"
             android:supportsRtl="true"
             android:allowBackup="true"
             android:theme="@style/Theme.AppCompat.Light"
             android:name="io.separ.neural.inputmethod.slash.NeuralApplication">
-            <!--android:label="@string/latin_ime_name"
-            tools:replace="android:label">-->
 
         <service android:name="LatinIME"
                 android:label="@string/latin_ime_name"
@@ -150,7 +147,8 @@
 
         <activity android:theme="@style/Theme.Slash.Setup" android:label="@string/latin_ime_name"
             android:name="io.separ.neural.inputmethod.indic.settings.StartActivity"
-            android:clearTaskOnLaunch="true" android:screenOrientation="portrait">
+            android:clearTaskOnLaunch="true" android:screenOrientation="portrait"
+            android:icon="@drawable/ic_launcher_keyboard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
