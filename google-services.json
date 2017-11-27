@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "1021737674902",
+    "firebase_url": "https://agah-keyboard.firebaseio.com",
+    "project_id": "agah-keyboard",
+    "storage_bucket": "agah-keyboard.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021737674902:android:0fcd941fe7a9d317",
+        "android_client_info": {
+          "package_name": "io.separ.neural.inputmethod.indic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1021737674902-p1ns8eu1ldh6h9nibq4ica29bhmujjc6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.separ.neural.inputmethod.indic",
+            "certificate_hash": "63de0904f68255cd26937fc2924480a3dd3237d1"
+          }
+        },
+        {
+          "client_id": "1021737674902-lm4lsqnlpbfm8said1huad1epeaoso25.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.separ.neural.inputmethod.indic",
+            "certificate_hash": "bff12631a8713a2ff1d2b3971e78a4e280aa8b42"
+          }
+        },
+        {
+          "client_id": "1021737674902-nnmmhphulq540gl8o9clvhfc2iur9f9q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC6XeDuS_hJcaA1o6ybYTSr0YZo_Xwj-Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1021737674902-nnmmhphulq540gl8o9clvhfc2iur9f9q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
