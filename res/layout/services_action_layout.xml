@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <ImageView android:gravity="center" android:id="@+id/gif_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/cache_giphy_bar" android:layout_weight="1.0" />
+    <!--<ImageView android:gravity="center" android:id="@+id/gif_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/cache_giphy_bar" android:layout_weight="1.0" />-->
     <ImageView android:gravity="center" android:id="@+id/maps_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/cache_maps_bar" android:layout_weight="1.0" />
     <ImageView android:gravity="center" android:id="@+id/google_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/cache_google_bar" android:layout_weight="1.0" />
     <ImageView android:gravity="center" android:id="@+id/contacts_service_action_button" android:padding="8dp" android:layout_width="0dp" android:layout_height="match_parent" android:src="@drawable/cache_contacts_bar" android:layout_weight="1.0" />

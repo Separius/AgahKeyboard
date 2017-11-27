@@ -7,11 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="72e76d03-a89b-4f35-a56c-6eb71d02bc5a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/debug.sh" afterPath="$PROJECT_DIR$/debug.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/android/inputmethod/keyboard/KeyboardView.java" afterPath="$PROJECT_DIR$/src/com/android/inputmethod/keyboard/KeyboardView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io.separ.neural.inputmethod/indic/LatinIME.java" afterPath="$PROJECT_DIR$/src/io.separ.neural.inputmethod/indic/LatinIME.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/services_action_layout.xml" afterPath="$PROJECT_DIR$/res/layout/services_action_layout.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/android/inputmethod/keyboard/top/actionrow/ActionRowView.java" afterPath="$PROJECT_DIR$/src/com/android/inputmethod/keyboard/top/actionrow/ActionRowView.java" />
     </list>
     <ignored path="NeuralKey.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -127,31 +124,34 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="KeyboardView.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/android/inputmethod/keyboard/KeyboardView.java">
+      <file leaf-file-name="action_row_bg.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/res/drawable/action_row_bg.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="157">
-              <caret line="303" column="0" selection-start-line="303" selection-start-column="0" selection-end-line="303" selection-end-column="0" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="KeyboardSwitcher.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/android/inputmethod/keyboard/KeyboardSwitcher.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="38" column="40" selection-start-line="38" selection-start-column="40" selection-end-line="38" selection-end-column="40" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LatinIME.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/io.separ.neural.inputmethod/indic/LatinIME.java">
+      <file leaf-file-name="ActionRowView.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/android/inputmethod/keyboard/top/actionrow/ActionRowView.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="299">
-              <caret line="1651" column="39" selection-start-line="1651" selection-start-column="39" selection-end-line="1651" selection-end-column="39" />
+              <caret line="148" column="71" selection-start-line="148" selection-start-column="46" selection-end-line="148" selection-end-column="71" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="services_action_layout.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/res/layout/services_action_layout.xml">
+          <provider editor-type-id="android-designer2">
+            <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -1441,6 +1441,8 @@
         <option value="$PROJECT_DIR$/src/com/android/inputmethod/keyboard/KeyboardView.java" />
         <option value="$PROJECT_DIR$/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/src/io.separ.neural.inputmethod/indic/LatinIME.java" />
+        <option value="$PROJECT_DIR$/src/com/android/inputmethod/keyboard/top/actionrow/ActionRowView.java" />
+        <option value="$PROJECT_DIR$/res/layout/services_action_layout.xml" />
       </list>
     </option>
   </component>
@@ -1505,7 +1507,7 @@
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="device.picker.selection" value="c74a944c" />
-    <property name="SearchEverywhereHistoryKey" value="And&#9;FILE&#9;file:///home/sepehr/Workspace/AgahKeyboard/NeuralKey/AndroidManifest.xml&#10;Latin&#9;PSI&#9;JAVA://io.separ.neural.inputmethod.indic.LatinIME&#10;KeyboardView&#9;PSI&#9;JAVA://com.android.inputmethod.keyboard.KeyboardView&#10;google-ser&#9;FILE&#9;file:///home/sepehr/Workspace/AgahKeyboard/NeuralKey/google-services.json" />
+    <property name="SearchEverywhereHistoryKey" value="ActionRow&#9;PSI&#9;JAVA://com.android.inputmethod.keyboard.top.actionrow.ActionRowView&#10;And&#9;FILE&#9;file:///home/sepehr/Workspace/AgahKeyboard/NeuralKey/AndroidManifest.xml&#10;Latin&#9;PSI&#9;JAVA://io.separ.neural.inputmethod.indic.LatinIME&#10;KeyboardView&#9;PSI&#9;JAVA://com.android.inputmethod.keyboard.KeyboardView&#10;google-ser&#9;FILE&#9;file:///home/sepehr/Workspace/AgahKeyboard/NeuralKey/google-services.json" />
   </component>
   <component name="RunManager" selected="Android App.NeuralKey">
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
@@ -1724,6 +1726,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1731,6 +1734,7 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1826923" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Fabric" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1744,7 +1748,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -1833,6 +1836,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+      <provider editor-type-id="android-manifest">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="567">
+          <caret line="21" column="38" selection-start-line="21" selection-start-column="38" selection-end-line="21" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io.separ.neural.inputmethod/indic/LatinIME.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="1745" column="19" selection-start-line="1745" selection-start-column="19" selection-end-line="1745" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/android/inputmethod/keyboard/KeyboardSwitcher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="38" column="40" selection-start-line="38" selection-start-column="40" selection-end-line="38" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/android/inputmethod/keyboard/KeyboardView.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="157">
@@ -1849,29 +1879,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
-      <provider editor-type-id="android-manifest">
+    <entry file="file://$PROJECT_DIR$/res/drawable/action_row_bg.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/android/inputmethod/keyboard/top/actionrow/ActionRowView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="148" column="71" selection-start-line="148" selection-start-column="46" selection-end-line="148" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/services_action_layout.xml">
+      <provider editor-type-id="android-designer2">
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="567">
-          <caret line="21" column="38" selection-start-line="21" selection-start-column="38" selection-end-line="21" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/android/inputmethod/keyboard/KeyboardSwitcher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="38" column="40" selection-start-line="38" selection-start-column="40" selection-end-line="38" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/io.separ.neural.inputmethod/indic/LatinIME.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="1651" column="39" selection-start-line="1651" selection-start-column="39" selection-end-line="1651" selection-end-column="39" />
+        <state relative-caret-position="162">
+          <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
           <folding />
         </state>
       </provider>

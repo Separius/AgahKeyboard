@@ -146,9 +146,11 @@ public class ActionRowView extends ViewPager implements ColorManager.OnColorChan
 
     static {
         DEFAULT_SUGGESTED_EMOJI = "\u2764,\ud83d\ude15,\ud83d\ude18,\ud83d\ude22,\ud83d\ude3b,\ud83d\ude0a,\ud83d\ude09,\ud83d\ude0d".split("\\s*,\\s*");
-        SERVICE_IMAGE_IDS = new int[] {R.id.gif_service_action_button, R.id.maps_service_action_button, R.id.google_service_action_button,
+        //SERVICE_IMAGE_IDS = new int[] {R.id.gif_service_action_button, R.id.maps_service_action_button, R.id.google_service_action_button,
+        SERVICE_IMAGE_IDS = new int[] {R.id.maps_service_action_button, R.id.google_service_action_button,
                 R.id.contacts_service_action_button, R.id.foursquare_service_action_button, R.id.customization_service_action_button, R.id.go_to_emoji};
-        DEFAULT_SERVICES = new String[] {"giphy","maps","google","contacts","foursquare","customization","emoji"};
+        //DEFAULT_SERVICES = new String[] {"giphy","maps","google","contacts","foursquare","customization","emoji"};
+        DEFAULT_SERVICES = new String[] {"maps","google","contacts","foursquare","customization","emoji"};
     }
 
     public ActionRowView(Context context) {
