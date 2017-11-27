@@ -32,12 +32,6 @@
         android:title="@string/prefs_keypress_sound_volume_settings"
         latin:maxValue="100" /> <!-- percent -->
         android:persistent="true" />
-    <!-- title will be set programmatically to embed application name -->
-    <CheckBoxPreference
-        android:key="pref_enable_metrics_logging"
-        android:summary="@string/enable_metrics_logging_summary"
-        android:defaultValue="true"
-        android:persistent="true" />
     <PreferenceScreen
         android:fragment="io.separ.neural.inputmethod.indic.settings.DebugSettingsFragment"
         android:key="screen_debug"

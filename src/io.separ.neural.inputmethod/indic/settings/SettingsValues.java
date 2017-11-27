@@ -78,7 +78,6 @@ public final class SettingsValues {
     public final boolean mSlidingKeyInputPreviewEnabled;
     public final boolean mPhraseGestureEnabled;
     public final int mKeyLongpressTimeout;
-    public final boolean mEnableMetricsLogging;
     public final boolean mShouldShowUiToAcceptTypedWord;
 
     // From the input box
@@ -151,7 +150,6 @@ public final class SettingsValues {
         mBigramPredictionEnabled = readBigramPredictionEnabled(prefs, res);
         mDoubleSpacePeriodTimeout = res.getInteger(R.integer.config_double_space_period_timeout);
         mHasHardwareKeyboard = Settings.readHasHardwareKeyboard(res.getConfiguration());
-        mEnableMetricsLogging = prefs.getBoolean(Settings.PREF_ENABLE_METRICS_LOGGING, true);
         mShouldShowUiToAcceptTypedWord = Settings.HAS_UI_TO_ACCEPT_TYPED_WORD
                 && prefs.getBoolean(DebugSettings.PREF_SHOW_UI_TO_ACCEPT_TYPED_WORD, true);
         // Compute other readable settings

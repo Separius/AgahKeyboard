@@ -97,7 +97,6 @@
     <orderEntry type="library" exported="" name="ambilwarna-2.0.1" level="project" />
     <orderEntry type="library" exported="" name="fbcore-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="Android-SpinKit-1.1.0" level="project" />
-    <orderEntry type="library" exported="" name="android-job-1.1.7" level="project" />
     <orderEntry type="library" exported="" name="jackson-annotations-2.8.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-core-11.0.2" level="project" />
     <orderEntry type="library" exported="" name="firebase-messaging-11.0.2" level="project" />
@@ -110,7 +109,6 @@
     <orderEntry type="library" exported="" name="support-annotations-26.1.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-26.1.0" level="project" />
     <orderEntry type="library" exported="" name="support-fragment-26.1.0" level="project" />
-    <orderEntry type="library" exported="" name="cat-1.0.5" level="project" />
     <orderEntry type="library" exported="" name="materialcolorpicker-1.0.7" level="project" />
     <orderEntry type="library" exported="" name="pagerslidingtabstrip-1.0.1" level="project" />
     <orderEntry type="library" exported="" name="common-1.0.0" level="project" />

@@ -74,7 +74,6 @@ dependencies {
     compile 'com.github.ybq:Android-SpinKit:1.1.0'
     compile 'com.hannesdorfmann.smoothprogressbar:library:1.0.0'
     compile 'com.github.yukuku:ambilwarna:2.0.1'
-    compile 'com.evernote:android-job:1.1.7'
     compile 'com.rarepebble:colorpicker:2.1.0'
     compile 'com.turki-alkhateeb:materialcolorpicker:1.0.7'
 }

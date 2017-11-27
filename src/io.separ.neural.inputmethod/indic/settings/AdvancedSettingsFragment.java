@@ -90,21 +90,6 @@ public final class AdvancedSettingsFragment extends SubScreenFragment {
                     Settings.readKeyPreviewPopupEnabled(prefs, res));
         }
 
-        if (ProductionFlags.IS_METRICS_LOGGING_SUPPORTED) {
-            final Preference enableMetricsLogging =
-                    findPreference(Settings.PREF_ENABLE_METRICS_LOGGING);
-            if (enableMetricsLogging != null) {
-                final int applicationLabelRes = context.getApplicationInfo().labelRes;
-                final String applicationName = res.getString(applicationLabelRes);
-                final String enableMetricsLoggingTitle = res.getString(
-                        R.string.enable_metrics_logging, applicationName);
-                enableMetricsLogging.setTitle(enableMetricsLoggingTitle);
-                //enableMetricsLogging.setOnPreferenceClickListener(new MyOnPreferenceClickListener(context));
-            }
-        } else {
-            removePreference(Settings.PREF_ENABLE_METRICS_LOGGING);
-        }
-
         setupKeypressVibrationDurationSettings();
         setupKeypressSoundVolumeSettings();
         refreshEnablingsOfKeypressSoundAndVibrationSettings();

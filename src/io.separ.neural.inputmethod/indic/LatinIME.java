@@ -86,7 +86,7 @@ import com.android.inputmethod.latin.utils.LeakGuardHandlerWrapper;
 import com.android.inputmethod.latin.utils.SubtypeLocaleUtils;
 import com.android.inputmethod.latin.utils.ViewLayoutUtils;
 import com.crashlytics.android.Crashlytics;
-import com.evernote.android.job.JobManager;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.permissioneverywhere.PermissionEverywhere;
 import com.permissioneverywhere.PermissionResponse;
 import com.permissioneverywhere.PermissionResultCallback;
@@ -112,8 +112,6 @@ import java.util.concurrent.TimeUnit;
 import io.fabric.sdk.android.Fabric;
 import io.separ.neural.inputmethod.Utils.FontUtils;
 import io.separ.neural.inputmethod.Utils.ShareUtils;
-import io.separ.neural.inputmethod.Utils.StatSyncJob;
-import io.separ.neural.inputmethod.Utils.StatsJobCreator;
 import io.separ.neural.inputmethod.Utils.StatsUtils;
 import io.separ.neural.inputmethod.Utils.SwipeUtils;
 import io.separ.neural.inputmethod.accessibility.AccessibilityUtils;
@@ -743,8 +741,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         this.navManager = new NavManager(this);
         //SpeechUtils.initialize(this);
         this.mEventHandler = new EventBusHandler();
-        JobManager.create(this).addJobCreator(new StatsJobCreator());
         //StatSyncJob.scheduleJob();
+        FirebaseMessaging.getInstance().subscribeToTopic("promos");
     }
 
     public void finishCalculatingProfile() {
