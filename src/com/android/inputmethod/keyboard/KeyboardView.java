@@ -115,10 +115,8 @@ public class KeyboardView extends View {
     /** The keys that should be drawn */
     private final HashSet<Key> mInvalidatedKeys = new HashSet<>();
     /** The working rectangle variable */
-    private final Rect mWorkingRect = new Rect();
+    private final Rect mClipRect = new Rect();
     /** The keyboard bitmap buffer for faster updates */
-    /** The clip region to draw keys */
-    private final Region mClipRegion = new Region();
     private Bitmap mOffscreenBuffer;
     /** The canvas for the above mutable keyboard bitmap */
     private final Canvas mOffscreenCanvas = new Canvas();
@@ -286,65 +284,50 @@ public class KeyboardView extends View {
     }
 
     private void onDrawKeyboard(final Canvas canvas) {
-        if (mKeyboard == null) return;
-
-        final int width = getWidth();
-        final int height = getHeight();
-        final Paint paint = mPaint;
-
-        if (this instanceof MoreKeysKeyboardView) {
-            getBackground().setColorFilter(colorProfile.getPrimary(), PorterDuff.Mode.MULTIPLY);
-        } else {
-            ColorUtils.drawBackground(canvas, colorProfile.getPrimary());
-        }
-
-        // Calculate clip region and set.
-        final boolean drawAllKeys = mInvalidateAllKeys || mInvalidatedKeys.isEmpty();
-        final boolean isHardwareAccelerated = canvas.isHardwareAccelerated();
-        //SEPAR TODO, FARAZ?
-        // TODO: Confirm if it's really required to draw all keys when hardware acceleration is on.
-        if (drawAllKeys || isHardwareAccelerated) {
-            mClipRegion.set(0, 0, width, height);
-        } else {
-            mClipRegion.setEmpty();
-            for (final Key key : mInvalidatedKeys) {
-                if (mKeyboard.hasKey(key)) {
-                    final int x = key.getX() + getPaddingLeft();
-                    final int y = key.getY() + getPaddingTop();
-                    mWorkingRect.set(x, y, x + key.getWidth(), y + key.getHeight());
-                    mClipRegion.union(mWorkingRect);
-                }
-            }
-        }
-        if (!isHardwareAccelerated) {
-            canvas.clipRegion(mClipRegion, Region.Op.REPLACE);
-            // Draw keyboard background.
-            canvas.drawColor(Color.BLACK, PorterDuff.Mode.CLEAR);
-            final Drawable background = getBackground();
-            if (background != null) {
-                background.draw(canvas);
-            }
-        }
-
-        // TODO: Confirm if it's really required to draw all keys when hardware acceleration is on.
-        if (drawAllKeys || isHardwareAccelerated) {
-            // Draw all keys.
-            for (final Key key : mKeyboard.getSortedKeys()) {
-                onDrawKey(key, canvas, paint);
-            }
-        } else {
-            // Draw invalidated keys.
-            for (final Key key : mInvalidatedKeys) {
-                if (!mKeyboard.hasKey(key)) {
-                    continue;
-                }
-                onDrawKey(key, canvas, paint);
-            }
-        }
-
-        mInvalidatedKeys.clear();
-        mInvalidateAllKeys = false;
-    }
+	        final Keyboard keyboard = getKeyboard();
+	        if (keyboard == null) {
+	            return;
+	        }
+	
+	        final Paint paint = mPaint;
+	        final Drawable background = getBackground();
+	        // Calculate clip region and set.
+	        final boolean drawAllKeys = mInvalidateAllKeys || mInvalidatedKeys.isEmpty();
+	        final boolean isHardwareAccelerated = canvas.isHardwareAccelerated();
+	        // TODO: Confirm if it's really required to draw all keys when hardware acceleration is on.
+	        if (drawAllKeys || isHardwareAccelerated) {
+	            if (!isHardwareAccelerated && background != null) {
+	                // Need to draw keyboard background on {@link #mOffscreenBuffer}.
+	                canvas.drawColor(Color.BLACK, PorterDuff.Mode.CLEAR);
+	                background.draw(canvas);
+	            }
+	            // Draw all keys.
+	            for (final Key key : keyboard.getSortedKeys()) {
+	                onDrawKey(key, canvas, paint);
+	            }
+	        } else {
+	            for (final Key key : mInvalidatedKeys) {
+	                if (!keyboard.hasKey(key)) {
+	                    continue;
+	                }
+	                if (background != null) {
+	                    // Need to redraw key's background on {@link #mOffscreenBuffer}.
+	                    final int x = key.getX() + getPaddingLeft();
+	                    final int y = key.getY() + getPaddingTop();
+	                    mClipRect.set(x, y, x + key.getWidth(), y + key.getHeight());
+	                    canvas.save();
+	                    canvas.clipRect(mClipRect);
+	                    canvas.drawColor(Color.BLACK, PorterDuff.Mode.CLEAR);
+	                    background.draw(canvas);
+	                    canvas.restore();
+	                }
+	                onDrawKey(key, canvas, paint);
+	            }
+	        }
+	
+	        mInvalidatedKeys.clear();
+	        mInvalidateAllKeys = false;
+	    }
 
     private void onDrawKey(final Key key, final Canvas canvas, final Paint paint) {
         final int keyDrawX = key.getDrawX() + getPaddingLeft();

@@ -91,7 +91,6 @@ import com.permissioneverywhere.PermissionEverywhere;
 import com.permissioneverywhere.PermissionResponse;
 import com.permissioneverywhere.PermissionResultCallback;
 import com.rarepebble.colorpicker.ColorPickerView;
-import com.squareup.leakcanary.LeakCanary;
 import com.turkialkhateeb.materialcolorpicker.ColorChooserDialog;
 import com.turkialkhateeb.materialcolorpicker.ColorListener;
 
@@ -697,10 +696,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     @Override
     public void onCreate() {
         Fabric.with(this, new Crashlytics());
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return;
-        }
-        LeakCanary.install(getApplication());
         Settings.init(this);
         DebugFlags.init(PreferenceManager.getDefaultSharedPreferences(this));
         RichInputMethodManager.init(this);

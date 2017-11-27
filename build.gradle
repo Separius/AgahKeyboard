@@ -1,4 +1,12 @@
 project.ext.set("archivesBaseName", "IndicKeyboard");
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+        jcenter()
+        maven { url 'https://maven.google.com' }
+        mavenCentral()
+    }
+}
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
@@ -16,10 +24,13 @@ buildscript {
 
 buildscript {
     repositories {
-        mavenCentral()
+      maven { url 'https://jitpack.io' }
+      jcenter()
+      maven { url 'https://maven.google.com' }
+      mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.3.3'
         classpath 'com.google.gms:google-services:3.0.0'
     }
 }
@@ -34,16 +45,23 @@ apply plugin: 'io.fabric'
 
 dependencies {
     compile fileTree(include: '*.jar', dir: 'libs')
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:gridlayout-v7:26.1.0'
+    compile 'com.android.support:support-vector-drawable:26.1.0'
+    compile 'com.android.support:support-v4:26.1.0'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.android.support:palette-v7:26.1.0'
+    compile 'com.android.support:support-v13:26.1.0'
+    compile 'com.android.support:cardview-v7:26.1.0'
+    compile 'com.google.android.gms:play-services-location:11.0.2'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.6'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
+    compile 'com.google.firebase:firebase-messaging:11.0.2' //gcm
+    compile 'com.google.firebase:firebase-core:11.0.2' //analytics
+    compile 'com.google.firebase:firebase-crash:11.0.2' //crash
     compile 'com.github.kaknazaveshtakipishi:PermissionEverywhere:1.0.2'
-    compile 'com.android.support:support-v4:25.1.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
-    compile 'com.android.support:palette-v7:25.1.0'
-    compile 'com.android.support:support-v13:25.1.0'
-    compile 'com.android.support:cardview-v7:25.1.0'
     compile 'com.google.code.findbugs:jsr305:3.0.0'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
@@ -58,23 +76,18 @@ dependencies {
     compile 'com.github.yukuku:ambilwarna:2.0.1'
     compile 'com.evernote:android-job:1.1.7'
     compile 'com.rarepebble:colorpicker:2.1.0'
-    compile 'com.google.firebase:firebase-crash:10.2.0'
-    compile 'com.google.firebase:firebase-core:10.2.0'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compile 'com.turki-alkhateeb:materialcolorpicker:1.0.7'
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 25
         multiDexEnabled true
         ndk {
-            abiFilters "armeabi-v7a" //, "armeabi" TODO, if i could disable all the native calls, this would work
+            abiFilters "armeabi-v7a"
         }
     }
     sourceSets {
@@ -95,7 +108,7 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('/home/sepehr/workspace/Keyboard/key.keystore')
+            storeFile file('/home/sepehr/Workspace/AgahKeyboard/key.keystore')
             storePassword '123456'
             keyAlias 'alias'
             keyPassword '123456'
