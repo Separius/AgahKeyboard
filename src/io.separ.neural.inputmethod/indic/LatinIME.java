@@ -1648,6 +1648,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     @Override
     public void onEmojiInput(final String rawText) {
+        long currentTime = System.currentTimeMillis();
+        if ((lastEmojiInsertionTime + 200) > currentTime)
+            return;
+        lastEmojiInsertionTime = currentTime;
         FrequentEmojiHandler.getInstance(this).onEmojiClicked(rawText);
         onTextInput(rawText);
         StatsUtils.getInstance().onRichEmojiSelected();
@@ -2287,6 +2291,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     }
 
     private long lastStickerInsertionTime = 0;
+    private long lastEmojiInsertionTime = 0;
 
     private static class MyBroadcastReceiver extends BroadcastReceiver {
         @Override
